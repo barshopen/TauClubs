@@ -1,20 +1,26 @@
 import './App.css';
+import {useState, useEffect} from 'react';
+
 
 function App() {
+  const [data, setData] = useState();
+  
+  useEffect(()=>{
+    fetch("/time", {
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+    })
+    .then(res=>res.json())
+    .then(mydata=>setData(mydata));
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+          It's working!
+        {data}
       </header>
     </div>
   );
