@@ -11,6 +11,12 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./commands/pre-commit",
+      "pre-push": "./commands/pre-push $HUSKY_GIT_STDIN"
+    }
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
