@@ -3,5 +3,17 @@
       "title": "string",
       "text": "string",
       "date": "date"
+    },
+    "Club":{
+        "name":"string",
+        "photo":"string",
+        "num_of_users": "int"
+    },
+    "Event":{
+        "title":"string",
+        "description": "string",
+        "address": "string",
+        "date": "date",
+        "photo":"string"
     }
 }
