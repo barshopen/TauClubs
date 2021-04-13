@@ -1,0 +1,7 @@
+{
+    "messages": {
+      "title": "string",
+      "date": "date",
+      "text": "string"
+    }
+}
