@@ -1,7 +1,7 @@
 {
-    "messages": {
+    "Message": {
       "title": "string",
-      "date": "date",
-      "text": "string"
+      "text": "string",
+      "date": "date"
     }
 }
