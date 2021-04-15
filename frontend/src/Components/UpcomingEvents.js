@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
-function Messages({ data }) {
+function UpcomingEvents({ data }) {
   return (
-    <GenericControl header="Messages">
+    <GenericControl header="Upcoming Events">
       <MessagesContainer>
         {data.map((d) => (
           <GenericFeedMessage title={d.title} date={d.date} key={d.id}>
             <Content>{(`${d.text} `).repeat((Math.random() * 7 + 3))}</Content>
+            <Link to="/#"> View Location</Link>
           </GenericFeedMessage>
         ))}
       </MessagesContainer>
@@ -18,7 +20,7 @@ function Messages({ data }) {
   );
 }
 
-Messages.propTypes = {
+UpcomingEvents.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -28,7 +30,7 @@ Messages.propTypes = {
   ),
 };
 
-Messages.defaultProps = {
+UpcomingEvents.defaultProps = {
   data: [],
 };
 
@@ -43,6 +45,13 @@ const MessagesContainer = styled.div`
 const Content = styled.div`
     font-size: 15rem;
     text-align: left;
+    overflow-wrap: break-word;
+`;
+const Link = styled(RouterLink)`
+    font-size: 15rem;
+    text-decoration: none;
+    display:block;
+    text-align: left;
 `;
 
-export default Messages;
+export default UpcomingEvents;

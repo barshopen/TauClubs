@@ -2,29 +2,46 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Messages from '../Components/Messages';
 import MyClubs from '../Components/MyClubs';
+import UpcomingEvents from '../Components/UpcomingEvents';
 
 function Home() {
-  const [data, setData] = useState();
+  const [messagesData, setMessagesData] = useState();
+  const [clubsData, setClubsData] = useState();
 
   useEffect(() => {
-    fetch('https://mockend.com/barshopen/a/messages', {
+    fetch('https://mockend.com/barshopen/tauclubs/messages', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     })
       .then((res) => res.json())
-      .then((mydata) => setData(mydata.slice(0, 7)));
+      .then((mydata) => setMessagesData(mydata.slice(0, 7)));
+
+    fetch('https://mockend.com/barshopen/tauclubs/clubs', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((mydata) => setClubsData(mydata.slice(0, 7)));
   }, []);
 
   return (
     <>
       <Container>
-        <ComponentContainer Flex="1">
-          <Messages data={data} />
+        <ComponentContainer>
+          <Messages data={messagesData} />
         </ComponentContainer>
-        <ComponentContainer Flex="2">
-          <MyClubs />
+        <ComponentContainer>
+          <MyClubs data={clubsData} />
+        </ComponentContainer>
+        <ComponentContainer>
+          <div />
+        </ComponentContainer>
+        <ComponentContainer>
+          <UpcomingEvents data={messagesData} />
         </ComponentContainer>
 
       </Container>
@@ -34,11 +51,11 @@ function Home() {
 
 export default Home;
 const Container = styled.div`
-    display:flex;
-    flex-direction:row;
-    width:100vw;
+    display:grid;
+    grid-template-columns:1fr 2fr;
+    width:100%;
+    grid-gap:10px;
 `;
 const ComponentContainer = styled.div`
-      flex:${(props) => props.Flex};
-      padding: 0 10px;
+      /* padding: 0 10px; */
 `;

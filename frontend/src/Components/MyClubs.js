@@ -1,25 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import GenericControl from './Generic/GenericControl';
 
 function MyClubs({ data }) {
   return (
-    <>
-      <MainHeader> My Clubs </MainHeader>
+    <GenericControl header="My Clubs">
       {data.map((d) => (
-        <ItemHeader>{d.title}</ItemHeader>
+        <ItemHeader key={d.id}>{d.name}</ItemHeader>
       ))}
-
-    </>
+    </GenericControl>
   );
 }
 
 MyClubs.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string,
-      date: PropTypes.string,
-      text: PropTypes.string,
+      id: PropTypes.int,
+      name: PropTypes.string,
+      num_of_users: PropTypes.int, // todo change to usersCount
+      /* TODO decide represented base64-decoded -string or another http request. */
+      photo: PropTypes.string,
     }),
   ),
 };
@@ -28,12 +29,6 @@ MyClubs.defaultProps = {
   data: [],
 };
 export default MyClubs;
-
-const MainHeader = styled.h1`
-    font-family: 'Roboto Condensed';
-    font-size:35px;
-    font-weight: normal;
-`;
 
 const ItemHeader = styled.div`
     font-size:25px;
