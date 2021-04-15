@@ -12,7 +12,6 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "styled-components": "^5.2.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -20,7 +19,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-backend": "cd .. && python run.py"
+    "start-backend": "cd .. && python run.py",
+    "lint-fix": "eslint --fix",
+    "lint": "eslint --fix-dry-run"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +43,11 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
