@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Nav, NavLink, Bars, NavMenu,
+  Nav, NavBtn, NavBtnLink, NavLink, Bars, NavMenu,
 } from './NavbarElements';
 
 function Navbar() {
@@ -10,16 +10,19 @@ function Navbar() {
         <Bars />
 
         <NavMenu>
-          <NavLink to="/Home" activeStyle>
+          <NavLink to="/" exact activeStyle>
             Home
           </NavLink>
           <NavLink to="/allClubs" activeStyle>
             All Clubs
           </NavLink>
           <NavLink to="/contact" activeStyle>
-            Contact
+            Contact us
           </NavLink>
         </NavMenu>
+        <NavBtn>
+          <NavBtnLink to="/SignIn">Sign In</NavBtnLink>
+        </NavBtn>
       </Nav>
     </>
   );

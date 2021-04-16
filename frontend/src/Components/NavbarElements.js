@@ -4,14 +4,15 @@ import styled from 'styled-components';
 
 export const Nav = styled.nav`
   background: #000000;
-  height: 85px;
+  height: 60px;
   display: flex;
+  padding-left: 15px;
+  font: Copperplate;
   font-weight: bold;
+  font-size: 14px;
   justify-content: space-between;
-  padding: 0.15 2rem calc((100vw - 1000px) / 2);
+  /*padding: 0.15 2rem calc((100vw - 1000px) / 2);*/
   z-index: 12;
-  /* Third Nav */
-  /* justify-content: flex-start; */
 `;
 
 export const NavLink = styled(Link)`
@@ -58,7 +59,7 @@ export const NavMenu = styled.div`
 export const NavBtn = styled.nav`
   display: flex;
   align-items: center;
-  margin-right: 24px;
+  margin-right: 44px;
   /* Third Nav */
   /* justify-content: flex-end;
   width: 100vw; */
