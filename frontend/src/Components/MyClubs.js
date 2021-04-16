@@ -6,6 +6,7 @@ import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 
 const width = '90%';
+
 function MyClubs({ data }) {
   return (
     <GenericControl header="My Clubs" width={width}>
@@ -14,6 +15,8 @@ function MyClubs({ data }) {
       <Container width={width}>
         {data.map((d) => (
           <GenericCard title={d.name} key={d.id}>
+            <Tag>a </Tag>
+            <Text>{`${d.membersCount} Members`}</Text>
             <CustomPlaceholder width={260} height={180} />
           </GenericCard>
         ))}
@@ -34,6 +37,11 @@ MyClubs.propTypes = {
   ),
 };
 
+const Text = styled.div`
+    font-size: 15rem;
+    text-align: right;
+`;
+
 MyClubs.defaultProps = {
   data: [],
 };
@@ -44,4 +52,11 @@ const Container = styled.div`
     grid-template-columns:repeat(3, 1fr);
     width:${(props) => props.width}; 
     grid-gap:10px;
+`;
+
+const Tag = styled.a`
+  font-size: 15rem;
+  text-align: left;
+  background-color:#00d989;
+  border-radius:30%;
 `;

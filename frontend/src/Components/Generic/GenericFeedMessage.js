@@ -27,7 +27,10 @@ function GenericFeedMessage({ title, date, children }) {
 
 GenericFeedMessage.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   date: PropTypes.string,
 };
 

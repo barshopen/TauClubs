@@ -15,7 +15,7 @@ function GenericCard({ title, children }) {
 
 GenericCard.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.arrayOf(PropTypes.element),
 
 };
 
@@ -28,6 +28,8 @@ const Title = styled.h3`
     text-align: center;
 `;
 const ComponentContainer = styled.div`
+  display:flex;
+  flex-direction:column;
 `;
 
 export default GenericCard;
