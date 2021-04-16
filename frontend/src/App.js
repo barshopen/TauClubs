@@ -1,25 +1,15 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Home from './Scenarios/Home';
 
 function App() {
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    fetch('/time', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((mydata) => setData(mydata));
-  }, []);
-
   return (
     <div className="App">
       <header className="App-header">
-        We are working!
-        {data}
+        <Router>
+          <Home />
+        </Router>
       </header>
     </div>
   );
