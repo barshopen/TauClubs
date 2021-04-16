@@ -10,7 +10,7 @@ function GenericFeedMessage({ title, date, children }) {
   return (
     <SingleMessageContainer>
       <TextContainer>
-        <ItemHeader>{title}</ItemHeader>
+        <Title>{title}</Title>
         {children}
       </TextContainer>
 
@@ -48,7 +48,7 @@ const TextContainer = styled.div`
     display: inline-block;
 `;
 
-const ItemHeader = styled.h3`
+const Title = styled.h3`
     margin: 10px 0px;
     font-size: 25rem;
     text-align: left;

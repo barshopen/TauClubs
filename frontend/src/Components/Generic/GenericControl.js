@@ -2,36 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-function GenericControl({ header, children }) {
+function GenericControl({ header, children, width }) {
   return (
-    <ComponentContainer>
-      <MainHeader>
+    <>
+      <MainHeader width={width}>
         {header}
       </MainHeader>
+
       {children}
-    </ComponentContainer>
+    </>
   );
 }
 
 GenericControl.propTypes = {
   header: PropTypes.string.isRequired,
   children: PropTypes.element,
-
+  width: PropTypes.string,
 };
 
 GenericControl.defaultProps = {
   children: [],
+  width: '100%',
 };
-
-const ComponentContainer = styled.div`
-      flex:${(props) => props.Flex};
-      margin: 30px 0;
-`;
 
 const MainHeader = styled.h2`
     font-family: 'Roboto Condensed', sans-serif;
     font-size:28rem;
     font-weight: normal;
+    width:${(props) => props.width};
 `;
 
 export default GenericControl;

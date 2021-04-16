@@ -7,7 +7,7 @@
     "Club":{
         "name":"string",
         "photo":"string",
-        "usersCount": "int"
+        "membersCount": "int"
     },
     "Event":{
         "title":"string",
