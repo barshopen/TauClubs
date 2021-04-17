@@ -10,7 +10,7 @@ function Messages({ data }) {
       <MessagesContainer>
         {data.map((d) => (
           <GenericFeedMessage title={d.title} date={d.date} key={d.id}>
-            <Content>{(`${d.text} `).repeat((Math.random() * 7 + 3))}</Content>
+            <Content>{d.text}</Content>
           </GenericFeedMessage>
         ))}
       </MessagesContainer>
