@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Contact from './Pages/Contact';
 import Navbar from './Navbar';
 import AllClubs from './Pages/AllClubs';
-import Home from './Pages/Home';
+import Home from './Scenarios/Home';
 import Signin from './Pages/signIn';
 
 function App() {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
-import signin from './Pages/signIn';
 
 function Navbar() {
   return (
@@ -31,6 +30,7 @@ export const Nav = styled.nav`
 `;
 
 export const NavLink = styled(Link)`
+  float: left;
   color: #ffffff;
   padding: 20px 10px 10px 25px;
   margin: 0px 0px 0px 25px;
