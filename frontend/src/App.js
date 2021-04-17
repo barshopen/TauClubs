@@ -1,11 +1,11 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Contact from './Pages/Contact';
+import Contact from './Scenarios/Contact';
 import Navbar from './Navbar';
-import AllClubs from './Pages/AllClubs';
+import AllClubs from './Scenarios/AllClubs';
 import Home from './Scenarios/Home';
-import Signin from './Pages/signIn';
+import Signin from './Scenarios/signIn';
 
 function App() {
   return (
