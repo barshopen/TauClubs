@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
+import signin from './Pages/signIn';
 
 function Navbar() {
   return (
