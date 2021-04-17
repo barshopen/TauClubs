@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { CustomPlaceholder } from 'react-placeholder-image';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
+import Label from './Generic/Label';
 
 const width = '90%';
 
@@ -15,8 +16,11 @@ function MyClubs({ data }) {
       <Container width={width}>
         {data.map((d) => (
           <GenericCard title={d.name} key={d.id}>
-            <Tag>a </Tag>
-            <Text>{`${d.membersCount} Members`}</Text>
+            <LineContainer>
+
+              <Label color="#00d989">aasdasd</Label>
+              <Text>{`${d.membersCount} Members`}</Text>
+            </LineContainer>
             <CustomPlaceholder width={260} height={180} />
           </GenericCard>
         ))}
@@ -53,10 +57,9 @@ const Container = styled.div`
     width:${(props) => props.width}; 
     grid-gap:10px;
 `;
-
-const Tag = styled.a`
-  font-size: 15rem;
-  text-align: left;
-  background-color:#00d989;
-  border-radius:30%;
-`;
+const LineContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: auto;
+  `;
