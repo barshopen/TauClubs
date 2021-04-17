@@ -8,7 +8,7 @@ import Label from './Generic/Label';
 
 const width = '90%';
 
-function MyClubs({ data }) {
+function ClubsView({ data }) {
   return (
     <GenericControl header="My Clubs" width={width}>
       { /* TODO find less way to acheive thie width property
@@ -29,7 +29,7 @@ function MyClubs({ data }) {
   );
 }
 
-MyClubs.propTypes = {
+ClubsView.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.int,
@@ -46,10 +46,10 @@ const Text = styled.div`
     text-align: right;
 `;
 
-MyClubs.defaultProps = {
+ClubsView.defaultProps = {
   data: [],
 };
-export default MyClubs;
+export default ClubsView;
 
 const Container = styled.div`
     display:grid;

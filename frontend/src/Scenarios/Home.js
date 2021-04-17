@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Messages from '../Components/Messages';
-import MyClubs from '../Components/MyClubs';
+import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
 
 function Home() {
@@ -35,7 +35,7 @@ function Home() {
           <Messages data={messagesData} />
         </ComponentContainer>
         <ComponentContainer>
-          <MyClubs data={clubsData} />
+          <ClubsView data={clubsData} />
         </ComponentContainer>
         <ComponentContainer>
           <div />
