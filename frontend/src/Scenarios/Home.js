@@ -18,14 +18,14 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
 
-    fetch('https://mockend.com/barshopen/tauclubs/clubs', {
+    fetch('https://mockend.com/barshopen/tauclubs/tree/mockend/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     })
       .then((res) => res.json())
-      .then((mydata) => setClubsData(mydata.slice(0, 7)));
+      .then((mydata) => setClubsData(mydata.slice(0, 5)));
   }, []);
 
   return (

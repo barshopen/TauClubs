@@ -1,14 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { CustomPlaceholder } from 'react-placeholder-image';
 import GenericControl from './Generic/GenericControl';
+import GenericCard from './Generic/GenericCard';
+import Label from './Generic/Label';
+
+const width = '90%';
 
 function MyClubs({ data }) {
   return (
-    <GenericControl header="My Clubs">
-      {data.map((d) => (
-        <ItemHeader key={d.id}>{d.name}</ItemHeader>
-      ))}
+    <GenericControl header="My Clubs" width={width}>
+      { /* TODO find less way to acheive thie width property
+          genralize containers for all controls. */}
+      <Container width={width}>
+        {data.map((d) => (
+          <GenericCard title={d.name} key={d.id}>
+            <LineContainer>
+
+              <Label color="#00d989">aasdasd</Label>
+              <Text>{`${d.membersCount} Members`}</Text>
+            </LineContainer>
+            <CustomPlaceholder width={260} height={180} />
+          </GenericCard>
+        ))}
+      </Container>
     </GenericControl>
   );
 }
@@ -25,14 +41,25 @@ MyClubs.propTypes = {
   ),
 };
 
+const Text = styled.div`
+    font-size: 15rem;
+    text-align: right;
+`;
+
 MyClubs.defaultProps = {
   data: [],
 };
 export default MyClubs;
 
-const ItemHeader = styled.div`
-    font-size:25px;
-    font-weight: bold;
-    text-transform: capitalize;
-    text-align:left;
+const Container = styled.div`
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    width:${(props) => props.width}; 
+    grid-gap:10px;
 `;
+const LineContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: auto;
+  `;
