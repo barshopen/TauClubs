@@ -1,0 +1,48 @@
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import GenericControl from './Generic/GenericControl';
+import GenericFeedMessage from './Generic/GenericFeedMessage';
+
+function Messages({ data }) {
+  return (
+    <GenericControl header="Messages">
+      <MessagesContainer>
+        {data.map((d) => (
+          <GenericFeedMessage title={d.title} date={d.date} key={d.id}>
+            <Content>{(`${d.text} `).repeat((Math.random() * 7 + 3))}</Content>
+          </GenericFeedMessage>
+        ))}
+      </MessagesContainer>
+    </GenericControl>
+  );
+}
+
+Messages.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      date: PropTypes.string,
+      text: PropTypes.string,
+    }),
+  ),
+};
+
+Messages.defaultProps = {
+  data: [],
+};
+
+// styled components
+const MessagesContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px
+
+`;
+
+const Content = styled.div`
+    font-size: 15rem;
+    text-align: left;
+`;
+
+export default Messages;
