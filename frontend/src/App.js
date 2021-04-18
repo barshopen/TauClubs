@@ -6,6 +6,7 @@ import Navbar from './Components/Navbar';
 import AllClubs from './Scenarios/AllClubs';
 import Home from './Scenarios/Home';
 import Signin from './Scenarios/signIn';
+import ClubSection from './Scenarios/ClubSection/ClubSection';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/allClubs" component={AllClubs} />
             <Route path="/contact" component={Contact} />
             <Route path="/signin" component={Signin} />
+            <Route path="/club" component={ClubSection} />
           </Switch>
         </Router>
       </header>
