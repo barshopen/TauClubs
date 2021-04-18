@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 
 function Label({ children, color }) {
   return (
-    <dvi>
+    <div>
       <Tag color={color}>
         {children}
       </Tag>
-    </dvi>
+    </div>
   );
 }
 
