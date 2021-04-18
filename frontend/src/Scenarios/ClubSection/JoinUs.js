@@ -1,6 +1,6 @@
 import React from 'react';
 
-function JoinUs(props) {
+function JoinUs() {
   return (
     <>
       Tell us about yourself

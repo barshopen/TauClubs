@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 
-function ClubBoard(props) {
+function ClubBoard() {
   const [messagesData, setMessagesData] = useState();
+  const [upcomingEvents, setUpcomingEvents] = useState();
 
   useEffect(() => {
-    fetch('https://mockend.com/barshopen/tauclubs/messages', {
+    fetch('http://localhost:3030/messages', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -15,6 +16,15 @@ function ClubBoard(props) {
     })
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
+
+    fetch('http://localhost:3030/upcoming_events', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((mydata) => setUpcomingEvents(mydata.slice(0, 7)));
   }, []);
   return (
     <>
@@ -23,7 +33,7 @@ function ClubBoard(props) {
           <Messages data={messagesData} />
         </ComponentContainer>
         <ComponentContainer>
-          <UpcomingEvents data={messagesData} />
+          <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
 
       </Container>
