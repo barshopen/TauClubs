@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { CustomPlaceholder } from 'react-placeholder-image';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
@@ -27,7 +27,7 @@ function ClubsView({
 }
 
 ClubsView.propTypes = {
-  header: string,
+  header: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.int,
