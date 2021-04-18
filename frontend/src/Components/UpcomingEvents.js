@@ -39,7 +39,6 @@ const MessagesContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0 15px
-
 `;
 
 const Content = styled.div`
