@@ -2,28 +2,6 @@ import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-function Navbar() {
-  return (
-    <>
-      <Nav>
-        <NavLink to="/" exact activeStyle>
-          Home
-        </NavLink>
-        <NavLink to="/allClubs" activeStyle>
-          All Clubs
-        </NavLink>
-        <NavLink to="/contact" activeStyle>
-          Contact Us
-        </NavLink>
-        <NavSignIn to="/signin" activeStyle>
-          Sign In
-        </NavSignIn>
-      </Nav>
-    </>
-  );
-}
-
-export default Navbar;
 export const Nav = styled.nav`
   background: #000000;
   height: 60px;
@@ -60,3 +38,26 @@ export const NavSignIn = styled(Link)`
     color: #2561da;
   }
 `;
+
+function Navbar() {
+  return (
+    <>
+      <Nav>
+        <NavLink to="/" exact activeStyle>
+          Home
+        </NavLink>
+        <NavLink to="/allClubs" activeStyle>
+          All Clubs
+        </NavLink>
+        <NavLink to="/contact" activeStyle>
+          Contact Us
+        </NavLink>
+        <NavSignIn to="/signin" activeStyle>
+          Sign In
+        </NavSignIn>
+      </Nav>
+    </>
+  );
+}
+
+export default Navbar;

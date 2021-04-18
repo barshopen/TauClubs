@@ -2,26 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-function GenericControl({ header, children, width }) {
+const Container1 = styled.div`
+  width:${(props) => props.width};
+`;
+
+function GenericControl({
+  header, children, width, Container,
+}) {
   return (
     <>
       <MainHeader width={width}>
         {header}
       </MainHeader>
-
-      {children}
+      <Container1 width={width} as={Container}>{children}</Container1>
     </>
   );
 }
 
 GenericControl.propTypes = {
   header: PropTypes.string.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.node,
   width: PropTypes.string,
+  Container: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]),
 };
 
 GenericControl.defaultProps = {
-  children: [],
+  Container: styled.div``, // a default container
+  children: React.createElement('div'),
   width: '100%',
 };
 

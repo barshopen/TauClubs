@@ -4,6 +4,8 @@ import Messages from '../Components/Messages';
 import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
 
+const width = '90%';
+
 function Home() {
   const [messagesData, setMessagesData] = useState();
   const [clubsData, setClubsData] = useState();
@@ -35,7 +37,7 @@ function Home() {
           <Messages data={messagesData} />
         </ComponentContainer>
         <ComponentContainer>
-          <ClubsView data={clubsData} />
+          <ClubsView header="My Clubs" width={width} data={clubsData} Container={ClubsViewContainer} />
         </ComponentContainer>
         <ComponentContainer>
           <div />
@@ -50,6 +52,13 @@ function Home() {
 }
 
 export default Home;
+
+const ClubsViewContainer = styled.div`
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-gap:10px;
+`;
+
 const Container = styled.div`
     display:grid;
     grid-template-columns:1fr 2fr;
