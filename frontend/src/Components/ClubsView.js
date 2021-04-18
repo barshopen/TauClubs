@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { CustomPlaceholder } from 'react-placeholder-image';
+import { PhotoPlaceholder } from 'react-placeholder-image';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 import Label from './Generic/Label';
@@ -19,7 +19,7 @@ function ClubsView({
             <Label color="#00d989">aasdasd</Label>
             <Text>{`${d.membersCount} Members`}</Text>
           </LineContainer>
-          <CustomPlaceholder width={260} height={180} />
+          <PhotoPlaceholder width={260} height={180} />
         </GenericCard>
       ))}
     </GenericControl>
