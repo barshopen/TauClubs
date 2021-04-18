@@ -19,13 +19,14 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --kill-others --kill-others-on-fail \"react-scripts start\" \"yarn mock\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-backend": "cd .. && python run.py",
     "lint-fix": "eslint --fix",
-    "lint": "eslint --fix-dry-run"
+    "lint": "eslint --fix-dry-run",
+    "mock": "json-server --watch mock-api/mock1.json --port 3030"
   },
   "eslintConfig": {
     "extends": [
@@ -47,11 +48,13 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "concurrently": "^6.0.2",
     "eslint": "^7.24.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "json-server": "^0.16.3"
   }
 }

@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Messages from '../Components/Messages';
-import MyClubs from '../Components/MyClubs';
+import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
+
+const width = '90%';
 
 function Home() {
   const [messagesData, setMessagesData] = useState();
   const [clubsData, setClubsData] = useState();
+  const [upcomingEvents, setUpcomingEvents] = useState();
 
   useEffect(() => {
-    fetch('https://mockend.com/barshopen/tauclubs/messages', {
+    fetch('http://localhost:3030/messages', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -18,7 +21,7 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
 
-    fetch('https://mockend.com/barshopen/tauclubs/tree/mockend/clubs', {
+    fetch('http://localhost:3030/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -26,22 +29,31 @@ function Home() {
     })
       .then((res) => res.json())
       .then((mydata) => setClubsData(mydata.slice(0, 5)));
+
+    fetch('http://localhost:3030/upcoming_events', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((mydata) => setUpcomingEvents(mydata.slice(0, 5)));
   }, []);
 
   return (
     <>
       <Container>
-        <ComponentContainer>
+        <ComponentContainer gridArea="messages">
           <Messages data={messagesData} />
         </ComponentContainer>
-        <ComponentContainer>
-          <MyClubs data={clubsData} />
+        <ComponentContainer gridArea="myClubs">
+          <ClubsView header="My Clubs" width={width} data={clubsData} Container={ClubsViewContainer} />
         </ComponentContainer>
         <ComponentContainer>
           <div />
         </ComponentContainer>
-        <ComponentContainer>
-          <UpcomingEvents data={messagesData} />
+        <ComponentContainer gridArea="upcomingEvents">
+          <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
 
       </Container>
@@ -49,13 +61,26 @@ function Home() {
   );
 }
 
-export default Home;
+const ClubsViewContainer = styled.div`
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-gap:10px;
+`;
+
 const Container = styled.div`
     display:grid;
+    grid-template-areas:
+      "messages myClubs"
+      "messages upcomingEvents";
     grid-template-columns:1fr 2fr;
+    grid-template-rows: repeat(4, 1fr);
     width:100%;
     grid-gap:10px;
 `;
+
 const ComponentContainer = styled.div`
-      /* padding: 0 10px; */
+  grid-area: ${(props) => props.gridArea};
+
 `;
+
+export default Home;
