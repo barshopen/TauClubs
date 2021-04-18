@@ -21,7 +21,7 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
 
-    fetch(' http://localhost:3030/clubs', {
+    fetch('http://localhost:3030/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -30,7 +30,7 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setClubsData(mydata.slice(0, 5)));
 
-    fetch(' http://localhost:3030/upcoming_events', {
+    fetch('http://localhost:3030/upcoming_events', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

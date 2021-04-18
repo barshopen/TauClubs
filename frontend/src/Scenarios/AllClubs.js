@@ -24,7 +24,7 @@ function AllClubs() {
   const [clubsData, setClubsData] = useState();
   const [searchData, setSearchData] = useState();
   useEffect(() => {
-    fetch('https://mockend.com/barshopen/tauclubs/tree/mockend/clubs', {
+    fetch('http://localhost:3030/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
