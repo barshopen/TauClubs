@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Messages from '../Components/Messages';
-import MyClubs from '../Components/MyClubs';
+import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
+
+const width = '90%';
 
 function Home() {
   const [messagesData, setMessagesData] = useState();
@@ -19,7 +21,7 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
 
-    fetch(' http://localhost:3030/clubs', {
+    fetch('http://localhost:3030/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -28,7 +30,7 @@ function Home() {
       .then((res) => res.json())
       .then((mydata) => setClubsData(mydata.slice(0, 5)));
 
-    fetch(' http://localhost:3030/upcoming_events', {
+    fetch('http://localhost:3030/upcoming_events', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -45,7 +47,7 @@ function Home() {
           <Messages data={messagesData} />
         </ComponentContainer>
         <ComponentContainer gridArea="myClubs">
-          <MyClubs data={clubsData} />
+          <ClubsView header="My Clubs" width={width} data={clubsData} Container={ClubsViewContainer} />
         </ComponentContainer>
         <ComponentContainer>
           <div />
@@ -58,6 +60,13 @@ function Home() {
     </>
   );
 }
+
+const ClubsViewContainer = styled.div`
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-gap:10px;
+`;
+
 const Container = styled.div`
     display:grid;
     grid-template-areas:

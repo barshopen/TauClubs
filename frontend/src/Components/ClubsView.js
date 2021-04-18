@@ -6,30 +6,28 @@ import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 import Label from './Generic/Label';
 
-const width = '90%';
-
-function MyClubs({ data }) {
+function ClubsView({
+  header, data, width, Container,
+}) {
   return (
-    <GenericControl header="My Clubs" width={width}>
+    <GenericControl header={header} width={width} Container={Container}>
       { /* TODO find less way to acheive thie width property
           genralize containers for all controls. */}
-      <Container width={width}>
-        {data.map((d) => (
-          <GenericCard title={d.name} key={d.id}>
-            <LineContainer>
-
-              <Label color="#00d989">aasdasd</Label>
-              <Text>{`${d.membersCount} Members`}</Text>
-            </LineContainer>
-            <CustomPlaceholder width={260} height={180} />
-          </GenericCard>
-        ))}
-      </Container>
+      {data.map((d) => (
+        <GenericCard title={d.name} key={d.id}>
+          <LineContainer>
+            <Label color="#00d989">aasdasd</Label>
+            <Text>{`${d.membersCount} Members`}</Text>
+          </LineContainer>
+          <CustomPlaceholder width={260} height={180} />
+        </GenericCard>
+      ))}
     </GenericControl>
   );
 }
 
-MyClubs.propTypes = {
+ClubsView.propTypes = {
+  header: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.int,
@@ -39,24 +37,26 @@ MyClubs.propTypes = {
       photo: PropTypes.string,
     }),
   ),
+  Container: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]).isRequired,
+  width: PropTypes.string,
 };
+
+ClubsView.defaultProps = {
+  data: [],
+  header: '',
+  width: '100%',
+};
+export default ClubsView;
 
 const Text = styled.div`
     font-size: 15rem;
     text-align: right;
 `;
 
-MyClubs.defaultProps = {
-  data: [],
-};
-export default MyClubs;
-
-const Container = styled.div`
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    width:${(props) => props.width}; 
-    grid-gap:10px;
-`;
 const LineContainer = styled.div`
   display: flex;
   align-items: flex-start;
