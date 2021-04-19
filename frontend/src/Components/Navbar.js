@@ -43,16 +43,16 @@ function Navbar() {
   return (
     <>
       <Nav>
-        <NavLink to="/" exact activeStyle>
+        <NavLink to="/" exact>
           Home
         </NavLink>
-        <NavLink to="/allClubs" activeStyle>
+        <NavLink to="/allClubs">
           All Clubs
         </NavLink>
-        <NavLink to="/contact" activeStyle>
+        <NavLink to="/contact">
           Contact Us
         </NavLink>
-        <NavSignIn to="/signin" activeStyle>
+        <NavSignIn to="/signin">
           Sign In
         </NavSignIn>
       </Nav>
