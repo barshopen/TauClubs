@@ -7,24 +7,28 @@
             "time": "20:00"
         },
         {
+            "id" : "msg_1",
             "title": "new opening",
             "text": "we will open another tour in April",
             "date": "12/16/2020",
             "time": "20:10"
         },
         {
+            "id" : "msg_2",
             "title": "royal",
             "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
             "date": "2/16/2021",
             "time": "19:30"
         },
         {
+            "id" : "msg_3",
             "title": "Veritatis Dolores Adipisci Minus",
             "text": "an evening of physics, including a talk from a theoretical particle physicist",
             "date": "9/11/2020",
             "time": "18:00"
         },
         {
+            "id" : "msg_4",
             "title": "Repellat",
             "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
             "date": "6/21/2020",
@@ -34,6 +38,7 @@
 
     "clubs": [
         {
+            "id" : "c_1",
             "name": "chess",
             "profileImage": "images/chessProfile.jpeg",
             "shortDescription": "the chess club is the home for chess fans of all levels",
@@ -45,6 +50,7 @@
         },
 
         {
+            "id" : "c_2",
             "name": "Salsa",
             "profileImage": "images/salsaProfile.jpeg",
             "shortDescription": "the chess club is the home for chess fans of all levels",
@@ -56,6 +62,7 @@
         },
 
         {
+            "id" : "c_3",
             "name": "Hiking",
             "profileImage": "images/hikeProfile.jpeg",
             "shortDescription": "the chess club is the home for chess fans of all levels",
@@ -67,6 +74,7 @@
         },
 
         {
+            "id" : "c_4",
             "name": "Foodies",
             "profileImage": "images/foodiesProfile.jpeg",
             "shortDescription": "the chess club is the home for chess fans of all levels",
@@ -77,6 +85,7 @@
             "membersCount": 423
         },
         {
+            "id" : "c_5",
             "name": "Volleyball",
             "profileImage": "images/chessProfile.jpeg",
             "shortDescription": "the chess club is the home for chess fans of all levels",
@@ -90,6 +99,7 @@
 
     "upcoming_events": [
         {
+            "id" : "ue_1",
             "title": "Similique",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
             "date": "19/12/2021",
@@ -98,6 +108,7 @@
             "location": "3130 Bathurst Street, Suite 214"
         },
         {
+            "id" : "ue_2",
             "title": "Meetup!",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
             "date": "15/01/2021",
@@ -106,6 +117,7 @@
             "location": "3130 Bathurst Street, Suite 214"
         },
         {
+            "id" : "ue_3",
             "title": "Physics 101",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
             "date": "20/01/2021",
@@ -114,6 +126,7 @@
             "location": "3130 Bathurst Street, Suite 214"
         },
         {
+            "id" : "ue_4",
             "title": "A trip to Haifa",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
             "date": "30/01/2021",
@@ -121,5 +134,36 @@
             "duration": "3:00",
             "location": "3130 Bathurst Street, Suite 214"
         }
+    ],
+
+    "users": [
+        {
+            "id" : "usr_1",
+            "name": "Daniel Peretz",
+            "contactMail": "DanielPeretz@gmail.com",
+            "myClubs": ["chess","Salsa","Foodies"],
+            "myEvents":["A trip to Haifa","Physics 101"]
+        },
+        {
+            "id" : "usr_2",
+            "name": "Bar Chopin",
+            "contactMail": "Chopin@gmail.com",
+            "myClubs": ["chess","Salsa","Foodies"],
+            "myEvents":["A trip to Haifa","Physics 101"]
+        },
+        {
+            "id" : "usr_3",
+            "name": "Sharon zlothty",
+            "contactMail": "Sharonzlothty@gmail.com",
+            "myClubs": ["chess","Salsa","Foodies"],
+            "myEvents":["A trip to Haifa","Physics 101"]
+        },
+        {
+            "id" : "usr_4",
+            "name": "Avital Haimon",
+            "contactMail": "AvitalHaimon@gmail.com",
+            "myClubs": ["chess","Salsa","Foodies"],
+            "myEvents":["A trip to Haifa","Physics 101"]
+        }
     ]
-}
+    }
