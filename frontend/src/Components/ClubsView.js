@@ -13,13 +13,15 @@ function ClubsView({
 }) {
   return (
     <GenericControl header={header} width={width} Container={Container}>
-      {data.map((d) => (
-        <GenericCard key={d.name} title={d.name}>
-          <LineContainer>
-            <Labels tags={d.tags} color={green} />
-            <Text>{`${d.membersCount} Members`}</Text>
-          </LineContainer>
+      {data.map(({
+        id, name, tags, membersCount,
+      }) => (
+        <GenericCard key={id} title={name}>
+          <Text>{`${membersCount} Members`}</Text>
           <CustomPlaceholder width={260} height={180} />
+          <LineContainer>
+            <Labels tags={tags} color={green} />
+          </LineContainer>
         </GenericCard>
       ))}
     </GenericControl>
@@ -62,7 +64,6 @@ const Text = styled.div`
 const LineContainer = styled.div`
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   height: auto;
   margin: 10px 0;
   `;
