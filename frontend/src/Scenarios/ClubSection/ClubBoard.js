@@ -8,7 +8,7 @@ function ClubBoard() {
   const [upcomingEvents, setUpcomingEvents] = useState();
 
   useEffect(() => {
-    fetch('http://localhost:3030/messages', {
+    fetch('http://localhost:5000/messages', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -17,7 +17,7 @@ function ClubBoard() {
       .then((res) => res.json())
       .then((mydata) => setMessagesData(mydata.slice(0, 7)));
 
-    fetch('http://localhost:3030/upcoming_events', {
+    fetch('http://localhost:5000/upcoming_events', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
