@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export function Label({ children, color }) {
+function Label({ children, color }) {
   return (
     <Tag color={color}>
       {children}
@@ -14,7 +14,7 @@ Label.propTypes = {
   color: PropTypes.string.isRequired,
 };
 
-export function Labels({ tags, color }) {
+function Labels({ tags, color }) {
   return (
     <>
       {tags.map((tag) => (<Label key={tag} color={color}>{tag}</Label>))}
@@ -34,3 +34,5 @@ const Tag = styled.span`
   border-radius:20px;
   margin:0px 3px;
 `;
+
+export { Label, Labels };

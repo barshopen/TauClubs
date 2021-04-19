@@ -6,17 +6,17 @@ import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 import { Labels } from './Generic/Label';
 
+const green = '#00d989';
+
 function ClubsView({
   header, data, width, Container,
 }) {
   return (
     <GenericControl header={header} width={width} Container={Container}>
-      { /* TODO find less way to acheive thie width property
-          genralize containers for all controls. */}
       {data.map((d) => (
         <GenericCard key={d.name} title={d.name}>
           <LineContainer>
-            <Labels tags={d.tags} color="#00d989" />
+            <Labels tags={d.tags} color={green} />
             <Text>{`${d.membersCount} Members`}</Text>
           </LineContainer>
           <CustomPlaceholder width={260} height={180} />
@@ -30,10 +30,10 @@ ClubsView.propTypes = {
   header: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.int, // TODO make sure we actualy have string
+      id: PropTypes.int,
       name: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
-      membersCount: PropTypes.int, // todo change to usersCount
+      membersCount: PropTypes.int,
       /* TODO decide represented base64-decoded -string or another http request. */
       photo: PropTypes.string,
     }),
