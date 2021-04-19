@@ -9,9 +9,11 @@ function UpcomingEvents({ data }) {
   return (
     <GenericControl header="Upcoming Events">
       <MessagesContainer>
-        {data.map((d) => (
-          <GenericFeedMessage title={d.title} date={d.date} key={d.id}>
-            <Content>{d.text}</Content>
+        {data.map(({
+          id, title, date, text,
+        }) => (
+          <GenericFeedMessage title={title} date={date} key={id}>
+            <Content>{text}</Content>
             <Link to="/#"> View Location</Link>
           </GenericFeedMessage>
         ))}
@@ -23,6 +25,7 @@ function UpcomingEvents({ data }) {
 UpcomingEvents.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       title: PropTypes.string,
       date: PropTypes.string,
       text: PropTypes.string,

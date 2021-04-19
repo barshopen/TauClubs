@@ -4,16 +4,26 @@ import PropTypes from 'prop-types';
 
 function Label({ children, color }) {
   return (
-    <div>
-      <Tag color={color}>
-        {children}
-      </Tag>
-    </div>
+    <Tag color={color}>
+      {children}
+    </Tag>
+  );
+}
+Label.propTypes = {
+  children: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+};
+
+function Labels({ tags, color }) {
+  return (
+    <>
+      {tags.map((tag) => (<Label key={tag} color={color}>{tag}</Label>))}
+    </>
   );
 }
 
-Label.propTypes = {
-  children: PropTypes.string.isRequired, // TODO force the element to be always text...
+Labels.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   color: PropTypes.string.isRequired,
 };
 
@@ -22,5 +32,7 @@ const Tag = styled.span`
   padding: 0 7px;
   background-color:${(props) => props.color}; 
   border-radius:20px;
+  margin:0px 3px;
 `;
-export default Label;
+
+export { Label, Labels };
