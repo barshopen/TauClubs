@@ -8,9 +8,11 @@ function Messages({ data }) {
   return (
     <GenericControl header="Messages">
       <MessagesContainer>
-        {data.map((d) => (
-          <GenericFeedMessage title={d.title} date={d.date} key={d.id}>
-            <Content>{d.text}</Content>
+        {data.map(({
+          id, title, date, text,
+        }) => (
+          <GenericFeedMessage title={title} date={date} key={id}>
+            <Content>{text}</Content>
           </GenericFeedMessage>
         ))}
       </MessagesContainer>
@@ -21,6 +23,7 @@ function Messages({ data }) {
 Messages.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       title: PropTypes.string,
       date: PropTypes.string,
       text: PropTypes.string,
