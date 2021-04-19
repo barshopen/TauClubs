@@ -3,57 +3,87 @@
         {
             "title": "chess",
             "text": "The new meeting location is tel aviv",
-            "date": "6/8/2020"
+            "date": "6/8/2020",
+            "time": "20:00"
         },
         {
             "title": "new opening",
             "text": "we will open another tour in April",
-            "date": "12/16/2020"
+            "date": "12/16/2020",
+            "time": "20:10"
         },
         {
             "title": "royal",
             "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
-            "date": "2/16/2021"
+            "date": "2/16/2021",
+            "time": "19:30"
         },
         {
             "title": "Veritatis Dolores Adipisci Minus",
             "text": "an evening of physics, including a talk from a theoretical particle physicist",
-            "date": "9/11/2020"
+            "date": "9/11/2020",
+            "time": "18:00"
         },
         {
             "title": "Repellat",
             "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
-            "date": "6/21/2020"
+            "date": "6/21/2020",
+            "time": "10:00"
         }
     ],
 
     "clubs": [
         {
             "name": "chess",
+            "profileImage": "images/chessProfile.jpeg",
+            "shortDescription": "the chess club is the home for chess fans of all levels",
+            "Description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
             "tags": ["Math"],
+            "creationDate": "18/2/2021",
+            "contactMail": "chessAtTau@gmail.com",
             "membersCount": 128
         },
 
         {
             "name": "Salsa",
+            "profileImage": "images/salsaProfile.jpeg",
+            "shortDescription": "the chess club is the home for chess fans of all levels",
+            "Description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
             "tags": ["Dancing", "Sport"],
+            "creationDate": "18/2/2021",
+            "contactMail": "SalsaAtTau@gmail.com",
             "membersCount": 111
         },
 
         {
             "name": "Hiking",
+            "profileImage": "images/hikeProfile.jpeg",
+            "shortDescription": "the chess club is the home for chess fans of all levels",
+            "Description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
             "tags": ["Outdoor", "Sport", "Social"],
+            "creationDate": "18/2/2021",
+            "contactMail": "HikingAtTau@gmail.com",
             "membersCount": 12
         },
 
         {
             "name": "Foodies",
+            "profileImage": "images/foodiesProfile.jpeg",
+            "shortDescription": "the chess club is the home for chess fans of all levels",
+            "Description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
             "tags": ["Outdoor", "Social"],
+            "creationDate": "18/2/2021",
+            "contactMail": "FoodiesAtTau@gmail.com",
             "membersCount": 423
         },
         {
             "name": "Volleyball",
+            "profileImage": "images/chessProfile.jpeg",
+            "shortDescription": "the chess club is the home for chess fans of all levels",
+            "Description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
             "tags": ["Sport", "Social", "Outdoor"],
+            "creationDate": "18/2/2021",
+            "contactMail": "VolleyballAtTau@gmail.com",
             "membersCount": 13
         }
     ],
@@ -62,22 +92,34 @@
         {
             "title": "Similique",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-            "date": "19/12/2021"
+            "date": "19/12/2021",
+            "time":"10:00",
+            "duration": "3:00",
+            "location": "3130 Bathurst Street, Suite 214"
         },
         {
             "title": "Meetup!",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-            "date": "15/01/2021"
+            "date": "15/01/2021",
+            "time":"10:00",
+            "duration": "3:00",
+            "location": "3130 Bathurst Street, Suite 214"
         },
         {
             "title": "Physics 101",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-            "date": "20/01/2021"
+            "date": "20/01/2021",
+            "time":"10:00",
+            "duration": "3:00",
+            "location": "3130 Bathurst Street, Suite 214"
         },
         {
             "title": "A trip to Haifa",
             "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-            "date": "30/01/2021"
+            "date": "30/01/2021",
+            "time":"10:00",
+            "duration": "3:00",
+            "location": "3130 Bathurst Street, Suite 214"
         }
     ]
 }
