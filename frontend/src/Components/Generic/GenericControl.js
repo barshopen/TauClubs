@@ -37,11 +37,12 @@ GenericControl.defaultProps = {
 };
 
 const MainHeader = styled.h2`
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size:28rem;
-    margin: 25px 0;
-    font-weight: normal;
-    width:${(props) => props.width};
+  text-align: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size:28rem;
+  margin: 25px 0;
+  font-weight: normal;
+  width:${(props) => props.width};
 `;
 
 export default GenericControl;
