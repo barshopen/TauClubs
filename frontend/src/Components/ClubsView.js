@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { PhotoPlaceholder } from 'react-placeholder-image';
 import { Link } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
@@ -20,7 +19,7 @@ const LineContainer = styled.div`
   align-items: flex-start;
   height: auto;
   margin: 10px 0;
-  `;
+`;
 
 function ClubsView({
   header, data, width, Container,

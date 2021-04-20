@@ -1,36 +1,88 @@
-// @flow
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
+import styled from 'styled-components';
+import {
+  withScriptjs, withGoogleMap, GoogleMap, Marker,
+} from 'react-google-maps';
+import GenericModal from '../Components/Generic/GenericModal';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+const primary = '#3898EC';
+const secondary = '#87898a';
+
+const Container = styled.div`
+  display:flex;
+  flex-direction:column;
+  justify-content: space-evenly;
+  height: 50vh;
+`;
+
+const Header = styled.h2`
+  text-align: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size:30rem;
+  font-weight: bold;
+`;
+
+const Button = styled.button`
+  border: solid ${({ color }) => color} 1px;
+  text-align: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size:15rem; font-weight: bold; color:white;
+  width:75px; height:40px;
+  background-color:  ${({ color }) => color};
+  margin:30px 80px;
+`;
+
+const Line = styled.div`
+  display:flex;
+  justify-content: space-around;
+`;
+
+const Input = styled.input`
+  height:${(props) => props.height};
+  font-family:'Roboto';
+  height:'30px';
+`;
+const TextArea = styled.textarea`
+  height: '120px';  
+  font-family:'Roboto';
+`;
 
 function NewEvent({ showEventModal, setShowEventModal }) {
   return (
-    <Modal
-      ariaHideApp={false}
-      isOpen={showEventModal}
-      onRequestClose={() => setShowEventModal(false)}
-      style={customStyles}
-      contentLabel="Example Modal"
+    <GenericModal
+      showModal={showEventModal}
+      setShowModal={setShowEventModal}
+      Container={Container}
     >
+      <Header>
+        Create New Event
+      </Header>
+      <Input type="text" placeholder="Event title" />
+      <TextArea placeholder="Description" style={{ height: '140px' }} />
 
-      <h2>Hello</h2>
-      <div>I am a modal</div>
-      <form>
-        <input />
-        <input type="text" />
-      </form>
-    </Modal>
+      <Input width="150px" type="date" />
+
+      <Line>
+        <Button
+          color={primary}
+          type="button"
+          label="Create"
+          onClick={() => setShowEventModal(false)}
+        >
+          Publish
+        </Button>
+        <Button
+          color={secondary}
+          type="button"
+          label="Cancel"
+          onClick={() => setShowEventModal(false)}
+        >
+          Cancel
+        </Button>
+
+      </Line>
+    </GenericModal>
   );
 }
 

@@ -16,7 +16,7 @@ export const Nav = styled.nav`
   font: Roboto;
 `;
 
-export const buttunBack = styled.div`
+export const ButtunBack = styled.div`
 width:5px;
 flex-direction:center;
 `;
@@ -72,9 +72,9 @@ function Navbar() {
           Contact Us
         </NavLink>
         <NavLink to="/createnewclub" gridArea="nl4">
-          <buttunBack>
+          <ButtunBack>
             <BiPlus style={{ BiFontColor: 'white' }} />
-          </buttunBack>
+          </ButtunBack>
         </NavLink>
         <NavBarSearch>
           <SearchBox
