@@ -28,12 +28,12 @@ function ClubsView({
   return (
     <GenericControl header={header} width={width} Container={Container}>
       {data.map(({
-        id, name, tags, membersCount,
+        id, name, tags, membersCount, profileImage,
       }) => (
         <Link key={id} to={`/club/board/${id}`}>
           <GenericCard title={name}>
             <Text>{`${membersCount} Members`}</Text>
-            <PhotoPlaceholder width={260} height={180} />
+            <img src={profileImage} alt="" width={260} height={180} style={{ objectFit: 'cover' }} />
             <LineContainer>
               <Labels tags={tags} color={green} />
             </LineContainer>
