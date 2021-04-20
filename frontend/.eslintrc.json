@@ -23,6 +23,7 @@
         "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
         "linebreak-style":"off",
         "no-unused-vars":"warn",
-        "no-use-before-define": "off"
+        "no-use-before-define": "off",
+        "no-console": "warn"
     }
 }

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Switch, Route, useRouteMatch, useParams, Link,
+  Switch, Route, useRouteMatch, Link,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { PhotoPlaceholder } from 'react-placeholder-image';
@@ -43,10 +43,18 @@ const NavLink = styled(Link)`
 `;
 
 function ClubSection() {
-  const { clubId } = useParams();
-  const { path } = useRouteMatch();
-
-  // pass options to customize the background-color, text, and height
+  const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
+  const [clubData, setClubData] = useState();
+  useEffect(() => {
+    fetch(`http://localhost:5000/clubs/${clubId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((mydata) => setClubData(mydata));
+  }, [clubId]);
 
   return (
     <div>
@@ -55,17 +63,17 @@ function ClubSection() {
       <HeaderPhoto>
         <PhotoPlaceholder width={1000} height={200} as="img" alt="wallpaper" />
         <Nav>
-          <NavLink>Club Board</NavLink>
-          <NavLink>About Us</NavLink>
-          <NavLink>Join Us</NavLink>
-          <NavLink>Contact</NavLink>
+          <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
+          <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
+          <NavLink to={`/club/contact/${clubId}`}>Join Us</NavLink>
+          <NavLink to={`/club/joinus/${clubId}`}>Contact</NavLink>
         </Nav>
       </HeaderPhoto>
       <Switch>
-        <Route exact path={path} component={ClubBoard} />
-        <Route path={`${path}/about`} component={AboutUs} />
-        <Route path={`${path}/contact`} component={Contact} />
-        <Route path={`${path}/joinus`} component={JoinUs} />
+        <Route path="/club/board/:clubId" render={() => <ClubBoard props={{ clubData }} />} />
+        <Route path="/club/about/:clubId" render={() => <AboutUs props={{ clubData }} />} />
+        <Route path="/club/contact/:clubId" render={() => <Contact props={{ clubData }} />} />
+        <Route path="/club/joinus/:clubId" render={() => <JoinUs props={{ clubData }} />} />
       </Switch>
 
     </div>

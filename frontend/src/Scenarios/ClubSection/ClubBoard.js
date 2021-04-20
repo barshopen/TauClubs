@@ -45,7 +45,6 @@ function ClubBoard() {
         <ComponentContainer>
           <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
-
       </Container>
     </>
   );

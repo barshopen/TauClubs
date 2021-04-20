@@ -30,7 +30,7 @@ function ClubsView({
       {data.map(({
         id, name, tags, membersCount,
       }) => (
-        <Link key={id} to="/club">
+        <Link key={id} to={`/club/board/${id}`}>
           <GenericCard title={name}>
             <Text>{`${membersCount} Members`}</Text>
             <PhotoPlaceholder width={260} height={180} />
