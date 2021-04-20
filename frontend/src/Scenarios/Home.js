@@ -55,7 +55,6 @@ function Home() {
         <ComponentContainer gridArea="upcomingEvents">
           <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
-
       </Container>
     </>
   );

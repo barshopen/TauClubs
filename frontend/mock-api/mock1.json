@@ -48,7 +48,8 @@
             "creationTime": "2012-04-23T18:25:43.511Z",
             "lastUpdateTime": "2012-04-23T22:25:00.000Z",
             "contactMail": "chessAtTau@gmail.com",
-            "membersCount": 128
+            "membersCount": 128,
+            "admin": true
         },
 
         {
@@ -61,7 +62,8 @@
             "creationTime": "2012-04-23T18:25:43.511Z",
             "lastUpdateTime": "2012-04-23T22:25:00.000Z",
             "contactMail": "SalsaAtTau@gmail.com",
-            "membersCount": 111
+            "membersCount": 111,
+            "admin": false
         },
 
         {
@@ -74,7 +76,8 @@
             "creationTime": "2012-04-23T18:25:43.511Z",
             "lastUpdateTime": "2012-04-23T22:25:00.000Z",
             "contactMail": "HikingAtTau@gmail.com",
-            "membersCount": 12
+            "membersCount": 12,
+            "admin": false
         },
 
         {
@@ -87,7 +90,8 @@
             "creationTime": "2012-04-23T18:25:43.511Z",
             "lastUpdateTime": "2012-04-23T22:25:00.000Z",
             "contactMail": "FoodiesAtTau@gmail.com",
-            "membersCount": 423
+            "membersCount": 423,
+            "admin": false
         },
         {
             "id" : "c_5",
@@ -99,7 +103,8 @@
             "creationTime": "2012-04-23T18:25:43.511Z",
             "lastUpdateTime": "2012-04-23T22:25:00.000Z",
             "contactMail": "VolleyballAtTau@gmail.com",
-            "membersCount": 13
+            "membersCount": 13,
+            "admin": false
         }
     ],
 
