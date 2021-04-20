@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { BiPlus } from 'react-icons/bi';
+import { IconContext } from 'react-icons';
+import { GoPlus } from 'react-icons/go';
+
+const IconContainer = styled.div`
+  & div{ /* TODO change this. find a better way to do it. 'left' should be forsakend for grid method */ 
+    position: relative;
+    left:70px; 
+    cursor: pointer;
+  }
+`;
 
 export const Nav = styled.nav`
   display:grid;
@@ -72,9 +81,20 @@ function Navbar() {
           Contact Us
         </NavLink>
         <NavLink to="/createnewclub" gridArea="nl4">
+<<<<<<< HEAD
           <ButtunBack>
             <BiPlus style={{ BiFontColor: 'white' }} />
           </ButtunBack>
+=======
+
+          <IconContainer>
+            <div>
+              <IconContext.Provider value={{ size: '23px', color: 'white' }}>
+                <GoPlus />
+              </IconContext.Provider>
+            </div>
+          </IconContainer>
+>>>>>>> brashopne/Club2
         </NavLink>
         <NavBarSearch>
           <SearchBox

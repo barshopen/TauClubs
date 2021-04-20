@@ -32,7 +32,7 @@ function ClubsView({
         <Link key={id} to={`/club/board/${id}`}>
           <GenericCard title={name}>
             <Text>{`${membersCount} Members`}</Text>
-            <img src={profileImage} alt="" width={260} height={180} style={{ objectFit: 'cover' }} />
+            <img src={profileImage} alt="" width={width} height={205} style={{ objectFit: 'cover' }} />
             <LineContainer>
               <Labels tags={tags} color={green} />
             </LineContainer>
