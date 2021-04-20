@@ -4,21 +4,21 @@ import ClubsView from '../Components/ClubsView';
 
 const width = '95%';
 
-const Ribbon = styled.div`
-  background: #393939;
-`;
-const SearchBox = styled.input`
-  margin: 7px 15px;
-  padding: 8px 8px;
-  font-size: 14px;
-  width:35%;
-  max-width: 40%;
-  border-style: solid; border-width: 2px; border-color: #000; border-radius: 20px;
-  background-color: #393939; color: #fff;
-`;
-const SearchButton = styled.button`
-  color: #fff;
-`;
+// const Ribbon = styled.div`
+//   background: #393939;
+// `;
+// const SearchBox = styled.input`
+//   margin: 7px 15px;
+//   padding: 8px 8px;
+//   font-size: 14px;
+//   width:35%;
+//   max-width: 40%;
+//   border-style: solid; border-width: 2px; border-color: #000; border-radius: 20px;
+//   background-color: #393939; color: #fff;
+// `;
+// const SearchButton = styled.button`
+//   color: #fff;
+// `;
 
 function AllClubs() {
   const [clubsData, setClubsData] = useState();
@@ -41,19 +41,13 @@ function AllClubs() {
 
   return (
     <>
-      <form>
-        <Ribbon>
-          <SearchBox placeholder="Search..." type="search" value={searchData} onChange={(e) => setSearchData(e.target.value)} />
-          <SearchButton onClick={(e) => handleClick(e)} type="button"> Search</SearchButton>
-        </Ribbon>
-      </form>
       <ClubsView width={width} data={clubsData} Container={StyledContainer} />
     </>
   );
 }
 const StyledContainer = styled.div`
     display:grid;
-    grid-template-columns:repeat(5, 1fr);
+    grid-template-columns:repeat(4, 1fr);
     grid-gap:40px;
     align-items:center;
 `;
