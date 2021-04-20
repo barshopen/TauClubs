@@ -2,11 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { PhotoPlaceholder } from 'react-placeholder-image';
+import { Link } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 import { Labels } from './Generic/Label';
 
 const green = '#00d989';
+
+const Text = styled.div`
+    font-size: 15rem;
+    text-align: right;
+    flex: 1;
+`;
+
+const LineContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  margin: 10px 0;
+  `;
 
 function ClubsView({
   header, data, width, Container,
@@ -16,13 +30,15 @@ function ClubsView({
       {data.map(({
         id, name, tags, membersCount,
       }) => (
-        <GenericCard key={id} title={name}>
-          <Text>{`${membersCount} Members`}</Text>
-          <PhotoPlaceholder width={260} height={180} />
-          <LineContainer>
-            <Labels tags={tags} color={green} />
-          </LineContainer>
-        </GenericCard>
+        <Link key={id} to="/club">
+          <GenericCard title={name}>
+            <Text>{`${membersCount} Members`}</Text>
+            <PhotoPlaceholder width={260} height={180} />
+            <LineContainer>
+              <Labels tags={tags} color={green} />
+            </LineContainer>
+          </GenericCard>
+        </Link>
       ))}
     </GenericControl>
   );
@@ -54,16 +70,3 @@ ClubsView.defaultProps = {
   width: '100%',
 };
 export default ClubsView;
-
-const Text = styled.div`
-    font-size: 15rem;
-    text-align: right;
-    flex: 1;
-`;
-
-const LineContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  height: auto;
-  margin: 10px 0;
-  `;
