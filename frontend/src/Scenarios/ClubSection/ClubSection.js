@@ -65,8 +65,8 @@ function ClubSection() {
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-          <NavLink to={`/club/contact/${clubId}`}>Join Us</NavLink>
-          <NavLink to={`/club/joinus/${clubId}`}>Contact</NavLink>
+          <NavLink to={`/club/joinus/${clubId}`}>Join Us</NavLink>
+          <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
         </Nav>
       </HeaderPhoto>
       <Switch>
