@@ -4,7 +4,7 @@ import Contact from './Scenarios/Contact';
 import Navbar from './Components/Navbar';
 import AllClubs from './Scenarios/AllClubs';
 import Home from './Scenarios/Home';
-import Signin from './Scenarios/signIn'
+import Signin from './Scenarios/signIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 
 function App() {

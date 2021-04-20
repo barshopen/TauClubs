@@ -18,7 +18,7 @@
         "react"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts", ".tsx"] }],
         "indent": ["error", 2],
         "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
         "linebreak-style":"off",

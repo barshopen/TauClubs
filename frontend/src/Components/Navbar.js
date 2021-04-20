@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { BiPlus, BiFontColor } from 'react-icons/bi';
 
 export const Nav = styled.nav`
   display:grid;
-  grid-template-columns:repeat(10, 1fr);
+  grid-template-columns:repeat(12, 1fr);
   grid-template-areas:
-      "nl1 nl2 nl3  sb sb sb sb sb  nl4 nl5 ";
-  grid-gap:40px;
-  align-items:center;
+      "nl1 nl2 nl3  nl3 sb sb sb sb sb sb  nl4 nl5 nl5";
+  grid-gap:30px;
+
   background: #000000;
   height: 60px;
   font-size: 14px;
   font: Roboto;
 `;
 
+export const buttunBack = styled.div`
+width:5px;
+flex-direction:center;
+`;
+
 export const NavLink = styled(Link)`
-  float: left;
   color: #ffffff;
+  margin-inline-start:40px;
   display: inline-grid;
   align-items: center;
   text-decoration: none;
   font-weight: bold;
-  white-space: nowrap;
   grid-area: ${(props) => props.gridArea};
   &.active {
     color: #2561da;
@@ -31,6 +36,7 @@ export const NavLink = styled(Link)`
 `;
 const NavBarSearch = styled.form`
   grid-area: sb;
+  margin-inline-start:20px;
 
 `;
 const SearchBox = styled.input`
@@ -42,7 +48,7 @@ const SearchBox = styled.input`
 
 const SearchButton = styled.button`
   color: #fff;
-  margin-right: 200px;
+  margin-right: 100px;
 `;
 
 function Navbar() {
@@ -66,7 +72,9 @@ function Navbar() {
           Contact Us
         </NavLink>
         <NavLink to="/createnewclub" gridArea="nl4">
-          Create Club
+          <buttunBack>
+            <BiPlus style={{ BiFontColor: 'white' }} />
+          </buttunBack>
         </NavLink>
         <NavBarSearch>
           <SearchBox
@@ -79,7 +87,7 @@ function Navbar() {
             Search
           </SearchButton>
         </NavBarSearch>
-        <NavLink to="/signin" activeStyle gridArea="nl5">
+        <NavLink to="/signin" gridArea="nl5">
           Sign In
         </NavLink>
       </Nav>
