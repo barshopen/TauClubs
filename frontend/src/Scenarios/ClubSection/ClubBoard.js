@@ -89,7 +89,7 @@ function ClubBoard() {
         <ComponentContainer>
           <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
-        <IconContainer>
+        <IconContainer show={isAdmin}>
           <div>
             <IconContext.Provider value={{ size: '23px' }}>
               <GoPlus
