@@ -18,7 +18,7 @@ const Header = styled.h2`
 
 const HeaderPhoto = styled.div`
   & img{
-    width:100%;
+    min-width:100%;
     object-fit:cover;
     display: block;
   }
