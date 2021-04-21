@@ -20,17 +20,19 @@ const ContainerInner = styled.div`
     "ph  ."
     "ph  e";
 `;
+
 const Header = styled.h2`
   text-align: justify;
   font-family: 'Roboto Condensed', sans-serif;
   font-size:35rem;
   font-weight: bold;
-
 `;
+
 const Text = styled.div`
   text-align: left;
   font-family: 'Roboto', sans-serif;
   font-size: 14rem;
+  grid-area: ${(props) => props.gridArea};
 `;
 
 const GridItem = styled.div`grid-area: ${(props) => props.gridArea};`;

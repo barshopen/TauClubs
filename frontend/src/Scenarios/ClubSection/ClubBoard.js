@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { IconContext } from 'react-icons';
 import { GoPlus } from 'react-icons/go';
+import { useRouteMatch } from 'react-router-dom';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessage from '../NewMessage';
@@ -21,6 +22,7 @@ const IconContainer = styled.div`
     right:90px;
     cursor: pointer;
   }
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')}
 `;
 
 const ComponentContainer = styled.div`
@@ -31,6 +33,19 @@ function ClubBoard() {
   const [showEventModal, setShowEventModal] = useState(false);
   const [messagesData, setMessagesData] = useState();
   const [upcomingEvents, setUpcomingEvents] = useState();
+  const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
+  const [isAdmin, setIsAdmin] = useState();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/clubs/${clubId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((mydata) => setIsAdmin(mydata.admin));
+  }, [clubId]);
 
   useEffect(() => {
     fetch('http://localhost:5000/messages', {
@@ -51,7 +66,6 @@ function ClubBoard() {
       .then((res) => res.json())
       .then((mydata) => setUpcomingEvents(mydata.slice(0, 7)));
   }, []);
-
   return (
     <>
       <Container>
@@ -60,7 +74,7 @@ function ClubBoard() {
         <ComponentContainer>
           <Messages data={messagesData} />
         </ComponentContainer>
-        <IconContainer>
+        <IconContainer show={isAdmin}>
           <div>
             <IconContext.Provider value={{ size: '23px' }}>
               <GoPlus
