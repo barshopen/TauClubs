@@ -42,6 +42,18 @@ const NavLink = styled(Link)`
   }
 `;
 
+const RightNavLink = styled(NavLink)`
+  grid-column: 12;
+  border: 1px solid white; 
+  padding:3px 8px;
+  transition-duration: 0.4s;
+
+  &:hover{
+    background-color:white;
+    color: #393939;
+  }
+`;
+
 function ClubSection() {
   const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
   const [clubData, setClubData] = useState();
@@ -65,8 +77,8 @@ function ClubSection() {
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-          <NavLink to={`/club/joinus/${clubId}`}>Join Us</NavLink>
           <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
+          <RightNavLink to={`/club/joinus/${clubId}`}>Join</RightNavLink>
         </Nav>
       </HeaderPhoto>
       <Switch>

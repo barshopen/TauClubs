@@ -4,22 +4,6 @@ import ClubsView from '../Components/ClubsView';
 
 const width = '95%';
 
-// const Ribbon = styled.div`
-//   background: #393939;
-// `;
-// const SearchBox = styled.input`
-//   margin: 7px 15px;
-//   padding: 8px 8px;
-//   font-size: 14px;
-//   width:35%;
-//   max-width: 40%;
-//   border-style: solid; border-width: 2px; border-color: #000; border-radius: 20px;
-//   background-color: #393939; color: #fff;
-// `;
-// const SearchButton = styled.button`
-//   color: #fff;
-// `;
-
 function AllClubs() {
   const [clubsData, setClubsData] = useState();
   const [searchData, setSearchData] = useState();

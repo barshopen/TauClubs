@@ -25,11 +25,6 @@ export const Nav = styled.nav`
   font: Roboto;
 `;
 
-export const ButtunBack = styled.div`
-width:5px;
-flex-direction:center;
-`;
-
 export const NavLink = styled(Link)`
   color: #ffffff;
   margin-inline-start:40px;
@@ -81,12 +76,6 @@ function Navbar() {
           Contact Us
         </NavLink>
         <NavLink to="/createnewclub" gridArea="nl4">
-<<<<<<< HEAD
-          <ButtunBack>
-            <BiPlus style={{ BiFontColor: 'white' }} />
-          </ButtunBack>
-=======
-
           <IconContainer>
             <div>
               <IconContext.Provider value={{ size: '23px', color: 'white' }}>
@@ -94,7 +83,6 @@ function Navbar() {
               </IconContext.Provider>
             </div>
           </IconContainer>
->>>>>>> brashopne/Club2
         </NavLink>
         <NavBarSearch>
           <SearchBox
