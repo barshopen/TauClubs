@@ -6,7 +6,6 @@ const width = '95%';
 
 function AllClubs() {
   const [clubsData, setClubsData] = useState();
-  const [searchData, setSearchData] = useState();
   useEffect(() => {
     fetch('http://localhost:5000/clubs', {
       headers: {
@@ -18,17 +17,13 @@ function AllClubs() {
       .then((mydata) => setClubsData(mydata.slice(0, 5)));
   }, []);
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    // TODO make search here
-  };
-
   return (
     <>
       <ClubsView width={width} data={clubsData} Container={StyledContainer} />
     </>
   );
 }
+
 const StyledContainer = styled.div`
     display:grid;
     grid-template-columns:repeat(4, 1fr);

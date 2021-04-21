@@ -3,14 +3,7 @@ import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { IconContext } from 'react-icons';
 import { GoPlus } from 'react-icons/go';
-
-const IconContainer = styled.div`
-  & div{ /* TODO change this. find a better way to do it. 'left' should be forsakend for grid method */ 
-    position: relative;
-    left:70px; 
-    cursor: pointer;
-  }
-`;
+import propTypes from 'prop-types';
 
 export const Nav = styled.nav`
   display:grid;
@@ -25,6 +18,14 @@ export const Nav = styled.nav`
   font: Roboto;
 `;
 
+const IconContainer = styled.div`
+  & div{ /* TODO change this. find a better way to do it. 'left' should be forsakend for grid method */ 
+    position: relative;
+    left:70px; 
+    cursor: pointer;
+  }
+`;
+
 export const NavLink = styled(Link)`
   color: #ffffff;
   margin-inline-start:40px;
@@ -36,8 +37,8 @@ export const NavLink = styled(Link)`
   &.active {
     color: #2561da;
   }
-
 `;
+
 const NavBarSearch = styled.form`
   grid-area: sb;
   margin-inline-start:20px;
@@ -55,27 +56,46 @@ const SearchButton = styled.button`
   margin-right: 100px;
 `;
 
-function Navbar() {
+function Navbar({ setShowNewClubModal }) {
   const [searchData, setSearchData] = useState();
 
-  const handleClick = (e) => {
+  const handleClickSearchBar = (e) => {
     e.preventDefault();
+    // TODO make search here
+  };
+  const handleClickPlusButton = (e) => {
+    e.preventDefault();
+    setShowNewClubModal(true);
     // TODO make search here
   };
   return (
     <>
       <Nav>
-
         <NavLink to="/" exact gridArea="nl1">
           Home
         </NavLink>
+
         <NavLink to="/allClubs" gridArea="nl2">
           All Clubs
         </NavLink>
+
         <NavLink to="/contact" gridArea="nl3">
           Contact Us
         </NavLink>
-        <NavLink to="/createnewclub" gridArea="nl4">
+
+        <NavBarSearch>
+          <SearchBox
+            placeholder="Search..."
+            type="search"
+            value={searchData}
+            onChange={(e) => setSearchData(e.target.value)}
+          />
+          <SearchButton onClick={(e) => handleClickSearchBar(e)} type="button">
+            Search
+          </SearchButton>
+        </NavBarSearch>
+
+        <NavLink to="/#" gridArea="nl4" onClick={(e) => handleClickPlusButton(e)}>
           <IconContainer>
             <div>
               <IconContext.Provider value={{ size: '23px', color: 'white' }}>
@@ -84,17 +104,7 @@ function Navbar() {
             </div>
           </IconContainer>
         </NavLink>
-        <NavBarSearch>
-          <SearchBox
-            placeholder="Search..."
-            type="search"
-            value={searchData}
-            onChange={(e) => setSearchData(e.target.value)}
-          />
-          <SearchButton onClick={(e) => handleClick(e)} type="button">
-            Search
-          </SearchButton>
-        </NavBarSearch>
+
         <NavLink to="/signin" gridArea="nl5">
           Sign In
         </NavLink>
@@ -102,5 +112,7 @@ function Navbar() {
     </>
   );
 }
-
+Navbar.propTypes = {
+  setShowNewClubModal: propTypes.func.isRequired,
+};
 export default Navbar;

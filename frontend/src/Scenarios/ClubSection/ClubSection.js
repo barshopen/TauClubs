@@ -3,7 +3,6 @@ import {
   Switch, Route, useRouteMatch, Link,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { PhotoPlaceholder } from 'react-placeholder-image';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import Contact from './Contact';
@@ -57,6 +56,7 @@ const RightNavLink = styled(NavLink)`
 function ClubSection() {
   const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
   const [clubData, setClubData] = useState();
+
   useEffect(() => {
     fetch(`http://localhost:5000/clubs/${clubId}`, {
       headers: {
@@ -67,13 +67,20 @@ function ClubSection() {
       .then((res) => res.json())
       .then((mydata) => setClubData(mydata));
   }, [clubId]);
-
+  useEffect(() => {
+  }, [clubData]);
   return (
     <div>
       {/* TODO derieve data from api request. */}
       <Header>Chess</Header>
       <HeaderPhoto>
-        <PhotoPlaceholder width={1000} height={200} as="img" alt="wallpaper" />
+
+        <img
+          src={clubData ? `/${clubData.profileImage}` : ''}
+          width={1000}
+          height={200}
+          alt="wallpaper"
+        />
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
@@ -82,10 +89,10 @@ function ClubSection() {
         </Nav>
       </HeaderPhoto>
       <Switch>
-        <Route path="/club/board/:clubId" render={() => <ClubBoard props={{ clubData }} />} />
-        <Route path="/club/about/:clubId" render={() => <AboutUs props={{ clubData }} />} />
-        <Route path="/club/contact/:clubId" render={() => <Contact props={{ clubData }} />} />
-        <Route path="/club/joinus/:clubId" render={() => <JoinUs props={{ clubData }} />} />
+        <Route path="/club/board/:clubId" component={ClubBoard} />
+        <Route path="/club/about/:clubId" component={AboutUs} />
+        <Route path="/club/contact/:clubId" component={Contact} />
+        <Route path="/club/joinus/:clubId" component={JoinUs} />
       </Switch>
 
     </div>
