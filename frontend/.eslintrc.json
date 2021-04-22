@@ -5,7 +5,8 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+       "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -15,11 +16,13 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "prettier"
     ],
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts", ".tsx"] }],
         "indent": ["error", 2],
+        "prettier/prettier":"error",
         "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
         "linebreak-style":"off",
         "no-unused-vars":"warn",
