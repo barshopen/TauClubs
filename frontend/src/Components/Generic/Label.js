@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 function Label({ children, color }) {
-  return (
-    <Tag color={color}>
-      {children}
-    </Tag>
-  );
+  return <Tag color={color}>{children}</Tag>;
 }
 Label.propTypes = {
   children: PropTypes.string.isRequired,
@@ -17,7 +13,11 @@ Label.propTypes = {
 function Labels({ tags, color }) {
   return (
     <>
-      {tags.map((tag) => (<Label key={tag} color={color}>{tag}</Label>))}
+      {tags.map(tag => (
+        <Label key={tag} color={color}>
+          {tag}
+        </Label>
+      ))}
     </>
   );
 }
@@ -30,9 +30,9 @@ Labels.propTypes = {
 const Tag = styled.span`
   font-size: 15rem;
   padding: 0 7px;
-  background-color:${(props) => props.color}; 
-  border-radius:20px;
-  margin:0px 3px;
+  background-color: ${props => props.color};
+  border-radius: 20px;
+  margin: 0px 3px;
 `;
 
 export { Label, Labels };

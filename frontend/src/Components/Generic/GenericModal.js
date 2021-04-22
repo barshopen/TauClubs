@@ -13,7 +13,6 @@ const customStyles = {
     right: '33%',
     top: '20%',
     height: '56vh',
-
   },
 };
 
@@ -21,28 +20,28 @@ const Button = styled.button`
   border: solid ${({ color }) => color} 1px;
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size:15rem; font-weight: bold; color:white;
-  width:75px; height:40px;
-  background-color:  ${({ color }) => color};
-  margin:30px 80px;
+  font-size: 15rem;
+  font-weight: bold;
+  color: white;
+  width: 75px;
+  height: 40px;
+  background-color: ${({ color }) => color};
+  margin: 30px 80px;
 `;
 
 const Line = styled.div`
-  display:flex;
+  display: flex;
   justify-content: space-around;
 `;
 
-function GenericModal({
-  showModal, setShowModal, Title, Container, children,
-}) {
+function GenericModal({ showModal, setShowModal, Title, Container, children }) {
   return (
     <Modal
       ariaHideApp={false}
       isOpen={showModal}
       onRequestClose={() => setShowModal(false)}
       style={customStyles}
-      contentLabel={Title}
-    >
+      contentLabel={Title}>
       <Container>
         {children}
 
@@ -51,19 +50,16 @@ function GenericModal({
             color={primary}
             type="button"
             label="Create"
-            onClick={() => setShowModal(false)}
-          >
+            onClick={() => setShowModal(false)}>
             Publish
           </Button>
           <Button
             color={secondary}
             type="button"
             label="Cancel"
-            onClick={() => setShowModal(false)}
-          >
+            onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-
         </Line>
       </Container>
     </Modal>

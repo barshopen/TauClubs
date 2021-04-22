@@ -12,7 +12,10 @@ function App() {
   const [showNewClubModal, setShowNewClubModal] = useState(false);
   return (
     <div>
-      <NewClub showModal={showNewClubModal} setClubModal={setShowNewClubModal} />
+      <NewClub
+        showModal={showNewClubModal}
+        setClubModal={setShowNewClubModal}
+      />
       <Router>
         <Navbar setShowNewClubModal={setShowNewClubModal} />
         <Switch>
