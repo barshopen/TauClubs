@@ -24,7 +24,7 @@
         "indent": ["error", 2],
         "prettier/prettier":"error",
         "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
-        "linebreak-style":"off",
+        "linebreak-style":"error",
         "no-unused-vars":"warn",
         "no-use-before-define": "off",
         "no-console": "warn"

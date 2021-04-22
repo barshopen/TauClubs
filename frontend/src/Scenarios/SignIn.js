@@ -35,20 +35,21 @@ function Signin() {
             />
           </Inputbox2>
           <HebrewContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>:תעודת זהות </label>
           </HebrewContainer>
         </SingleRow>
         <SingleRow>
           <TextContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>Password:</label>
           </TextContainer>
           <Inputbox3>
-            <input type="text" name="password" style={{ width: '190px', height: '20px' }} />
+            <input
+              type="text"
+              name="password"
+              style={{ width: '190px', height: '20px' }}
+            />
           </Inputbox3>
           <HebrewContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>:סיסמה </label>
           </HebrewContainer>
         </SingleRow>
@@ -71,6 +72,7 @@ function Signin() {
 }
 
 export default Signin;
+
 const SingleRow = styled.div`
   flex-direction: row;
 `;

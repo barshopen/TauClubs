@@ -3,18 +3,16 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Container1 = styled.div`
-  width:${(props) => props.width};
+  width: ${props => props.width};
 `;
 
-function GenericControl({
-  header, children, width, Container,
-}) {
+function GenericControl({ header, children, width, Container }) {
   return (
     <>
-      <MainHeader width={width}>
-        {header}
-      </MainHeader>
-      <Container1 width={width} as={Container}>{children}</Container1>
+      <MainHeader width={width}>{header}</MainHeader>
+      <Container1 width={width} as={Container}>
+        {children}
+      </Container1>
     </>
   );
 }
@@ -39,10 +37,10 @@ GenericControl.defaultProps = {
 const MainHeader = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size:28rem;
+  font-size: 28rem;
   margin: 25px 0;
   font-weight: normal;
-  width:${(props) => props.width};
+  width: ${props => props.width};
 `;
 
 export default GenericControl;

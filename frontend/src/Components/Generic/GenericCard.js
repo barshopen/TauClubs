@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 function GenericCard({ title, children }) {
   return (
     <ComponentContainer>
-      <Title>
-        {title}
-      </Title>
+      <Title>{title}</Title>
       {children}
     </ComponentContainer>
   );
@@ -16,7 +14,6 @@ function GenericCard({ title, children }) {
 GenericCard.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(PropTypes.element),
-
 };
 
 GenericCard.defaultProps = {
@@ -24,12 +21,12 @@ GenericCard.defaultProps = {
 };
 
 const Title = styled.h3`
-    font-size: 25rem;
-    text-align: center;
+  font-size: 25rem;
+  text-align: center;
 `;
 const ComponentContainer = styled.div`
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default GenericCard;

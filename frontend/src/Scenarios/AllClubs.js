@@ -13,8 +13,8 @@ function AllClubs() {
         Accept: 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((mydata) => setClubsData(mydata.slice(0, 5)));
+      .then(res => res.json())
+      .then(mydata => setClubsData(mydata.slice(0, 5)));
   }, []);
 
   return (
@@ -25,9 +25,9 @@ function AllClubs() {
 }
 
 const StyledContainer = styled.div`
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    grid-gap:40px;
-    align-items:center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 40px;
+  align-items: center;
 `;
 export default AllClubs;

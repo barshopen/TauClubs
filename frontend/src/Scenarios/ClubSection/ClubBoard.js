@@ -9,31 +9,33 @@ import NewMessage from '../NewMessage';
 import NewEvent from '../NewEvent';
 
 const Container = styled.div`
-  display:grid;
-  grid-template-columns:10fr 1fr 20fr 1fr;
-  width:100%;
-  grid-gap:10px;
+  display: grid;
+  grid-template-columns: 10fr 1fr 20fr 1fr;
+  width: 100%;
+  grid-gap: 10px;
 `;
 
 const IconContainer = styled.div`
-  & div{ /* TODO change this. find a better way to do it. */
+  & div {
+    /* TODO change this. find a better way to do it. */
     position: relative;
-    top:30px;
-    right:90px;
+    top: 30px;
+    right: 90px;
     cursor: pointer;
   }
-  visibility: ${({ show }) => (show ? 'visible' : 'hidden')}
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
-const ComponentContainer = styled.div`
-`;
+const ComponentContainer = styled.div``;
 
 function ClubBoard() {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [messagesData, setMessagesData] = useState();
   const [upcomingEvents, setUpcomingEvents] = useState();
-  const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
+  const {
+    params: { clubId },
+  } = useRouteMatch('/club/*/:clubId');
   const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
@@ -43,8 +45,8 @@ function ClubBoard() {
         Accept: 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((mydata) => setIsAdmin(mydata.admin));
+      .then(res => res.json())
+      .then(mydata => setIsAdmin(mydata.admin));
   }, [clubId]);
 
   useEffect(() => {
@@ -54,8 +56,8 @@ function ClubBoard() {
         Accept: 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((mydata) => setMessagesData(mydata.slice(0, 7)));
+      .then(res => res.json())
+      .then(mydata => setMessagesData(mydata.slice(0, 7)));
 
     fetch('http://localhost:5000/upcoming_events', {
       headers: {
@@ -63,14 +65,20 @@ function ClubBoard() {
         Accept: 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((mydata) => setUpcomingEvents(mydata.slice(0, 7)));
+      .then(res => res.json())
+      .then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
   }, []);
   return (
     <>
       <Container>
-        <NewMessage showMessageModal={showMessageModal} setShowMessageModal={setShowMessageModal} />
-        <NewEvent showEventModal={showEventModal} setShowEventModal={setShowEventModal} />
+        <NewMessage
+          showMessageModal={showMessageModal}
+          setShowMessageModal={setShowMessageModal}
+        />
+        <NewEvent
+          showEventModal={showEventModal}
+          setShowEventModal={setShowEventModal}
+        />
         <ComponentContainer>
           <Messages data={messagesData} />
         </ComponentContainer>
@@ -78,7 +86,7 @@ function ClubBoard() {
           <div>
             <IconContext.Provider value={{ size: '23px' }}>
               <GoPlus
-                onClick={(e) => {
+                onClick={e => {
                   e.preventDefault();
                   setShowMessageModal(!showMessageModal);
                 }}
@@ -89,11 +97,11 @@ function ClubBoard() {
         <ComponentContainer>
           <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
-        <IconContainer>
+        <IconContainer show={isAdmin}>
           <div>
             <IconContext.Provider value={{ size: '23px' }}>
               <GoPlus
-                onClick={(e) => {
+                onClick={e => {
                   e.preventDefault();
                   setShowEventModal(!showEventModal);
                 }}
