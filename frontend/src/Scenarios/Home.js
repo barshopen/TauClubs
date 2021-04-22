@@ -6,6 +6,28 @@ import UpcomingEvents from '../Components/UpcomingEvents';
 
 const width = '90%';
 
+const ClubsViewContainer = styled.div`
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-gap:10px;
+`;
+
+const Container = styled.div`
+    display:grid;
+    grid-template-areas:
+      "messages myClubs"
+      "messages upcomingEvents";
+    grid-template-columns:1fr 2fr;
+    grid-template-rows: repeat(4, 1fr);
+    width:100%;
+    grid-gap:10px;
+`;
+
+const ComponentContainer = styled.div`
+  grid-area: ${(props) => props.gridArea};
+
+`;
+
 function Home() {
   const [messagesData, setMessagesData] = useState();
   const [clubsData, setClubsData] = useState();
@@ -59,27 +81,5 @@ function Home() {
     </>
   );
 }
-
-const ClubsViewContainer = styled.div`
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    grid-gap:10px;
-`;
-
-const Container = styled.div`
-    display:grid;
-    grid-template-areas:
-      "messages myClubs"
-      "messages upcomingEvents";
-    grid-template-columns:1fr 2fr;
-    grid-template-rows: repeat(4, 1fr);
-    width:100%;
-    grid-gap:10px;
-`;
-
-const ComponentContainer = styled.div`
-  grid-area: ${(props) => props.gridArea};
-
-`;
 
 export default Home;

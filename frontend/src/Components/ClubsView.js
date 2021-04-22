@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { PhotoPlaceholder } from 'react-placeholder-image';
 import { Link } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
@@ -20,7 +19,7 @@ const LineContainer = styled.div`
   align-items: flex-start;
   height: auto;
   margin: 10px 0;
-  `;
+`;
 
 function ClubsView({
   header, data, width, Container,
@@ -28,12 +27,12 @@ function ClubsView({
   return (
     <GenericControl header={header} width={width} Container={Container}>
       {data.map(({
-        id, name, tags, membersCount,
+        id, name, tags, membersCount, profileImage,
       }) => (
         <Link key={id} to={`/club/board/${id}`}>
           <GenericCard title={name}>
             <Text>{`${membersCount} Members`}</Text>
-            <PhotoPlaceholder width={260} height={180} />
+            <img src={profileImage} alt="" width={width} height={205} style={{ minWidth: '100%', minHeight: '100%' }} />
             <LineContainer>
               <Labels tags={tags} color={green} />
             </LineContainer>
