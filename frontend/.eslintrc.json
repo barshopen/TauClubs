@@ -22,9 +22,21 @@
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts", ".tsx"] }],
         "indent": ["error", 2],
-        "prettier/prettier":"error",
+        "prettier/prettier":["error", {
+            "semi": true,
+            "singleQuote": true,
+            "tabWidth": 2,
+            "printWidth": 80,
+            "useTabs": false,
+            "trailingComma": "all",
+            "bracketSpacing": true,
+            "arrowParens": "avoid",
+            "jsxBracketSameLine": true,
+            "endOfLine": "lf"
+          }
+        ],
         "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
-        "linebreak-style":"error",
+        "linebreak-style":["error", "unix"],
         "no-unused-vars":"warn",
         "no-use-before-define": "off",
         "no-console": "warn"

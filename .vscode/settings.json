@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+    "prettier.singleQuote": true,
+    "files.eol": "\n"
+}
