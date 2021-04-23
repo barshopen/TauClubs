@@ -9,9 +9,9 @@ import { Labels } from './Generic/Label';
 const green = '#00d989';
 
 const Text = styled.div`
-    font-size: 15rem;
-    text-align: right;
-    flex: 1;
+  font-size: 15rem;
+  text-align: right;
+  flex: 1;
 `;
 
 const LineContainer = styled.div`
@@ -21,18 +21,20 @@ const LineContainer = styled.div`
   margin: 10px 0;
 `;
 
-function ClubsView({
-  header, data, width, Container,
-}) {
+function ClubsView({ header, data, width, Container }) {
   return (
     <GenericControl header={header} width={width} Container={Container}>
-      {data.map(({
-        id, name, tags, membersCount, profileImage,
-      }) => (
+      {data.map(({ id, name, tags, membersCount, profileImage }) => (
         <Link key={id} to={`/club/board/${id}`}>
           <GenericCard title={name}>
             <Text>{`${membersCount} Members`}</Text>
-            <img src={profileImage} alt="" width={width} height={205} style={{ minWidth: '100%', minHeight: '100%' }} />
+            <img
+              src={profileImage}
+              alt=''
+              width={width}
+              height={205}
+              style={{ minWidth: '100%', minHeight: '100%' }}
+            />
             <LineContainer>
               <Labels tags={tags} color={green} />
             </LineContainer>
@@ -53,7 +55,7 @@ ClubsView.propTypes = {
       membersCount: PropTypes.int,
       /* TODO decide represented base64-decoded -string or another http request. */
       photo: PropTypes.string,
-    }),
+    })
   ),
   Container: PropTypes.oneOfType([
     PropTypes.func,

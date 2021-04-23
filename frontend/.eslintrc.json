@@ -1,29 +1,34 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
+    "indent": ["error", 2],
+    "jsx-quotes": ["error", "prefer-single"],
+    "prettier/prettier": "error",
+    "react/jsx-indent": [
+      "error",
+      2,
+      { "checkAttributes": true, "indentLogicalExpressions": true }
     ],
-    "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts", ".tsx"] }],
-        "indent": ["error", 2],
-        "react/jsx-indent":["error", 2,{"checkAttributes": true, "indentLogicalExpressions": true}],
-        "linebreak-style":"off",
-        "no-unused-vars":"warn",
-        "no-use-before-define": "off",
-        "no-console": "warn"
-    }
+    "linebreak-style": ["error", "unix"],
+    "no-unused-vars": "warn",
+    "no-use-before-define": "off",
+    "no-console": "warn"
+  }
 }

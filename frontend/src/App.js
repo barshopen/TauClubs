@@ -12,15 +12,18 @@ function App() {
   const [showNewClubModal, setShowNewClubModal] = useState(false);
   return (
     <div>
-      <NewClub showModal={showNewClubModal} setClubModal={setShowNewClubModal} />
+      <NewClub
+        showModal={showNewClubModal}
+        setClubModal={setShowNewClubModal}
+      />
       <Router>
         <Navbar setShowNewClubModal={setShowNewClubModal} />
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/allClubs" component={AllClubs} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/signin" component={Signin} />
-          <Route path="/club" component={ClubSection} />
+          <Route path='/' exact component={Home} />
+          <Route path='/allClubs' component={AllClubs} />
+          <Route path='/contact' component={Contact} />
+          <Route path='/signin' component={Signin} />
+          <Route path='/club' component={ClubSection} />
         </Switch>
       </Router>
     </div>

@@ -12,10 +12,10 @@ function Signin() {
           </TextContainer>
           <Inputbox1>
             <input
-              type="email"
-              name="Email"
+              type='email'
+              name='Email'
               style={{ width: '190px', height: '20px' }}
-              placeholder="...@mail.tau.ac.il"
+              placeholder='...@mail.tau.ac.il'
             />
           </Inputbox1>
           <HebrewContainer>
@@ -28,34 +28,35 @@ function Signin() {
           </TextContainer>
           <Inputbox2>
             <input
-              type="number"
-              name="id"
-              placeholder="123456789"
+              type='number'
+              name='id'
+              placeholder='123456789'
               style={{ width: '190px', height: '20px' }}
             />
           </Inputbox2>
           <HebrewContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>:תעודת זהות </label>
           </HebrewContainer>
         </SingleRow>
         <SingleRow>
           <TextContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>Password:</label>
           </TextContainer>
           <Inputbox3>
-            <input type="text" name="password" style={{ width: '190px', height: '20px' }} />
+            <input
+              type='text'
+              name='password'
+              style={{ width: '190px', height: '20px' }}
+            />
           </Inputbox3>
           <HebrewContainer>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>:סיסמה </label>
           </HebrewContainer>
         </SingleRow>
       </FillContainer>
       <input
-        type="submit"
-        value="Sign In"
+        type='submit'
+        value='Sign In'
         style={{
           fontSize: '20px',
           width: '150px',
@@ -71,6 +72,7 @@ function Signin() {
 }
 
 export default Signin;
+
 const SingleRow = styled.div`
   flex-direction: row;
 `;

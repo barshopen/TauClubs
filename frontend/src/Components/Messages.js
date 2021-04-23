@@ -6,11 +6,9 @@ import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 function Messages({ data }) {
   return (
-    <GenericControl header="Messages">
+    <GenericControl header='Messages'>
       <MessagesContainer>
-        {data.map(({
-          id, title, date, text,
-        }) => (
+        {data.map(({ id, title, date, text }) => (
           <GenericFeedMessage title={title} date={date} key={id}>
             <Content>{text}</Content>
           </GenericFeedMessage>
@@ -27,7 +25,7 @@ Messages.propTypes = {
       title: PropTypes.string,
       date: PropTypes.string,
       text: PropTypes.string,
-    }),
+    })
   ),
 };
 
@@ -37,15 +35,14 @@ Messages.defaultProps = {
 
 // styled components
 const MessagesContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 0 15px
-
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
 `;
 
 const Content = styled.div`
-    font-size: 15rem;
-    text-align: left;
+  font-size: 15rem;
+  text-align: left;
 `;
 
 export default Messages;

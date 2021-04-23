@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const Container = styled.div`
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   height: 50vh;
 `;
@@ -14,18 +14,18 @@ const Container = styled.div`
 const Header = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size:30rem;
+  font-size: 30rem;
   font-weight: bold;
 `;
 
 const Input = styled.input`
-  height:${(props) => props.height};
-  font-family:'Roboto';
-  height:'30px';
+  height: ${props => props.height};
+  font-family: 'Roboto';
+  height: '30px';
 `;
 const TextArea = styled.textarea`
-  height: '120px';  
-  font-family:'Roboto';
+  height: '120px';
+  font-family: 'Roboto';
 `;
 
 function NewEvent({ showEventModal, setShowEventModal }) {
@@ -34,15 +34,12 @@ function NewEvent({ showEventModal, setShowEventModal }) {
       <GenericModal
         showModal={showEventModal}
         setShowModal={setShowEventModal}
-        Container={Container}
-      >
-        <Header>
-          Create New Event
-        </Header>
-        <Input type="text" placeholder="Event title" />
-        <TextArea placeholder="Description" style={{ height: '140px' }} />
+        Container={Container}>
+        <Header>Create New Event</Header>
+        <Input type='text' placeholder='Event title' />
+        <TextArea placeholder='Description' style={{ height: '140px' }} />
 
-        <Input width="150px" type="date" />
+        <Input width='150px' type='date' />
       </GenericModal>
     </>
   );

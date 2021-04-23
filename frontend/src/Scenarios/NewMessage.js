@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const Container = styled.div`
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   height: 50vh;
 `;
@@ -13,17 +13,17 @@ const Container = styled.div`
 const Header = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size:30rem;
+  font-size: 30rem;
   font-weight: bold;
 `;
 
 const Input = styled.input`
-  height:${(props) => props.height};
-  font-family:'Roboto';
+  height: ${props => props.height};
+  font-family: 'Roboto';
 `;
 const TextArea = styled.textarea`
-  height: '120px';  
-  font-family:'Roboto';
+  height: '120px';
+  font-family: 'Roboto';
 `;
 
 function NewMessage({ showMessageModal, setShowMessageModal }) {
@@ -31,14 +31,10 @@ function NewMessage({ showMessageModal, setShowMessageModal }) {
     <GenericModal
       showModal={showMessageModal}
       setShowModal={setShowMessageModal}
-      Container={Container}
-    >
-      <Header>
-        Publish New Message
-      </Header>
-      <Input height="30px" type="text" placeholder="Message title" />
-      <TextArea placeholder="Message" style={{ height: '140px' }} />
-
+      Container={Container}>
+      <Header>Publish New Message</Header>
+      <Input height='30px' type='text' placeholder='Message title' />
+      <TextArea placeholder='Message' style={{ height: '140px' }} />
     </GenericModal>
   );
 }

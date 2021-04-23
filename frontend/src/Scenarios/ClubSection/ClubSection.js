@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Switch, Route, useRouteMatch, Link,
-} from 'react-router-dom';
+import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
@@ -10,16 +8,16 @@ import JoinUs from './JoinUs';
 
 const Header = styled.h2`
   font-family: 'Roboto Condensed', sans-serif;
-  font-size:40rem;
+  font-size: 40rem;
   margin: 25px 0;
   font-weight: normal;
   text-align: center;
 `;
 
 const HeaderPhoto = styled.div`
-  & img{
-    min-width:100%;
-    object-fit:cover;
+  & img {
+    min-width: 100%;
+    object-fit: cover;
     display: block;
   }
 `;
@@ -27,13 +25,16 @@ const HeaderPhoto = styled.div`
 const Nav = styled.nav`
   background: #393939;
   height: 38px;
-  display:grid;
-  grid-template-columns:repeat(12, 1fr);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
 `;
 
 const NavLink = styled(Link)`
   display: inline-grid;
-  text-decoration: none; font: Roboto; font-size: 14px; color: #ffffff;
+  text-decoration: none;
+  font: Roboto;
+  font-size: 14px;
+  color: #ffffff;
   justify-self: center;
   align-self: center;
   &.active {
@@ -43,18 +44,20 @@ const NavLink = styled(Link)`
 
 const RightNavLink = styled(NavLink)`
   grid-column: 12;
-  border: 1px solid white; 
-  padding:3px 8px;
+  border: 1px solid white;
+  padding: 3px 8px;
   transition-duration: 0.4s;
 
-  &:hover{
-    background-color:white;
+  &:hover {
+    background-color: white;
     color: #393939;
   }
 `;
 
 function ClubSection() {
-  const { params: { clubId } } = useRouteMatch('/club/*/:clubId');
+  const {
+    params: { clubId },
+  } = useRouteMatch('/club/*/:clubId');
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
@@ -64,22 +67,20 @@ function ClubSection() {
         Accept: 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((mydata) => setClubData(mydata));
+      .then(res => res.json())
+      .then(mydata => setClubData(mydata));
   }, [clubId]);
-  useEffect(() => {
-  }, [clubData]);
+  useEffect(() => {}, [clubData]);
   return (
     <div>
       {/* TODO derieve data from api request. */}
       <Header>Chess</Header>
       <HeaderPhoto>
-
         <img
           src={clubData ? `/${clubData.profileImage}` : ''}
           width={1000}
           height={200}
-          alt="wallpaper"
+          alt='wallpaper'
         />
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
@@ -89,12 +90,11 @@ function ClubSection() {
         </Nav>
       </HeaderPhoto>
       <Switch>
-        <Route path="/club/board/:clubId" component={ClubBoard} />
-        <Route path="/club/about/:clubId" component={AboutUs} />
-        <Route path="/club/contact/:clubId" component={Contact} />
-        <Route path="/club/joinus/:clubId" component={JoinUs} />
+        <Route path='/club/board/:clubId' component={ClubBoard} />
+        <Route path='/club/about/:clubId' component={AboutUs} />
+        <Route path='/club/contact/:clubId' component={Contact} />
+        <Route path='/club/joinus/:clubId' component={JoinUs} />
       </Switch>
-
     </div>
   );
 }
