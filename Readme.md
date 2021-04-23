@@ -17,7 +17,7 @@ Components: All non scenarios components.
 We use eslint and prettier to manage the front-end styling and pep8 for the backend. See our .eslintrc.json for more details.
 
 ## Graphical Design ##
-Up untill now we used pure CSS as a solution an approach to resolve our design needs. We consider moving to material-UI design system to resolve mobile comaptability and many other issues that came up while workin on v0.001(milestone 1)
+Up untill now we used pure CSS as a solution an approach to resolve our design needs. We consider moving to material-UI design system to resolve mobile comaptability and many other issues that came up while workinע on v0.001(milestone 1)
 
 # Contribution #
 Following v0.001, each commit on PR to master are squashed before merged. We usually require a CR before inserting any piece of code to master.
