@@ -50,19 +50,19 @@ function Contact() {
   return (
     <ContainerOuter>
       <ContainerInner>
-        <GridItem gridArea="ph">
-          <img src={photo} width="150" alt="" />
+        <GridItem gridArea='ph'>
+          <img src={photo} width='150' alt='' />
         </GridItem>
 
-        <GridItem gridArea="h">
+        <GridItem gridArea='h'>
           <Header>{data.owner}</Header>
         </GridItem>
 
-        <GridItem gridArea="t">
-          <Text gridArea="t">{data.text}</Text>
+        <GridItem gridArea='t'>
+          <Text gridArea='t'>{data.text}</Text>
         </GridItem>
-        <GridItem gridArea="e">
-          <Text gridArea="e">{data.email}</Text>
+        <GridItem gridArea='e'>
+          <Text gridArea='e'>{data.email}</Text>
         </GridItem>
       </ContainerInner>
     </ContainerOuter>

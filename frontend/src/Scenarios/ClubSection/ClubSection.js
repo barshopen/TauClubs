@@ -80,7 +80,7 @@ function ClubSection() {
           src={clubData ? `/${clubData.profileImage}` : ''}
           width={1000}
           height={200}
-          alt="wallpaper"
+          alt='wallpaper'
         />
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
@@ -90,10 +90,10 @@ function ClubSection() {
         </Nav>
       </HeaderPhoto>
       <Switch>
-        <Route path="/club/board/:clubId" component={ClubBoard} />
-        <Route path="/club/about/:clubId" component={AboutUs} />
-        <Route path="/club/contact/:clubId" component={Contact} />
-        <Route path="/club/joinus/:clubId" component={JoinUs} />
+        <Route path='/club/board/:clubId' component={ClubBoard} />
+        <Route path='/club/about/:clubId' component={AboutUs} />
+        <Route path='/club/contact/:clubId' component={Contact} />
+        <Route path='/club/joinus/:clubId' component={JoinUs} />
       </Switch>
     </div>
   );

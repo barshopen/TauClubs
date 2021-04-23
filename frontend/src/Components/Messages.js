@@ -6,7 +6,7 @@ import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 function Messages({ data }) {
   return (
-    <GenericControl header="Messages">
+    <GenericControl header='Messages'>
       <MessagesContainer>
         {data.map(({ id, title, date, text }) => (
           <GenericFeedMessage title={title} date={date} key={id}>
@@ -25,7 +25,7 @@ Messages.propTypes = {
       title: PropTypes.string,
       date: PropTypes.string,
       text: PropTypes.string,
-    }),
+    })
   ),
 };
 

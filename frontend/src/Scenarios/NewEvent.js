@@ -36,10 +36,10 @@ function NewEvent({ showEventModal, setShowEventModal }) {
         setShowModal={setShowEventModal}
         Container={Container}>
         <Header>Create New Event</Header>
-        <Input type="text" placeholder="Event title" />
-        <TextArea placeholder="Description" style={{ height: '140px' }} />
+        <Input type='text' placeholder='Event title' />
+        <TextArea placeholder='Description' style={{ height: '140px' }} />
 
-        <Input width="150px" type="date" />
+        <Input width='150px' type='date' />
       </GenericModal>
     </>
   );

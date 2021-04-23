@@ -73,31 +73,31 @@ function Navbar({ setShowNewClubModal }) {
   return (
     <>
       <Nav>
-        <NavLink to="/" exact gridArea="nl1">
+        <NavLink to='/' exact gridArea='nl1'>
           Home
         </NavLink>
 
-        <NavLink to="/allClubs" gridArea="nl2">
+        <NavLink to='/allClubs' gridArea='nl2'>
           All Clubs
         </NavLink>
 
-        <NavLink to="/contact" gridArea="nl3">
+        <NavLink to='/contact' gridArea='nl3'>
           Contact Us
         </NavLink>
 
         <NavBarSearch>
           <SearchBox
-            placeholder="Search..."
-            type="search"
+            placeholder='Search...'
+            type='search'
             value={searchData}
             onChange={e => setSearchData(e.target.value)}
           />
-          <SearchButton onClick={e => handleClickSearchBar(e)} type="button">
+          <SearchButton onClick={e => handleClickSearchBar(e)} type='button'>
             Search
           </SearchButton>
         </NavBarSearch>
 
-        <NavLink to="/#" gridArea="nl4" onClick={e => handleClickPlusButton(e)}>
+        <NavLink to='/#' gridArea='nl4' onClick={e => handleClickPlusButton(e)}>
           <IconContainer>
             <div>
               <IconContext.Provider value={{ size: '23px', color: 'white' }}>
@@ -107,7 +107,7 @@ function Navbar({ setShowNewClubModal }) {
           </IconContainer>
         </NavLink>
 
-        <NavLink to="/signin" gridArea="nl5">
+        <NavLink to='/signin' gridArea='nl5'>
           Sign In
         </NavLink>
       </Nav>

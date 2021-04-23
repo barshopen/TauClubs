@@ -12,10 +12,10 @@ function Signin() {
           </TextContainer>
           <Inputbox1>
             <input
-              type="email"
-              name="Email"
+              type='email'
+              name='Email'
               style={{ width: '190px', height: '20px' }}
-              placeholder="...@mail.tau.ac.il"
+              placeholder='...@mail.tau.ac.il'
             />
           </Inputbox1>
           <HebrewContainer>
@@ -28,9 +28,9 @@ function Signin() {
           </TextContainer>
           <Inputbox2>
             <input
-              type="number"
-              name="id"
-              placeholder="123456789"
+              type='number'
+              name='id'
+              placeholder='123456789'
               style={{ width: '190px', height: '20px' }}
             />
           </Inputbox2>
@@ -44,8 +44,8 @@ function Signin() {
           </TextContainer>
           <Inputbox3>
             <input
-              type="text"
-              name="password"
+              type='text'
+              name='password'
               style={{ width: '190px', height: '20px' }}
             />
           </Inputbox3>
@@ -55,8 +55,8 @@ function Signin() {
         </SingleRow>
       </FillContainer>
       <input
-        type="submit"
-        value="Sign In"
+        type='submit'
+        value='Sign In'
         style={{
           fontSize: '20px',
           width: '150px',

@@ -19,11 +19,11 @@ function App() {
       <Router>
         <Navbar setShowNewClubModal={setShowNewClubModal} />
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/allClubs" component={AllClubs} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/signin" component={Signin} />
-          <Route path="/club" component={ClubSection} />
+          <Route path='/' exact component={Home} />
+          <Route path='/allClubs' component={AllClubs} />
+          <Route path='/contact' component={Contact} />
+          <Route path='/signin' component={Signin} />
+          <Route path='/club' component={ClubSection} />
         </Switch>
       </Router>
     </div>

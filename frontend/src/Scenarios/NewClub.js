@@ -36,12 +36,12 @@ function NewClub({ showModal, setClubModal }) {
         Container={Container}>
         <Header>Create New Club</Header>
 
-        <Input type="text" placeholder="Club Name" />
+        <Input type='text' placeholder='Club Name' />
         <TextArea
-          placeholder="Description of club"
+          placeholder='Description of club'
           style={{ height: '140px' }}
         />
-        <Input type="text" placeholder="Contact Email" />
+        <Input type='text' placeholder='Contact Email' />
       </GenericModal>
     </>
   );

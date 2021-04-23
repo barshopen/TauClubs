@@ -33,8 +33,8 @@ function NewMessage({ showMessageModal, setShowMessageModal }) {
       setShowModal={setShowMessageModal}
       Container={Container}>
       <Header>Publish New Message</Header>
-      <Input height="30px" type="text" placeholder="Message title" />
-      <TextArea placeholder="Message" style={{ height: '140px' }} />
+      <Input height='30px' type='text' placeholder='Message title' />
+      <TextArea placeholder='Message' style={{ height: '140px' }} />
     </GenericModal>
   );
 }

@@ -30,7 +30,7 @@ function ClubsView({ header, data, width, Container }) {
             <Text>{`${membersCount} Members`}</Text>
             <img
               src={profileImage}
-              alt=""
+              alt=''
               width={width}
               height={205}
               style={{ minWidth: '100%', minHeight: '100%' }}
@@ -55,7 +55,7 @@ ClubsView.propTypes = {
       membersCount: PropTypes.int,
       /* TODO decide represented base64-decoded -string or another http request. */
       photo: PropTypes.string,
-    }),
+    })
   ),
   Container: PropTypes.oneOfType([
     PropTypes.func,

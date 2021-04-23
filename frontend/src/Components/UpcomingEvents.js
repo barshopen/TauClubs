@@ -7,12 +7,12 @@ import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 function UpcomingEvents({ data }) {
   return (
-    <GenericControl header="Upcoming Events">
+    <GenericControl header='Upcoming Events'>
       <MessagesContainer>
         {data.map(({ id, title, date, text }) => (
           <GenericFeedMessage title={title} date={date} key={id}>
             <Content>{text}</Content>
-            <Link to="/#"> View Location</Link>
+            <Link to='/#'> View Location</Link>
           </GenericFeedMessage>
         ))}
       </MessagesContainer>
@@ -27,7 +27,7 @@ UpcomingEvents.propTypes = {
       title: PropTypes.string,
       date: PropTypes.string,
       text: PropTypes.string,
-    }),
+    })
   ),
 };
 

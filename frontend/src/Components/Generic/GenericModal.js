@@ -48,15 +48,15 @@ function GenericModal({ showModal, setShowModal, Title, Container, children }) {
         <Line>
           <Button
             color={primary}
-            type="button"
-            label="Create"
+            type='button'
+            label='Create'
             onClick={() => setShowModal(false)}>
             Publish
           </Button>
           <Button
             color={secondary}
-            type="button"
-            label="Cancel"
+            type='button'
+            label='Cancel'
             onClick={() => setShowModal(false)}>
             Cancel
           </Button>

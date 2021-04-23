@@ -64,12 +64,12 @@ function Home() {
   return (
     <>
       <Container>
-        <ComponentContainer gridArea="messages">
+        <ComponentContainer gridArea='messages'>
           <Messages data={messagesData} />
         </ComponentContainer>
-        <ComponentContainer gridArea="myClubs">
+        <ComponentContainer gridArea='myClubs'>
           <ClubsView
-            header="My Clubs"
+            header='My Clubs'
             width={width}
             data={clubsData}
             Container={ClubsViewContainer}
@@ -78,7 +78,7 @@ function Home() {
         <ComponentContainer>
           <div />
         </ComponentContainer>
-        <ComponentContainer gridArea="upcomingEvents">
+        <ComponentContainer gridArea='upcomingEvents'>
           <UpcomingEvents data={upcomingEvents} />
         </ComponentContainer>
       </Container>
