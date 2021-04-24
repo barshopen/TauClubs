@@ -1,5 +1,6 @@
 /* eslint-disable indent */
-import React from 'react';
+import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -10,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { Form, Review, Description } from './index';
+import { newUserData } from '../../../atoms';
 
 const Copyright = () => (
   <Typography variant='body2' color='textSecondary' align='center'>
@@ -63,29 +65,38 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ['Welcome', 'General', 'Description'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <Review />;
-    case 1:
-      return <Form />;
-    case 2:
-      return <Description />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
 const JoinUs = () => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const setUserData = useSetRecoilState(newUserData);
+
+  const getStepContent = step => {
+    switch (step) {
+      case 0:
+        return <Review />;
+      case 1:
+        return <Form setUserData={setUserData} handleSubmit={handleSubmit} />;
+      case 2:
+        return <Description />;
+      default:
+        throw new Error('Unknown step');
+    }
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    setTimeout(() => {
+      setActiveStep(prev => prev + 1);
+    }, 3000);
+  };
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    setActiveStep(prev => prev + 1);
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStep(prev => prev - 1);
   };
 
   return (
@@ -125,7 +136,11 @@ const JoinUs = () => {
                   <Button
                     variant='contained'
                     color='primary'
-                    onClick={handleNext}
+                    onClick={
+                      activeStep === steps.length - 1
+                        ? handleSubmit
+                        : handleNext
+                    }
                     className={classes.button}>
                     {activeStep === steps.length - 1 ? 'Join' : 'Next'}
                   </Button>
