@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Contact from './Scenarios/Contact';
 import Navbar from './Components/Navbar';
+import NavBarM from './Components/NavBarM';
 import AllClubs from './Scenarios/AllClubs';
 import Home from './Scenarios/Home';
 import Signin from './Scenarios/SignIn';
@@ -17,7 +18,8 @@ function App() {
         setClubModal={setShowNewClubModal}
       />
       <Router>
-        <Navbar setShowNewClubModal={setShowNewClubModal} />
+        {/* <Navbar setShowNewClubModal={setShowNewClubModal} /> */}
+        <NavBarM />
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/allClubs' component={AllClubs} />

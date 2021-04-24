@@ -9,7 +9,7 @@ import { Labels } from './Generic/Label';
 const green = '#00d989';
 
 const Text = styled.div`
-  font-size: 15rem;
+  font-size: 1rem;
   text-align: right;
   flex: 1;
 `;

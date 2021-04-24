@@ -13,7 +13,7 @@ export const Nav = styled.nav`
 
   background: #000000;
   height: 60px;
-  font-size: 12rem;
+  font-size: 1rem;
   font: Roboto;
 `;
 

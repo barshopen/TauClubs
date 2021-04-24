@@ -28,7 +28,7 @@ Labels.propTypes = {
 };
 
 const Tag = styled.span`
-  font-size: 15px;
+  font-size: 0.2rem;
   padding: 0 7px;
   background-color: ${props => props.color};
   border-radius: 20px;
