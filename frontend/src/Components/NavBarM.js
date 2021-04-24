@@ -291,7 +291,9 @@ export default function NavBarM() {
               </IconButton>
             </div>
           ) : (
-            <LockIcon />
+            <NavLink to='/signin'>
+              <LockIcon />
+            </NavLink>
           )}
 
           <div className={classes.sectionMobile}>
@@ -306,8 +308,8 @@ export default function NavBarM() {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {isUser && renderMobileMenu}
+      {isUser && renderMenu}
     </div>
   );
 }
