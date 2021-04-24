@@ -50,7 +50,7 @@ const TextContainer = styled.div`
 
 const Title = styled.h3`
   margin: 10px 0px;
-  font-size: 15px;
+  font-size: 15rem;
   text-align: left;
 `;
 
@@ -58,7 +58,7 @@ const DateContainerOuter = styled.div`
   display: inline-block;
   position: relative;
 
-  font-size: 15px;
+  font-size: 15rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

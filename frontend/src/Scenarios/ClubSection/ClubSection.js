@@ -16,7 +16,7 @@ const NavBarContainer = styled.div`
 
 const Header = styled.h2`
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 5rem;
+  font-size: 15rem;
   margin: 25px 0;
   font-weight: normal;
   text-align: center;
@@ -41,7 +41,7 @@ const NavLink = styled(Link)`
   text-decoration: none;
   font: Roboto;
   grid-column-start: ${props => props.start};
-  font-size: 18px;
+  font-size: 18rem;
   color: black;
   justify-self: center;
   align-self: center;
