@@ -21,7 +21,7 @@ GenericCard.defaultProps = {
 };
 
 const Title = styled.h3`
-  font-size: 25rem;
+  font-size: 15px;
   text-align: center;
 `;
 const ComponentContainer = styled.div`

@@ -41,7 +41,7 @@ const MessagesContainer = styled.div`
 `;
 
 const Content = styled.div`
-  font-size: 15rem;
+  font-size: 15px;
   text-align: left;
 `;
 
