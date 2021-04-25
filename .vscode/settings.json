@@ -1,11 +1,33 @@
 {
+    // enforce clrf > lf
     "files.eol": "\n",
+    
+    // enforce working with env
     "python.pythonPath": "${workspaceFolder}\\.env\\Scripts\\python.exe",
     "python.terminal.activateEnvironment": true,
-      
+    
+    // autopep8 related settings
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Args": [
+        "--aggressive", "--aggressive"
+    ],
+    "[python]":{
+        "editor.formatOnSave":true,
+    },
+    
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": ["--rcfile=${workspaceFolder}\\.pylintrc"],
+    "python.linting.pylintPath": "pylint",
+
+    
     "prettier.singleQuote": true,
+
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
-    "eslint.validate": ["javascript"]
+    "eslint.validate": [
+        "javascript"
+    ],
+
 }
