@@ -13,7 +13,7 @@ const Container = styled.div`
 const Header = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 30rem;
+  font-size: 1rem;
   font-weight: bold;
 `;
 
