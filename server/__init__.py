@@ -1,12 +1,25 @@
 from flask import Flask
-import time
+from server.db import db_app
+from server.auth import auth_app
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="__staticbuild__", static_url_path="/")
+
+# serves static react
+
+
+@app.errorhandler(404)
+def not_found(e):
+    print(e)
+    return app.send_static_file('index.html')
+
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return app.send_static_file('index.html')
 
-@app.route('/time')
-def get_time():
-    return str(time.time())
+
+# blueprint for db
+app.register_blueprint(db_app)
+
+# blueprint for auth
+app.register_blueprint(auth_app)
