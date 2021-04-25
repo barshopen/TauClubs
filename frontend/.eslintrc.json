@@ -29,8 +29,6 @@
     "linebreak-style": ["error", "unix"],
     "no-unused-vars": "warn",
     "no-use-before-define": "off",
-    "no-console": "warn",
-    "import/prefer-default-export": "off"
-    
+    "no-console": "warn"  
   }
 }
