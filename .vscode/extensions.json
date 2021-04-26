@@ -1,5 +1,12 @@
 {
     "recommendations": [
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "almenon.arepl",
+        "msjsdiag.debugger-for-chrome",
+        "dbaeumer.vscode-eslint",
+        "ms-python.python",
+        "frhtylcn.pythonsnippets",
+        "jpoissonnier.vscode-styled-components",
+        "visualstudioexptteam.vscodeintellicode"
     ]
 }

@@ -21,7 +21,23 @@ Up untill now we used pure CSS as a solution an approach to resolve our design n
 
 # Contribution #
 Following v0.001, each commit on PR to master are squashed before merged. We usually require a CR before inserting any piece of code to master.
+
 ## Basic Rules for PR ##
 The changes you push to master, should always compile and pass our linting rules.
 Please have a clear and brief explanation on what is the main changes you have added in this PR. Also, if any visual changes were made, please add a screen shot of the relevant view that should have changed.
 If you working on major changes, please try and devide your PR for few seperate PR that make logical sense.
+
+## Running env ##
+1. Install at least python 3.9.4. If you own a 64-bit machine please use the 64-bit Python for better preformence.
+2. Install at least node 12.18.13
+3. At the root dir, run: `python -m venv .env`
+4. Install recomended extensions Go to extensions(Ctrl+Shift+X on Windows), on the search type `@recommended` under workspace recommendations click on the ☁️ button the install all the recommended extensions.
+5. Python virtual envirnoment should be activated when you start a new terminal. You should see a green `(.env)` at the begining of your terminal prompt. (If you don't please let us know :) ). Restart the terminal.
+6. Run `pip install -r requirements.txt` (when env is activated). This should install all requirements.
+7. Run the following commands:
+```
+cd frontend
+yarn install
+yarn start
+```
+8. After this, the app should be up and running.
