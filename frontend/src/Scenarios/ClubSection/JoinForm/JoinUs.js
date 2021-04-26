@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -88,7 +87,7 @@ const JoinUs = () => {
 
     setTimeout(() => {
       setActiveStep(prev => prev + 1);
-    }, 3000);
+    }, 1000);
   };
 
   const handleNext = () => {
@@ -101,7 +100,6 @@ const JoinUs = () => {
 
   return (
     <>
-      <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component='h1' variant='h4' align='center'>

@@ -50,18 +50,6 @@ const NavLink = styled(Link)`
   }
 `;
 
-/* const RightNavLink = styled(NavLink)`
-  grid-column: 12;
-  border: 1px solid white;
-  padding: 3px 8px;
-  transition-duration: 0.4s;
-
-  &:hover {
-    background-color: white;
-    color: #393939;
-  }
-`; */
-
 function ClubSection() {
   const {
     params: { clubId },
@@ -78,7 +66,7 @@ function ClubSection() {
       .then(res => res.json())
       .then(mydata => setClubData(mydata));
   }, [clubId]);
-  useEffect(() => {}, [clubData]);
+
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
       {/* TODO derieve data from api request. */}
