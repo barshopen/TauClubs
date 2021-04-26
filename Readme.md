@@ -40,4 +40,5 @@ cd frontend
 yarn install
 yarn start
 ```
-8. After this, the app should be up and running.
+8. go to frontend. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
+9. After this, the app should be up and running.
