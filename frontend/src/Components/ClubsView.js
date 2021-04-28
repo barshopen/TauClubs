@@ -2,19 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 import GenericControl from './Generic/GenericControl';
 import GenericCard from './Generic/GenericCard';
 import { Labels } from './Generic/Label';
 
 const green = '#00d989';
 
-const Text = styled.div`
-  font-size: 15rem;
+const Text = styled(Typography)`
+  font-size: 1rem;
   text-align: right;
   flex: 1;
 `;
 
-const LineContainer = styled.div`
+const LineContainer = styled(Typography)`
   display: flex;
   align-items: flex-start;
   height: auto;

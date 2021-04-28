@@ -20,7 +20,7 @@ const Button = styled.button`
   border: solid ${({ color }) => color} 1px;
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 15rem;
+  font-size: 1rem;
   font-weight: bold;
   color: white;
   width: 75px;

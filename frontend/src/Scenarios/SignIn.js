@@ -80,7 +80,7 @@ const TextContainer = styled.div`
   display: inline-block;
   flex-direction: column;
   float: left;
-  font-size: 25px;
+  font-size: 1rem;
 `;
 
 const Inputbox1 = styled.div`
