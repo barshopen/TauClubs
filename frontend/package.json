@@ -22,14 +22,13 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "concurrently --kill-others --kill-others-on-fail \"react-scripts start\" \"cd .. && python -m server\"",
+    "start": "react-scripts start",
+    "start1": "concurrently --kill-others --kill-others-on-fail \"react-scripts start\" \"cd .. && python -m server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start-backend": "cd .. && python run.py",
     "lint-fix": "yarn prettier --write . && yarn eslint --fix .",
     "lint": "eslint --fix-dry-run",
-    "mock": "json-server --id id --watch mock-api/mock1.json --port 443"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -60,7 +59,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "json-server": "^0.16.3",
     "prettier": "^2.2.1"
   }
 }

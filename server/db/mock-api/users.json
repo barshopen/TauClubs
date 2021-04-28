@@ -1,0 +1,30 @@
+[
+  {
+    "id": "usr_1",
+    "name": "Daniel Peretz",
+    "contactMail": "DanielPeretz@gmail.com",
+    "myClubs": ["chess", "Salsa", "Foodies"],
+    "myEvents": ["A trip to Haifa", "Physics 101"]
+  },
+  {
+    "id": "usr_2",
+    "name": "Bar Chopin",
+    "contactMail": "Chopin@gmail.com",
+    "myClubs": ["chess", "Salsa", "Foodies"],
+    "myEvents": ["A trip to Haifa", "Physics 101"]
+  },
+  {
+    "id": "usr_3",
+    "name": "Sharon zlothty",
+    "contactMail": "Sharonzlothty@gmail.com",
+    "myClubs": ["chess", "Salsa", "Foodies"],
+    "myEvents": ["A trip to Haifa", "Physics 101"]
+  },
+  {
+    "id": "usr_4",
+    "name": "Avital Haimon",
+    "contactMail": "AvitalHaimon@gmail.com",
+    "myClubs": ["chess", "Salsa", "Foodies"],
+    "myEvents": ["A trip to Haifa", "Physics 101"]
+  }
+]

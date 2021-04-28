@@ -29,8 +29,7 @@
     "eslint.validate": [
         "javascript"
     ],
-
-    "npm.packageManager": "yarn",
     "python.testing.promptToConfigure": false,
     "python.testing.pytestEnabled": false, // will change in the future, when we have tests
+    "npm.packageManager": "yarn", 
 }
