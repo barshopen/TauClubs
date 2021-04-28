@@ -49,4 +49,4 @@ yarn start
     }
 ```
 you can change `ctrl+alt+d` to any keyboard shortcut you like. If you do, just make sure you do not overlap any other existing keyboard shortcut.
-10. After this, the app should be up and running. your keyboard shortcut will ask you to choose if you want to debug yarn or flask. Choose your option and happy hacking.
+10. After this, the app should be up and running. your keyboard shortcut will ask you to choose if you want to debug Frontend, Server or both. Choose your option and happy hacking.
