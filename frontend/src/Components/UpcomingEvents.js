@@ -43,12 +43,12 @@ const MessagesContainer = styled.div`
 `;
 
 const Content = styled.div`
-  font-size: 15rem;
+  font-size: 1rem;
   text-align: left;
   overflow-wrap: break-word;
 `;
 const Link = styled(RouterLink)`
-  font-size: 15rem;
+  font-size: 1rem;
   text-decoration: none;
   display: block;
   text-align: left;

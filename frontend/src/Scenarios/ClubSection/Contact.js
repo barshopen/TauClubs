@@ -25,14 +25,14 @@ const ContainerInner = styled.div`
 const Header = styled.h2`
   text-align: justify;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 35rem;
+  font-size: 1rem;
   font-weight: bold;
 `;
 
 const Text = styled.div`
   text-align: left;
   font-family: 'Roboto', sans-serif;
-  font-size: 14rem;
+  font-size: 1rem;
   grid-area: ${props => props.gridArea};
 `;
 
