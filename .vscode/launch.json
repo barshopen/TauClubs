@@ -2,16 +2,24 @@
     "version": "0.2.0",
     "configurations": [
         
-        
         {
+            "name": "Debug Server",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "module":"server"
+        },
+        {
+            "name": "Debug Frontend",
             "type": "node",
             "request": "launch",
-            "name": "Debug App",
             "runtimeExecutable": "yarn",
             "cwd": "${workspaceFolder}/frontend",
-            "runtimeArgs": ["start"],
+            "runtimeArgs": [
+                "start"
+            ],
             "port": 3000
         }
-
     ]
 }

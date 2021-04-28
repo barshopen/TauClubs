@@ -41,4 +41,12 @@ yarn install
 yarn start
 ```
 8. go to frontend. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
-9. After this, the app should be up and running.
+9. hit `ctrl+shift+p` and type `keyboard shortcuts(json)`. This should give you only one option. Upon clicking on this option you'll find yourself in a "keybindings.json" file add the following:
+```
+    {
+        "key": "ctrl+alt+d",
+        "command": "workbench.action.debug.selectandstart"
+    }
+```
+you can change `ctrl+alt+d` to any keyboard shortcut you like. If you do, just make sure you do not overlap any other existing keyboard shortcut.
+10. After this, the app should be up and running. your keyboard shortcut will ask you to choose if you want to debug yarn or flask. Choose your option and happy hacking.
