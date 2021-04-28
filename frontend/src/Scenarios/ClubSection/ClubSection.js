@@ -57,7 +57,7 @@ function ClubSection() {
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/clubs/${clubId}`, {
+    fetch(`/db/clubs/${clubId}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

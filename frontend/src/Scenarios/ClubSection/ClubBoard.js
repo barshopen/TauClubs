@@ -39,7 +39,7 @@ function ClubBoard() {
   const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/clubs/${clubId}`, {
+    fetch(`/db/clubs/${clubId}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -50,7 +50,7 @@ function ClubBoard() {
   }, [clubId]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/messages', {
+    fetch('/db/messages', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -59,7 +59,7 @@ function ClubBoard() {
       .then(res => res.json())
       .then(mydata => setMessagesData(mydata.slice(0, 7)));
 
-    fetch('http://localhost:5000/upcoming_events', {
+    fetch('/db/upcoming_events', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

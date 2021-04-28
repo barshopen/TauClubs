@@ -7,7 +7,7 @@ const width = '95%';
 function AllClubs() {
   const [clubsData, setClubsData] = useState();
   useEffect(() => {
-    fetch('http://localhost:5000/clubs', {
+    fetch('/db/clubs', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
