@@ -10,7 +10,6 @@ app = Flask(__name__, static_folder="__staticbuild__", static_url_path="/")
 # serves static react
 FLAG_EXPECTED_VALUE = '1'
 FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
-print(FLAG_ACTUAL_VALUE)
 
 
 @app.errorhandler(404)

@@ -23,7 +23,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start1": "concurrently --kill-others --kill-others-on-fail \"react-scripts start\" \"cd .. && python -m server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint-fix": "yarn prettier --write . && yarn eslint --fix .",
