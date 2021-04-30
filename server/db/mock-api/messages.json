@@ -1,0 +1,37 @@
+[
+  {
+    "id": "msg_1",
+    "title": "chess",
+    "text": "The new meeting location is tel aviv",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "msg_2",
+    "title": "new opening",
+    "text": "we will open another tour in April",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "msg_3",
+    "title": "royal",
+    "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "msg_4",
+    "title": "Veritatis Dolores Adipisci Minus",
+    "text": "an evening of physics, including a talk from a theoretical particle physicist",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "msg_5",
+    "title": "Repellat",
+    "text": "‘an evening of physics, including a talk from a theoretical particle physicist’",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  }
+]

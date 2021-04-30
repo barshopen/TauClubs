@@ -1,0 +1,70 @@
+[
+  {
+    "id": "c_1",
+    "name": "chess",
+    "profileImage": "images/chessProfile.jpeg",
+    "shortDescription": "the chess club is the home for chess fans of all levels",
+    "description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
+    "tags": ["Math"],
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z",
+    "contactMail": "chessAtTau@gmail.com",
+    "membersCount": 128,
+    "admin": true
+  },
+
+  {
+    "id": "c_2",
+    "name": "Salsa",
+    "profileImage": "images/salsaProfile.jpeg",
+    "shortDescription": "the chess club is the home for chess fans of all levels",
+    "description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
+    "tags": ["Dancing", "Sport"],
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z",
+    "contactMail": "SalsaAtTau@gmail.com",
+    "membersCount": 111,
+    "admin": false
+  },
+
+  {
+    "id": "c_3",
+    "name": "Hiking",
+    "profileImage": "images/hikeProfile.jpeg",
+    "shortDescription": "the chess club is the home for chess fans of all levels",
+    "description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
+    "tags": ["Outdoor", "Sport", "Social"],
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z",
+    "contactMail": "HikingAtTau@gmail.com",
+    "membersCount": 12,
+    "admin": false
+  },
+
+  {
+    "id": "c_4",
+    "name": "Foodies",
+    "profileImage": "images/foodiesProfile.jpeg",
+    "shortDescription": "the chess club is the home for chess fans of all levels",
+    "description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
+    "tags": ["Outdoor", "Social"],
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z",
+    "contactMail": "FoodiesAtTau@gmail.com",
+    "membersCount": 423,
+    "admin": false
+  },
+  {
+    "id": "c_5",
+    "name": "Volleyball",
+    "profileImage": "images/chessProfile.jpeg",
+    "shortDescription": "the chess club is the home for chess fans of all levels",
+    "description": "the chess club offers you an oppertunity to level up your skills and practice with fellow students",
+    "tags": ["Sport", "Social", "Outdoor"],
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z",
+    "contactMail": "VolleyballAtTau@gmail.com",
+    "membersCount": 13,
+    "admin": false
+  }
+]

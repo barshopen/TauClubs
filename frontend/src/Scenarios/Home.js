@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Messages from '../Components/Messages';
 import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
+import { getMessages, getClubs, getUpcomingEvents } from '../api';
 
 const width = '90%';
 
@@ -33,32 +34,11 @@ function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState();
 
   useEffect(() => {
-    fetch('http://localhost:5000/messages', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setMessagesData(mydata.slice(0, 7)));
+    getMessages().then(mydata => setMessagesData(mydata.slice(0, 7)));
 
-    fetch('http://localhost:5000/clubs', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setClubsData(mydata.slice(0, 5)));
+    getClubs().then(mydata => setClubsData(mydata.slice(0, 5)));
 
-    fetch('http://localhost:5000/upcoming_events', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setUpcomingEvents(mydata.slice(0, 5)));
+    getUpcomingEvents().then(mydata => setUpcomingEvents(mydata.slice(0, 5)));
   }, []);
 
   return (
