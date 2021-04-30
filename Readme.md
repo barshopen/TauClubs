@@ -40,7 +40,8 @@ If you working on major changes, please try and devide your PR for few seperate 
         "key": "ctrl+alt+d",
         "command": "workbench.action.debug.selectandstart"
     }
-```
-**you can change `ctrl+alt+d` to any keyboard shortcut you like.** If you do, just make sure you do not overlap any other existing keyboard shortcut.
+``` 
+>**you can change `ctrl+alt+d` to any keyboard shortcut you like.** If you do, just make sure you do not overlap any other existing keyboard shortcut.
+ 
 8. go to frontend. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
 9. After this, the app should be up and running. your keyboard shortcut will ask you to choose if you want to debug Frontend, Server or both. Choose your option and happy hacking.
