@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ClubsView from '../Components/ClubsView';
+import { getClubs } from '../api';
 
 const width = '95%';
 
 function AllClubs() {
   const [clubsData, setClubsData] = useState();
   useEffect(() => {
-    fetch('http://localhost:5000/clubs', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setClubsData(mydata.slice(0, 5)));
+    getClubs().then(mydata => setClubsData(mydata.slice(0, 5)));
   }, []);
 
   return (

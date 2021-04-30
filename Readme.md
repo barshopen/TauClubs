@@ -14,7 +14,8 @@ Components: All non scenarios components.
 |_ Generic: holds all components that are publicly used by many other components.
 
 ## Styling ## 
-We use eslint and prettier to manage the front-end styling and pep8 for the backend. See our .eslintrc.json for more details.
+We use eslint and prettier to manage the front-end styling .eslintrc.json for more details. 
+We use autopep8 and pylint for styling the backend. See our .pylintrc and [PEP8](https://www.python.org/dev/peps/pep-0008/) for more details.
 
 ## Graphical Design ##
 Up untill now we used pure CSS as a solution an approach to resolve our design needs. We consider moving to material-UI design system to resolve mobile comaptability and many other issues that came up while workinע on v0.001(milestone 1)
@@ -34,10 +35,14 @@ If you working on major changes, please try and devide your PR for few seperate 
 4. Install recomended extensions Go to extensions(Ctrl+Shift+X on Windows), on the search type `@recommended` under workspace recommendations click on the ☁️ button the install all the recommended extensions.
 5. Python virtual envirnoment should be activated when you start a new terminal. You should see a green `(.env)` at the begining of your terminal prompt. (If you don't please let us know :) ). Restart the terminal.
 6. Run `pip install -r requirements.txt` (when env is activated). This should install all requirements.
-7. Run the following commands:
+7. Hit `ctrl+shift+p` and type `keyboard shortcuts(json)`. This should give you only one option. Upon clicking on this option you'll find yourself in a "keybindings.json" file add the following:
 ```
-cd frontend
-yarn install
-yarn start
-```
-8. After this, the app should be up and running.
+    {
+        "key": "ctrl+alt+d",
+        "command": "workbench.action.debug.selectandstart"
+    }
+``` 
+>**you can change `ctrl+alt+d` to any keyboard shortcut you like.** If you do, just make sure you do not overlap any other existing keyboard shortcut.
+ 
+8. go to frontend. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
+9. After this, the app should be up and running. your keyboard shortcut will ask you to choose if you want to debug Frontend, Server or both. Choose your option and happy hacking.

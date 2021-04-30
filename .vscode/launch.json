@@ -1,14 +1,44 @@
 {
     "version": "0.2.0",
+    "compounds": [
+        {
+          "name": "Server+Client",
+          "configurations": ["Debug Server", "Debug Frontend"],
+          "presentation": {
+        
+              "hidden": false,
+              "order": 1
+          }
+        }
+    ],
     "configurations": [
         {
-            "type": "node",
+            "name": "Check build locally",
+            "type": "python",
             "request": "launch",
-            "name": "Launch via Yarn",
-            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "module":"server",
+            "preLaunchTask": "Front build"
+        },
+        {
+            "name": "Debug Frontend",
+            "command": "yarn start",
+            "request": "launch",
+            "type": "node-terminal",
             "cwd": "${workspaceFolder}/frontend",
-            "runtimeArgs": ["start"],
-            "port": 5858
-        }
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+        },
+        {
+            "name": "Debug Server",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "module":"server",
+            "env": {"DEBUG_BACKEND":"1"},
+        },
     ]
 }

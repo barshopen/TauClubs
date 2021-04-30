@@ -1,0 +1,43 @@
+[
+  {
+    "id": "ue_1",
+    "title": "Similique",
+    "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
+    "startTime": "2012-04-23T18:25:43.511Z",
+    "duration": "3:00",
+    "location": "3130 Bathurst Street, Suite 214",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "ue_2",
+    "title": "Meetup!",
+    "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
+    "startTime": "2012-04-23T18:25:43.511Z",
+    "duration": "3:00",
+    "location": "3130 Bathurst Street, Suite 214",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "ue_3",
+    "title": "Physics 101",
+    "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
+    "startTime": "2012-04-23T18:25:43.511Z",
+    "duration": "3:00",
+    "location": "3130 Bathurst Street, Suite 214",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  },
+  {
+    "id": "ue_4",
+    "title": "A trip to Haifa",
+    "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
+    "startTime": "2012-04-23T18:25:43.511Z",
+    "time": "10:00",
+    "duration": "3:00",
+    "location": "3130 Bathurst Street, Suite 214",
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+  }
+]

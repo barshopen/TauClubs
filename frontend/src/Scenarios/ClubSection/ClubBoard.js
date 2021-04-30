@@ -7,6 +7,7 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessage from '../NewMessage';
 import NewEvent from '../NewEvent';
+import { getMessages, getClubs, getUpcomingEvents } from '../../api';
 
 const Container = styled.div`
   display: grid;
@@ -39,35 +40,12 @@ function ClubBoard() {
   const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/clubs/${clubId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setIsAdmin(mydata.admin));
+    getClubs(clubId).then(mydata => setIsAdmin(mydata.admin));
+
+    getMessages().then(mydata => setMessagesData(mydata.slice(0, 7)));
+
+    getUpcomingEvents().then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
   }, [clubId]);
-
-  useEffect(() => {
-    fetch('http://localhost:5000/messages', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setMessagesData(mydata.slice(0, 7)));
-
-    fetch('http://localhost:5000/upcoming_events', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
-  }, []);
   return (
     <>
       <Container>
