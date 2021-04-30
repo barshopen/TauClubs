@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
+import { getClubs } from '../../api';
 
 const ContainerOuter = styled.div`
   margin: 40px;
@@ -16,14 +17,7 @@ function AboutUs() {
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
-    fetch(`/db/clubs/${clubId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setClubData(mydata));
+    getClubs(clubId).then(mydata => setClubData(mydata));
   }, [clubId]);
   useEffect(() => {}, [clubData]);
   return <ContainerOuter>{clubData?.description}</ContainerOuter>;

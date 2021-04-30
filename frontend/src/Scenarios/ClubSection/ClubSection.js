@@ -6,6 +6,7 @@ import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
+import { getClubs } from '../../api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -57,14 +58,9 @@ function ClubSection() {
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
-    fetch(`/db/clubs/${clubId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(mydata => setClubData(mydata));
+    getClubs(clubId).then(mydata => {
+      setClubData(mydata);
+    });
   }, [clubId]);
 
   return (
