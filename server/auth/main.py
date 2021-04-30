@@ -1,3 +1,6 @@
+# https://docs.authlib.org/en/latest/client/frameworks.html#frameworks-clients
+# https://github.com/joegasewicz/react-google-oauth2.0
+# https://realpython.com/flask-google-login/#creating-your-own-web-application
 import os
 from flask import Flask, redirect, request, url_for
 from flask_login import (
@@ -8,26 +11,22 @@ from flask_login import (
     logout_user,
     UserMixin
 )
-from authlib.integrations.flask_client import OAuth
-import google.oauth2.credentials
-import googleapiclient.discovery
-import google_auth_oauthlib
-import json
-import sqlite3
-from db import init_db_command
-from user import User
 
-try:
-    init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
+from authlib.integrations.flask_client import OAuth
+from flask_sqlalchemy import SQLAlchemy
+import json
 
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = "sharon"
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/users.db'
+db = SQLAlchemy(app)
+db.create_all()
+
+
 # User session management setup
-# https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -37,27 +36,32 @@ oauth.register(
     name='google',
     client_id=os.environ.get("GOOGLE_CLIENT_ID", None),
     client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", None),
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    # access_token_url='https://accounts.google.com/o/oauth2/token',
+    # access_token_params=None,
+    # authorize_url='https://accounts.google.com/o/oauth2/auth',
+    # authorize_params=None,
+    # api_base_url='https://www.googleapis.com/oauth2/v1/',
     # This is only needed if using openId to fetch user info
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    client_kwargs={'scope': 'openid email profile'},
+    # userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    # client_kwargs={'scope': 'openid email profile'},
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={
+        'scope': 'openid email profile'
+    }
 )
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
+google = oauth.create_client('google')  # create the google oauth client
 
 
-# class User(UserMixin, db.Model):
-# primary keys are required by SQLAlchemy
-#    id = db.Column(db.Integer, primary_key=True)
-#    email = db.Column(db.String(100), unique=True)
-#    name = db.Column(db.String(1000))
+class User(UserMixin, db.Model):
+    # primary keys are required by SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(1000))
+
+    @staticmethod
+    def create(user):
+        db.session.add(user)
+        db.session.commit()
 
 
 @login_manager.user_loader
@@ -78,54 +82,49 @@ def index():
         )
     else:
         return '<a class="button" href="/login">Google Login</a>'
-       # return ('<script src="https://apis.google.com/js/platform.js" async defer></script>'
-        #        '<meta name="google-signin-client_id" content="18740809626-1et94g7dbvpmr4ajbc289d6p4rq35i7k.apps.googleusercontent.com">'
-        #       '<div class="g-signin2"></div>')
+        # return ('<script src="https://apis.google.com/js/platform.js" async defer></script>'
+        #       '<meta name="google-signin-client_id" content="18740809626-1et94g7dbvpmr4ajbc289d6p4rq35i7k.apps.googleusercontent.com">'
+        #      '<div class="g-signin2"></div>')
 
 
 @app.route("/login")
 def login():
-    google = oauth.create_client('google')  # create the google oauth client
-   # redirect_uri = request.base_url + "/callback",
     return google.authorize_redirect(url_for('callback', _external=True))
 
 
 @app.route("/login/callback")
 def callback():
-    google = oauth.create_client('google')  # create the google oauth client
     # Access token from google (needed to get user info)
     token = google.authorize_access_token()
-    # userinfo contains stuff u specificed in the scrope
-    resp = google.get('userinfo')
-    user_info = resp.json()
+    user_info = oauth.google.parse_id_token(token)
 
-    if user_info.get("verified_email"):
-        unique_id = user_info["id"]
+    if user_info["email_verified"]:
+        unique_id = user_info["sub"]
         users_email = user_info["email"]
-        picture = user_info["picture"]
         users_name = user_info["given_name"]
     else:
         return "User email not available or not verified by Google.", 400
 
         # Create a user in your db with the information provided
     # by Google
-    user = User(
-        id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-    )
+
+    user = User.query.filter_by(id=unique_id, email=users_email).first()
 
     # Doesn't exist? Add it to the database.
-    if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, picture)
+    if not user:
+        user = User(id_=unique_id, name=users_name,
+                    email=users_email)
+        User.create(user)
 
     # Begin user session by logging the user in
-    login_user(user)
+    login_user(user, remember=True)
 
     # Send user back to homepage
     return redirect(url_for("index"))
 
 
-@app.route("/logout")
-@login_required
+@ app.route("/logout")
+@ login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
