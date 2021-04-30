@@ -2,7 +2,6 @@ import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { NavLink } from 'react-router-dom';
-
 import {
   Tab,
   Tabs,
@@ -29,6 +28,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'black',
     font: 'Roboto',
+    zIndex: theme.zIndex.drawer + 1,
   },
   tabs: {
     width: '100%',
@@ -232,7 +232,7 @@ export default function NavBar() {
   );
   return (
     <div className={classes.grow}>
-      <AppBar className={classes.appBar} position='sticky' title={<Tabber />}>
+      <AppBar className={classes.appBar} position='fixed' title={<Tabber />}>
         <Toolbar>
           <IconButton
             edge='start'

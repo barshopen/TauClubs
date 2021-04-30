@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ClubsView from '../Components/ClubsView';
-import { getClubs } from '../api';
+import { getClubs } from '../Shared/api';
 
 const width = '95%';
 

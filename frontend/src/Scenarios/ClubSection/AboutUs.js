@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { getClubs } from '../../api';
+import { getClubs } from '../../Shared/api';
 
 const ContainerOuter = styled.div`
   margin: 40px;

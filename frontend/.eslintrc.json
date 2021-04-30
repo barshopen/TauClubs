@@ -29,6 +29,7 @@
     "linebreak-style": ["error", "unix"],
     "no-unused-vars": "warn",
     "no-use-before-define": "off",
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-param-reassign": "off"
   }
 }

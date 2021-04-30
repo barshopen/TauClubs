@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Messages from '../Components/Messages';
 import ClubsView from '../Components/ClubsView';
 import UpcomingEvents from '../Components/UpcomingEvents';
-import { getMessages, getClubs, getUpcomingEvents } from '../api';
+import { getMessages, getClubs, getUpcomingEvents } from '../Shared/api';
 
 const width = '90%';
 
@@ -16,8 +16,8 @@ const ClubsViewContainer = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-areas:
-    'messages myClubs'
-    'messages upcomingEvents';
+    'myClubs messages'
+    'myClubs upcomingEvents';
   grid-template-columns: 1fr 2fr;
   grid-template-rows: repeat(4, 1fr);
   width: 100%;
