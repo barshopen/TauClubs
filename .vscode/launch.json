@@ -13,6 +13,15 @@
     ],
     "configurations": [
         {
+            "name": "Check build locally",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "module":"server",
+            "preLaunchTask": "Front build"
+        },
+        {
             "name": "Debug Frontend",
             "command": "yarn start",
             "request": "launch",
@@ -30,15 +39,6 @@
             "console": "integratedTerminal",
             "module":"server",
             "env": {"DEBUG_BACKEND":"1"},
-        },
-        {
-            "name": "Build & Debug Server",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "module":"server",
-            "preLaunchTask": "Front build"
         },
     ]
 }
