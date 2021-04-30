@@ -1,20 +1,34 @@
 import os
-from flask import Flask, abort, request
+from flask import Flask, abort, request, Blueprint
 import dotenv
 from server.db import db_app
-from server.auth import auth_app
+#from server.auth import auth_app
+from flask_login import (
+    LoginManager
+)
 from server.generic import disable_route_on_flag
+from authlib.integrations.flask_client import OAuth
+
 dotenv.load_dotenv()
 
 app = Flask(__name__, static_folder="__staticbuild__", static_url_path="/")
+app.secret_key = 'sharon'
+
+
 # serves static react
 FLAG_EXPECTED_VALUE = '1'
 FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 
-
 # blueprint for db
 app.register_blueprint(db_app)
 
+auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
+
+# User session management setup
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+oauth = OAuth(app)
 # blueprint for auth
 app.register_blueprint(auth_app)
 
