@@ -14,7 +14,8 @@ Components: All non scenarios components.
 |_ Generic: holds all components that are publicly used by many other components.
 
 ## Styling ## 
-We use eslint and prettier to manage the front-end styling and pep8 for the backend. See our .eslintrc.json for more details.
+We use eslint and prettier to manage the front-end styling .eslintrc.json for more details. 
+We use autopep8 and pylint for styling the backend. See our .pylintrc and [PEP8](https://www.python.org/dev/peps/pep-0008/) for more details.
 
 ## Graphical Design ##
 Up untill now we used pure CSS as a solution an approach to resolve our design needs. We consider moving to material-UI design system to resolve mobile comaptability and many other issues that came up while workinע on v0.001(milestone 1)
