@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React, { useMemo } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
-
 import { NavLink } from 'react-router-dom';
 import {
   AppBar,
@@ -122,6 +124,16 @@ const StyledMenu = withStyles({
   />
 ));
 
+const MenuItemWithToolTip = ({ title, content, icon, ...rest }) => (
+  <IconButton color='inherit' {...rest}>
+    <Tooltip title={title} arrow>
+      <Badge badgeContent={content} color='secondary'>
+        {icon}
+      </Badge>
+    </Tooltip>
+  </IconButton>
+);
+
 const fetchClubs = async () => {
   const res = await getClubs();
   return res;
@@ -142,7 +154,7 @@ export default function NavBar() {
   };
 
   // get data about the current user
-  const isUser = true; // for now - later, if signed in will be true.
+  const isUser = false; // for now - later, if signed in will be true.
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -184,29 +196,31 @@ export default function NavBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}>
       <MenuItem>
-        <IconButton color='inherit'>
-          <Badge badgeContent={userMessages} color='secondary'>
-            <MailIcon />
-          </Badge>
-        </IconButton>
+        <MenuItemWithToolTip
+          title='Messages'
+          content={userMessages}
+          icon={<MailIcon />}
+        />
         <p>Messages</p>
       </MenuItem>
+
       <MenuItem>
-        <IconButton color='inherit'>
-          <Badge badgeContent={userNotifications} color='secondary'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+        <MenuItemWithToolTip
+          title='Notifications'
+          content={userNotifications}
+          icon={<NotificationsIcon />}
+        />
         <p>Notifications</p>
       </MenuItem>
+
       <MenuItem>
-        <IconButton
+        <MenuItemWithToolTip
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
-          color='inherit'>
-          <AccountCircle />
-        </IconButton>
+          title='Profile'
+          icon={<AccountCircle />}
+        />
         <p>Profile</p>
       </MenuItem>
     </StyledMenu>
@@ -216,18 +230,18 @@ export default function NavBar() {
     <div className={classes.grow}>
       <AppBar className={classes.appBar} position='static'>
         <Toolbar>
-          <IconButton
+          <MenuItemWithToolTip
             edge='start'
             className={classes.menuButton}
-            color='inherit'
-            aria-label='open drawer'>
-            {/* TODO: Replace to our icon */}
-            <NavLink to='/'>
-              <Tooltip title='Home'>
+            aria-label='open drawer'
+            title='Home'
+            icon={
+              <NavLink to='/'>
                 <HomeIcon fontSize='small' />
-              </Tooltip>
-            </NavLink>
-          </IconButton>
+              </NavLink>
+            }
+          />
+
           <Typography className={classes.title} variant='h6' noWrap>
             TauClubs
           </Typography>
@@ -261,51 +275,49 @@ export default function NavBar() {
           {isUser ? (
             <>
               <div className={classes.sectionDesktop}>
-                <IconButton color='inherit'>
-                  <Tooltip title='Messages'>
-                    <Badge badgeContent={userMessages} color='secondary'>
-                      <MailIcon />
-                    </Badge>
-                  </Tooltip>
-                </IconButton>
-                <IconButton color='inherit'>
-                  <Tooltip title='Notifications'>
-                    <Badge badgeContent={userNotifications} color='secondary'>
-                      <NotificationsIcon />
-                    </Badge>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
+                <MenuItemWithToolTip
+                  title='Messages'
+                  content={userMessages}
+                  icon={<MailIcon />}
+                />
+
+                <MenuItemWithToolTip
+                  title='Notifications'
+                  content={userNotifications}
+                  icon={<NotificationsIcon />}
+                />
+
+                <MenuItemWithToolTip
                   edge='end'
                   aria-label='account of current user'
                   aria-controls={menuId}
                   aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
-                  color='inherit'>
-                  <Tooltip title='Profile'>
-                    <AccountCircle />
-                  </Tooltip>
-                </IconButton>
+                  title='Profile'
+                  icon={<AccountCircle />}
+                />
               </div>
+
               <div className={classes.sectionMobile}>
-                <IconButton
+                <MenuItemWithToolTip
                   aria-label='show more'
                   aria-controls={mobileMenuId}
                   aria-haspopup='true'
                   onClick={handleMobileMenuOpen}
-                  color='inherit'>
-                  <MoreIcon />
-                </IconButton>
+                  title='Show More'
+                  icon={<MoreIcon />}
+                />
               </div>
             </>
           ) : (
-            <NavLink to='/signin'>
-              <IconButton color='inherit'>
-                <Tooltip title='Sign In'>
+            <MenuItemWithToolTip
+              title='Sign In'
+              icon={
+                <NavLink to='/signin'>
                   <ExitToAppIcon />
-                </Tooltip>
-              </IconButton>
-            </NavLink>
+                </NavLink>
+              }
+            />
           )}
         </Toolbar>
       </AppBar>

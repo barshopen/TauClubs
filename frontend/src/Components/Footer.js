@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
 import GenericModal from './Generic/GenericModal';
 
 const Container = styled.div`
@@ -51,19 +50,7 @@ const Header = styled.h2`
   padding-bottom: 20px;
 `;
 
-const Input = styled.input`
-  height: ${props => props.height};
-  font-family: 'Roboto';
-  height: '30px';
-`;
-const TextArea = styled.textarea`
-  height: '120px';
-  font-family: 'Roboto';
-`;
-
-const ModalContainer = styled.div.attrs(() => {
-  'modalContainr';
-})`
+const ModalContainer = styled.div`
   display: flex;
   position: unset;
   flex-direction: column;

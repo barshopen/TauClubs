@@ -20,6 +20,7 @@
     ],
     "indent": ["error", 2],
     "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "warn",
     "jsx-quotes": ["error", "prefer-single"],
     "prettier/prettier": "error",
     "react/jsx-indent": [
