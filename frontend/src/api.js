@@ -1,23 +1,17 @@
-function getApi(route) {
-  return fetch(route, {
+const getApi = route =>
+  fetch(route, {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   }).then(res => res.json());
-}
 
-function getDb(subroute, id) {
-  if (id) return getApi(`/db/${subroute}/${id}`);
-  return getApi(`/db/${subroute}`);
-}
+export const getDb = (subroute, id) =>
+  id ? getApi(`/db/${subroute}/${id}`) : getApi(`/db/${subroute}`);
 
-export function getMessages(messageId = null) {
-  return getDb('messages', messageId);
-}
-export function getClubs(clubId = null) {
-  return getDb('clubs', clubId);
-}
-export function getUpcomingEvents(eventId = null) {
-  return getDb('upcoming_events', eventId);
-}
+export const getMessages = (messageId = null) => getDb('messages', messageId);
+
+export const getClubs = (clubId = null) => getDb('clubs', clubId);
+
+export const getUpcomingEvents = (eventId = null) =>
+  getDb('upcoming_events', eventId);

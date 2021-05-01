@@ -34,7 +34,14 @@ const Line = styled.div`
   justify-content: space-around;
 `;
 
-function GenericModal({ showModal, setShowModal, Title, Container, children }) {
+function GenericModal({
+  showModal,
+  setShowModal,
+  hideButtons,
+  Title,
+  Container,
+  children,
+}) {
   return (
     <Modal
       ariaHideApp={false}
@@ -45,22 +52,24 @@ function GenericModal({ showModal, setShowModal, Title, Container, children }) {
       <Container>
         {children}
 
-        <Line>
-          <Button
-            color={primary}
-            type='button'
-            label='Create'
-            onClick={() => setShowModal(false)}>
-            Publish
-          </Button>
-          <Button
-            color={secondary}
-            type='button'
-            label='Cancel'
-            onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
-        </Line>
+        {!hideButtons && (
+          <Line>
+            <Button
+              color={primary}
+              type='button'
+              label='Create'
+              onClick={() => setShowModal(false)}>
+              Publish
+            </Button>
+            <Button
+              color={secondary}
+              type='button'
+              label='Cancel'
+              onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+          </Line>
+        )}
       </Container>
     </Modal>
   );
@@ -68,6 +77,7 @@ function GenericModal({ showModal, setShowModal, Title, Container, children }) {
 
 GenericModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
+  hideButtons: PropTypes.bool,
   setShowModal: PropTypes.func.isRequired,
   Title: PropTypes.string,
   children: PropTypes.node,
@@ -80,6 +90,7 @@ GenericModal.propTypes = {
 
 GenericModal.defaultProps = {
   Title: '',
+  hideButtons: false,
   children: React.createElement('div'),
   Container: styled.div``, // a default container
 };
