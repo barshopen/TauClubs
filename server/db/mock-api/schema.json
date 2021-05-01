@@ -1,0 +1,54 @@
+{
+
+    "messages":{
+        "id": "m_(uid)",
+        "title": "str",
+        "content": "str",
+        "creationTime": "TIME ISO8601",
+        "lastUpdateTime": "TIME ISO8601",
+        "likes": "list(users)",
+        "creating club": "club",
+        "creating user": "user"
+    },
+    "tags":{
+        "name": "str",
+        "color": "hex of 6 nibbles(#ABCDEF)",
+        "clubsWithTag": "list(clubs)"
+    },
+    "clubs":{
+        "id": "c_(uid)",
+        "name": "str",
+        "profileImage": "url",
+        "shortDescription": "str",
+        "description": "str",
+        "tags": "list(tags)",
+        "creationTime": "TIME ISO8601",
+        "lastUpdateTime": "TIME ISO8601",
+        "contactMail": "str",
+        "members": "list(users)",
+        "admins": "list(users)"
+      },
+      "events":{
+        "id": "e_(uid)",
+        "title": "str",
+        "description": "str",
+        "startTime": "TIME ISO8601",
+        "duration": "TIME DELTA",
+        "location": "str",
+        "creationTime": "TIME ISO8601",
+        "lastUpdateTime": "TIME ISO8601",
+        "membersAttending": "list(users)",
+        "creating club": "club",
+        "profileImage": "url",
+        "intrested": "list(users)"
+      },
+      "users":{
+        "id": "u_(uid)",
+        "name": "str",
+        "contactMail": "str",
+        "myClubsMembership": "list(clubs)",
+        "myClubsAsAdmin":  "list(clubs)",
+        "eventsAttending": "list(events)"
+        
+      }
+}
