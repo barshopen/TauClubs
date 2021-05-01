@@ -10,4 +10,9 @@ const x = atom({
   default: '', // default value (aka initial value)
 });
 
-export { newUserData, x };
+const showSideBarMobileState = atom({
+  key: 'userJoinState', // unique ID (with respect to other atoms/selectors)
+  default: false, // default value (aka initial value)
+});
+
+export { newUserData, x, showSideBarMobileState };

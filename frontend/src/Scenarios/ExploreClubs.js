@@ -5,7 +5,7 @@ import { getClubs } from '../Shared/api';
 
 const width = '95%';
 
-function AllClubs() {
+function ExploreClubs() {
   const [clubsData, setClubsData] = useState();
   useEffect(() => {
     getClubs().then(mydata => setClubsData(mydata.slice(0, 5)));
@@ -24,4 +24,4 @@ const StyledContainer = styled.div`
   grid-gap: 40px;
   align-items: center;
 `;
-export default AllClubs;
+export default ExploreClubs;

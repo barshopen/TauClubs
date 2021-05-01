@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { NavLink } from 'react-router-dom';
-import {
-  Tab,
-  Tabs,
-  Toolbar,
-  IconButton,
-  InputBase,
-  Badge,
-  MenuItem,
-  Menu,
-} from '@material-ui/core';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import { useRecoilState } from 'recoil';
 import {
   Lock as LockIcon,
   ExitToApp as ExitToAppIcon,
@@ -22,6 +22,7 @@ import {
   Notifications as NotificationsIcon,
   MoreVert as MoreIcon,
 } from '@material-ui/icons';
+import { showSideBarMobileState } from '../atoms';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -98,13 +99,20 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavBar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [signedInAnchorEl, setSignedInAnchorEl] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [signedInAnchorEl, setSignedInAnchorEl] = useState(false);
+  const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
+    showSideBarMobileState
+  );
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isUser = Boolean(signedInAnchorEl);
+
+  const showSideBarMobileToggleHandler = () => {
+    setShowSideBarMobile(!showSideBarMobile);
+  };
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -212,6 +220,16 @@ export default function NavBar() {
 
         <p>Profile</p>
       </MenuItem>
+      <MenuItem>
+        <IconButton
+          color='inherit'
+          aria-label='open drawer'
+          edge='start'
+          onClick={showSideBarMobileToggleHandler}
+          className={classes.menuButton}>
+          <MenuIcon />
+        </IconButton>
+      </MenuItem>
     </Menu>
   );
 
@@ -221,7 +239,7 @@ export default function NavBar() {
         <Tab label='Home' />
       </NavLink>
 
-      <NavLink to='/allClubs'>
+      <NavLink to='/explore'>
         <Tab label='All Clubs' />
       </NavLink>
 

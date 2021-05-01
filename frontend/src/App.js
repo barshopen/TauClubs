@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
-import AllClubs from './Scenarios/AllClubs';
+import ExploreClubs from './Scenarios/ExploreClubs';
 import Home from './Scenarios/Home';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const classes = useStyles();
   const [showNewClubModal, setShowNewClubModal] = useState(false);
+
   return (
     <div className={classes.root}>
       <NewClub
@@ -36,7 +37,7 @@ function App() {
         <main className={classes.content}>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/allClubs' component={AllClubs} />
+            <Route path='/explore' component={ExploreClubs} />
             <Route path='/contact' component={Contact} />
             <Route path='/signin' component={Signin} />
             <Route path='/club' component={ClubSection} />
