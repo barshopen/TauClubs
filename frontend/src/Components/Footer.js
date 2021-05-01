@@ -71,13 +71,13 @@ const ModalContainer = styled.div.attrs(() => {
 `;
 
 const Footer = () => {
-  const [open, setOpen] = useState(false);
+  const [modalOpened, setModalOpened] = useState(false);
   return (
     <>
       <Container>
         <Row>
           <Column>
-            <Heading onClick={() => setOpen(prev => !prev)}>About Us</Heading>
+            <Heading onClick={() => setModalOpened(true)}>About Us</Heading>
           </Column>
 
           <Column>
@@ -93,12 +93,12 @@ const Footer = () => {
       </Container>
 
       <GenericModal
-        showModal={open}
-        setShowModal={setOpen}
+        showModal={modalOpened}
+        setShowModal={setModalOpened}
         Container={ModalContainer}
         hideButtons>
         <Header>About Us</Header>
-        <div> gdgfgdf </div>
+        <div> Information To fill </div>
       </GenericModal>
     </>
   );

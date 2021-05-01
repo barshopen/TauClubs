@@ -64,13 +64,7 @@ ClubCard.propTypes = {
   color: PropTypes.string,
 };
 
-// ClubCard.propTypes = {
-//   title: PropTypes.string.isRequired,
-//   children: PropTypes.arrayOf(PropTypes.element),
-// };
-
 ClubCard.defaultProps = {
-  //   children: [],
   title: '',
   count: 0,
   img: '',
