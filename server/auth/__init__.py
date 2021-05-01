@@ -1,4 +1,5 @@
 import os
+import flask
 from flask import Flask, Blueprint, redirect, request, url_for
 from flask_login import (
     LoginManager,
@@ -6,12 +7,14 @@ from flask_login import (
     current_user,
     login_user,
     logout_user,
+    UserMixin
 )
 import json
 import sqlite3
 from authlib.integrations.flask_client import OAuth
-from .db import init_db_command
-from .user import User
+from flask_sqlalchemy import SQLAlchemy
+#from .db import init_db_command
+#from .user import User
 
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
@@ -21,6 +24,7 @@ auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
 oauth = None
 login_manager = LoginManager()
 google = None
+db = SQLAlchemy()
 
 
 def init(app):
@@ -48,27 +52,30 @@ def init(app):
     global google
     google = oauth.create_client('google')  # create the google oauth client
     # init_db_command()
+    global db
+    db = SQLAlchemy(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+        os.path.join(os.getcwd(), "server\\auth\\sharonn.db")
+
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+
+def create():
+    db.create_all()
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.query.get(int(user_id))
 
-
-@auth_app.route("/")
-def index():
-    # if current_user.is_authenticated:
-    #   return (
-    #       "<p>Hello, {}! You're logged in! Email: {}</p>"
-    #      '<a class="button" href="/logout">Logout</a>'.format(
-    #           current_user.name, current_user.email, current_user.profile_pic
-    #      )
-    # )
-    # else:
-    return '<a class="button" href="/login">Google Login</a>'
-    # return ('<script src="https://apis.google.com/js/platform.js" async defer></script>'
-    #       '<meta name="google-signin-client_id" content="18740809626-1et94g7dbvpmr4ajbc289d6p4rq35i7k.apps.googleusercontent.com">'
-    #      '<div class="g-signin2"></div>')
+    # return User.get(user_id)
 
 
 @auth_app.route("/login")
@@ -80,12 +87,15 @@ def login():
 @auth_app.route("/login/callback")
 def callback():
     # Access token from google (needed to get user info)
+    print(flask.request.args.get('state'),
+          flask.session.get('_google_authlib_state_'))
     token = google.authorize_access_token()
     user_info = oauth.google.parse_id_token(token)
 
     if user_info["email_verified"]:
         unique_id = user_info["sub"]
         users_email = user_info["email"]
+        print("unique id", users_email)
         users_name = user_info["given_name"]
     else:
         return "User email not available or not verified by Google.", 400
@@ -93,17 +103,18 @@ def callback():
         # Create a user in your db with the information provided
     # by Google
 
-    #user = User(id_=unique_id, name=users_name, email=users_email)
-
+    user = User.query.filter_by(email=users_email).first()
     # Doesn't exist? Add it to the database.
-    # if not User.get(unique_id):
-     #   User.create(id_=unique_id, name=users_name, email=users_email)
+    if not user:
+        user = User(name=users_name, email=users_email)
+        db.session.add(user)
+        db.session.commit()
 
     # Begin user session by logging the user in
-    #login_user(user, remember=True)
+    login_user(user, remember=True)
 
     # Send user back to homepage
-    return redirect("http://localhost:3000")
+    return redirect("http://localhost:3000/allClubs")
 
 
 @ auth_app.route("/logout")

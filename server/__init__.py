@@ -2,7 +2,7 @@ import os
 from flask import Flask, abort, request, Blueprint
 import dotenv
 from server.db import db_app
-from server.auth import auth_app, init
+from server.auth import auth_app, init, create
 from flask_login import (
     LoginManager
 )
@@ -23,6 +23,7 @@ FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 app.register_blueprint(db_app)
 
 init(app)
+# create()
 # blueprint for auth
 app.register_blueprint(auth_app)
 
