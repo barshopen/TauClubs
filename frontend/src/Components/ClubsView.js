@@ -1,45 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
 import GenericControl from './Generic/GenericControl';
-import GenericCard from './Generic/GenericCard';
-import { Labels } from './Generic/Label';
+import Card from './Generic/Card';
 
 const green = '#00d989';
-
-const Text = styled(Typography)`
-  font-size: 1rem;
-  text-align: right;
-  flex: 1;
-`;
-
-const LineContainer = styled(Typography)`
-  display: flex;
-  align-items: flex-start;
-  height: auto;
-  margin: 10px 0;
-`;
 
 function ClubsView({ header, data, width, Container }) {
   return (
     <GenericControl header={header} width={width} Container={Container}>
       {data.map(({ id, name, tags, membersCount, profileImage }) => (
         <Link key={id} to={`/club/board/${id}`}>
-          <GenericCard title={name}>
-            <Text>{`${membersCount} Members`}</Text>
-            <img
-              src={profileImage}
-              alt=''
-              width={width}
-              height={205}
-              style={{ minWidth: '100%', minHeight: '100%' }}
-            />
-            <LineContainer>
-              <Labels tags={tags} color={green} />
-            </LineContainer>
-          </GenericCard>
+          <Card
+            title={name}
+            img={profileImage}
+            tags={tags}
+            count={membersCount}
+            color={green}
+          />
         </Link>
       ))}
     </GenericControl>
