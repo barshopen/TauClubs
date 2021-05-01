@@ -4,13 +4,13 @@ import GenericModal from './Generic/GenericModal';
 
 const Container = styled.div`
   display: flex;
-  position: fixed;
+  position: relative;
   bottom: 0;
   flex-direction: column;
   justify-content: center;
-
+  color: black;
   margin: 0 auto;
-  background: black;
+  background: #aa9996;
 
   width: 100%;
   height: 50px;
@@ -36,7 +36,7 @@ const Row = styled.div`
 
 const Heading = styled.p`
   font-size: 0.8rem;
-  color: #fff;
+  color: black;
   :hover {
     cursor: pointer;
   }

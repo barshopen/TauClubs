@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useMemo } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
@@ -24,6 +23,7 @@ import {
   Mail as MailIcon,
   Notifications as NotificationsIcon,
   MoreVert as MoreIcon,
+  Menu as MenuIcon,
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
@@ -154,7 +154,7 @@ export default function NavBar() {
   };
 
   // get data about the current user
-  const isUser = false; // for now - later, if signed in will be true.
+  const isUser = true; // for now - later, if signed in will be true.
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -180,8 +180,6 @@ export default function NavBar() {
       keepMounted
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </StyledMenu>
@@ -230,6 +228,13 @@ export default function NavBar() {
     <div className={classes.grow}>
       <AppBar className={classes.appBar} position='static'>
         <Toolbar>
+          <IconButton
+            edge='start'
+            className={classes.menuButton}
+            color='inherit'
+            aria-label='menu'>
+            <MenuIcon />
+          </IconButton>
           <MenuItemWithToolTip
             edge='start'
             className={classes.menuButton}
