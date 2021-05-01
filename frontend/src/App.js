@@ -9,6 +9,7 @@ import Home from './Scenarios/Home';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
+import Footer from './Components/Footer';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,6 +44,7 @@ function App() {
             <Route path='/club' component={ClubSection} />
           </Switch>
         </main>
+        {/* <Footer /> */}
       </Router>
     </div>
   );

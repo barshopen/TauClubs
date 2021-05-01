@@ -19,7 +19,7 @@ const Container = styled.div`
     'myClubs messages'
     'myClubs upcomingEvents';
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: auto;
   width: 100%;
   grid-gap: 10px;
 `;
