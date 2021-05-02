@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -15,7 +15,7 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import AddIcon from '@material-ui/icons/Add';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Hidden from '@material-ui/core/Hidden';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../atoms';
 
@@ -91,9 +91,12 @@ export default function SideBar() {
     getClubs().then(mydata => setClubsData(mydata));
   }, []);
   const classes = useStyles();
-  const theme = useTheme();
-  const showSideBarMobile = useRecoilValue(showSideBarMobileState);
-
+  const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
+    showSideBarMobileState
+  );
+  const showSideBarMobileToggleHandler = () => {
+    setShowSideBarMobile(!showSideBarMobile);
+  };
   const DrawerContent = (
     <div>
       <Toolbar />
@@ -129,20 +132,22 @@ export default function SideBar() {
       <Hidden smUp implementation='css'>
         <Drawer
           variant='temporary'
-          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
           open={showSideBarMobile}
           classes={{
             paper: classes.drawerPaper,
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
-          }}>
-          {DrawerContent}{' '}
+          }}
+          className={classes.drawer}
+          onClose={showSideBarMobileToggleHandler}>
+          {DrawerContent}
         </Drawer>
       </Hidden>
 
       <Hidden xsDown implementation='css'>
         <Drawer
+          className={classes.drawer}
           classes={{
             paper: classes.drawerPaper,
           }}

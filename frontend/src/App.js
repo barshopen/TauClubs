@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
@@ -12,13 +15,19 @@ import NewClub from './Scenarios/NewClub';
 import Footer from './Components/Footer';
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  main: {
     display: 'flex',
+    flexDirection: 'column',
   },
   content: {
-    flexGrow: 1,
+    flex: 1,
     paddingTop: theme.spacing(9),
     padding: theme.spacing(3),
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
   },
 }));
 
@@ -27,24 +36,26 @@ function App() {
   const [showNewClubModal, setShowNewClubModal] = useState(false);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.main}>
       <NewClub
         showModal={showNewClubModal}
         setClubModal={setShowNewClubModal}
       />
       <Router>
-        <NavBar />
-        <SideBar />
-        <main className={classes.content}>
-          <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/explore' component={ExploreClubs} />
-            <Route path='/contact' component={Contact} />
-            <Route path='/signin' component={Signin} />
-            <Route path='/club' component={ClubSection} />
-          </Switch>
-        </main>
-        {/* <Footer /> */}
+        <Grid>
+          <NavBar />
+          <SideBar />
+          <Container className={classes.content}>
+            <Switch>
+              <Route path='/' exact component={Home} />
+              <Route path='/explore' component={ExploreClubs} />
+              <Route path='/contact' component={Contact} />
+              <Route path='/signin' component={Signin} />
+              <Route path='/club' component={ClubSection} />
+            </Switch>
+          </Container>
+          <Footer />
+        </Grid>
       </Router>
     </div>
   );

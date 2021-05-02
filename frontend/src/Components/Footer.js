@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTheme } from '@material-ui/core/styles';
 import GenericModal from './Generic/GenericModal';
 
-const Container = styled.div`
+const Container = styled.footer`
   display: flex;
   position: relative;
   bottom: 0;
@@ -10,8 +11,8 @@ const Container = styled.div`
   justify-content: center;
   color: black;
   margin: 0 auto;
-  background: #aa9996;
-
+  background: #efefea;
+  z-index: ${props => props.zIndex};
   width: 100%;
   height: 50px;
 `;
@@ -59,9 +60,10 @@ const ModalContainer = styled.div`
 
 const Footer = () => {
   const [modalOpened, setModalOpened] = useState(false);
+  const theme = useTheme();
   return (
     <>
-      <Container>
+      <Container zIndex={theme.zIndex.drawer + 1}>
         <Row>
           <Column>
             <Heading onClick={() => setModalOpened(true)}>About Us</Heading>
