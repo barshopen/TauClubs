@@ -1,13 +1,12 @@
 import os
 from flask import Flask, abort, request, Blueprint
 import dotenv
-from server.db import db_app
-from server.auth import auth_app, init, create
 from flask_login import (
     LoginManager
 )
+from server.db import db_app
+from server.auth import auth_app, init, create
 from server.generic import disable_route_on_flag
-from authlib.integrations.flask_client import OAuth
 
 dotenv.load_dotenv()
 
@@ -23,7 +22,7 @@ FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 app.register_blueprint(db_app)
 
 init(app)
-# create()
+
 # blueprint for auth
 app.register_blueprint(auth_app)
 
