@@ -7,6 +7,7 @@ import Home from './Scenarios/Home';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
+import Footer from './Components/Footer';
 
 function App() {
   const [showNewClubModal, setShowNewClubModal] = useState(false);
@@ -26,6 +27,7 @@ function App() {
           <Route path='/club' component={ClubSection} />
         </Switch>
       </Router>
+      <Footer />
     </div>
   );
 }
