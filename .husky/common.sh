@@ -29,4 +29,5 @@ function undoChanges() {
     git fetch; git checkout origin/master -- $1
     autoCommitChanges $1 UNDO
 }
-donothing(){ :; }
+
+function donothing(){ :; }

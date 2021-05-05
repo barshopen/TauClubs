@@ -27,5 +27,5 @@ $PIP freeze > $REQUIREMENTS
 changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
 
 if [ $changes -ne 0 ]; then
-    autoCommitChanges ${REQUIREMENTS} update
+    autoCommitChanges ${REQUIREMENTS} UPDATE
 fi
