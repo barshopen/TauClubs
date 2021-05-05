@@ -1,7 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
-cd frontend
-yarn install
-cd ..
-pip install -r requirements.txt
+PIP=.env/Scripts/pip.exe
+echo updating requirements.txt...
+$PIP freeze > requirements.txt
+git add requirements.txt
+git commit -m "AUTOMATIC COMMIT: UPDATE requirements.txt"

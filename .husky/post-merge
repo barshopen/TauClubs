@@ -1,4 +1,13 @@
 #!/bin/sh
+
+PIP=.env/Scripts/pip.exe
+
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
-pip freeze > requirements.txt
+
+echo updating python environment and yarn...
+yarn install
+cd frontend
+yarn install
+cd ..
+$PIP install -r requirements.txt
