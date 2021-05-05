@@ -5,13 +5,13 @@
 
 
 
-printf "${HUSKY} ${GREEN} updating python environment from ${REQUIREMENTS}...\n ${NC} "
+printf "${HUSKY} ${GREEN} Updating python environment from ${REQUIREMENTS}...\n ${NC} "
 $PIP install -r $REQUIREMENTS
 
-printf "${HUSKY} ${GREEN} updating js environment...\n ${NC} "
+printf "${HUSKY} ${GREEN} Updating js environment...\n ${NC} "
 yarn install
 
-printf "${HUSKY} ${GREEN} updating js environment in frontend...\n ${NC} "
+printf "${HUSKY} ${GREEN} Updating js environment in frontend...\n ${NC} "
 cd frontend
 yarn install
 

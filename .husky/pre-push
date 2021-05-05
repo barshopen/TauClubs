@@ -6,7 +6,7 @@
 printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
 changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
 
-if [[ $changes -ne 0 ]]; then
+if [ $changes -ne 0 ]; then
     printf "${HUSKY} ${YELLOW} WARNING! git detected changes in:  ${NC}\n";
     git diff --name-only origin/master $SHOULDNT_CHANGE
 
