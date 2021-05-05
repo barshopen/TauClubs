@@ -5,13 +5,13 @@
 
 printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
 changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
-printf "${changes}"
-if [[ $changes -ne 0 ]]; then
-    printf "${HUSKY} ${YELLOW} WARNING! git detected changes in: \n";
-    printf "$(git diff --name-only $SHOULDNT_CHANGE) \n ";
 
-    printf  "Are you sure you want to add those changes  ${NC}?";
-       read -p " [Y/N]" yn
+if [[ $changes -ne 0 ]]; then
+    printf "${HUSKY} ${YELLOW} WARNING! git detected changes in:  ${NC}\n";
+    git diff --name-only origin/master $SHOULDNT_CHANGE
+
+    printf  "${HUSKY} ${YELLOW} Are you sure you want to add those changes? ${NC}";
+       read -p "[Y/N] " yn
             case $yn in
             [Yy]* )     donothing ;;
             [Nn]* ) undoChanges $SHOULDNT_CHANGE ;;
