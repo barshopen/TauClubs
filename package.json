@@ -1,0 +1,12 @@
+{
+  "name": "tauclubs",
+  "description": "pac",
+  "version": "0",
+  "repository": "https://github.com/barshopen/TauClubs.git",
+  "devDependencies": {
+    "husky": "^6.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
