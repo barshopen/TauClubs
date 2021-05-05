@@ -2,6 +2,7 @@ import os
 from flask import Flask, abort, request
 import dotenv
 from server.db import db_app
+from server.db.db_init import initdb
 from server.auth import auth_app
 from server.generic import disable_route_on_flag
 dotenv.load_dotenv()
@@ -14,6 +15,8 @@ FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 
 # blueprint for db
 app.register_blueprint(db_app)
+
+initdb(app)
 
 # blueprint for auth
 app.register_blueprint(auth_app)
