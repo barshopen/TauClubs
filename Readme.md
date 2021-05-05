@@ -29,7 +29,7 @@ Please have a clear and brief explanation on what is the main changes you have a
 If you working on major changes, please try and devide your PR for few seperate PR that make logical sense.
 
 ## Running env ##
-1. Install at least python 3.9.4. If you own a 64-bit machine please use the 64-bit Python for better preformence.
+1. Install at least python 3.9.4. If you own a 64-bit machine please use the 64-bit Python for better preformence.123123
 2. Install at least node 12.18.13
 3. At the root dir, run: `python -m venv .env`
 4. Install recomended extensions Go to extensions(Ctrl+Shift+X on Windows), on the search type `@recommended` under workspace recommendations click on the ☁️ button the install all the recommended extensions.

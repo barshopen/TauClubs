@@ -2,24 +2,24 @@
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 
-function autoCommit() {
+function autoCommitChanges() {
     printf "${HUSKY} ${GREEN} Saving $1 \n ${NC}";
-
-    git add $1
-    git commit -m "AUTOMATIC-COMMIT: UPDATE  $1"
+    changes=`git diff --name-only HEAD $1 | wc -l`;
+    if [[ $changes -ne 0 ]]; then
+        git add $1
+        git commit -m "AUTOMATIC-COMMIT: $2 FILES: $1"
+    fi
 }
 
 function undoChanges() {
     printf "${HUSKY} ${GREEN} Undoing changes in $1 \n ${NC}";
     git fetch; git checkout origin/master -- $1
-    git add $1
-    git commit -m "AUTOMATIC-COMMIT: UNDO  $1"
+    autoCommitChanges $1 UNDO
 }
 
 printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
-changes=`git diff --name-only HEAD $SHOULDNT_CHANGE | wc -l`;
-autoCommit
-
+changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
+printf "${changes}"
 if [[ $changes -ne 0 ]]; then
     printf "${HUSKY} ${YELLOW} WARNING! git detected changes in: \n";
     printf "$(git diff --name-only $SHOULDNT_CHANGE) \n ";
@@ -41,5 +41,5 @@ $PIP freeze > $REQUIREMENTS
 changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
 
 if [ $changes -ne 0 ]; then
-autoCommit ${REQUIREMENTS}
+    autoCommit ${REQUIREMENTS} update
 fi
