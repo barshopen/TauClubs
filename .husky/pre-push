@@ -2,21 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 
-function autoCommitChanges() {
-    printf "${HUSKY} ${GREEN} Saving $1 \n ${NC}";
-    changes=`git diff --name-only HEAD $1 | wc -l`;
-    if [[ $changes -ne 0 ]]; then
-        git add $1
-        git commit -m "AUTOMATIC-COMMIT: $2 FILES: $1"
-    fi
-}
-
-function undoChanges() {
-    printf "${HUSKY} ${GREEN} Undoing changes in $1 \n ${NC}";
-    git fetch; git checkout origin/master -- $1
-    autoCommitChanges $1 UNDO
-}
-donothing(){ :; }
 
 printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
 changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
