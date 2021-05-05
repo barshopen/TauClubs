@@ -2,7 +2,9 @@
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 PIP=.env/Scripts/pip.exe
-echo updating requirements.txt...
-$PIP freeze > requirements.txt
+REQUIREMENTS=requirements.txt
+
+echo updating $REQUIREMENTS...
+$PIP freeze > $REQUIREMENTS
 git add requirements.txt
 git commit -m "AUTOMATIC COMMIT: UPDATE requirements.txt"
