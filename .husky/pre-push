@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+cd frontend
+yarn install
+cd ..
+pip install -r requirements.txt
