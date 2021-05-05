@@ -1,10 +1,45 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
-PIP=.env/Scripts/pip.exe
-REQUIREMENTS=requirements.txt
 
-echo updating $REQUIREMENTS...
+function autoCommit() {
+    printf "${HUSKY} ${GREEN} Saving $1 \n ${NC}";
+
+    git add $1
+    git commit -m "AUTOMATIC-COMMIT: UPDATE  $1"
+}
+
+function undoChanges() {
+    printf "${HUSKY} ${GREEN} Undoing changes in $1 \n ${NC}";
+    git fetch; git checkout origin/master -- $1
+    git add $1
+    git commit -m "AUTOMATIC-COMMIT: UNDO  $1"
+}
+
+printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
+changes=`git diff --name-only HEAD $SHOULDNT_CHANGE | wc -l`;
+autoCommit
+
+if [[ $changes -ne 0 ]]; then
+    printf "${HUSKY} ${YELLOW} WARNING! git detected changes in: \n";
+    printf "$(git diff --name-only $SHOULDNT_CHANGE) \n ";
+
+    printf  "Are you sure you want to add those changes  ${NC}?";
+       read -p " [Y/N]" yn
+            case $yn in
+            [Yy]* ) ;;
+            [Nn]* ) undoChanges $SHOULDNT_CHANGE ;;
+            * ) echo "Please answer [Y/N]";;
+            esac
+ 
+fi
+
+
+printf "${HUSKY} ${GREEN} making sure ${REQUIREMENTS} is updated ...\n ${NC} "
+
 $PIP freeze > $REQUIREMENTS
-git add requirements.txt
-git commit -m "AUTOMATIC COMMIT: UPDATE requirements.txt"
+changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
+
+if [ $changes -ne 0 ]; then
+autoCommit ${REQUIREMENTS}
+fi

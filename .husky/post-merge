@@ -1,13 +1,18 @@
 #!/bin/sh
 
-PIP=.env/Scripts/pip.exe
-
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 
-echo updating python environment and yarn...
+
+
+printf "${HUSKY} ${GREEN} updating python environment from ${REQUIREMENTS}...\n ${NC} "
+$PIP install -r $REQUIREMENTS
+
+printf "${HUSKY} ${GREEN} updating js environment...\n ${NC} "
 yarn install
+
+printf "${HUSKY} ${GREEN} updating js environment in frontend...\n ${NC} "
 cd frontend
 yarn install
-cd ..
-$PIP install -r requirements.txt
+
+
