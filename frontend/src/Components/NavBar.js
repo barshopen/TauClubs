@@ -254,8 +254,8 @@ export default function NavBar() {
 
   const searchImageStyle = {
     marginRight: '10px',
-    width: '15%',
-    height: '15%',
+    width: '12%',
+    height: '12%',
   };
 
   return (
@@ -301,10 +301,6 @@ export default function NavBar() {
               onChange={(event, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
-              // getOptionSelected={params => {
-              //   console.log(params);
-              //   setSelectedOptionState(params.id);
-              // }}
               options={defaultFilterOptions}
               getOptionLabel={option => option.render ?? option.name}
               renderOption={option => (
@@ -312,15 +308,7 @@ export default function NavBar() {
                   {option.icon && (
                     <img src={option.icon} alt='' style={searchImageStyle} />
                   )}
-                  <Chip
-                    variant='outlined'
-                    key={option}
-                    style={{
-                      backgroundColor: 'black',
-                      color: 'white',
-                    }}
-                    label={option.name}
-                  />
+                  {option.name}
                 </>
               )}
               renderInput={params => {
