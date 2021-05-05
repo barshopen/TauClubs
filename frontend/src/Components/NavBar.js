@@ -1,8 +1,10 @@
+/* eslint-disable indent */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import {
   AppBar,
   Toolbar,
@@ -13,6 +15,7 @@ import {
   Badge,
   Menu,
   MenuItem,
+  Chip,
 } from '@material-ui/core';
 
 import {
@@ -27,7 +30,10 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
+import styled from 'styled-components';
+import SearchFor from '../assets/search-icon.png';
 import { getClubs } from '../api';
+import { selectedOptionState } from '../atoms';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -80,7 +86,6 @@ const useStyles = makeStyles(theme => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -143,15 +148,35 @@ export default function NavBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [search, setSearch] = React.useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const setSelectedOptionState = useSetRecoilState(selectedOptionState);
 
   const { data } = useQuery('allClubs', fetchClubs);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
+
+  const defaultFilterOptions = useMemo(
+    () =>
+      data
+        ? data.slice(0, 20).concat(
+            search
+              ? [
+                  {
+                    name: `Search for ${search}`,
+                    icon: SearchFor,
+                  },
+                ]
+              : []
+          )
+        : [],
+    [data, search]
+  );
 
   // get data about the current user
   const isUser = true; // for now - later, if signed in will be true.
@@ -180,7 +205,9 @@ export default function NavBar() {
       keepMounted
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to='/profile'>My account</NavLink>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </StyledMenu>
   );
@@ -219,10 +246,17 @@ export default function NavBar() {
           title='Profile'
           icon={<AccountCircle />}
         />
+
         <p>Profile</p>
       </MenuItem>
     </StyledMenu>
   );
+
+  const searchImageStyle = {
+    marginRight: '10px',
+    width: '15%',
+    height: '15%',
+  };
 
   return (
     <div className={classes.grow}>
@@ -241,8 +275,11 @@ export default function NavBar() {
             aria-label='open drawer'
             title='Home'
             icon={
-              <NavLink to='/'>
-                <HomeIcon fontSize='small' />
+              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
+                <HomeIcon
+                  onClick={() => setSelectedOptionState('')}
+                  fontSize='small'
+                />
               </NavLink>
             }
           />
@@ -257,10 +294,39 @@ export default function NavBar() {
 
             <Autocomplete
               id='combo-box-demo'
-              options={data}
-              getOptionLabel={option => option.name}
+              size='small'
+              autoComplete
+              autoHighlight
+              autoSelect
+              onChange={(event, newValue) => {
+                setSelectedOptionState(newValue?.id || '');
+              }}
+              // getOptionSelected={params => {
+              //   console.log(params);
+              //   setSelectedOptionState(params.id);
+              // }}
+              options={defaultFilterOptions}
+              getOptionLabel={option => option.render ?? option.name}
+              renderOption={option => (
+                <>
+                  {option.icon && (
+                    <img src={option.icon} alt='' style={searchImageStyle} />
+                  )}
+                  <Chip
+                    variant='outlined'
+                    key={option}
+                    style={{
+                      backgroundColor: 'black',
+                      color: 'white',
+                    }}
+                    label={option.name}
+                  />
+                </>
+              )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+                setSearch(rest.inputProps.value);
+
                 return (
                   <InputBase
                     {...params.InputProps}
