@@ -30,7 +30,7 @@ If you working on major changes, please try and devide your PR for few seperate 
 
 ## Running env ##
 1. Install at least python 3.9.4. If you own a 64-bit machine please use the 64-bit Python for better preformence.
-2. Install at least node 12.18.13
+2. Install at least node 12.18.13.
 3. At the root dir, run: `python -m venv .env`
 4. Install recomended extensions Go to extensions(Ctrl+Shift+X on Windows), on the search type `@recommended` under workspace recommendations click on the ☁️ button the install all the recommended extensions.
 5. Python virtual envirnoment should be activated when you start a new terminal. You should see a green `(.env)` at the begining of your terminal prompt. (If you don't please let us know :) ). Restart the terminal.
