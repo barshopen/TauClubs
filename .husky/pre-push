@@ -16,6 +16,7 @@ function undoChanges() {
     git fetch; git checkout origin/master -- $1
     autoCommitChanges $1 UNDO
 }
+donothing(){ :; }
 
 printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
 changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
@@ -27,7 +28,7 @@ if [[ $changes -ne 0 ]]; then
     printf  "Are you sure you want to add those changes  ${NC}?";
        read -p " [Y/N]" yn
             case $yn in
-            [Yy]* ) ;;
+            [Yy]* )     donothing ;;
             [Nn]* ) undoChanges $SHOULDNT_CHANGE ;;
             * ) echo "Please answer [Y/N]";;
             esac
@@ -41,5 +42,5 @@ $PIP freeze > $REQUIREMENTS
 changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
 
 if [ $changes -ne 0 ]; then
-    autoCommit ${REQUIREMENTS} update
+    autoCommitChanges ${REQUIREMENTS} update
 fi
