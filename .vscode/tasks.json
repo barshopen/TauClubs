@@ -2,16 +2,34 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Front build",
-			"type": "npm",
-			"script": "build",
-			"path": "frontend/",
+			"label": "Build dockerfile",
+			"type":"docker-build",
+			"platform": "python",	
+			"dependsOn":["Front build"],
+			"dockerBuild": {
+				"tag": "tauclubs"		
+			}
+		},
+		{
+			"label": "Run docker",
+			"type":"docker-run",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
+			"dependsOn":["Build dockerfile"],
+			"dockerRun": {
+				"image": "tauclubs"
+			}
+		},
+		{
+			"label": "Front build",
+			"type": "npm",
+			"script": "build",
+			"path": "frontend/",
 			"problemMatcher": [],
 			"detail": "react-scripts build"
 		},
+
 	]
 }
