@@ -4,8 +4,8 @@ import dotenv
 from flask_login import (
     LoginManager
 )
-from server.db import db_app
-from server.auth import auth_app, init, create
+from server.db import db_app, initdb
+from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
 
 dotenv.load_dotenv()

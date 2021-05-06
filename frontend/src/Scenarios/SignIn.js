@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import GoogleButton from 'react-google-button';
 
 function Signin() {
-  const history = useHistory();
+  // const history = useHistory();
 
   const routeChange = () => {
     // const path = `/auth/login`;
