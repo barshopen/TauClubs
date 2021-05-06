@@ -2,7 +2,7 @@ from mongoengine import Document, StringField, UUIDField, DateTimeField, ListFie
 
 
 class Message(Document):
-    id = UUIDField()  # consider ObjectIdField
+    # id = UUIDField()  # consider ObjectIdField
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)
     creationTime = DateTimeField(required=True,
