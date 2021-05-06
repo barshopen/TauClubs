@@ -1,0 +1,16 @@
+**/.env/*
+**/.git/*
+**/.husky/*
+**/.pytest_cache/*
+**/.vscode/*
+**/frontend/*
+**/node_modules/*
+**/.gitignore
+**/.pylintrc
+Readme.md
+server/__pycache__/*
+server/.env_example
+
+# ignore nodejs envelope in root- this isn't used in prod anyway
+yarn.lock
+package.json
