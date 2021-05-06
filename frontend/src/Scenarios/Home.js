@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Messages from '../Components/Messages';
 import UpcomingEvents from '../Components/UpcomingEvents';
+import FeedCard from '../Components/Feed/GenericFeedCard';
 import { getMessages, getUpcomingEvents } from '../api';
 
 const ComponentContainer = styled.div`
@@ -22,11 +23,8 @@ function Home() {
   return (
     <>
       <Container maxWidth='md'>
-        <ComponentContainer gridArea='messages'>
-          <Messages data={messagesData} />
-        </ComponentContainer>
-        <ComponentContainer gridArea='upcomingEvents'>
-          <UpcomingEvents data={upcomingEvents} />
+        <ComponentContainer gridArea='feed'>
+          <FeedCard />
         </ComponentContainer>
       </Container>
     </>
