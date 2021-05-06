@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function FeedCard({ date, title, profileImage, description }) {
+function FeedCard({ date, title, profileImage, description, clubName }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -53,18 +53,15 @@ function FeedCard({ date, title, profileImage, description }) {
   return (
     <Card className={classes.root} m={75}>
       <CardHeader
-        avatar={
-          <Avatar aria-label='CHESS' className={classes.avatar}>
-            {profileImage}
-          </Avatar>
-        }
+        avatar={<Avatar alt='club image' src={profileImage} />}
         action={
           <IconButton aria-label='settings'>
             <MoreVertIcon />
           </IconButton>
         }
+        titleTypographyProps={{ variant: 'h5' }}
         title={title}
-        subheader={date}
+        subheader={date.concat(` ${clubName}`)}
       />
       <CardMedia className={classes.media} image={profileImage} title={title} />
       <CardContent>
@@ -92,7 +89,7 @@ function FeedCard({ date, title, profileImage, description }) {
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
           <Typography paragraph>more details:</Typography>
-          <Typography paragraph variant='h5' color='initial'>
+          <Typography paragraph variant='h6' color='initial'>
             This events is the best one yet.
           </Typography>
         </CardContent>
@@ -103,6 +100,7 @@ function FeedCard({ date, title, profileImage, description }) {
 
 FeedCard.propTypes = {
   title: PropTypes.string,
+  clubName: PropTypes.string,
   date: PropTypes.string,
   profileImage: PropTypes.string,
   description: PropTypes.string,
@@ -111,6 +109,7 @@ FeedCard.propTypes = {
 FeedCard.defaultProps = {
   date: '',
   title: '',
+  clubName: '',
   profileImage: '',
   description: '',
 };

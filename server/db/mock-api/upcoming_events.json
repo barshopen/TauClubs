@@ -1,47 +1,51 @@
 [
   {
     "id": "ue_1",
-    "title": "Similique",
+    "clubName": "Chess Club",
+    "title": "Meetup at the park",
     "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "2012-04-23T18:25:43.511Z",
+    "startTime": "23/11/2021 18:25",
     "duration": "3:00",
     "location": "3130 Bathurst Street, Suite 214",
-    "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "creationTime": "23/11/2021 18:25",
+    "lastUpdateTime": "23/11/2021 18:35"
   },
   {
     "id": "ue_2",
+    "clubName": "Salsa club",
     "title": "Meetup!",
-    "profileImage": "images/hikeProfile.jpeg",
+    "profileImage": "images/salsaProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "2012-04-23T18:25:43.511Z",
+    "startTime": "23/11/2021 18:25",
     "duration": "3:00",
     "location": "3130 Bathurst Street, Suite 214",
-    "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "creationTime": "23/11/2021 18:25",
+    "lastUpdateTime": "23/11/2021 18:35"
   },
   {
     "id": "ue_3",
+    "clubName": "Chess Club",
     "title": "Physics 101",
     "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "2012-04-23T18:25:43.511Z",
+    "startTime": "23/11/2021 18:25",
     "duration": "3:00",
     "location": "3130 Bathurst Street, Suite 214",
-    "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "creationTime": "23/11/2021 18:25",
+    "lastUpdateTime": "23/11/2021 18:35"
   },
   {
     "id": "ue_4",
+    "clubName": "Chess Club",
     "title": "A trip to Haifa",
-    "profileImage": "images/hikeProfile.jpeg",
+    "profileImage": "images/salsaProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "2012-04-23T18:25:43.511Z",
+    "startTime": "23/11/2021 18:25",
     "time": "10:00",
     "duration": "3:00",
     "location": "3130 Bathurst Street, Suite 214",
-    "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "creationTime": "23/11/2021 18:25",
+    "lastUpdateTime": "23/11/2021 18:35"
   }
 ]

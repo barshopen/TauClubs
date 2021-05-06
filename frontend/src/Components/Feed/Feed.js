@@ -23,7 +23,15 @@ const Feed = () => {
       {/* <FeedNavBar setCurrentTab='all' /> */}
       <Container>
         {data?.map(
-          ({ id, type, title, profileImage, description, lastUpdateTime }) => (
+          ({
+            id,
+            type,
+            title,
+            profileImage,
+            description,
+            lastUpdateTime,
+            clubName,
+          }) => (
             <FeedCard
               id={id}
               type={type}
@@ -31,6 +39,7 @@ const Feed = () => {
               profileImage={profileImage}
               description={description}
               date={lastUpdateTime}
+              clubName={clubName}
             />
           )
         )}
