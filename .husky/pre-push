@@ -1,0 +1,31 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
+
+printf "${HUSKY} ${GREEN} Making sure that the files: [${SHOULDNT_CHANGE}] has no changes ...${NC} \n";
+changes=`git diff --name-only origin/master $SHOULDNT_CHANGE | wc -l`;
+
+if [ $changes -ne 0 ]; then
+    printf "${HUSKY} ${YELLOW} WARNING! git detected changes in:  ${NC}\n";
+    git diff --name-only origin/master $SHOULDNT_CHANGE
+
+    printf  "${HUSKY} ${YELLOW} Are you sure you want to add those changes? ${NC}";
+       read -p "[Y/N] " yn
+            case $yn in
+            [Yy]* )     donothing ;;
+            [Nn]* ) undoChanges $SHOULDNT_CHANGE ;;
+            * ) echo "Please answer [Y/N]";;
+            esac
+ 
+fi
+
+
+printf "${HUSKY} ${GREEN} making sure ${REQUIREMENTS} is updated ...\n ${NC} "
+
+$PIP freeze > $REQUIREMENTS
+changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
+
+if [ $changes -ne 0 ]; then
+    autoCommitChanges ${REQUIREMENTS} UPDATE
+fi

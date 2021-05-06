@@ -22,6 +22,7 @@ FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 app.register_blueprint(db_app)
 
 init(app)
+initdb(app)
 
 # blueprint for auth
 app.register_blueprint(auth_app)
