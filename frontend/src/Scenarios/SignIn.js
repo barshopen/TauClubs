@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import GoogleButton from 'react-google-button';
 import { GoogleLogin } from 'react-google-login';
 import { useSetRecoilState } from 'recoil';
 import { currentUser } from '../atoms';
 
 function Signin() {
   // const history = useHistory();
-  const { setisUser } = useSetRecoilState(currentUser);
+  const { setIsUser } = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
 
   function loginSuccess(d) {
@@ -23,7 +21,7 @@ function Signin() {
 
       fetch('/auth/confirm', requestOptions)
         .then(response => response.json())
-        .then(setisUser(true))
+        .then(setIsUser(true))
         .catch(error => {
           setLoginError(true);
         });
@@ -34,14 +32,10 @@ function Signin() {
   function loginFailure(d) {
     setLoginError(true);
   }
-  const routeChange = () => {
-    // const path = `/auth/login`;
-    // history.replace(path); for production
-    window.location.href = 'http://127.0.0.1:443/auth/login';
-  };
+
   return (
     <GoogleLogin
-      clientId='752350466610-gce0q11es3ap63hg0vn42p84p184pf0g.apps.googleusercontent.com'
+      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
       buttonText='Log in with Google'
       onSuccess={loginSuccess}
       onFailure={loginFailure}

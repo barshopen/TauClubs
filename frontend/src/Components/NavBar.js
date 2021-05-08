@@ -26,7 +26,8 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-
+import { useRecoilState } from 'recoil';
+import { currentUser } from '../atoms';
 import { getClubs, getIsLogin } from '../api';
 
 const useStyles = makeStyles(theme => ({
@@ -141,13 +142,21 @@ const fetchClubs = async () => {
 
 export default function NavBar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const { data } = useQuery('allClubs', fetchClubs);
+
+  const [isUser, setIsUser] = useRecoilState(currentUser);
+  useEffect(() => {
+    getIsLogin().then(d => {
+      setIsUser(d.isLogin);
+      console.log(d);
+    });
+  }, []);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
