@@ -9,7 +9,7 @@ const newUserData = atom({
 const currentUser = atom({ key: 'currentUser', default: null });
 
 const showSideBarMobileState = atom({
-  key: 'userJoinState', // unique ID (with respect to other atoms/selectors)
+  key: 'showSideBarMobileState', // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)
 });
 
