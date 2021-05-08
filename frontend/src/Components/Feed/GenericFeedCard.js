@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -19,7 +20,7 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: '80%',
+    maxWidth: '100%',
     margin: 20,
   },
   media: {
@@ -41,9 +42,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function FeedCard({ date, title, profileImage, description, clubName }) {
+function FeedCard({
+  date,
+  title,
+  profileImage,
+  description,
+  clubName,
+  location,
+  startTime,
+  duration,
+}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const isImg = profileImage !== '';
 
   // eslint-disable-next-line no-unused-vars
   const handleExpandClick = () => {
@@ -53,20 +64,36 @@ function FeedCard({ date, title, profileImage, description, clubName }) {
     <Card className={classes.root} m={75}>
       <CardHeader
         avatar={<Avatar alt='club image' src={profileImage} />}
-        action={
-          <IconButton aria-label='settings'>
-            <MoreVertIcon />
-          </IconButton>
-        }
+        // action={
+        //   // <IconButton aria-label='settings'>
+        //   //   <MoreVertIcon />
+        //   // </IconButton>
+        // }
         titleTypographyProps={{ variant: 'h5' }}
         title={title}
         subheader={date.concat(` ${clubName}`)}
       />
-      <CardMedia className={classes.media} image={profileImage} title={title} />
+
+      {isImg && (
+        <CardMedia
+          className={classes.media}
+          image={profileImage}
+          title={title}
+        />
+      )}
       <CardContent>
-        <Typography variant='h5' color='initial' component='p'>
+        <Typography paragraph variant='h6' color='initial' component='p'>
           {description}
         </Typography>
+        {location && (
+          <Typography>
+            <div>
+              Starts at: {startTime}
+              <br />
+              Location: {location}
+            </div>{' '}
+          </Typography>
+        )}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label='add to favorites'>
@@ -103,6 +130,9 @@ FeedCard.propTypes = {
   date: PropTypes.string,
   profileImage: PropTypes.string,
   description: PropTypes.string,
+  location: PropTypes.string,
+  startTime: PropTypes.string,
+  duration: PropTypes.string,
 };
 
 FeedCard.defaultProps = {
@@ -111,6 +141,9 @@ FeedCard.defaultProps = {
   clubName: '',
   profileImage: '',
   description: '',
+  location: '',
+  startTime: '',
+  duration: '',
 };
 
 export default FeedCard;

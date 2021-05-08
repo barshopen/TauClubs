@@ -30,6 +30,9 @@ const Feed = () => {
             description,
             lastUpdateTime,
             clubName,
+            location,
+            startTime,
+            duration,
           }) => (
             <FeedCard
               id={id}
@@ -39,6 +42,9 @@ const Feed = () => {
               description={description}
               date={lastUpdateTime}
               clubName={clubName}
+              location={location}
+              startTime={startTime}
+              duration={duration}
             />
           )
         )}
