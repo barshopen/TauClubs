@@ -15,3 +15,16 @@ export const getClubs = (clubId = null) => getDb('clubs', clubId);
 
 export const getUpcomingEvents = (eventId = null) =>
   getDb('upcoming_events', eventId);
+
+export const getFeedData = (currentTab = 'all') => {
+  if (currentTab === 'messages') {
+    return getMessages();
+  }
+  if (currentTab === 'events') {
+    return getUpcomingEvents();
+  }
+  return Promise.all([
+    getUpcomingEvents(),
+    getMessages(),
+  ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
+};

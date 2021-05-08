@@ -1,5 +1,14 @@
 from os import path
+import os
 from flask import Blueprint, json
+import dotenv
+from flask_mongoengine import MongoEngine
+#from .users import User
+#from .clubs import Club
+#from .events import Event
+#from .tags import Tag
+#from .messages import Message
+
 
 STATIC_FOLDER_NAME = 'mock-api'
 
@@ -7,6 +16,28 @@ db_app = Blueprint(
     "db_app",
     __name__,
     url_prefix="/db",)
+
+dotenv.load_dotenv()
+MONGO_DB_HOST_USER = os.getenv('MONGO_DB_HOST_USER')
+MONGO_DB_HOST_PASSWORD = os.getenv('MONGO_DB_HOST_PASSWORD')
+MONGO_DB_CLUSTER_URL = os.getenv('MONGO_DB_CLUSTER_URL')
+MONGO_DB_CLUSTER_DB_NAME = os.getenv('MONGO_DB_CLUSTER_DB_NAME')
+MONGO_DB_PARAMS = "retryWrites=true&w=majority"
+
+URL_HOST = f"mongodb+srv://{MONGO_DB_HOST_USER}:{MONGO_DB_HOST_PASSWORD}@{MONGO_DB_CLUSTER_URL}/" \
+    f"{MONGO_DB_CLUSTER_DB_NAME}?{MONGO_DB_PARAMS}"
+
+
+def initdb(app):
+    mongodb = MongoEngine()
+    app.config['MONGODB_SETTINGS'] = {
+        'host': URL_HOST
+    }
+    mongodb.init_app(app)
+   # t = Tag(name="bar", color="s") example create
+    # t.save() save to the collection Tag
+    # temp = Tag.objects.get(name="zolty") query
+    # print(temp.name)
 
 
 def get_json_data(filename):

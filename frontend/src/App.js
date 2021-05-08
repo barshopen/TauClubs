@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
-import Home from './Scenarios/Home';
+import Feed from './Components/Feed/Feed';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
@@ -25,8 +23,8 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
   },
   container: {
-    display: 'flex',
-    flexDirection: 'column',
+    flexGrow: 1,
+    padding: theme.spacing(3),
     height: '100%',
   },
 }));
@@ -36,28 +34,27 @@ function App() {
   const [showNewClubModal, setShowNewClubModal] = useState(false);
 
   return (
-    <div className={classes.main}>
+    <>
       <NewClub
         showModal={showNewClubModal}
         setClubModal={setShowNewClubModal}
       />
       <Router>
-        <Grid>
-          <NavBar />
+        <NavBar />
+        <div className={classes.main}>
           <SideBar />
-          <Container className={classes.content}>
+          <Container>
             <Switch>
-              <Route path='/' exact component={Home} />
-              <Route path='/explore' component={ExploreClubs} />
+              <Route path='/' exact component={Feed} />
+              <Route path='/allClubs' component={ExploreClubs} />
               <Route path='/contact' component={Contact} />
               <Route path='/signin' component={Signin} />
               <Route path='/club' component={ClubSection} />
             </Switch>
           </Container>
-          <Footer />
-        </Grid>
+        </div>
       </Router>
-    </div>
+    </>
   );
 }
 

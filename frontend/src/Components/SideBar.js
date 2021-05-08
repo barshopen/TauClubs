@@ -52,16 +52,6 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerOverflow: {
-    overflow: 'auto',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  toolbar: theme.mixins.toolbar,
 }));
 
 function SideBarListItem({ text, children, to }) {
