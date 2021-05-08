@@ -17,12 +17,22 @@ db_app = Blueprint(
     __name__,
     url_prefix="/db",)
 
+dotenv.load_dotenv()
+MONGO_DB_HOST_USER = os.getenv('MONGO_DB_HOST_USER')
+MONGO_DB_HOST_PASSWORD = os.getenv('MONGO_DB_HOST_PASSWORD')
+MONGO_DB_CLUSTER_URL = os.getenv('MONGO_DB_CLUSTER_URL')
+MONGO_DB_CLUSTER_DB_NAME = os.getenv('MONGO_DB_CLUSTER_DB_NAME')
+MONGO_DB_PARAMS = "retryWrites=true&w=majority"
+
+URL_HOST = f"mongodb+srv://{MONGO_DB_HOST_USER}:{MONGO_DB_HOST_PASSWORD}@{MONGO_DB_CLUSTER_URL}/" \
+    f"{MONGO_DB_CLUSTER_DB_NAME}?{MONGO_DB_PARAMS}"
+
 
 def initdb(app):
-    dotenv.load_dotenv()
     mongodb = MongoEngine()
     app.config['MONGODB_SETTINGS'] = {
-        'host': os.getenv('MONGO_DB_HOST')}
+        'host': URL_HOST
+    }
     mongodb.init_app(app)
    # t = Tag(name="bar", color="s") example create
     # t.save() save to the collection Tag
