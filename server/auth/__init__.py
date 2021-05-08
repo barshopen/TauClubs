@@ -12,8 +12,8 @@ from flask_login import (
     logout_user
 )
 from authlib.integrations.flask_client import OAuth
-from ..db.userauth import UserAuth
-
+from server.db.userauth import UserAuth
+from server.auth import google_token
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
 dotenv.load_dotenv()
 OAuthGOOGLE = None
@@ -61,17 +61,23 @@ def load_user(user_id):
     return UserAuth.objects(id=user_id).first()
 
 
-@auth_app.route("/login")
-def login():
-    return google.authorize_redirect(
-        url_for('auth_app.callback', _external=True))
+@auth_app.route('/login', methods=['POST'])
+def sendUserData():
+    id_token = request.headers.get('id_token')
+    print(id_token)
+    if id_token is None:
+        return "No ID token provided", 401
 
+    try:
 
-@auth_app.route("/login/callback")
-def callback():
-    token = google.authorize_access_token()
-    user_info = OAuthGOOGLE.google.parse_id_token(token)
-    print("userinfo", user_info)
+        user_info = google_token.validate_id_token(
+            id_token, os.getenv('GOOGLE_CLIENT_ID')
+        )
+        print("userinfo", user_info)
+        print(user_info)
+    except ValueError:
+        print(1)
+        return 'Invalid ID token', 401
 
     if user_info["email_verified"]:
         #unique_id = user_info["sub"]
@@ -83,19 +89,19 @@ def callback():
 
     try:
         user = UserAuth.objects.get(email=users_email)
-    except BaseException:
+    except Exception:
         user = UserAuth(name=users_name, email=users_email)
         user.save()
 
     login_user(user, remember=True)
 
-    # Send user back to homepage
-    # return redirect("http://localhost:3000")  # direct for now
-    # return redirect(request.host_url) # for production
-    response = redirect('http://localhost:3000')
-    response.headers['Authorization'] = current_user.get_id()
-    #response.headers = {'authorization': current_user.get_id()}
-    return response
+    return login()
+
+
+@auth_app.route("/login", methods=['GET'])
+def login():
+    d = {'google_id': current_user.get_id()}
+    return d
 
 
 @ auth_app.route("/logout")
@@ -103,9 +109,3 @@ def callback():
 def logout():
     logout_user()
     return redirect('http://localhost:3000')
-
-
-@auth_app.route('/islogin')
-def isuserlogin():
-    d = {'isLogin': current_user.is_authenticated}
-    return json.dumps(d)

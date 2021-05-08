@@ -5,7 +5,7 @@ import { currentUser } from '../atoms';
 
 function Signin() {
   // const history = useHistory();
-  const { setIsUser } = useSetRecoilState(currentUser);
+  const setIsUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
 
   function loginSuccess(d) {
@@ -19,7 +19,7 @@ function Signin() {
         body: JSON.stringify({ title: 'React POST Request Example' }),
       };
 
-      fetch('/auth/confirm', requestOptions)
+      fetch('/auth/login', requestOptions)
         .then(response => response.json())
         .then(setIsUser(true))
         .catch(error => {
