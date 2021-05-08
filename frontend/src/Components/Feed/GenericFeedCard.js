@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -20,7 +19,6 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: '100%',
-    marginRight: -200,
     marginTop: 20,
     marginBottom: 20,
   },
@@ -56,8 +54,9 @@ function FeedCard({
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isImg = profileImage !== '';
+  const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayLastUpdate = new Date(date).toLocaleString('en-GB');
 
-  // eslint-disable-next-line no-unused-vars
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -65,14 +64,9 @@ function FeedCard({
     <Card className={classes.root} m={75}>
       <CardHeader
         avatar={<Avatar alt='club image' src={profileImage} />}
-        // action={
-        //   // <IconButton aria-label='settings'>
-        //   //   <MoreVertIcon />
-        //   // </IconButton>
-        // }
         titleTypographyProps={{ variant: 'h5' }}
         title={title}
-        subheader={date.concat(` ${clubName}`)}
+        subheader={displayLastUpdate.concat(` ${clubName}`)}
       />
 
       {isImg && (
@@ -89,7 +83,7 @@ function FeedCard({
         {location && (
           <Typography>
             <div>
-              Starts at: {startTime}
+              Starts at: {displayStartTime}
               <br />
               Location: {location}
             </div>{' '}

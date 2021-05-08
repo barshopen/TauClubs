@@ -5,11 +5,11 @@
     "title": "Meetup at the park",
     "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "23/11/2021 18:25",
+    "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
     "location": "Arlozorov 97, Tel Aviv, Israel",
-    "creationTime": "23/11/2021 18:25",
-    "lastUpdateTime": "23/11/2021 18:35"
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "ue_2",
@@ -17,11 +17,11 @@
     "title": "Meetup!",
     "profileImage": "images/salsaProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "23/11/2021 18:25",
+    "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
     "location": "Arlozorov 97, Tel Aviv, Israel",
-    "creationTime": "23/11/2021 18:25",
-    "lastUpdateTime": "23/11/2021 18:35"
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "ue_3",
@@ -29,11 +29,11 @@
     "title": "Physics 101",
     "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "23/11/2021 18:25",
+    "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
     "location": "Arlozorov 97, Tel Aviv, Israel",
-    "creationTime": "23/11/2021 18:25",
-    "lastUpdateTime": "23/11/2021 18:35"
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "ue_4",
@@ -41,11 +41,11 @@
     "title": "A trip to Haifa",
     "profileImage": "images/salsaProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
-    "startTime": "23/11/2021 18:25",
+    "startTime": "2012-04-23T18:25:43.511Z",
     "time": "10:00",
     "duration": "3:00",
     "location": "Arlozorov 97, Tel Aviv, Israel",
-    "creationTime": "23/11/2021 18:25",
-    "lastUpdateTime": "23/11/2021 18:35"
+    "creationTime": "2012-04-23T18:25:43.511Z",
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   }
 ]
