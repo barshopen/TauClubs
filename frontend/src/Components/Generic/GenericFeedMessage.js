@@ -1,25 +1,65 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import IconButton from '@material-ui/core/IconButton';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
 }
 
-function GenericFeedMessage({ title, date, children }) {
-  return (
-    <SingleMessageContainer>
-      <TextContainer>
-        <Title>{title}</Title>
-        {children}
-      </TextContainer>
+const useStyles = makeStyles(theme => ({
+  root: {
+    minWidth: 275,
+    margin: theme.spacing(1, 1),
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+}));
 
-      {date ? (
-        <DateContainerOuter>
-          <div>{formatDate(date)}</div>
-        </DateContainerOuter>
-      ) : null}
-    </SingleMessageContainer>
+function GenericFeedMessage({ title, date, children }) {
+  const classes = useStyles();
+
+  return (
+    <Card className={classes.root}>
+      <CardContent>
+        <Typography
+          className={classes.title}
+          color='textSecondary'
+          gutterBottom
+        />
+        <Typography variant='h5' component='h2'>
+          {title}
+        </Typography>
+        <Typography variant='body2' component='p'>
+          {children}
+        </Typography>
+        {date ? (
+          <DateContainerOuter>
+            <div>{formatDate(date)}</div>
+          </DateContainerOuter>
+        ) : null}
+      </CardContent>
+      <CardActions>
+        <IconButton aria-label='add to favorites'>
+          <FavoriteIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
   );
 }
 
@@ -37,22 +77,6 @@ GenericFeedMessage.defaultProps = {
   date: '',
   title: '',
 };
-
-const SingleMessageContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const TextContainer = styled.div`
-  margin-right: 45px;
-  display: inline-block;
-`;
-
-const Title = styled.h3`
-  margin: 10px 0px;
-  font-size: 1rem;
-  text-align: left;
-`;
 
 const DateContainerOuter = styled.div`
   display: inline-block;

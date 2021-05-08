@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import AllClubs from './Scenarios/AllClubs';
-import Home from './Scenarios/Home';
+// import Home from './Scenarios/Home';
+import Feed from './Components/Feed/Feed';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
@@ -20,7 +21,7 @@ function App() {
       <Router>
         <NavBar />
         <Switch>
-          <Route path='/' exact component={Home} />
+          <Route path='/' exact component={Feed} />
           <Route path='/allClubs' component={AllClubs} />
           <Route path='/contact' component={Contact} />
           <Route path='/signin' component={Signin} />
