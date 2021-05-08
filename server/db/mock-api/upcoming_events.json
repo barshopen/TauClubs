@@ -2,6 +2,7 @@
   {
     "id": "ue_1",
     "title": "Similique",
+    "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
     "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
@@ -12,6 +13,7 @@
   {
     "id": "ue_2",
     "title": "Meetup!",
+    "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
     "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
@@ -22,6 +24,7 @@
   {
     "id": "ue_3",
     "title": "Physics 101",
+    "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
     "startTime": "2012-04-23T18:25:43.511Z",
     "duration": "3:00",
@@ -32,6 +35,7 @@
   {
     "id": "ue_4",
     "title": "A trip to Haifa",
+    "profileImage": "images/hikeProfile.jpeg",
     "description": "an evening of physics, including a talk from particle physicist and host of 3CR’s Lost in Science show Chris Lassig",
     "startTime": "2012-04-23T18:25:43.511Z",
     "time": "10:00",
