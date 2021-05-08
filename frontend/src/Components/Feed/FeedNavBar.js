@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FeedNavBar = ({ setCurrentTab }) => (
-  // eslint-disable-next-line react/jsx-no-undef
   <Container>
     <Tabs>
       <Tab onClick={() => setCurrentTab('all')}> all </Tab>

@@ -14,7 +14,6 @@ const Feed = () => {
   useEffect(() => {
     getFeedData().then(d => {
       setData(d);
-      console.log({ d });
     });
   }, []);
 
