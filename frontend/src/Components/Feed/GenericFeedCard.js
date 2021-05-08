@@ -13,15 +13,16 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: '100%',
-    margin: 20,
+    marginRight: -200,
+    marginTop: 20,
+    marginBottom: 20,
   },
   media: {
     height: 0,
@@ -96,11 +97,11 @@ function FeedCard({
         )}
       </CardContent>
       <CardActions disableSpacing>
+        <IconButton aria-label='go to club home page'>
+          <HomeIcon />
+        </IconButton>
         <IconButton aria-label='add to favorites'>
           <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label='share'>
-          <ShareIcon />
         </IconButton>
         <IconButton
           className={clsx(classes.expand, {
