@@ -1,7 +1,9 @@
 import os
 import dotenv
+import json
 import flask
 from flask import Flask, Blueprint, redirect, request, url_for
+from requests import Response
 from flask_login import (
     LoginManager,
     login_required,
@@ -56,7 +58,7 @@ def init(app):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return UserAuth.objects.get(id=user_id).id
+    return UserAuth.objects(id=user_id).first()
 
 
 @auth_app.route("/login")
@@ -88,12 +90,22 @@ def callback():
     login_user(user, remember=True)
 
     # Send user back to homepage
-    return redirect("http://localhost:3000")  # direct for now
+    # return redirect("http://localhost:3000")  # direct for now
     # return redirect(request.host_url) # for production
+    response = redirect('http://localhost:3000')
+    response.headers['Authorization'] = current_user.get_id()
+    #response.headers = {'authorization': current_user.get_id()}
+    return response
 
 
 @ auth_app.route("/logout")
 @ login_required
 def logout():
     logout_user()
-    return redirect(url_for("auth_app.index"))
+    return redirect('http://localhost:3000')
+
+
+@auth_app.route('/islogin')
+def isuserlogin():
+    d = {'isLogin': current_user.is_authenticated}
+    return json.dumps(d)

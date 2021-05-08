@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import {
@@ -27,7 +27,7 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-import { getClubs } from '../api';
+import { getClubs, getIsLogin } from '../api';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -138,6 +138,10 @@ const fetchClubs = async () => {
   const res = await getClubs();
   return res;
 };
+const fetchLogin = async () => {
+  const res = await getIsLogin();
+  return res;
+};
 
 export default function NavBar() {
   const classes = useStyles();
@@ -149,13 +153,20 @@ export default function NavBar() {
 
   const { data } = useQuery('allClubs', fetchClubs);
 
+  const [userLogin, setuserLogin] = useState(getIsLogin());
+
+  useEffect(() => {
+    getIsLogin().then(d => setuserLogin(d.isLogin));
+    console.log(userLogin);
+  }, []);
+
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   // get data about the current user
-  const isUser = true; // for now - later, if signed in will be true.
-
+  const isUser = userLogin; // for now - later, if signed in will be true.
+  // console.log(fetchLogin);
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };

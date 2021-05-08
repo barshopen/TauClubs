@@ -6,6 +6,11 @@ const getApi = route =>
     },
   }).then(res => res.json());
 
+export const getIsLogin = () =>
+  fetch('auth/islogin')
+    .then(res => res.json())
+    .then(d => d);
+
 export const getDb = (subroute, id) =>
   id ? getApi(`/db/${subroute}/${id}`) : getApi(`/db/${subroute}`);
 
