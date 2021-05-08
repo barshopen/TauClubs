@@ -14,7 +14,6 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core';
-
 import {
   ExitToApp as ExitToAppIcon,
   Home as HomeIcon,
@@ -27,6 +26,8 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
+import { useRecoilState } from 'recoil';
+import { currentUser } from '../atoms';
 import { getClubs, getIsLogin } from '../api';
 
 const useStyles = makeStyles(theme => ({
@@ -138,10 +139,6 @@ const fetchClubs = async () => {
   const res = await getClubs();
   return res;
 };
-const fetchLogin = async () => {
-  const res = await getIsLogin();
-  return res;
-};
 
 export default function NavBar() {
   const classes = useStyles();
@@ -153,11 +150,12 @@ export default function NavBar() {
 
   const { data } = useQuery('allClubs', fetchClubs);
 
-  const [userLogin, setuserLogin] = useState(getIsLogin());
-
+  const [isUser, setisUser] = useRecoilState(currentUser);
   useEffect(() => {
-    getIsLogin().then(d => setuserLogin(d.isLogin));
-    console.log(userLogin);
+    getIsLogin().then(d => {
+      setisUser(d.isLogin);
+      console.log(d);
+    });
   }, []);
 
   const handleProfileMenuOpen = event => {
@@ -165,7 +163,6 @@ export default function NavBar() {
   };
 
   // get data about the current user
-  const isUser = userLogin; // for now - later, if signed in will be true.
   // console.log(fetchLogin);
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
