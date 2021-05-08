@@ -2,7 +2,7 @@ from mongoengine import Document, StringField, UUIDField, DateTimeField, ListFie
 
 
 class Club(Document):
-    id = UUIDField()  # consider ObjectIdField
+    # id = UUIDField()  # consider ObjectIdField
     name = StringField(max_length=200, required=True)
     profileImage = URLField()
     shortDescription = StringField(required=True)
