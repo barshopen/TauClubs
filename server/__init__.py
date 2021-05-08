@@ -11,7 +11,7 @@ from server.generic import disable_route_on_flag
 dotenv.load_dotenv()
 
 app = Flask(__name__, static_folder="__staticbuild__", static_url_path="/")
-app.secret_key = 'sharon'
+app.secret_key = os.getenv('DB_SECRET')
 
 
 # serves static react
