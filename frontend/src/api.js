@@ -6,9 +6,6 @@ const getApi = route =>
     },
   }).then(res => res.json());
 
-export const getIsLogin = () =>
-  fetch('http://127.0.0.1:443/auth/islogin').then(res => res.json());
-
 export const getDb = (subroute, id) =>
   id ? getApi(`/db/${subroute}/${id}`) : getApi(`/db/${subroute}`);
 

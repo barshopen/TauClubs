@@ -4,7 +4,6 @@ import { useSetRecoilState } from 'recoil';
 import { currentUser } from '../atoms';
 
 function Signin() {
-  // const history = useHistory();
   const setIsUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
 
