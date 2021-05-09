@@ -144,12 +144,13 @@ export default function NavBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const { data } = useQuery('allClubs', fetchClubs);
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
+  const data = useMemo(() => queryData || [], [queryData]);
   const userMessages = useMemo(() => 4, []);
   const userNotifications = useMemo(() => 7, []);
+  const { data: queryData } = useQuery('allClubs', fetchClubs);
 
   // primitive consts
   const isMenuOpen = Boolean(anchorEl);
@@ -162,6 +163,7 @@ export default function NavBar() {
   const showSideBarMobileToggleHandler = () => {
     setShowSideBarMobile(!showSideBarMobile);
   };
+
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };

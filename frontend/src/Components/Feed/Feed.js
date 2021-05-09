@@ -13,18 +13,36 @@ const Feed = () => {
 
   return (
     <Container>
-      {data?.map(
-        ({ id, type, title, profileImage, description, lastUpdateTime }) => (
-          <FeedCard
-            id={id}
-            type={type}
-            title={title}
-            profileImage={profileImage}
-            description={description}
-            date={lastUpdateTime}
-          />
-        )
-      )}
+      {/* <FeedNavBar setCurrentTab='all' /> */}
+      <Container>
+        {data?.map(
+          ({
+            id,
+            type,
+            title,
+            profileImage,
+            description,
+            lastUpdateTime,
+            clubName,
+            location,
+            startTime,
+            duration,
+          }) => (
+            <FeedCard
+              id={id}
+              type={type}
+              title={title}
+              profileImage={profileImage}
+              description={description}
+              date={lastUpdateTime}
+              clubName={clubName}
+              location={location}
+              startTime={startTime}
+              duration={duration}
+            />
+          )
+        )}
+      </Container>
     </Container>
   );
 };
