@@ -34,10 +34,6 @@ def initdb(app):
         'host': URL_HOST
     }
     mongodb.init_app(app)
-   # t = Tag(name="bar", color="s") example create
-    # t.save() save to the collection Tag
-    # temp = Tag.objects.get(name="zolty") query
-    # print(temp.name)
 
 
 def get_json_data(filename):
@@ -58,6 +54,16 @@ def filter_by_id(data, data_id):
 def clubs(club_id):
     data = get_json_data('clubs.json')
     return filter_by_id(data, club_id)
+
+
+@db_app.route('/createclub')
+def newClubRequest(userid):
+    # not sure where we want this data to appear in the ui or maybe send email?
+    clubid = Club()  # provide all the fields is rquierd?
+    requestNewClub = ClubMembership(user=userid, club=clubid, isAdmin=True)
+    with switch_collection(ClubMembership, 'pending_requests') as Group:
+        requestNewClub.save()  # Saves in group2000 collection
+    return True
 
 
 @db_app.route('/messages')
