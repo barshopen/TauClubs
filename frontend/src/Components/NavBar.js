@@ -1,10 +1,9 @@
-/* eslint-disable indent */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import {
   AppBar,
   Toolbar,
@@ -15,7 +14,6 @@ import {
   Badge,
   Menu,
   MenuItem,
-  Chip,
 } from '@material-ui/core';
 import {
   ExitToApp as ExitToAppIcon,
@@ -144,9 +142,9 @@ const fetchClubs = async () => {
 
 export default function NavBar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [search, setSearch] = React.useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [search, setSearch] = useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -166,22 +164,21 @@ export default function NavBar() {
     setAnchorEl(event.currentTarget);
   };
 
-  const defaultFilterOptions = useMemo(
-    () =>
-      data
-        ? data.slice(0, 20).concat(
-            search
-              ? [
-                  {
-                    name: `Search for ${search}`,
-                    icon: SearchFor,
-                  },
-                ]
-              : []
-          )
-        : [],
-    [data, search]
-  );
+  const defaultFilterOptions = useMemo(() => {
+    if (data) {
+      return data.slice(0, 20).concat(
+        search
+          ? [
+              {
+                name: `Search for ${search}`,
+                icon: SearchFor,
+              },
+            ]
+          : []
+      );
+    }
+    return [];
+  }, [data, search]);
 
   // get data about the current user
 
