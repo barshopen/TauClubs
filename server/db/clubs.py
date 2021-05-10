@@ -1,17 +1,17 @@
-from mongoengine import Document, StringField, UUIDField, DateTimeField, ListField, URLField
+from mongoengine import Document, StringField, DateTimeField, ListField, URLField, ObjectIdField
 
 
 class Club(Document):
-    # id = UUIDField()  # consider ObjectIdField
+    # id = ObjectId()  # consider ObjectIdField
     name = StringField(max_length=200, required=True)
     profileImage = URLField()
     shortDescription = StringField(required=True)
-    tags = ListField(required=True)  # list of tags
+    tags = ListField(ObjectIdField(), required=True)  # list of tags
     content = StringField(required=True)
     creationTime = DateTimeField(required=True,
                                  validation=None)  # check validation define
     lastUpdateTime = DateTimeField(
         required=True,
         validation=None)  # not sure if relevant
-    members = ListField(required=True)  # list of users
-    admins = ListField(required=True)  # list of users
+    members = ListField(ObjectIdField(), required=True)  # list of users
+    admins = ListField(ObjectIdField(), required=True)  # list of users

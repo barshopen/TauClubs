@@ -1,8 +1,8 @@
-from mongoengine import Document, StringField, UUIDField, DateTimeField, ListField
+from mongoengine import Document, StringField, DateTimeField, ListField, ObjectIdField
 
 
 class Message(Document):
-    # id = UUIDField()  # consider ObjectIdField
+    # id = ObjectId()  # consider ObjectIdField
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)
     creationTime = DateTimeField(required=True,
@@ -10,7 +10,8 @@ class Message(Document):
     lastUpdateTime = DateTimeField(
         required=True,
         validation=None)  # not sure if relevant
-    likes = ListField(required=True)  # check if can define the list
+    # check if can define the list
+    likes = ListField(ObjectIdField(), required=True)
     creatingClub = StringField(
         max_length=200,
         required=True)  # check how to deine

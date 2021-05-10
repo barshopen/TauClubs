@@ -1,8 +1,8 @@
-from mongoengine import Document, StringField, UUIDField, DateTimeField, ListField, IntField, URLField
+from mongoengine import Document, StringField, DateTimeField, ListField, IntField, URLField, ObjectIdField
 
 
 class Event(Document):
-    # id = UUIDField()  # consider ObjectIdField
+    # id = ObjectId()  # consider ObjectIdField
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
     creationTime = DateTimeField(required=True,
@@ -11,9 +11,11 @@ class Event(Document):
     lastUpdateTime = DateTimeField(
         required=True,
         validation=None)  # not sure if relevant
-    membersAttending = ListField(required=True)  # check if can define the list
+    membersAttending = ListField(ObjectIdField(),
+                                 required=True)  # check if can define the list
     creatingClub = StringField(
         max_length=200,
         required=True)  # check how to define LazyReferenceField
     profileImage = URLField()
-    intrested = ListField(required=True)  # check if can define the list
+    # check if can define the list
+    intrested = ListField(ObjectIdField(), required=True)
