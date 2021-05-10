@@ -1,0 +1,18 @@
+#!/bin/sh
+
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
+
+
+printf "${HUSKY} ${GREEN} Updating python environment from ${REQUIREMENTS}...\n ${NC} "
+$PIP install -r $REQUIREMENTS
+
+printf "${HUSKY} ${GREEN} Updating js environment...\n ${NC} "
+yarn install
+
+printf "${HUSKY} ${GREEN} Updating js environment in frontend...\n ${NC} "
+cd frontend
+yarn install
+
+
