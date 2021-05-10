@@ -4,7 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { currentUser } from '../atoms';
 
 function Signin() {
-  const setIsUser = useSetRecoilState(currentUser);
+  const setUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
 
   function loginSuccess(d) {
@@ -20,7 +20,7 @@ function Signin() {
 
       fetch('/auth/login', requestOptions)
         .then(response => response.json())
-        .then(setIsUser(true))
+        .then(setUser(true))
         .catch(error => {
           setLoginError(true);
         });
@@ -28,6 +28,7 @@ function Signin() {
 
     completeAuth();
   }
+
   function loginFailure(d) {
     setLoginError(true);
   }

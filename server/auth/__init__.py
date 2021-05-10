@@ -58,11 +58,12 @@ def sendUserData():
 
     login_user(user, remember=True)
 
-    return login()
+    return whoami()
 
 
-@auth_app.route("/login", methods=['GET'])
-def login():
+@auth_app.route("/whoami", methods=['GET'])
+@ login_required
+def whoami():
     d = {'google_id': current_user.get_id()}
     return d
 
