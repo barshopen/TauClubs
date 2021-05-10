@@ -147,10 +147,10 @@ export default function NavBar() {
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
-  const data = useMemo(() => queryData || [], [queryData]);
   const userMessages = useMemo(() => 4, []);
   const userNotifications = useMemo(() => 7, []);
   const { data: queryData } = useQuery('allClubs', fetchClubs);
+  const data = useMemo(() => queryData || [], [queryData]);
 
   // primitive consts
   const isMenuOpen = Boolean(anchorEl);

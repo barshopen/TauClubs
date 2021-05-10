@@ -13,19 +13,19 @@ import NewClub from './Scenarios/NewClub';
 import Footer from './Components/Footer';
 
 const useStyles = makeStyles(theme => ({
-  main: {
+  root: {
     display: 'flex',
     flexDirection: 'column',
+    minHeight: '100vh',
+  },
+  container: {
+    flex: 1,
+    display: 'flex',
+    paddingTop: theme.spacing(8),
+    height: '100%',
   },
   content: {
     flex: 1,
-    paddingTop: theme.spacing(9),
-    padding: theme.spacing(3),
-  },
-  container: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    height: '100%',
   },
 }));
 
@@ -40,18 +40,21 @@ function App() {
         setClubModal={setShowNewClubModal}
       />
       <Router>
-        <NavBar />
-        <div className={classes.main}>
-          <SideBar />
-          <Container>
+        <div className={classes.root}>
+          <NavBar />
+          <Container className={classes.container}>
+            <SideBar />
             <Switch>
-              <Route path='/' exact component={Feed} />
-              <Route path='/allClubs' component={ExploreClubs} />
-              <Route path='/contact' component={Contact} />
-              <Route path='/signin' component={Signin} />
-              <Route path='/club' component={ClubSection} />
+              <div className={classes.content}>
+                <Route path='/' exact component={Feed} />
+                <Route path='/allClubs' component={ExploreClubs} />
+                <Route path='/contact' component={Contact} />
+                <Route path='/signin' component={Signin} />
+                <Route path='/club' component={ClubSection} />
+              </div>
             </Switch>
           </Container>
+          <Footer />
         </div>
       </Router>
     </>
