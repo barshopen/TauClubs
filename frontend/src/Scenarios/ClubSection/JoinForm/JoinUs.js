@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';

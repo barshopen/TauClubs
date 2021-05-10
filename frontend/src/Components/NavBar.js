@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
@@ -20,7 +18,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
+import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
@@ -124,15 +122,27 @@ const StyledMenu = withStyles({
   />
 ));
 
-const MenuItemWithToolTip = ({ title, content, icon, ...rest }) => (
-  <IconButton color='inherit' {...rest}>
-    <Tooltip title={title} arrow>
-      <Badge badgeContent={content} color='secondary'>
-        {icon}
-      </Badge>
-    </Tooltip>
-  </IconButton>
-);
+function MenuItemWithToolTip({ title, content, icon, ...rest }) {
+  return (
+    <IconButton color='inherit' {...rest}>
+      <Tooltip title={title} arrow>
+        <Badge badgeContent={content} color='secondary'>
+          {icon}
+        </Badge>
+      </Tooltip>
+    </IconButton>
+  );
+}
+
+MenuItemWithToolTip.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.number,
+  icon: PropTypes.element.isRequired,
+};
+
+MenuItemWithToolTip.defaultProps = {
+  content: null,
+};
 
 const fetchClubs = async () => {
   const res = await getClubs();

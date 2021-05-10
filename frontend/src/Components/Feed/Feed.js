@@ -29,7 +29,7 @@ const Feed = () => {
             duration,
           }) => (
             <FeedCard
-              id={id}
+              key={id}
               type={type}
               title={title}
               profileImage={profileImage}

@@ -81,13 +81,10 @@ function FeedCard({
           {description}
         </Typography>
         {location && (
-          <Typography>
-            <div>
-              Starts at: {displayStartTime}
-              <br />
-              Location: {location}
-            </div>{' '}
-          </Typography>
+          <>
+            <Typography>Starts at: {displayStartTime}</Typography>
+            <Typography>Location: {location}</Typography>
+          </>
         )}
       </CardContent>
       <CardActions disableSpacing>

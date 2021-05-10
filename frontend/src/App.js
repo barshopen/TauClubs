@@ -44,15 +44,15 @@ function App() {
           <NavBar />
           <Container className={classes.container}>
             <SideBar />
-            <Switch>
-              <div className={classes.content}>
+            <div className={classes.content}>
+              <Switch>
                 <Route path='/' exact component={Feed} />
                 <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
                 <Route path='/signin' component={Signin} />
                 <Route path='/club' component={ClubSection} />
-              </div>
-            </Switch>
+              </Switch>
+            </div>
           </Container>
           <Footer />
         </div>
