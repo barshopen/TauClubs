@@ -7,12 +7,28 @@ const primary = '#3898EC';
 const secondary = '#87898a';
 
 const customStyles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+  },
   content: {
-    position: 'absolute',
-    left: '33%',
-    right: '33%',
+    left: '30%',
+    right: '30%',
     top: '20%',
+    bottom: '20%',
     height: '56vh',
+    position: 'absolute',
+    border: '2px solid black',
+    background: '#fff',
+    overflow: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    borderRadius: '4px',
+    outline: 'none',
+    padding: '20px',
   },
 };
 

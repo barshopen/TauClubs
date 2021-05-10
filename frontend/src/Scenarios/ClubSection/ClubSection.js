@@ -89,7 +89,11 @@ function ClubSection() {
         <Route path='/club/board/:clubId' component={ClubBoard} />
         <Route path='/club/about/:clubId' component={AboutUs} />
         <Route path='/club/contact/:clubId' component={Contact} />
-        <Route path='/club/joinus/:clubId' component={JoinUs} />
+        <Route
+          path='/club/joinus/:clubId'
+          clubName={clubData?.name}
+          component={() => <JoinUs clubName={clubData.name} />}
+        />
       </Switch>
     </SimpleContaConiner>
   );

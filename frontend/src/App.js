@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useSetRecoilState } from 'recoil';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
@@ -11,6 +12,8 @@ import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
 import Footer from './Components/Footer';
+import { whoami } from './Shared/api';
+import { currentUser } from './Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +35,13 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const classes = useStyles();
   const [showNewClubModal, setShowNewClubModal] = useState(false);
+  const setUser = useSetRecoilState(currentUser);
+
+  useEffect(() => {
+    whoami().then(d => {
+      setUser(d);
+    });
+  }, []);
 
   return (
     <>

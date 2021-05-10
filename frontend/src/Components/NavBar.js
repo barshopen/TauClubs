@@ -21,10 +21,16 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
+
 import { getClubs } from '../Shared/api';
-import { showSideBarMobileState } from '../Shared/atoms';
+import {
+  showSideBarMobileState,
+  currentUser,
+  selectedOptionState,
+} from '../Shared/atoms';
+import SearchFor from '../assets/search-icon.png';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -78,7 +84,6 @@ const useStyles = makeStyles(theme => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -161,11 +166,11 @@ export default function NavBar() {
   const userNotifications = useMemo(() => 7, []);
   const { data: queryData } = useQuery('allClubs', fetchClubs);
   const data = useMemo(() => queryData || [], [queryData]);
+  const [search, setSearch] = useState('');
 
   // primitive consts
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isUser = true; // for now - later, if signed in will be true.
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
@@ -173,10 +178,35 @@ export default function NavBar() {
   const showSideBarMobileToggleHandler = () => {
     setShowSideBarMobile(!showSideBarMobile);
   };
+  const setSelectedOptionState = useSetRecoilState(selectedOptionState);
+
+  const [user, setUser] = useRecoilState(currentUser);
+  const logOut = () =>
+    fetch('/auth/logout')
+      .then(response => response.json())
+      .then(setUser(false));
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
+
+  const defaultFilterOptions = useMemo(() => {
+    if (data) {
+      return data.slice(0, 20).concat(
+        search
+          ? [
+              {
+                name: `Search for ${search}`,
+                icon: SearchFor,
+              },
+            ]
+          : []
+      );
+    }
+    return [];
+  }, [data, search]);
+
+  // get data about the current user
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -199,8 +229,11 @@ export default function NavBar() {
       keepMounted
       open={isMenuOpen}
       onClose={handleMenuClose}>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to='/profile'>My account</NavLink>
+      </MenuItem>
+      <MenuItem onClick={logOut}>Logout</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </StyledMenu>
   );
 
@@ -237,10 +270,17 @@ export default function NavBar() {
           title='Profile'
           icon={<AccountCircleIcon />}
         />
+
         <p>Profile</p>
       </MenuItem>
     </StyledMenu>
   );
+
+  const searchImageStyle = {
+    marginRight: '10px',
+    width: '12%',
+    height: '12%',
+  };
 
   return (
     <div className={classes.grow}>
@@ -262,8 +302,11 @@ export default function NavBar() {
             aria-label='open drawer'
             title='Home'
             icon={
-              <NavLink to='/'>
-                <HomeIcon fontSize='small' />
+              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
+                <HomeIcon
+                  onClick={() => setSelectedOptionState('')}
+                  fontSize='small'
+                />
               </NavLink>
             }
           />
@@ -278,10 +321,27 @@ export default function NavBar() {
 
             <Autocomplete
               id='combo-box-demo'
-              options={data}
-              getOptionLabel={option => option.name}
+              size='small'
+              autoComplete
+              autoHighlight
+              autoSelect
+              onChange={(event, newValue) => {
+                setSelectedOptionState(newValue?.id || '');
+              }}
+              options={defaultFilterOptions}
+              getOptionLabel={option => option.render ?? option.name}
+              renderOption={option => (
+                <>
+                  {option.icon && (
+                    <img src={option.icon} alt='' style={searchImageStyle} />
+                  )}
+                  {option.name}
+                </>
+              )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+                setSearch(rest.inputProps.value);
+
                 return (
                   <InputBase
                     {...params.InputProps}
@@ -298,7 +358,7 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
 
-          {isUser ? (
+          {user ? (
             <>
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
@@ -347,8 +407,8 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      {isUser && renderMobileMenu}
-      {isUser && renderMenu}
+      {user && renderMobileMenu}
+      {user && renderMenu}
     </div>
   );
 }

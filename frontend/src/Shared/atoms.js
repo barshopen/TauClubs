@@ -13,4 +13,11 @@ const showSideBarMobileState = atom({
   default: false, // default value (aka initial value)
 });
 
-export { newUserData, currentUser, showSideBarMobileState };
+const selectedOptionState = atom({ key: 'selectedOptionState', default: '' });
+
+export {
+  newUserData,
+  currentUser,
+  selectedOptionState,
+  showSideBarMobileState,
+};

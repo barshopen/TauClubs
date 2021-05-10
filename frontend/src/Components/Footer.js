@@ -1,95 +1,88 @@
 import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
 import styled from 'styled-components';
-import { useTheme } from '@material-ui/core/styles';
+
 import GenericModal from './Generic/GenericModal';
 
-const Container = styled.footer`
-  display: flex;
-  position: relative;
-  bottom: 0;
-  flex-direction: column;
-  justify-content: center;
-  color: black;
-  margin: 0 auto;
-  background: #efefea;
-  z-index: ${props => props.zIndex};
-  width: 100%;
-  height: 50px;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  margin-left: 60px;
-`;
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: center;
-  grid-gap: 20px;
-
-  @media (max-width: 1000px) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-`;
-
-const Heading = styled.p`
-  font-size: 0.8rem;
-  color: black;
-  :hover {
-    cursor: pointer;
-  }
-`;
+const Copyright = () => (
+  <Typography variant='body2' color='textSecondary'>
+    {'Copyright © '}
+    <Link color='inherit' href='/'>
+      TauClubs
+    </Link>
+    {new Date().getFullYear()}
+  </Typography>
+);
 
 const Header = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 1rem;
   font-weight: bold;
-  padding-bottom: 20px;
 `;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '50vh',
+  },
+  main: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(2),
+  },
+  container: {
+    margin: 'unset',
+    display: 'flex',
+  },
+  footer: {
+    padding: theme.spacing(3, 2),
+    marginTop: 'auto',
+    backgroundColor: '#cccccc',
+  },
+  typography: {
+    marginLeft: '30px',
+    cursor: 'pointer',
+  },
+}));
 
 const ModalContainer = styled.div`
   display: flex;
-  position: unset;
   flex-direction: column;
   justify-content: space-evenly;
+  height: 50vh;
 `;
 
 const Footer = () => {
-  const [modalOpened, setModalOpened] = useState(false);
-  const theme = useTheme();
+  const classes = useStyles();
+  const [contactModal, setShowContactModal] = useState(false);
+
   return (
-    <>
-      <Container zIndex={theme.zIndex.drawer + 1}>
-        <Row>
-          <Column>
-            <Heading onClick={() => setModalOpened(true)}>About Us</Heading>
-          </Column>
-
-          <Column>
-            <Heading>Services</Heading>
-          </Column>
-          <Column>
-            <Heading>Contact Us</Heading>
-          </Column>
-          <Column>
-            <Heading>Contact Us</Heading>
-          </Column>
-        </Row>
-      </Container>
-
+    <div className={classes.root}>
       <GenericModal
-        showModal={modalOpened}
-        setShowModal={setModalOpened}
+        showModal={contactModal}
+        setShowModal={setShowContactModal}
         Container={ModalContainer}
         hideButtons>
-        <Header>About Us</Header>
-        <div> Information To fill </div>
+        <Header>Contact Details</Header>
       </GenericModal>
-    </>
+
+      <footer className={classes.footer}>
+        <Container className={classes.container} maxWidth='sm'>
+          <Copyright />
+          <Typography
+            className={classes.typography}
+            variant='body2'
+            onClick={() => setShowContactModal(true)}>
+            Contact Us
+          </Typography>
+        </Container>
+      </footer>
+    </div>
   );
 };
+
 export default Footer;
