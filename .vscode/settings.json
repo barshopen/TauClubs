@@ -18,7 +18,7 @@
     // pylint related settings
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.linting.pylintArgs": ["--rcfile=${workspaceFolder}\\.pylintrc"],
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy","--rcfile=${workspaceFolder}\\.pylintrc"],
     "python.linting.pylintPath": "pylint",
     
     // frontend related settings for eslint and prettier

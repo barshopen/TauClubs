@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import {
@@ -14,7 +14,6 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core';
-
 import {
   ExitToApp as ExitToAppIcon,
   Home as HomeIcon,
@@ -27,6 +26,8 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
+import { useRecoilState } from 'recoil';
+import { currentUser } from '../atoms';
 import { getClubs } from '../api';
 
 const useStyles = makeStyles(theme => ({
@@ -141,20 +142,26 @@ const fetchClubs = async () => {
 
 export default function NavBar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const { data } = useQuery('allClubs', fetchClubs);
+  const { data: queryData } = useQuery('allClubs', fetchClubs);
+  const data = useMemo(() => queryData || [], [queryData]);
+
+  const [user, setUser] = useRecoilState(currentUser);
+  const logOut = () =>
+    fetch('/auth/logout')
+      .then(response => response.json())
+      .then(setUser(false));
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   // get data about the current user
-  const isUser = true; // for now - later, if signed in will be true.
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -181,7 +188,7 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={logOut}>Logout</MenuItem>
     </StyledMenu>
   );
 
@@ -277,7 +284,7 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
 
-          {isUser ? (
+          {user ? (
             <>
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
@@ -326,8 +333,8 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      {isUser && renderMobileMenu}
-      {isUser && renderMenu}
+      {user && renderMobileMenu}
+      {user && renderMenu}
     </div>
   );
 }
