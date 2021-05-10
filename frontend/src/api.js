@@ -9,12 +9,16 @@ const getApi = route =>
 export const getDb = (subroute, id) =>
   id ? getApi(`/db/${subroute}/${id}`) : getApi(`/db/${subroute}`);
 
+export const getAuth = subroute => getApi(`/auth/${subroute}`);
+
 export const getMessages = (messageId = null) => getDb('messages', messageId);
 
 export const getClubs = (clubId = null) => getDb('clubs', clubId);
 
 export const getUpcomingEvents = (eventId = null) =>
   getDb('upcoming_events', eventId);
+
+export const whoami = () => getAuth('whoami');
 
 export const getFeedData = (currentTab = 'all') => {
   if (currentTab === 'messages') {
