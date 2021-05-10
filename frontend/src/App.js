@@ -47,7 +47,7 @@ function App() {
             <Switch>
               <div className={classes.content}>
                 <Route path='/' exact component={Feed} />
-                <Route path='/allClubs' component={ExploreClubs} />
+                <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
                 <Route path='/signin' component={Signin} />
                 <Route path='/club' component={ClubSection} />
