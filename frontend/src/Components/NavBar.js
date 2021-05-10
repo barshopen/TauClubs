@@ -155,21 +155,26 @@ export default function NavBar() {
   useEffect(() => {
     getIsLogin().then(d => {
       setIsUser(d.isLogin);
-      console.log(d);
     });
   }, []);
+
+  const signOut = () =>
+    fetch('/auth/logout')
+      .then(response => response.json())
+      .then(setIsUser(false));
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   // get data about the current user
-  // console.log(fetchLogin);
+
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
+    signOut();
     setAnchorEl(null);
     handleMobileMenuClose();
   };
