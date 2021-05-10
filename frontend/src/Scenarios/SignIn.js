@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { useSetRecoilState } from 'recoil';
-import { currentUser } from '../atoms';
+import { currentUser } from '../Shared/atoms';
 
 function Signin() {
   const setUser = useSetRecoilState(currentUser);

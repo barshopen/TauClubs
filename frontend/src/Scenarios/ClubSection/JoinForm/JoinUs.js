@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,7 +10,7 @@ import Button from '@material-ui/core/Button';
 
 import Typography from '@material-ui/core/Typography';
 import { Form, Review, Description } from './index';
-import { newUserData } from '../../../atoms';
+import { newUserData } from '../../../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   appBar: {

@@ -18,7 +18,7 @@
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "indent":"off",
+    "indent": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "warn",
     "jsx-quotes": ["error", "prefer-single"],
@@ -28,6 +28,7 @@
     "no-unused-vars": "warn",
     "no-use-before-define": "off",
     "no-console": "warn",
+    "no-param-reassign": "off",
     "prefer-const": "warn"
   }
 }

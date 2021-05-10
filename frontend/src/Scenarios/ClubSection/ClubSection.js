@@ -6,7 +6,7 @@ import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
-import { getClubs } from '../../api';
+import { getClubs } from '../../Shared/api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
