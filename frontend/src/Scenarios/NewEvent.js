@@ -23,6 +23,7 @@ const Input = styled.input`
   font-family: 'Roboto';
   height: '30px';
 `;
+
 const TextArea = styled.textarea`
   height: '120px';
   font-family: 'Roboto';

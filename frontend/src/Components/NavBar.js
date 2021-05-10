@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import {
   AppBar,
   Toolbar,
@@ -26,8 +27,8 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-import { useRecoilState } from 'recoil';
-import { currentUser } from '../atoms';
+import SearchFor from '../assets/search-icon.png';
+import { currentUser, selectedOptionState } from '../atoms';
 import { getClubs } from '../api';
 
 const useStyles = makeStyles(theme => ({
@@ -81,7 +82,6 @@ const useStyles = makeStyles(theme => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -144,9 +144,12 @@ export default function NavBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [search, setSearch] = useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const setSelectedOptionState = useSetRecoilState(selectedOptionState);
 
   const { data: queryData } = useQuery('allClubs', fetchClubs);
   const data = useMemo(() => queryData || [], [queryData]);
@@ -160,6 +163,22 @@ export default function NavBar() {
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
+
+  const defaultFilterOptions = useMemo(() => {
+    if (data) {
+      return data.slice(0, 20).concat(
+        search
+          ? [
+              {
+                name: `Search for ${search}`,
+                icon: SearchFor,
+              },
+            ]
+          : []
+      );
+    }
+    return [];
+  }, [data, search]);
 
   // get data about the current user
 
@@ -187,8 +206,11 @@ export default function NavBar() {
       keepMounted
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to='/profile'>My account</NavLink>
+      </MenuItem>
       <MenuItem onClick={logOut}>Logout</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </StyledMenu>
   );
 
@@ -226,10 +248,17 @@ export default function NavBar() {
           title='Profile'
           icon={<AccountCircle />}
         />
+
         <p>Profile</p>
       </MenuItem>
     </StyledMenu>
   );
+
+  const searchImageStyle = {
+    marginRight: '10px',
+    width: '12%',
+    height: '12%',
+  };
 
   return (
     <div className={classes.grow}>
@@ -248,8 +277,11 @@ export default function NavBar() {
             aria-label='open drawer'
             title='Home'
             icon={
-              <NavLink to='/'>
-                <HomeIcon fontSize='small' />
+              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
+                <HomeIcon
+                  onClick={() => setSelectedOptionState('')}
+                  fontSize='small'
+                />
               </NavLink>
             }
           />
@@ -264,10 +296,27 @@ export default function NavBar() {
 
             <Autocomplete
               id='combo-box-demo'
-              options={data}
-              getOptionLabel={option => option.name}
+              size='small'
+              autoComplete
+              autoHighlight
+              autoSelect
+              onChange={(event, newValue) => {
+                setSelectedOptionState(newValue?.id || '');
+              }}
+              options={defaultFilterOptions}
+              getOptionLabel={option => option.render ?? option.name}
+              renderOption={option => (
+                <>
+                  {option.icon && (
+                    <img src={option.icon} alt='' style={searchImageStyle} />
+                  )}
+                  {option.name}
+                </>
+              )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+                setSearch(rest.inputProps.value);
+
                 return (
                   <InputBase
                     {...params.InputProps}

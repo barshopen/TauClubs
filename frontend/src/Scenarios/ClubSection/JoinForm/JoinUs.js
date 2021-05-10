@@ -5,41 +5,30 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
+import PropTypes from 'prop-types';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+
 import Typography from '@material-ui/core/Typography';
 import { Form, Review, Description } from './index';
 import { newUserData } from '../../../atoms';
-
-const Copyright = () => (
-  <Typography variant='body2' color='textSecondary' align='center'>
-    {'Copyright © '}
-    <Link color='inherit' href='/'>
-      TauClubs
-    </Link>{' '}
-    {new Date().getFullYear()}
-  </Typography>
-);
 
 const useStyles = makeStyles(theme => ({
   appBar: {
     position: 'relative',
   },
   layout: {
-    width: 'auto',
-    height: 'auto',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: ' 70%',
       marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
   paper: {
     borderRadius: '10px',
-    minHeight: '10px',
+    width: '100%',
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
@@ -52,6 +41,9 @@ const useStyles = makeStyles(theme => ({
   stepper: {
     padding: theme.spacing(3, 0, 5),
   },
+  stepIcon: {
+    color: '#808080',
+  },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -59,12 +51,14 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
+    backgroundColor: '#808080',
+    color: 'white',
   },
 }));
 
 const steps = ['Welcome', 'General', 'Description'];
 
-const JoinUs = () => {
+const JoinUs = ({ clubName }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const setUserData = useSetRecoilState(newUserData);
@@ -103,12 +97,17 @@ const JoinUs = () => {
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component='h1' variant='h4' align='center'>
-            Join Form
+            Join To {clubName}
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map(label => (
               <Step key={label}>
-                <StepLabel>{label}</StepLabel>
+                <StepLabel
+                  StepIconProps={{
+                    classes: { root: classes.stepIcon },
+                  }}>
+                  {label}
+                </StepLabel>
               </Step>
             ))}
           </Stepper>
@@ -147,9 +146,17 @@ const JoinUs = () => {
             )}
           </>
         </Paper>
-        <Copyright />
       </main>
     </>
   );
 };
+
+JoinUs.propTypes = {
+  clubName: PropTypes.string,
+};
+
+JoinUs.defaultProps = {
+  clubName: '',
+};
+
 export default JoinUs;

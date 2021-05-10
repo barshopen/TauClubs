@@ -49,16 +49,7 @@ const Form = ({ handleSubmit, setUserData }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id='address2'
-            name='address2'
-            label='Address line 2'
-            fullWidth
-            autoComplete='shipping address-line2'
-            onChange={handleChange}
-          />
-        </Grid>
+
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -79,28 +70,7 @@ const Form = ({ handleSubmit, setUserData }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id='zip'
-            name='zip'
-            label='Zip / Postal code'
-            fullWidth
-            autoComplete='shipping postal-code'
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id='country'
-            name='country'
-            label='Country'
-            fullWidth
-            autoComplete='shipping country'
-            onChange={handleChange}
-          />
-        </Grid>
+
         <Grid item xs={12}>
           <FormControlLabel
             control={
@@ -111,7 +81,7 @@ const Form = ({ handleSubmit, setUserData }) => {
                 onChange={handleChange}
               />
             }
-            label='Use this address for payment details'
+            label='I confirm using my private data'
           />
         </Grid>
       </Grid>

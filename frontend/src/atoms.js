@@ -8,4 +8,6 @@ const newUserData = atom({
 /* This atom will hold the current user data */
 const currentUser = atom({ key: 'currentUser', default: null });
 
-export { newUserData, currentUser };
+const selectedOptionState = atom({ key: 'selectedOptionState', default: '' });
+
+export { newUserData, currentUser, selectedOptionState };
