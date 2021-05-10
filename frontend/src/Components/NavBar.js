@@ -4,7 +4,7 @@
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
   AppBar,
   Toolbar,
@@ -29,15 +29,9 @@ import {
 } from '@material-ui/icons';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-<<<<<<< HEAD
-import styled from 'styled-components';
 import SearchFor from '../assets/search-icon.png';
-=======
-import { useRecoilState } from 'recoil';
-import { currentUser } from '../atoms';
->>>>>>> master
+import { currentUser, selectedOptionState } from '../atoms';
 import { getClubs } from '../api';
-import { selectedOptionState } from '../atoms';
 
 const useStyles = makeStyles(theme => ({
   grow: {
