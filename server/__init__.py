@@ -4,9 +4,10 @@ import dotenv
 from flask_login import (
     LoginManager
 )
-from server.db import db_app, initdb
+from server.db import db_app
 from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
+from flask_mongoengine import MongoEngine
 
 dotenv.load_dotenv()
 
@@ -22,10 +23,25 @@ FLAG_ACTUAL_VALUE = os.getenv('DEBUG_BACKEND')
 app.register_blueprint(db_app)
 
 init(app)
-initdb(app)
 
 # blueprint for auth
 app.register_blueprint(auth_app)
+
+
+MONGO_DB_HOST_USER = os.getenv('MONGO_DB_HOST_USER')
+MONGO_DB_HOST_PASSWORD = os.getenv('MONGO_DB_HOST_PASSWORD')
+MONGO_DB_CLUSTER_URL = os.getenv('MONGO_DB_CLUSTER_URL')
+MONGO_DB_CLUSTER_DB_NAME = os.getenv('MONGO_DB_CLUSTER_DB_NAME')
+MONGO_DB_PARAMS = "retryWrites=true&w=majority"
+
+URL_HOST = f"mongodb+srv://{MONGO_DB_HOST_USER}:{MONGO_DB_HOST_PASSWORD}@{MONGO_DB_CLUSTER_URL}/" \
+    f"{MONGO_DB_CLUSTER_DB_NAME}?{MONGO_DB_PARAMS}"
+
+mongodb = MongoEngine()
+app.config['MONGODB_SETTINGS'] = {
+    'host': URL_HOST
+}
+mongodb.init_app(app)
 
 
 @app.errorhandler(404)

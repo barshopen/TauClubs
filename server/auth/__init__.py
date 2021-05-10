@@ -11,7 +11,7 @@ from flask_login import (
     logout_user
 )
 
-from server.db.userauth import UserAuth
+from server.auth.userauth import UserAuth
 from server.auth import google_token
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
