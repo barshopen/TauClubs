@@ -13,5 +13,3 @@ class Club(Document):
     lastUpdateTime = DateTimeField(
         required=True,
         validation=None)  # not sure if relevant
-    members = ListField(required=True)  # list of users
-    admins = ListField(required=True)  # list of users
