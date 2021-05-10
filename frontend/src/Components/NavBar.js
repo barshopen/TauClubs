@@ -26,7 +26,7 @@ import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
 import { getClubs } from '../Shared/api';
-import { showSideBarMobileState } from '../atoms';
+import { showSideBarMobileState } from '../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   grow: {

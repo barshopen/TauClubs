@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { Form, Review, Description } from './index';
-import { newUserData } from '../../../atoms';
+import { newUserData } from '../../../Shared/atoms';
 
 const Copyright = () => (
   <Typography variant='body2' color='textSecondary' align='center'>

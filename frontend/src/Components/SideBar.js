@@ -17,7 +17,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Hidden from '@material-ui/core/Hidden';
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
-import { showSideBarMobileState } from '../atoms';
+import { showSideBarMobileState } from '../Shared/atoms';
 
 const drawerWidth = 240;
 
