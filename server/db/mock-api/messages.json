@@ -6,16 +6,16 @@
     "profileImage": "images/hikeProfile.jpeg",
     "description": "The new meeting location is tel aviv",
     "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "msg_2",
     "clubName": "chess",
     "title": "new opening",
-    "profileImage": "images/hikeProfile.jpeg",
+    "profileImage": "",
     "description": "we will open another tour in April",
     "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "msg_3",
@@ -24,16 +24,16 @@
     "profileImage": "images/hikeProfile.jpeg",
     "description": "‘an evening of physics, including a talk from a theoretical particle physicist’",
     "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "msg_4",
     "clubName": "chess",
-    "profileImage": "images/hikeProfile.jpeg",
+    "profileImage": "images/chessProfile.jpeg",
     "title": "Veritatis Dolores Adipisci Minus",
     "description": "an evening of physics, including a talk from a theoretical particle physicist",
     "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   },
   {
     "id": "msg_5",
@@ -42,6 +42,6 @@
     "profileImage": "images/hikeProfile.jpeg",
     "description": "‘an evening of physics, including a talk from a theoretical particle physicist’",
     "creationTime": "2012-04-23T18:25:43.511Z",
-    "lastUpdateTime": "2012-04-23T22:25:00.000Z"
+    "lastUpdateTime": "2012-04-23T18:25:43.511Z"
   }
 ]

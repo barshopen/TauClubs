@@ -148,7 +148,8 @@ export default function NavBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const { data } = useQuery('allClubs', fetchClubs);
+  const { data: queryData } = useQuery('allClubs', fetchClubs);
+  const data = useMemo(() => queryData || [], [queryData]);
 
   const [isUser, setIsUser] = useRecoilState(currentUser);
   useEffect(() => {
