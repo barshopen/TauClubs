@@ -9,7 +9,7 @@ from flask_login import (
     logout_user,
 )
 
-from server.auth.userauth import UserAuth
+from server.db.userauth import UserAuth
 from server.auth import google_token
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
@@ -46,7 +46,7 @@ def sendUserData():
         users_email = user_info["email"]
         users_name = user_info["name"]
     else:
-        return "User email not available or not verified by Google.", 400
+        return "User email not available or could not be verified by Google.", 400
 
     try:
         user = UserAuth.objects.get(email=users_email)

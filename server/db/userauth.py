@@ -1,5 +1,4 @@
-
-from mongoengine import Document, StringField, UUIDField, EmailField
+from mongoengine import Document, StringField, EmailField
 from flask_login import UserMixin
 
 
@@ -9,4 +8,4 @@ class UserAuth(UserMixin, Document):
     email = EmailField(required=True, unique=True)
 
     def __repr__(self):
-        return f'< User {self.name} >'
+        return f"< User {self.name} >"

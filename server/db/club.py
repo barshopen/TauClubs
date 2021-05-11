@@ -5,12 +5,15 @@ from mongoengine import (
     DateTimeField,
     ListField,
     URLField,
+    UUIDField,
 )
+from bson.objectid import ObjectId
+import json
 
 
 class Club(Document):
     meta = {"collection": "clubs"}
-    # id = UUIDField()  # consider ObjectIdField
+    _id = UUIDField()  # TODO change this field to hold different unique, random filed.
     name = StringField(max_length=50, required=True)
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
@@ -21,6 +24,23 @@ class Club(Document):
     )  # check validation define
     lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
     contactMail = StringField(required=True)
+
+    def to_json(self):
+        return json.dumps(
+            {
+                "id": str(self._id),
+                "name": self.name,
+                "profileImage": self.profileImage,
+                "description": self.description,
+                "shortDescription": self.shortDescription,
+                "tags": self.tags,
+                "creationTime": self.creationTime.isoformat(),
+                "lastUpdateTime": self.lastUpdateTime.isoformat(),
+                "contactMail": self.contactMail,
+                "membersCount": 12,
+                "admin": False,
+            }
+        )
 
 
 def create_club(
@@ -42,3 +62,11 @@ def create_club(
     )
 
     return club.save(force_insert=True)
+
+
+def get_clubs(name: str = None, tag: str = None):
+    return Club.objects()
+
+
+def get_club(id: str):
+    return Club.objects.get(_id=ObjectId(id))

@@ -1,6 +1,6 @@
 from os import path
 from flask import Blueprint, json
-from .clubs import Club, create_club
+from server.db.club import create_club, get_club, get_clubs
 
 # from .users import User
 # from .events import Event
@@ -34,8 +34,8 @@ def filter_by_id(data, data_id):
 @db_app.route("/clubs/<club_id>")
 def clubs(club_id):
     if club_id:
-        return Club.objects(id=club_id).to_json()  # still buggy to do fix
-    return Club.objects.to_json()
+        return get_club(id=club_id).to_json()  # still buggy to do fix
+    return get_clubs().to_json()
 
 
 @db_app.route("/create_club")
