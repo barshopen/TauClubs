@@ -65,7 +65,7 @@ def create_club(
 
 
 def get_clubs(name: str = None, tag: str = None):
-    return Club.objects()
+    return Club.objects(name=name, tags=tag)
 
 
 def get_club(id: str):
