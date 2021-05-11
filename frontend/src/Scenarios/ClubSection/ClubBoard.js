@@ -7,7 +7,7 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessage from '../NewMessage';
 import NewEvent from '../NewEvent';
-import { getMessages, getClubs, getUpcomingEvents } from '../../api';
+import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
 
 const Container = styled.div`
   display: grid;

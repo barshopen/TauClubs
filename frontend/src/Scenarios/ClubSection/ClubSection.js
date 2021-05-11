@@ -6,7 +6,7 @@ import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
-import { getClubs } from '../../api';
+import { getClubs } from '../../Shared/api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -89,7 +89,11 @@ function ClubSection() {
         <Route path='/club/board/:clubId' component={ClubBoard} />
         <Route path='/club/about/:clubId' component={AboutUs} />
         <Route path='/club/contact/:clubId' component={Contact} />
-        <Route path='/club/joinus/:clubId' component={JoinUs} />
+        <Route
+          path='/club/joinus/:clubId'
+          clubName={clubData?.name}
+          component={() => <JoinUs clubName={clubData.name} />}
+        />
       </Switch>
     </SimpleContaConiner>
   );

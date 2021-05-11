@@ -43,7 +43,7 @@ const ClubCard = props => {
       <CardActions>
         {tags &&
           tags.map(tag => (
-            <Button size='medim' color='primary'>
+            <Button size='medium' color='primary'>
               <Label key={tag} color={color}>
                 {tag}
               </Label>

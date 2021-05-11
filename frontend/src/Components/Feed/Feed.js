@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import FeedCard from './GenericFeedCard';
-import { getFeedData } from '../../api';
+import { getFeedData } from '../../Shared/api';
 
 const Feed = () => {
   const [data, setData] = useState();
@@ -29,7 +29,7 @@ const Feed = () => {
             duration,
           }) => (
             <FeedCard
-              id={id}
+              key={id}
               type={type}
               title={title}
               profileImage={profileImage}
