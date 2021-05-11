@@ -9,6 +9,7 @@ from mongoengine import (
 )
 from bson.objectid import ObjectId
 import json
+from mongoengine.queryset.visitor import Q
 
 
 class Club(Document):
@@ -25,22 +26,23 @@ class Club(Document):
     lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
     contactMail = StringField(required=True)
 
+    def to_dict(self):
+        return {
+            "id": str(self._id),
+            "name": self.name,
+            "profileImage": self.profileImage,
+            "description": self.description,
+            "shortDescription": self.shortDescription,
+            "tags": self.tags,
+            "creationTime": self.creationTime.isoformat(),
+            "lastUpdateTime": self.lastUpdateTime.isoformat(),
+            "contactMail": self.contactMail,
+            "membersCount": 12,
+            "admin": False,
+        }
+
     def to_json(self):
-        return json.dumps(
-            {
-                "id": str(self._id),
-                "name": self.name,
-                "profileImage": self.profileImage,
-                "description": self.description,
-                "shortDescription": self.shortDescription,
-                "tags": self.tags,
-                "creationTime": self.creationTime.isoformat(),
-                "lastUpdateTime": self.lastUpdateTime.isoformat(),
-                "contactMail": self.contactMail,
-                "membersCount": 12,
-                "admin": False,
-            }
-        )
+        return json.dumps(self.to_dict())
 
 
 def create_club(
@@ -64,9 +66,18 @@ def create_club(
     return club.save(force_insert=True)
 
 
-def get_clubs(name: str = None, tag: str = None):
-    return Club.objects(name=name, tags=tag)
+def get_clubs(name: str, tag: str):
+    name_Q = Q(name__contains=name) if name else Q()
+    tags_Q = Q(tags=tag) if tag else Q()
+    return json.dumps(
+        list(
+            map(
+                lambda club: club.to_dict(),
+                Club.objects.filter(name_Q & tags_Q),
+            )
+        )
+    )
 
 
 def get_club(id: str):
-    return Club.objects.get(_id=ObjectId(id))
+    return Club.objects.get(_id=ObjectId(id)).to_json()

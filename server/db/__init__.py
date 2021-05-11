@@ -1,5 +1,5 @@
 from os import path
-from flask import Blueprint, json
+from flask import Blueprint, json, request
 from server.db.club import create_club, get_club, get_clubs
 
 # from .users import User
@@ -33,9 +33,19 @@ def filter_by_id(data, data_id):
 @db_app.route("/clubs", defaults={"club_id": ""})
 @db_app.route("/clubs/<club_id>")
 def clubs(club_id):
+    """
+    example queries:
+    * {mainroute}/club -> returns all clubs
+    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
+    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
+        foodies
+    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
+        containes foodies AND have a 'Math' tag
+    """
     if club_id:
-        return get_club(id=club_id).to_json()  # still buggy to do fix
-    return get_clubs().to_json()
+        return get_club(id=club_id)
+    clubs_params = request.args.to_dict()
+    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
 
 
 @db_app.route("/create_club")
