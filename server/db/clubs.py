@@ -1,20 +1,44 @@
-from mongoengine import Document, StringField, UUIDField, DateTimeField, ListField, URLField, IntField
+import datetime
+from mongoengine import (
+    Document,
+    StringField,
+    DateTimeField,
+    ListField,
+    URLField,
+)
 
 
-class Clubs(Document):
-   # id = UUIDField()  # consider ObjectIdField
-    name = StringField(max_length=200, required=True)
+class Club(Document):
+    meta = {"collection": "clubs"}
+    # id = UUIDField()  # consider ObjectIdField
+    name = StringField(max_length=50, required=True)
     profileImage = URLField()
-    shortDescription = StringField(required=True)
-    description = StringField(required=True)
-    tags = ListField(required=True)  # list of tags
-    content = StringField(required=True)
-    creationTime = DateTimeField(required=True,
-                                 validation=None)  # check validation define
-    lastUpdateTime = DateTimeField(
-        required=True,
-        validation=None)  # not sure if relevant
-    members = ListField(required=True)  # list of users
-    admins = ListField(required=True)  # list of users
+    description = StringField(max_length=4296, required=True)
+    shortDescription = StringField(max_length=100)
+    tags = ListField()  # list of tags
+    creationTime = DateTimeField(
+        required=True, validation=None
+    )  # check validation define
+    lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
     contactMail = StringField(required=True)
-    membersCount = IntField(required=True)
+
+
+def create_club(
+    name: str,
+    contact_mail: str,
+    description: str = "",
+    short_description: str = "",
+    tags=None,
+):
+    now = datetime.datetime.utcnow()
+    club = Club(
+        contactMail=contact_mail,
+        name=name,
+        description=description,
+        shortDescription=short_description,
+        tags=tags,
+        creationTime=now,
+        lastUpdateTime=now,
+    )
+
+    return club.save(force_insert=True)
