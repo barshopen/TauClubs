@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
-  const [showNewClubModal, setShowNewClubModal] = useState(false);
   const setUser = useSetRecoilState(currentUser);
 
   useEffect(() => {
@@ -45,10 +44,6 @@ function App() {
 
   return (
     <>
-      <NewClub
-        showModal={showNewClubModal}
-        setClubModal={setShowNewClubModal}
-      />
       <Router>
         <div className={classes.root}>
           <NavBar />

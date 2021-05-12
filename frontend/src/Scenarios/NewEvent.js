@@ -29,25 +29,29 @@ const TextArea = styled.textarea`
   font-family: 'Roboto';
 `;
 
-function NewEvent({ showEventModal, setShowEventModal }) {
+function NewEvent({ ClickableTrigger }) {
   return (
-    <>
-      <GenericModal
-        showModal={showEventModal}
-        setShowModal={setShowEventModal}
-        Container={Container}>
+    <GenericModal ClickableTrigger={ClickableTrigger}>
+      <Container>
         <Header>Create New Event</Header>
         <Input type='text' placeholder='Event title' />
         <TextArea placeholder='Description' style={{ height: '140px' }} />
-
         <Input width='150px' type='date' />
-      </GenericModal>
-    </>
+      </Container>
+    </GenericModal>
   );
 }
 
 NewEvent.propTypes = {
-  showEventModal: PropTypes.bool.isRequired,
-  setShowEventModal: PropTypes.func.isRequired,
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]),
 };
+
+NewEvent.defaultProps = {
+  ClickableTrigger: styled.div``, // a default container
+};
+
 export default NewEvent;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const Container = styled.div`
@@ -27,13 +27,10 @@ const TextArea = styled.textarea`
   font-family: 'Roboto';
 `;
 
-function NewClub({ showModal, setClubModal }) {
+function NewClub({ ClickableTrigger }) {
   return (
-    <>
-      <GenericModal
-        showModal={showModal}
-        setShowModal={setClubModal}
-        Container={Container}>
+    <GenericModal ClickableTrigger={ClickableTrigger}>
+      <Container>
         <Header>Create New Club</Header>
 
         <Input type='text' placeholder='Club Name' />
@@ -42,14 +39,19 @@ function NewClub({ showModal, setClubModal }) {
           style={{ height: '140px' }}
         />
         <Input type='text' placeholder='Contact Email' />
-      </GenericModal>
-    </>
+      </Container>
+    </GenericModal>
   );
 }
-
 NewClub.propTypes = {
-  showModal: propTypes.bool.isRequired,
-  setClubModal: propTypes.func.isRequired,
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]),
 };
 
+NewClub.defaultProps = {
+  ClickableTrigger: styled.div``, // a default container
+};
 export default NewClub;

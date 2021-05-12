@@ -26,21 +26,27 @@ const TextArea = styled.textarea`
   font-family: 'Roboto';
 `;
 
-function NewMessage({ showMessageModal, setShowMessageModal }) {
+function NewMessage({ ClickableTrigger }) {
   return (
-    <GenericModal
-      showModal={showMessageModal}
-      setShowModal={setShowMessageModal}
-      Container={Container}>
-      <Header>Publish New Message</Header>
-      <Input height='30px' type='text' placeholder='Message title' />
-      <TextArea placeholder='Message' style={{ height: '140px' }} />
+    <GenericModal ClickableTrigger={ClickableTrigger}>
+      <Container>
+        <Header>Publish New Message</Header>
+        <Input height='30px' type='text' placeholder='Message title' />
+        <TextArea placeholder='Message' style={{ height: '140px' }} />
+      </Container>
     </GenericModal>
   );
 }
 
 NewMessage.propTypes = {
-  showMessageModal: PropTypes.bool.isRequired,
-  setShowMessageModal: PropTypes.func.isRequired,
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]),
+};
+
+NewMessage.defaultProps = {
+  ClickableTrigger: styled.div``, // a default container
 };
 export default NewMessage;

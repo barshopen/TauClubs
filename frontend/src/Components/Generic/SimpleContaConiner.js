@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 const SimpleContaConiner = ({ style = {}, children }) => (
   <>
     <CssBaseline />
-    <Container maxWidth='m'>
+    <Container maxWidth='md'>
       <Typography component='div' style={style}>
         {children}
       </Typography>
