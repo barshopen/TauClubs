@@ -54,7 +54,7 @@ def clubs(club_id):
 
 
 @db_app.route("/clubs/<club_id>/messages/<message_title>")
-def messages(message_id):
+def messagesV2(message_id):
     return get_message(id=message_id)
 
 
