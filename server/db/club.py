@@ -1,48 +1,9 @@
 import datetime
-from mongoengine import (
-    Document,
-    StringField,
-    DateTimeField,
-    ListField,
-    URLField,
-    UUIDField,
-)
 from bson.objectid import ObjectId
 import json
 from mongoengine.queryset.visitor import Q
+from .models import Club, Tag
 
-
-class Club(Document):
-    meta = {"collection": "clubs"}
-    _id = UUIDField()  # TODO change this field to hold different unique, random filed.
-    name = StringField(max_length=50, required=True)
-    profileImage = URLField()
-    description = StringField(max_length=4296, required=True)
-    shortDescription = StringField(max_length=100)
-    tags = ListField()  # list of tags
-    creationTime = DateTimeField(
-        required=True, validation=None
-    )  # check validation define
-    lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
-    contactMail = StringField(required=True)
-
-    def to_dict(self):
-        return {
-            "id": str(self._id),
-            "name": self.name,
-            "profileImage": self.profileImage,
-            "description": self.description,
-            "shortDescription": self.shortDescription,
-            "tags": self.tags,
-            "creationTime": self.creationTime.isoformat(),
-            "lastUpdateTime": self.lastUpdateTime.isoformat(),
-            "contactMail": self.contactMail,
-            "membersCount": 12,
-            "admin": False,
-        }
-
-    def to_json(self):
-        return json.dumps(self.to_dict())
 
 
 def create_club(
