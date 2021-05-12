@@ -1,4 +1,7 @@
-from .models import User, ClubMembership
+from mongoengine import Document, StringField, EmailField,URLField
+from .models import User, Club, ClubMembership
+from .clubmembership import createAdminMembership, createRegularMembership
+from mongoengine.queryset.visitor import Q
 
 
 def create_user(firstName, lastName, contactMail, picture):
@@ -10,4 +13,8 @@ def create_user(firstName, lastName, contactMail, picture):
 
 
 def listOfClubsPerUser(user):
-    return ClubMembership.objects.get(member=user).to_json()
+    clubs=ClubMembership.objects.get(member=user)
+    return clubs.to_json()#need to decide hoe do we want to get it
+
+def joinClubAsUser(user,club):
+    createRegularMembership(user,club)

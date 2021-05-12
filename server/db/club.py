@@ -2,7 +2,8 @@ import datetime
 from bson.objectid import ObjectId
 import json
 from mongoengine.queryset.visitor import Q
-from .models import Club
+from .models import Club, Tag
+from .clubmembership import createAdminMembership
 
 
 def create_club(
@@ -25,6 +26,14 @@ def create_club(
 
     return club.save(force_insert=True)
 
+
+def establish(user, name: str,
+    contact_mail: str,
+    description: str = "",
+    short_description: str = "",
+    tags=None):
+    newclub = create_club(name,contact_mail,description,short_description,tags)
+    createAdminMembership(user,newclub)
 
 def get_clubs(name: str, tag: str):
     name_Q = Q(name__contains=name) if name else Q()

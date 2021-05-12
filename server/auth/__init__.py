@@ -10,6 +10,7 @@ from flask_login import (
 )
 
 from server.db.userauth import UserAuth
+from server.db.user import  listOfClubsPerUser
 from server.auth import google_token
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
