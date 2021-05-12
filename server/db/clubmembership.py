@@ -1,21 +1,24 @@
-from server.db.models import User, Club, ClubMembership
+# from bson.objectid import ObjectId
+# import json
+# from mongoengine.queryset.visitor import Q
+from .models import ClubMembership
 
 
-def createMembership(userEmail: str, club: Club, role):
-    user = User.objects.get(contactMail=userEmail)
+def createMembership(user, club, role):
     membership = ClubMembership(
-        member=user,
-        memberName=f"{user.firstName} {user.lastName}",
         club=club,
         clubName=club.name,
+        member=user,
+        memberFirstName=user.firstName,
+        memberLastName=user.lastName,
         role=role,
     )
-    return membership.save()
+    membership.save()
 
 
-def createRegularMembership(userEmail: str, club):
-    return createMembership(userEmail, club, "U")
+def createRegularMembership(user, club):
+    createMembership(user, club, "U")
 
 
-def createAdminMembership(userEmail: str, club):
-    return createMembership(userEmail, club, "A")
+def createAdminMembership(user, club):
+    createMembership(user, club, "A")

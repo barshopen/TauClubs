@@ -13,13 +13,13 @@ class UserAuth(UserMixin, Document):
     def __repr__(self):
         return f"< User {self.name} >"
 
-    @staticmethod
-    def create_user_auth(firstName, lastName, email, picture):
-        full_user = create_user(firstName, lastName, email, picture)
-        user = UserAuth(email=email, userauth=full_user)
-        user.save()
-        return user
-
 
 def get_userauth_email_by_id(id: str):
     return UserAuth.objects.get(_id=ObjectId(id)).email
+
+
+def create_user_auth(firstName, lastName, email, picture):
+    full_user = create_user(firstName, lastName, email, picture)
+    user = UserAuth(email=email, userauth=full_user)
+    user.save()
+    return user

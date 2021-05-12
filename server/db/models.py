@@ -48,7 +48,7 @@ class User(Document):
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
-    picture = URLField(required=True)
+    picture = URLField()
     meta = {"collection": "users"}
 
     def to_dict(self):
