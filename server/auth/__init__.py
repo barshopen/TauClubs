@@ -42,7 +42,6 @@ def sendUserData():
         return "Invalid ID token", 401
 
     if user_info["email_verified"]:
-        print(user_info)
         # unique_id = user_info["sub"]
         users_email = user_info["email"]
         users_name = user_info["name"]
@@ -50,7 +49,7 @@ def sendUserData():
         return "User email not available or could not be verified by Google.", 400
 
     try:
-        user = UserAuth.objects.get(email=users_email)
+        user = UserAuth.objects(email=users_email).first()
     except Exception:
         user=UserAuth.create_user_auth(user_info["given_name"], user_info["family_name"],user_info['email'],user_info['picture'])
         user.save()
