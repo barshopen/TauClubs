@@ -1,4 +1,4 @@
-from mongoengine import Document, EmailField, ReferenceField, BooleanField
+from mongoengine import Document, EmailField, ReferenceField
 from flask_login import UserMixin
 from server.db.models import User
 from server.db.user import create_user
@@ -8,7 +8,6 @@ from bson.objectid import ObjectId
 class UserAuth(UserMixin, Document):
     email = EmailField(required=True, unique=True)
     userauth = ReferenceField(User)
-    is_active = BooleanField()
 
     def __repr__(self):
         return f"< User {self.name} >"

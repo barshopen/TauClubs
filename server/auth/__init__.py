@@ -9,7 +9,7 @@ from flask_login import (
     logout_user,
 )
 
-from server.db.userauth import UserAuth, create_user_auth
+from server.auth.userauth import UserAuth, create_user_auth
 from server.auth import google_token
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
@@ -25,7 +25,6 @@ def init(app):
 
 @login_manager.user_loader
 def load_user(user_id):
-    print("got here!!!")
     return UserAuth.objects(id=user_id).first()
 
 
@@ -49,7 +48,6 @@ def sendUserData():
 
     try:
         user = UserAuth.objects.get(email=users_email)
-        print("in here", user.email)
     except Exception:
         user = create_user_auth(
             user_info["given_name"],
