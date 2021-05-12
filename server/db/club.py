@@ -2,8 +2,7 @@ import datetime
 from bson.objectid import ObjectId
 import json
 from mongoengine.queryset.visitor import Q
-from .models import Club, Tag
-
+from .models import Club
 
 
 def create_club(
@@ -11,7 +10,7 @@ def create_club(
     contact_mail: str,
     description: str = "",
     short_description: str = "",
-    tags=None,
+    tags=[],
 ):
     now = datetime.datetime.utcnow()
     club = Club(
