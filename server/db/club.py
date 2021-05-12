@@ -2,7 +2,7 @@ import datetime
 from bson.objectid import ObjectId
 import json
 from mongoengine.queryset.visitor import Q
-from .models import Club, Tag
+from .models import Club
 from .clubmembership import createAdminMembership
 
 
@@ -12,7 +12,7 @@ def create_club(
     description: str = "",
     short_description: str = "",
     tags=[],
-):
+) -> Club:
     now = datetime.datetime.utcnow()
     club = Club(
         contactMail=contact_mail,
@@ -23,17 +23,22 @@ def create_club(
         creationTime=now,
         lastUpdateTime=now,
     )
-
     return club.save(force_insert=True)
 
 
-def establish(user, name: str,
+def establish_club(
+    foundingUserEmail: str,
+    name: str,
     contact_mail: str,
     description: str = "",
     short_description: str = "",
-    tags=None):
-    newclub = create_club(name,contact_mail,description,short_description,tags)
-    createAdminMembership(user,newclub)
+    tags=None,
+):
+
+    newclub = create_club(name, contact_mail, description, short_description, tags)
+    membership = createAdminMembership(foundingUserEmail, newclub)
+    return membership.clubName
+
 
 def get_clubs(name: str, tag: str):
     name_Q = Q(name__contains=name) if name else Q()
@@ -50,3 +55,7 @@ def get_clubs(name: str, tag: str):
 
 def get_club(id: str):
     return Club.objects.get(_id=ObjectId(id)).to_json()
+
+
+def members_count(club: Club):
+    return Club.objects.get(pk=ObjectId(id)).count()

@@ -1,6 +1,8 @@
 from os import path
 from flask import Blueprint, json, request
-from server.db.club import create_club, get_club, get_clubs
+from server.db.club import establish_club, get_club, get_clubs
+from flask_login import current_user, login_required
+from server.auth.userauth import get_userauth_email_by_id
 
 # from .users import User
 # from .events import Event
@@ -48,14 +50,24 @@ def clubs(club_id):
     return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
 
 
-@db_app.route("/create_club")
+@login_required
+@db_app.route("/create_club", methods=["POST"])
 def club_creation():
-    result = create_club("test", "a@b.com")
-    print(result)
+    print("got here")
+    print(current_user.get_id())
+    email = get_userauth_email_by_id(current_user.get_id())
+    print(email)
+    result = establish_club(
+        "tauclubs2021@gmail.com",
+        name=request.form.get("name"),
+        contact_mail=request.form.get("contact_mail"),
+        description=request.form.get("description"),
+        short_description=request.form.get("short_description"),
+    )
     if not result:
         return "Failed", 400
 
-    return "OK", 200
+    return result, 200
 
 
 @db_app.route("/messagesv2")

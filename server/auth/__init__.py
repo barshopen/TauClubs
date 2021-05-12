@@ -9,8 +9,7 @@ from flask_login import (
     logout_user,
 )
 
-from server.db.userauth import UserAuth
-from server.db.user import  listOfClubsPerUser
+from server.auth.userauth import UserAuth
 from server.auth import google_token
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
@@ -26,6 +25,7 @@ def init(app):
 
 @login_manager.user_loader
 def load_user(user_id):
+    print("got here!!!")
     return UserAuth.objects(id=user_id).first()
 
 
@@ -42,17 +42,18 @@ def sendUserData():
     except ValueError:
         return "Invalid ID token", 401
 
-    if user_info["email_verified"]:
-        # unique_id = user_info["sub"]
-        users_email = user_info["email"]
-        users_name = user_info["name"]
-    else:
+    if not user_info["email_verified"]:
         return "User email not available or could not be verified by Google.", 400
 
     try:
-        user = UserAuth.objects(email=users_email).first()
+        user = UserAuth.objects.get(email=user_info["email"])
     except Exception:
-        user=UserAuth.create_user_auth(user_info["given_name"], user_info["family_name"],user_info['email'],user_info['picture'])
+        user = UserAuth.create_user_auth(
+            user_info["given_name"],
+            user_info["family_name"],
+            user_info["email"],
+            user_info["picture"],
+        )
         user.save()
 
     login_user(user, remember=True)

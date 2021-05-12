@@ -6,21 +6,13 @@ from mongoengine import (
     URLField,
     DateTimeField,
     ListField,
-    UUIDField,
     IntField,
 )
 import json
 
 
-ROLES = {
-    "A": "Admin",
-    "U": "User",
-}
-
-
 class Club(Document):
     meta = {"collection": "clubs"}
-    _id = UUIDField()  # TODO change this field to hold different unique, random filed.
     name = StringField(max_length=50, required=True)
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
@@ -34,7 +26,7 @@ class Club(Document):
 
     def to_dict(self):
         return {
-            "id": str(self._id),
+            "id": str(self.pk),
             "name": self.name,
             "profileImage": self.profileImage,
             "description": self.description,
@@ -68,17 +60,18 @@ class User(Document):
         return json.dumps(self.to_dict())
 
 
+ROLES = {
+    "A": "Admin",
+    "U": "User",
+}
+
+
 class ClubMembership(Document):
     club = ReferenceField("Club")
     clubName = StringField(max_length=50, required=True)
     member = ReferenceField("User")
-    memberFirsName = StringField(max_length=35, required=True)
-    memberLastName = StringField(max_length=35, required=True)
+    memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-
-    @staticmethod
-    def upsert_club_membership(club: Club, user: User, role):
-        ClubMembership.create()
 
 
 class Event(Document):
