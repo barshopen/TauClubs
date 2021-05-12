@@ -4,12 +4,6 @@ from server.db.club import establish_club, get_club, get_clubs
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id
 
-# from .users import User
-# from .events import Event
-# from .tags import Tag
-# from .messages import Message
-
-
 STATIC_FOLDER_NAME = "mock-api"
 
 db_app = Blueprint(
