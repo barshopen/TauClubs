@@ -1,65 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import GenericModal from '../Components/Generic/GenericModal';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50vh;
-`;
+const useStyles = makeStyles(theme => ({
+  header: {
+    textAlign: 'center',
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+    },
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+}));
 
-const Header = styled.h2`
-  text-align: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-`;
+function NewEventContent({ setOpen }) {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
-const Input = styled.input`
-  height: ${props => props.height};
-  font-family: 'Roboto';
-  height: '30px';
-`;
+  const classes = useStyles();
 
-const TextArea = styled.textarea`
-  height: '120px';
-  font-family: 'Roboto';
-`;
-const Line = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-function GenericContainer({ setOpen }) {
+  const handleChangeTitle = e => {
+    setTitle(e.target.value);
+  };
+  const handleChangeContent = e => {
+    setContent(e.target.value);
+  };
   return (
-    <Container>
-      <Header>Create New Event</Header>
-      <Input type='text' placeholder='Event title' />
-      <TextArea placeholder='Description' style={{ height: '140px' }} />
-      <Input width='150px' type='date' />
-      <Line>
+    <form className={classes.root} noValidate autoComplete='off'>
+      <Typography variant='h6' className={classes.header}>
+        Create New Event
+      </Typography>
+
+      <TextField
+        id='event-title'
+        label='Event title'
+        variant='outlined'
+        value={title}
+        onChange={handleChangeTitle}
+      />
+      <TextField
+        id='event-description'
+        label='Event Description'
+        multiline
+        variant='outlined'
+        value={content}
+        onChange={handleChangeContent}
+        rows={4}
+        rowsMax={10}
+      />
+      <TextField
+        id='datetime-picker'
+        label='Start Date'
+        type='datetime-local'
+        variant='outlined'
+        defaultValue='2017-05-24T10:30'
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      <div className={classes.buttons}>
         <Button
           variant='contained'
           color='primary'
           onClick={() => setOpen(false)}>
-          Create
+          Publish
         </Button>
         <Button variant='contained' onClick={() => setOpen(false)}>
           Cancel
         </Button>
-      </Line>
-    </Container>
+      </div>
+    </form>
   );
 }
+NewEventContent.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+};
 
 function NewEvent({ ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={GenericContainer}
+      Content={NewEventContent}
     />
   );
 }
