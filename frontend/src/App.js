@@ -60,10 +60,6 @@ const App = () => {
               </Switch>
             </div>
           </Container>
-<<<<<<< HEAD
-          {/* <Footer /> */}
-=======
->>>>>>> master
         </div>
       </Router>
     </>
