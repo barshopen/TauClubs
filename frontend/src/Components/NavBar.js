@@ -1,30 +1,36 @@
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuIcon from '@material-ui/icons/Menu';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import Hidden from '@material-ui/core/Hidden';
+import {
+  Button,
+  Hidden,
+  Typography,
+  AppBar,
+  Toolbar,
+  Tooltip,
+  InputBase,
+  IconButton,
+  Badge,
+  Menu,
+  MenuItem,
+} from '@material-ui/core';
 
-import { getClubs } from '../Shared/api';
+import {
+  Menu as MenuIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
+  AccountCircle as AccountCircleIcon,
+  Mail as MailIcon,
+  Notifications as NotificationsIcon,
+  MoreVert as MoreVertIcon,
+  ExitToApp as ExitToAppIcon,
+} from '@material-ui/icons';
+import { logOut, getClubs } from '../Shared/api';
+
 import {
   showSideBarMobileState,
   currentUser,
@@ -162,11 +168,16 @@ export default function NavBar() {
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
+  const { data, isLoading } = useQuery('allClubs', fetchClubs);
+  const [user, setUser] = useRecoilState(currentUser);
+  const [search, setSearch] = useState('');
   const userMessages = useMemo(() => 4, []);
   const userNotifications = useMemo(() => 7, []);
-  const { data: queryData } = useQuery('allClubs', fetchClubs);
-  const data = useMemo(() => queryData || [], [queryData]);
-  const [search, setSearch] = useState('');
+
+  const handleLogout = () => {
+    logOut();
+    setUser(false);
+  };
 
   // primitive consts
   const isMenuOpen = Boolean(anchorEl);
@@ -180,33 +191,23 @@ export default function NavBar() {
   };
   const setSelectedOptionState = useSetRecoilState(selectedOptionState);
 
-  const [user, setUser] = useRecoilState(currentUser);
-  const logOut = () =>
-    fetch('/auth/logout')
-      .then(response => response.json())
-      .then(setUser(false));
-
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const defaultFilterOptions = useMemo(() => {
     if (data) {
-      return data.slice(0, 20).concat(
-        search
-          ? [
-              {
-                name: `Search for ${search}`,
-                icon: SearchFor,
-              },
-            ]
-          : []
-      );
+      return search
+        ? data.slice(0, 20).concat([
+            {
+              name: `Search for ${search}`,
+              icon: SearchFor,
+            },
+          ])
+        : data;
     }
     return [];
   }, [data, search]);
-
-  // get data about the current user
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -221,7 +222,6 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  // nodes
   const renderMenu = (
     <StyledMenu
       anchorEl={anchorEl}
@@ -232,8 +232,7 @@ export default function NavBar() {
       <MenuItem onClick={handleMenuClose}>
         <NavLink to='/profile'>My account</NavLink>
       </MenuItem>
-      <MenuItem onClick={logOut}>Logout</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </StyledMenu>
   );
 
@@ -328,7 +327,7 @@ export default function NavBar() {
               onChange={(event, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
-              options={defaultFilterOptions}
+              options={isLoading ? ['loading...'] : defaultFilterOptions}
               getOptionLabel={option => option.render ?? option.name}
               renderOption={option => (
                 <>
@@ -396,14 +395,20 @@ export default function NavBar() {
               </div>
             </>
           ) : (
-            <MenuItemWithToolTip
-              title='Sign In'
-              icon={
-                <NavLink to='/signin'>
-                  <ExitToAppIcon />
-                </NavLink>
-              }
-            />
+            <NavLink to='/signin'>
+              <div className={classes.sectionDesktop}>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  size='small'
+                  onClick={() => setAnchorEl(false)}>
+                  Sign in
+                </Button>
+              </div>
+              <div className={classes.sectionMobile}>
+                <ExitToAppIcon onClick={() => setAnchorEl(false)} />
+              </div>
+            </NavLink>
           )}
         </Toolbar>
       </AppBar>

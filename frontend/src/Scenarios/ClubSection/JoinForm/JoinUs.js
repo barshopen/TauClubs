@@ -1,28 +1,38 @@
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import PropTypes from 'prop-types';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 
-import Typography from '@material-ui/core/Typography';
-import { Form, Review, Description } from './index';
+import PropTypes from 'prop-types';
+import {
+  Paper,
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
+import { Form, Description } from './index';
 import { newUserData } from '../../../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
     position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    height: '550px',
   },
   layout: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    width: ' 50%',
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: ' 70%',
+      height: '550px',
       marginLeft: 'auto',
       marginRight: 'auto',
+      marginBottom: '40px',
     },
   },
   paper: {
@@ -37,9 +47,7 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(3),
     },
   },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
+
   stepIcon: {
     color: '#808080',
   },
@@ -55,20 +63,29 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const steps = ['Welcome', 'General', 'Description'];
+const steps = ['General', 'Description'];
 
 const JoinUs = ({ clubName }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
+    false
+  );
   const setUserData = useSetRecoilState(newUserData);
 
   const getStepContent = step => {
     switch (step) {
       case 0:
-        return <Review />;
+        return (
+          <Form
+            setUserData={setUserData}
+            handleSubmit={handleSubmit}
+            setApprovedUsingPrivateData={setApprovedUsingPrivateData}
+            approvedUsingPrivateData={approvedUsingPrivateData}
+          />
+        );
       case 1:
-        return <Form setUserData={setUserData} handleSubmit={handleSubmit} />;
-      case 2:
         return <Description />;
       default:
         throw new Error('Unknown step');
@@ -77,10 +94,11 @@ const JoinUs = ({ clubName }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-
+    setIsLoading(true);
     setTimeout(() => {
       setActiveStep(prev => prev + 1);
-    }, 1000);
+      setIsLoading(false);
+    }, 2000);
   };
 
   const handleNext = () => {
@@ -122,7 +140,25 @@ const JoinUs = ({ clubName }) => {
               </>
             ) : (
               <>
-                {getStepContent(activeStep)}
+                {isLoading ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Loader
+                      type='TailSpin'
+                      color='#00BFFF'
+                      height={50}
+                      alignItems='center'
+                      width={50}
+                    />
+                  </div>
+                ) : (
+                  getStepContent(activeStep)
+                )}
+
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
@@ -132,6 +168,7 @@ const JoinUs = ({ clubName }) => {
                   <Button
                     variant='contained'
                     color='primary'
+                    disabled={activeStep === 0 && !approvedUsingPrivateData}
                     onClick={
                       activeStep === steps.length - 1
                         ? handleSubmit
