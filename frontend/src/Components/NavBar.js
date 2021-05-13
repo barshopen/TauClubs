@@ -232,7 +232,7 @@ export default function NavBar() {
       <MenuItem onClick={handleMenuClose}>
         <NavLink to='/profile'>My account</NavLink>
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <MenuItem onClick={handleLogout}>Log out</MenuItem>
     </StyledMenu>
   );
 
@@ -277,6 +277,7 @@ export default function NavBar() {
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
+          onClick={handleLogout}
           icon={<LogOutIcon />}
         />
         <p>Log out</p>
