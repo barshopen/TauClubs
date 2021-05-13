@@ -22,7 +22,6 @@ Flask-WTF==0.14.3
 google-auth==1.30.0
 greenlet==1.0.0
 idna==2.10
-importlib-metadata==4.0.1
 iniconfig==1.1.1
 isort==5.8.0
 itsdangerous==1.1.0

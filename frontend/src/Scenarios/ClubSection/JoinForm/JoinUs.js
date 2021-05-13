@@ -3,18 +3,19 @@ import { useSetRecoilState } from 'recoil';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
 import PropTypes from 'prop-types';
-import {
-  Paper,
-  Stepper,
-  Step,
-  StepLabel,
-  Button,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import { Form, Description } from './index';
+import StepLabel from '@material-ui/core/StepLabel';
+import Button from '@material-ui/core/Button';
+
+import Typography from '@material-ui/core/Typography';
+
 import { newUserData } from '../../../Shared/atoms';
+
+import { Form, Description } from './index';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
