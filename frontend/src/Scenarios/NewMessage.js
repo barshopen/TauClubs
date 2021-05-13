@@ -1,53 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+
 import GenericModal from '../Components/Generic/GenericModal';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50vh;
-`;
+const useStyles = makeStyles(theme => ({
+  container: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(2, 4, 3),
+  },
+  header: {
+    textAlign: 'center',
+  },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(2),
+      width: '1000ch',
+      display: 'block',
+    },
+  },
+}));
 
-const Header = styled.h2`
-  text-align: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const Input = styled.input`
-  height: ${props => props.height};
-  font-family: 'Roboto';
-`;
-const TextArea = styled.textarea`
-  height: '120px';
-  font-family: 'Roboto';
-`;
 const Line = styled.div`
   display: flex;
   justify-content: space-around;
 `;
 
-function GenericContainer({ setOpen }) {
+function NewMessageContnet({ setOpen }) {
+  const [value, setValue] = useState('');
+  const classes = useStyles();
+
+  const handleChange = e => {
+    setValue(e.target.value);
+  };
   return (
-    <Container>
-      <Header>Publish New Message</Header>
-      <Input height='30px' type='text' placeholder='Message title' />
-      <TextArea placeholder='Message' style={{ height: '140px' }} />
-      <Line>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(false)}>
-          Create
-        </Button>
-        <Button variant='contained' onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-      </Line>
+    <Container className={classes.container} maxWidth='md'>
+      <form className={classes.root} noValidate autoComplete='off'>
+        <Typography variant='h6' className={classes.header}>
+          Publish New Message
+        </Typography>
+
+        <TextField
+          id='outlined-search'
+          label='Message title'
+          variant='outlined'
+        />
+        <TextField
+          id='outlined-textarea'
+          label='Message Content'
+          multiline
+          variant='outlined'
+          value={value}
+          onChange={handleChange}
+          rowsMax={10}
+        />
+
+        <Line>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => setOpen(false)}>
+            Create
+          </Button>
+          <Button variant='contained' onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+        </Line>
+      </form>
     </Container>
   );
 }
@@ -56,7 +80,7 @@ function NewMessage({ ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={GenericContainer}
+      Content={NewMessageContnet}
     />
   );
 }
