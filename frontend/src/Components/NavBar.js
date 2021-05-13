@@ -18,6 +18,7 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core';
+import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
 
 import {
   Menu as MenuIcon,
@@ -27,7 +28,6 @@ import {
   Mail as MailIcon,
   Notifications as NotificationsIcon,
   MoreVert as MoreVertIcon,
-  ExitToApp as ExitToAppIcon,
 } from '@material-ui/icons';
 import { logOut, getClubs } from '../Shared/api';
 
@@ -269,8 +269,17 @@ export default function NavBar() {
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-
         <p>Profile</p>
+      </MenuItem>
+
+      <MenuItem>
+        <MenuItemWithToolTip
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          icon={<LogOutIcon />}
+        />
+        <p>Log out</p>
       </MenuItem>
     </StyledMenu>
   );
@@ -406,7 +415,7 @@ export default function NavBar() {
                 </Button>
               </div>
               <div className={classes.sectionMobile}>
-                <ExitToAppIcon onClick={() => setAnchorEl(false)} />
+                <LogInIcon onClick={() => setAnchorEl(false)} />
               </div>
             </NavLink>
           )}
