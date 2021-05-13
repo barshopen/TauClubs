@@ -18,6 +18,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
+import NewClub from '../Scenarios/NewClub';
 
 const drawerWidth = 240;
 
@@ -100,6 +101,7 @@ export default function SideBar() {
             <listItem.icon />
           </SideBarListItem>
         ))}
+        <NewClub />
       </List>
       <Divider />
       <List

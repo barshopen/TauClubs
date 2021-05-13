@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessage from '../NewMessage';
@@ -28,16 +28,17 @@ const IconContainer = styled.div`
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
-function IconBu({ ariaLabel }) {
+function IconBu({ ariaLabel, onClick }) {
   return (
-    <IconButton color='inherit' aria-label={ariaLabel}>
+    <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
       <AddIcon />
     </IconButton>
   );
 }
 
 IconBu.propTypes = {
-  ariaLabel: Proptypes.string,
+  ariaLabel: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
 };
 IconBu.defaultProps = {
   ariaLabel: '',

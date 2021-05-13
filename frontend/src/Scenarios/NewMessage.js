@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const Container = styled.div`
@@ -25,16 +26,38 @@ const TextArea = styled.textarea`
   height: '120px';
   font-family: 'Roboto';
 `;
+const Line = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+function GenericContainer({ setOpen }) {
+  return (
+    <Container>
+      <Header>Publish New Message</Header>
+      <Input height='30px' type='text' placeholder='Message title' />
+      <TextArea placeholder='Message' style={{ height: '140px' }} />
+      <Line>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => setOpen(false)}>
+          Create
+        </Button>
+        <Button variant='contained' onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+      </Line>
+    </Container>
+  );
+}
 
 function NewMessage({ ClickableTrigger }) {
   return (
-    <GenericModal ClickableTrigger={ClickableTrigger}>
-      <Container>
-        <Header>Publish New Message</Header>
-        <Input height='30px' type='text' placeholder='Message title' />
-        <TextArea placeholder='Message' style={{ height: '140px' }} />
-      </Container>
-    </GenericModal>
+    <GenericModal
+      ClickableTrigger={ClickableTrigger}
+      Content={GenericContainer}
+    />
   );
 }
 

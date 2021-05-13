@@ -1,15 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
 import GenericModal from '../Components/Generic/GenericModal';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50vh;
-`;
-
+const useStyles = makeStyles(theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 const Header = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
@@ -27,29 +41,56 @@ const TextArea = styled.textarea`
   font-family: 'Roboto';
 `;
 
-function NewClub({ ClickableTrigger }) {
-  return (
-    <GenericModal ClickableTrigger={ClickableTrigger}>
-      <Container>
-        <Header>Create New Club</Header>
+const Line = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
 
-        <Input type='text' placeholder='Club Name' />
-        <TextArea
-          placeholder='Description of club'
-          style={{ height: '140px' }}
-        />
-        <Input type='text' placeholder='Contact Email' />
-      </Container>
-    </GenericModal>
+function NewClubContent({ setOpen }) {
+  const classes = useStyles();
+  return (
+    <Container className={classes.paper} maxWidth='md'>
+      <Header>Create New Club</Header>
+
+      <Input type='text' placeholder='Club Name' />
+      <TextArea placeholder='Description of club' style={{ height: '140px' }} />
+      <Input type='text' placeholder='Contact Email' />
+      <Line>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => setOpen(false)}>
+          Create
+        </Button>
+        <Button variant='contained' onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+      </Line>
+    </Container>
   );
 }
-NewClub.propTypes = {
-  ClickableTrigger: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string,
-    PropTypes.shape({ render: PropTypes.func.isRequired }),
-  ]),
+
+function ClickableTrigger({ onClick }) {
+  return (
+    <IconButton color='inherit' onClick={onClick}>
+      <AddIcon />
+    </IconButton>
+  );
+}
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
+
+function NewClub() {
+  return (
+    <GenericModal
+      ClickableTrigger={ClickableTrigger}
+      Content={NewClubContent}
+    />
+  );
+}
+NewClub.propTypes = {};
 
 NewClub.defaultProps = {
   ClickableTrigger: styled.div``, // a default container
