@@ -11,9 +11,10 @@ import Feed from './Components/Feed/Feed';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import NewClub from './Scenarios/NewClub';
-import Footer from './Components/Footer';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';
+
+import GeneralProfile from './Components/Accounts/GeneralProfile';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function App() {
+const App = () => {
   const classes = useStyles();
   const setUser = useSetRecoilState(currentUser);
 
@@ -55,14 +56,18 @@ function App() {
                 <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
                 <Route path='/club' component={ClubSection} />
+                <Route path='/profile' component={GeneralProfile} />
               </Switch>
             </div>
           </Container>
+<<<<<<< HEAD
           {/* <Footer /> */}
+=======
+>>>>>>> master
         </div>
       </Router>
     </>
   );
-}
+};
 
 export default App;
