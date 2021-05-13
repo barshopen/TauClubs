@@ -82,7 +82,7 @@ ClickableTrigger.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-function NewClub() {
+export default function NewClub() {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
@@ -90,9 +90,3 @@ function NewClub() {
     />
   );
 }
-NewClub.propTypes = {};
-
-NewClub.defaultProps = {
-  ClickableTrigger: styled.div``, // a default container
-};
-export default NewClub;

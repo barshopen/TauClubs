@@ -84,11 +84,12 @@ function NewEventContent({ setOpen }) {
     </form>
   );
 }
+
 NewEventContent.propTypes = {
   setOpen: PropTypes.func.isRequired,
 };
 
-function NewEvent({ ClickableTrigger }) {
+export default function NewEvent({ ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
@@ -108,5 +109,3 @@ NewEvent.propTypes = {
 NewEvent.defaultProps = {
   ClickableTrigger: styled.div``, // a default container
 };
-
-export default NewEvent;

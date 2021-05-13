@@ -54,7 +54,6 @@ function App() {
                 <Route path='/' exact component={Feed} />
                 <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
-                <Route path='/signin' component={Signin} />
                 <Route path='/club' component={ClubSection} />
               </Switch>
             </div>

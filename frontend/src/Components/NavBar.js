@@ -11,7 +11,6 @@ import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -23,6 +22,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
+import SignIn from '../Scenarios/SignIn';
 
 import { getClubs } from '../Shared/api';
 import {
@@ -396,14 +396,7 @@ export default function NavBar() {
               </div>
             </>
           ) : (
-            <MenuItemWithToolTip
-              title='Sign In'
-              icon={
-                <NavLink to='/signin'>
-                  <ExitToAppIcon />
-                </NavLink>
-              }
-            />
+            <SignIn />
           )}
         </Toolbar>
       </AppBar>
