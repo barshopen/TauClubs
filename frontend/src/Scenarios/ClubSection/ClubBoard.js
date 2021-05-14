@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { IconContext } from 'react-icons';
-import { GoPlus } from 'react-icons/go';
 import { useRouteMatch } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
-import NewMessage from '../NewMessage';
-import NewEvent from '../NewEvent';
+import NewMessageModal from '../NewMessageModal';
+import NewEventModal from '../NewEventModal';
 import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
 
 const Container = styled.div`
@@ -27,11 +28,23 @@ const IconContainer = styled.div`
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
-const ComponentContainer = styled.div``;
+function IconBu({ ariaLabel, onClick }) {
+  return (
+    <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
+      <AddIcon />
+    </IconButton>
+  );
+}
+
+IconBu.propTypes = {
+  ariaLabel: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+};
+IconBu.defaultProps = {
+  ariaLabel: '',
+};
 
 function ClubBoard() {
-  const [showMessageModal, setShowMessageModal] = useState(false);
-  const [showEventModal, setShowEventModal] = useState(false);
   const [messagesData, setMessagesData] = useState();
   const [upcomingEvents, setUpcomingEvents] = useState();
   const {
@@ -49,43 +62,18 @@ function ClubBoard() {
   return (
     <>
       <Container>
-        <NewMessage
-          showMessageModal={showMessageModal}
-          setShowMessageModal={setShowMessageModal}
-        />
-        <NewEvent
-          showEventModal={showEventModal}
-          setShowEventModal={setShowEventModal}
-        />
-        <ComponentContainer>
+        <div>
           <Messages data={messagesData} />
-        </ComponentContainer>
+        </div>
         <IconContainer show={isAdmin}>
-          <div>
-            <IconContext.Provider value={{ size: '23px' }}>
-              <GoPlus
-                onClick={e => {
-                  e.preventDefault();
-                  setShowMessageModal(!showMessageModal);
-                }}
-              />
-            </IconContext.Provider>
-          </div>
+          <NewMessageModal ClickableTrigger={IconBu} />
         </IconContainer>
-        <ComponentContainer>
+
+        <div>
           <UpcomingEvents data={upcomingEvents} />
-        </ComponentContainer>
+        </div>
         <IconContainer show={isAdmin}>
-          <div>
-            <IconContext.Provider value={{ size: '23px' }}>
-              <GoPlus
-                onClick={e => {
-                  e.preventDefault();
-                  setShowEventModal(!showEventModal);
-                }}
-              />
-            </IconContext.Provider>
-          </div>
+          <NewEventModal ClickableTrigger={IconBu} />
         </IconContainer>
       </Container>
     </>
