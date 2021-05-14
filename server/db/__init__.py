@@ -136,7 +136,6 @@ def message_delete(club_id, message_id):
     delete_message(message_id)
 
 
-##########
 @db_app.route("/clubs/<club_id>/events/<event_id>")
 def events(club_id, event_id):  # after delete update name
     if not club_id:
@@ -200,7 +199,34 @@ def event_delete(club_id, event_id):
     if user.role != "A":
         return "Restrict", 400
     deleteEvent(event_id)
-    ####
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
+def event_attending(club_id, event_id):
+    if not club_id:
+        return "Failed", 400
+
+    user = get_userauth_user_by_id(current_user.get_id())
+
+    if user.role != "A":
+        return "Restrict", 400
+    event = getEvent(event_id)
+    addAttending(event, user)
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<event_id>/interested")
+def event_interesting(club_id, event_id):
+    if not club_id:
+        return "Failed", 400
+
+    user = get_userauth_user_by_id(current_user.get_id())
+
+    if user.role != "A":
+        return "Restrict", 400
+    event = getEvent(event_id)
+    addIntrested(event, user)
 
 
 @db_app.route("/messagesv2")
