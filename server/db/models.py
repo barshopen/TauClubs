@@ -7,6 +7,7 @@ from mongoengine import (
     DateTimeField,
     ListField,
     IntField,
+    LazyReferenceField,
 )
 import json
 
@@ -85,12 +86,14 @@ class Event(Document):
     lastUpdateTime = DateTimeField(
         required=True, validation=None
     )  # not sure if relevant
-    membersAttending = ListField(required=True)  # check if can define the list
+    membersAttending = ListField(LazyReferenceField("User"), required=True)
     creatingClub = StringField(
         max_length=200, required=True
     )  # check how to define LazyReferenceField
     profileImage = URLField()
-    intrested = ListField(required=True)  # check if can define the list
+    intrested = ListField(
+        LazyReferenceField("User"), required=True
+    )  # check if can define the list
 
 
 class Tag(Document):

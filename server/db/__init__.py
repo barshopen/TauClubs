@@ -1,5 +1,4 @@
 from os import path
-from server.db.models import Message
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 from server.db.message import (
@@ -80,7 +79,7 @@ def message_creation(club_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_title>/update")
+@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
 def message_update(club_id, message_id):
     if not club_id:
         return "Failed", 400
@@ -100,7 +99,7 @@ def message_update(club_id, message_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_title>/delete")
+@db_app.route("/clubs/<club_id>/messages/<message_id>/delete")
 def message_delete(club_id, message_id):
     if not club_id:
         return "Failed", 400
