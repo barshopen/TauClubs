@@ -5,6 +5,8 @@ import Container from '@material-ui/core/Container';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
+import { X as XIcon } from 'react-feather';
+import { Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -45,6 +47,17 @@ export default function GenericModal({ ClickableTrigger, Content, maxWidth }) {
         }}>
         <Fade in={open}>
           <Container className={classes.container} maxWidth={maxWidth}>
+            <Box
+              style={{
+                display: 'flex',
+                flexDirection: 'row-reverse',
+              }}>
+              <XIcon
+                onClick={handleClose}
+                style={{ marginBottom: '10px', cursor: 'pointer' }}
+              />
+            </Box>
+
             <Content open={open} setOpen={setOpen} />
           </Container>
         </Fade>

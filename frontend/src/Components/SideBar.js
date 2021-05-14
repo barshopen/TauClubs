@@ -6,18 +6,26 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
+import {
+  Avatar,
+  Box,
+  Button,
+  Hidden,
+  Typography,
+  Link,
+} from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Hidden from '@material-ui/core/Hidden';
+import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
 import NewClub from '../Scenarios/NewClub';
+import GenericModal from './Generic/GenericModal';
 
 const drawerWidth = 240;
 
@@ -39,6 +47,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
+      position: 'relative',
     },
     width: drawerWidth,
     flexShrink: 0,
@@ -49,16 +58,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SideBarListItem({ text, children, to }) {
-  return (
-    <NavLink to={to}>
-      <ListItem button key={text}>
-        <ListItemIcon>{children}</ListItemIcon>
-        <ListItemText primary={text} />
-      </ListItem>
-    </NavLink>
-  );
-}
+const SideBarListItem = ({ text, children, to }) => (
+  <NavLink to={to}>
+    <ListItem button key={text}>
+      <ListItemIcon>{children}</ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItem>
+  </NavLink>
+);
 
 SideBarListItem.propTypes = {
   text: PropTypes.string.isRequired,
@@ -70,8 +77,30 @@ SideBarListItem.defaultProps = {
   to: '/#',
 };
 
+const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 50vh;
+`;
+
+const Copyright = () => (
+  <Typography
+    style={{ marginTop: '10px', wordBreak: 'break-word' }}
+    variant='body2'
+    color='textSecondary'>
+    {'Copyright © '}
+    <Link color='inherit' href='/'>
+      TauClubs
+    </Link>
+    {new Date().getFullYear()}
+  </Typography>
+);
+
 export default function SideBar() {
   const [clubsData, setClubsData] = useState([]);
+  const [contactModal, setShowContactModal] = useState(false);
+
   useEffect(() => {
     getClubs().then(mydata => setClubsData(mydata));
   }, []);
@@ -86,6 +115,7 @@ export default function SideBar() {
     <div>
       <Toolbar />
       <Divider />
+
       <List>
         {SideBardListItems.map(listItem => (
           <SideBarListItem
@@ -110,6 +140,33 @@ export default function SideBar() {
           </SideBarListItem>
         ))}
       </List>
+      <Box display='flex' flexDirection='column'>
+        <Box
+          backgroundColor='background.default'
+          m={2}
+          p={2}
+          position='absolute'
+          bottom='0'>
+          <Typography align='center' variant='body2'>
+            For more information
+          </Typography>
+          <Box display='flex' justifyContent='center' pt={2}>
+            <GenericModal
+              showModal={contactModal}
+              setShowModal={setShowContactModal}
+              Container={ModalContainer}
+              hideButtons
+            />
+            <Button
+              color='primary'
+              variant='contained'
+              onClick={() => setShowContactModal(true)}>
+              Contact Us
+            </Button>
+          </Box>
+          <Copyright />
+        </Box>
+      </Box>
     </div>
   );
 
