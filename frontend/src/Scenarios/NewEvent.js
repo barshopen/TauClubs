@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   buttons: {
+    marginTop: theme.spacing(1),
     display: 'flex',
     justifyContent: 'space-around',
   },

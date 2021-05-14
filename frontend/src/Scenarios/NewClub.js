@@ -9,6 +9,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme => ({
@@ -71,10 +73,14 @@ function NewClubContent({ setOpen }) {
 }
 
 function ClickableTrigger({ onClick }) {
+  const text = 'Add New Club';
   return (
-    <IconButton color='inherit' onClick={onClick}>
-      <AddIcon />
-    </IconButton>
+    <ListItem button key={text} onClick={onClick}>
+      <ListItemIcon>
+        <AddIcon />
+      </ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItem>
   );
 }
 

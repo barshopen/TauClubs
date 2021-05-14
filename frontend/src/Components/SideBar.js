@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import AddIcon from '@material-ui/icons/Add';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Hidden from '@material-ui/core/Hidden';
 import { useRecoilState } from 'recoil';
@@ -25,18 +24,13 @@ const drawerWidth = 240;
 const SideBardListItems = [
   {
     text: 'Feed',
-    route: '/#',
+    route: '/',
     icon: LibraryBooksIcon,
   },
   {
     text: 'Explore',
     route: '/explore',
     icon: ExploreIcon,
-  },
-  {
-    text: 'Add New Club',
-    route: '/#',
-    icon: AddIcon,
   },
 ];
 

@@ -233,7 +233,6 @@ export default function NavBar() {
         <NavLink to='/profile'>My account</NavLink>
       </MenuItem>
       <MenuItem onClick={logOut}>Logout</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </StyledMenu>
   );
 
@@ -270,7 +269,6 @@ export default function NavBar() {
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-
         <p>Profile</p>
       </MenuItem>
     </StyledMenu>
