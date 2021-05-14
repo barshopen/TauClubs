@@ -14,5 +14,7 @@ cd frontend
 yarn install
 
 printf "${HUSKY} ${GREEN} Updating python environment from Pipefile...\n ${NC} "
-pipenv install
+if ! pipenv install; then
+    printf "${HUSKY} ${RED} Failed to automatically update pipenv. please do it manually ${NC} "
+fi 
 
