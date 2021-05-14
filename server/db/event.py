@@ -3,7 +3,7 @@ import datetime
 from bson.objectid import ObjectId
 
 
-def createEvent(title, duration, club, description=" ", profileImage=None):
+def createEvent(title, duration, club, description=None, profileImage=None):
     now = datetime.datetime.utcnow()
     newEvent = Event(
         title=title,
@@ -39,14 +39,14 @@ def updateEventContent(
     return event
 
 
-def addAttending(event, users):
-    event.membersAttending.extend(users)
+def addAttending(event, user):
+    event.membersAttending.append(user)
     updateEvent(event)
     return event
 
 
-def addIntrested(event, users):
-    event.intrested.extend(users)
+def addIntrested(event, user):
+    event.intrested.append(user)
     updateEvent(event)
     return event
 

@@ -8,6 +8,14 @@ from server.db.message import (
     updateMessageTitle,
     delete_message,
 )
+from server.db.event import (
+    createEvent,
+    updateEventContent,
+    addAttending,
+    addIntrested,
+    getEvent,
+    deleteEvent,
+)
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id, get_userauth_user_by_id
 
@@ -50,6 +58,23 @@ def clubs(club_id):
         return get_club(id=club_id)
     clubs_params = request.args.to_dict()
     return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+
+
+@login_required
+@db_app.route("/create_club", methods=["POST"])
+def club_creation():
+    email = get_userauth_email_by_id(current_user.get_id())
+    result = establish_club(
+        email,
+        name=request.form.get("name"),
+        contact_mail=request.form.get("contact_mail"),
+        description=request.form.get("description"),
+        short_description=request.form.get("short_description"),
+    )
+    if not result:
+        return "Failed", 400
+
+    return result, 200
 
 
 @db_app.route("/clubs/<club_id>/messages/<message_id>")
@@ -111,21 +136,71 @@ def message_delete(club_id, message_id):
     delete_message(message_id)
 
 
+##########
+@db_app.route("/clubs/<club_id>/events/<event_id>")
+def events(club_id, event_id):  # after delete update name
+    if not club_id:
+        return "Failed", 400
+    return getEvent(id=event_id)
+
+
 @login_required
-@db_app.route("/create_club", methods=["POST"])
-def club_creation():
-    email = get_userauth_email_by_id(current_user.get_id())
-    result = establish_club(
-        email,
-        name=request.form.get("name"),
-        contact_mail=request.form.get("contact_mail"),
+@db_app.route("/clubs/<club_id>/create_event")
+def event_creation(club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if user.role != "A":
+        return "Restrict", 400
+    result = createEvent(
+        title=request.form.get("title"),
+        duration=request.form.get("duration"),
+        club=get_club(club_id),
         description=request.form.get("description"),
-        short_description=request.form.get("short_description"),
+        profileImage=request.form.get("profileImage"),  # check if not filed
     )
     if not result:
         return "Failed", 400
 
     return result, 200
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<event_id>/update")
+def event_update(club_id, event_id):
+    if not club_id:
+        return "Failed", 400
+
+    user = get_userauth_user_by_id(current_user.get_id())
+    if user.role != "A":
+        return "Restrict", 400
+
+    event = getEvent(event_id)
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    duration = request.form.get("duration")
+    profileImage = request.form.get("profileImage")
+    event = updateEventContent(
+        event,
+        title=title,
+        description=description,
+        duration=duration,
+        profileImage=profileImage,
+    )
+    return event
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<event_id>/delete")
+def event_delete(club_id, event_id):
+    if not club_id:
+        return "Failed", 400
+
+    user = get_userauth_user_by_id(current_user.get_id())
+
+    if user.role != "A":
+        return "Restrict", 400
+    deleteEvent(event_id)
+    ####
 
 
 @db_app.route("/messagesv2")
