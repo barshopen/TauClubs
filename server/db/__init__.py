@@ -53,14 +53,16 @@ def clubs(club_id):
     return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
 
 
-@db_app.route("/clubs/<club_id>/messages/<message_title>")
-def messagesV2(message_id):
+@db_app.route("/clubs/<club_id>/messages/<message_id>")
+def messagesNew(club_id, message_id):  # after delete update name
+    if not club_id:
+        return "Failed", 400
     return get_message(id=message_id)
 
 
 @login_required
 @db_app.route("/clubs/<club_id>/create_message")
-def message_creation():
+def message_creation(club_id):
     user = get_userauth_user_by_id(current_user.get_id())
     if user.role != "A":
         return "Restrict", 400
@@ -68,7 +70,7 @@ def message_creation():
         title=request.form.get("title"),
         content=request.form.get("content"),
         likes=[],
-        club=None,  ##problem can extract from path?
+        club=get_club(club_id),
         user=user,
     )
     if not result:
@@ -79,13 +81,15 @@ def message_creation():
 
 @login_required
 @db_app.route("/clubs/<club_id>/messages/<message_title>/update")
-def message_update():
+def message_update(club_id, message_id):
+    if not club_id:
+        return "Failed", 400
+
     user = get_userauth_user_by_id(current_user.get_id())
     if user.role != "A":
         return "Restrict", 400
 
-    # can extract club id and message id from path?
-    # message=Message.objects(id=message_id)
+    message = get_message(id=message_id)
     title = request.form.get("title")
     content = request.form.get("content")
     if title:
@@ -97,10 +101,12 @@ def message_update():
 
 @login_required
 @db_app.route("/clubs/<club_id>/messages/<message_title>/delete")
-def message_delete():
-    # can extract club id and message id from path?
-    # message=Message.objects(id=message_id)
+def message_delete(club_id, message_id):
+    if not club_id:
+        return "Failed", 400
+
     user = get_userauth_user_by_id(current_user.get_id())
+
     if user.role != "A":
         return "Restrict", 400
     delete_message(message_id)
