@@ -8,7 +8,6 @@ import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
-import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';

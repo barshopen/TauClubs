@@ -25,6 +25,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
 import { logOut, getClubs } from '../Shared/api';
+import SignInModal from '../Scenarios/SignInModal';
 
 import {
   showSideBarMobileState,
@@ -217,6 +218,34 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const SignInModalClickableTrigger = ({ onClick }) => (
+    <>
+      <div className={classes.sectionDesktop}>
+        <Button
+          color='primary'
+          variant='contained'
+          size='small'
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}>
+          Sign In
+        </Button>
+      </div>
+      <div className={classes.sectionMobile}>
+        <LogInIcon
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}
+        />
+      </div>
+    </>
+  );
+  SignInModalClickableTrigger.propTypes = {
+    onClick: PropTypes.func.isRequired,
+  };
+
   const renderMenu = (
     <StyledMenu
       anchorEl={anchorEl}
@@ -400,20 +429,7 @@ export default function NavBar() {
               </div>
             </>
           ) : (
-            <NavLink to='/signin'>
-              <div className={classes.sectionDesktop}>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  size='small'
-                  onClick={() => setAnchorEl(false)}>
-                  Sign in
-                </Button>
-              </div>
-              <div className={classes.sectionMobile}>
-                <LogInIcon onClick={() => setAnchorEl(false)} />
-              </div>
-            </NavLink>
+            <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
           )}
         </Toolbar>
       </AppBar>

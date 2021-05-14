@@ -1,16 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme => ({
@@ -19,58 +16,59 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+    },
+  },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  buttons: {
+    marginTop: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
 }));
-const Header = styled.h2`
-  text-align: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const Input = styled.input`
-  height: ${props => props.height};
-  font-family: 'Roboto';
-  height: '30px';
-`;
-const TextArea = styled.textarea`
-  height: '120px';
-  font-family: 'Roboto';
-`;
-
-const Line = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
 
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
-  return (
-    <Container className={classes.paper} maxWidth='md'>
-      <Header>Create New Club</Header>
 
-      <Input type='text' placeholder='Club Name' />
-      <TextArea placeholder='Description of club' style={{ height: '140px' }} />
-      <Input type='text' placeholder='Contact Email' />
-      <Line>
+  return (
+    <form className={classes.root} noValidate autoComplete='off'>
+      <Typography variant='h6' className={classes.header}>
+        Create New Club
+      </Typography>
+
+      <TextField id='club-name' label='Club Name' variant='outlined' />
+      <TextField id='contact-email' label='Contact Email' variant='outlined' />
+      <TextField
+        id='club-description'
+        label='Club Description'
+        multiline
+        variant='outlined'
+        rows={4}
+        rowsMax={10}
+      />
+      <div className={classes.buttons}>
         <Button
           variant='contained'
           color='primary'
           onClick={() => setOpen(false)}>
-          Create
+          Publish
         </Button>
-        <Button variant='contained' onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-      </Line>
-    </Container>
+      </div>
+    </form>
   );
 }
+NewClubContent.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+};
 
 function ClickableTrigger({ onClick }) {
   const text = 'Add New Club';

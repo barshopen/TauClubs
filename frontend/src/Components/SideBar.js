@@ -8,7 +8,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -18,13 +17,11 @@ import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
 import NewClubModal from '../Scenarios/NewClubModal';
 import ContactUsModal from '../Scenarios/ContactUsModal';
-import GenericModal from './Generic/GenericModal';
 
 const drawerWidth = 240;
 

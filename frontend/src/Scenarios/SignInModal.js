@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { useSetRecoilState } from 'recoil';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -21,21 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ClickableTrigger({ onClick }) {
-  return (
-    <IconButton color='inherit' onClick={onClick}>
-      <Tooltip title='Sign In' arrow>
-        <ExitToAppIcon />
-      </Tooltip>
-    </IconButton>
-  );
-}
-
-ClickableTrigger.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
-
-function SignIn() {
+export default function SignInModal({ ClickableTrigger }) {
   const classes = useStyles();
   const setUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
@@ -91,4 +75,11 @@ function SignIn() {
     />
   );
 }
-export default SignIn;
+
+SignInModal.propTypes = {
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]).isRequired,
+};
