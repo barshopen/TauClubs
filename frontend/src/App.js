@@ -14,8 +14,6 @@ import NewClub from './Scenarios/NewClub';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';
 
-import GeneralProfile from './Components/Accounts/GeneralProfile';
-
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -56,7 +54,6 @@ const App = () => {
                 <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
                 <Route path='/club' component={ClubSection} />
-                <Route path='/profile' component={GeneralProfile} />
               </Switch>
             </div>
           </Container>
