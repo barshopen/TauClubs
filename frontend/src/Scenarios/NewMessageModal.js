@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -25,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewEventContent({ setOpen }) {
+function NewMessageContnet({ setOpen }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -40,19 +39,19 @@ function NewEventContent({ setOpen }) {
   return (
     <form className={classes.root} noValidate autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
-        Create New Event
+        Publish New Message
       </Typography>
 
       <TextField
-        id='event-title'
-        label='Event title'
+        id='message-title'
+        label='Message Title'
         variant='outlined'
         value={title}
         onChange={handleChangeTitle}
       />
       <TextField
-        id='event-description'
-        label='Event Description'
+        id='message-content'
+        label='Message Content'
         multiline
         variant='outlined'
         value={content}
@@ -60,17 +59,7 @@ function NewEventContent({ setOpen }) {
         rows={4}
         rowsMax={10}
       />
-      <TextField
-        id='datetime-picker'
-        label='Start Date'
-        type='datetime-local'
-        variant='outlined'
-        defaultValue='2017-05-24T10:30'
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+
       <div className={classes.buttons}>
         <Button
           variant='contained'
@@ -86,27 +75,23 @@ function NewEventContent({ setOpen }) {
   );
 }
 
-NewEventContent.propTypes = {
+NewMessageContnet.propTypes = {
   setOpen: PropTypes.func.isRequired,
 };
 
-export default function NewEvent({ ClickableTrigger }) {
+export default function NewMessageModal({ ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={NewEventContent}
+      Content={NewMessageContnet}
     />
   );
 }
 
-NewEvent.propTypes = {
+NewMessageModal.propTypes = {
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
-  ]),
-};
-
-NewEvent.defaultProps = {
-  ClickableTrigger: styled.div``, // a default container
+  ]).isRequired,
 };

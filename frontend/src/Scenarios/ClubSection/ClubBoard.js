@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
-import NewMessage from '../NewMessage';
-import NewEvent from '../NewEvent';
+import NewMessageModal from '../NewMessageModal';
+import NewEventModal from '../NewEventModal';
 import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
 
 const Container = styled.div`
@@ -66,14 +66,14 @@ function ClubBoard() {
           <Messages data={messagesData} />
         </div>
         <IconContainer show={isAdmin}>
-          <NewMessage ClickableTrigger={IconBu} />
+          <NewMessageModal ClickableTrigger={IconBu} />
         </IconContainer>
 
         <div>
           <UpcomingEvents data={upcomingEvents} />
         </div>
         <IconContainer show={isAdmin}>
-          <NewEvent ClickableTrigger={IconBu} />
+          <NewEventModal ClickableTrigger={IconBu} />
         </IconContainer>
       </Container>
     </>
