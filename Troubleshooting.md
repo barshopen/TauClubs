@@ -23,3 +23,4 @@ There might be plenty of reasons. Here are some possible solutions:
 1. Dependencies aren't properly installed. run: 
 2. You might have problem with access to mongodb. You need to ad you ip address to our mongo's firewall whitelist.
 3. 
+pymongo.errors.ConfigurationError: The DNS operation timed out after 21.200684547424316 seconds
