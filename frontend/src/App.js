@@ -10,7 +10,6 @@ import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
 import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
-import NewClub from './Scenarios/NewClub';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';
 

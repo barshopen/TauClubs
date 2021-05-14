@@ -88,7 +88,7 @@ ClickableTrigger.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export default function NewClub() {
+export default function NewClubModal() {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
