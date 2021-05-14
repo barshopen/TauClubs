@@ -32,5 +32,3 @@ export const getFeedData = (currentTab = 'all') => {
     getMessages(),
   ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
 };
-
-export const logOut = () => getApi('/auth/logout');

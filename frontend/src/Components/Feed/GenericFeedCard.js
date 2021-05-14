@@ -49,7 +49,7 @@ function FeedCard({
   clubName,
   location,
   startTime,
-  // duration,
+  duration,
 }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -124,7 +124,7 @@ FeedCard.propTypes = {
   description: PropTypes.string,
   location: PropTypes.string,
   startTime: PropTypes.string,
-  // duration: PropTypes.string,
+  duration: PropTypes.string,
 };
 
 FeedCard.defaultProps = {
@@ -135,7 +135,7 @@ FeedCard.defaultProps = {
   description: '',
   location: '',
   startTime: '',
-  // duration: '',
+  duration: '',
 };
 
 export default FeedCard;

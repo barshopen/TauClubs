@@ -6,12 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
 
-const Form = ({
-  handleSubmit,
-  setUserData,
-  setApprovedUsingPrivateData,
-  approvedUsingPrivateData,
-}) => {
+const Form = ({ handleSubmit, setUserData }) => {
   const handleChange = event =>
     setUserData(data => ({ ...data, [event.target.name]: event.target.value }));
 
@@ -55,14 +50,35 @@ const Form = ({
           />
         </Grid>
 
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id='city'
+            name='city'
+            label='City'
+            fullWidth
+            autoComplete='shipping address-level2'
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id='state'
+            name='state'
+            label='State/Province/Region'
+            fullWidth
+            onChange={handleChange}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox
                 color='secondary'
                 name='checkbox'
-                checked={approvedUsingPrivateData}
-                onChange={() => setApprovedUsingPrivateData(prev => !prev)}
+                value='yes'
+                onChange={handleChange}
               />
             }
             label='I confirm using my private data'
@@ -78,6 +94,4 @@ export default Form;
 Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   setUserData: PropTypes.func.isRequired,
-  setApprovedUsingPrivateData: PropTypes.func.isRequired,
-  approvedUsingPrivateData: PropTypes.bool.isRequired,
 };
