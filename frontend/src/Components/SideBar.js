@@ -53,7 +53,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
-      position: 'relative',
     },
     width: drawerWidth,
     flexShrink: 0,
@@ -61,6 +60,19 @@ const useStyles = makeStyles(theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+  },
+  footer: {
+    position: 'relative',
+    height: '40%',
+    [theme.breakpoints.up('md')]: {
+      height: '60%',
+    },
+  },
+  copyRight: {
+    marginTop: '10px',
+    wordBreak: 'break-word',
+    fontSize: '12px',
+    [theme.breakpoints.up('md')]: { fontSize: '14px' },
   },
 }));
 
@@ -90,11 +102,8 @@ const ModalContainer = styled.div`
   height: 50vh;
 `;
 
-const Copyright = () => (
-  <Typography
-    style={{ marginTop: '10px', wordBreak: 'break-word' }}
-    variant='body2'
-    color='textSecondary'>
+const Copyright = ({ className }) => (
+  <Typography className={className} variant='body2' color='textSecondary'>
     {'Copyright © '}
     <Link color='inherit' href='/'>
       TauClubs
@@ -102,6 +111,10 @@ const Copyright = () => (
     {new Date().getFullYear()}
   </Typography>
 );
+
+Copyright.propTypes = {
+  className: PropTypes.string.isRequired,
+};
 
 export default function SideBar() {
   const [clubsData, setClubsData] = useState([]);
@@ -145,13 +158,8 @@ export default function SideBar() {
           </SideBarListItem>
         ))}
       </List>
-      <Box display='flex' flexDirection='column'>
-        <Box
-          backgroundColor='background.default'
-          m={2}
-          p={2}
-          position='absolute'
-          bottom='0'>
+      <Box className={classes.footer}>
+        <Box m={2} p={2} position='absolute' bottom='0'>
           <Typography align='center' variant='body2'>
             For more information
           </Typography>
@@ -169,7 +177,7 @@ export default function SideBar() {
               Contact Us
             </Button>
           </Box>
-          <Copyright />
+          <Copyright className={classes.copyRight} />
         </Box>
       </Box>
     </div>
