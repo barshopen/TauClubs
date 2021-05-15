@@ -37,7 +37,7 @@ If you working on major changes, please try and devide your PR for few seperate 
 
 ### Python ###
 1. Install at least python 3.9.4. If you own a 64-bit machine please use the 64-bit Python for better performance.
-2. At the root dir, add a dir named .venv
+2. At the root dir, add a dir named `.venv`
 3. run `pip install pipenv`, when it's done run `pipenv install` (This should install all requirements)
 4. Run `pipenv --where`. This should output the root of your project dir, (if not, let us know so we could provide support)
 5. Restart your vscode.
