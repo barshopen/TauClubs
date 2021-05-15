@@ -1,4 +1,9 @@
-export default [
+import React from 'react';
+import { Box, Container } from '@material-ui/core';
+import UserListResults from '../components/customer/UserListResults';
+import UserListToolbar from '../components/customer/UserListToolbar';
+
+const users = [
   {
     id: 1,
     address: {
@@ -89,64 +94,19 @@ export default [
     phone: '858-602-3409',
     status: 'Pending',
   },
-  {
-    id: 7,
-    address: {
-      country: 'USA',
-      state: 'California',
-      city: 'Redondo Beach',
-      street: '2188  Armbrester Drive',
-    },
-    avatarUrl: '/static/images/avatars/avatar_7.png',
-    createdAt: 1554325200000,
-    email: 'ava.gregoraci@devias.io',
-    name: 'Ava Gregoraci',
-    phone: '415-907-2647',
-    status: 'Pending',
-  },
-  {
-    id: 8,
-    address: {
-      country: 'USA',
-      state: 'Nevada',
-      city: 'Las Vegas',
-      street: '1798  Hickory Ridge Drive',
-    },
-    avatarUrl: '/static/images/avatars/avatar_8.png',
-    createdAt: 1523048400000,
-    email: 'emilee.simchenko@devias.io',
-    name: 'Emilee Simchenko',
-    phone: '702-661-1654',
-    status: 'Pending',
-  },
-  {
-    id: 9,
-    address: {
-      country: 'USA',
-      state: 'Michigan',
-      city: 'Detroit',
-      street: '3934  Wildrose Lane',
-    },
-    avatarUrl: '/static/images/avatars/avatar_9.png',
-    createdAt: 1554702800000,
-    email: 'kwak.seong.min@devias.io',
-    name: 'Kwak Seong-Min',
-    phone: '313-812-8947',
-    status: 'Pending',
-  },
-  {
-    id: 10,
-    address: {
-      country: 'USA',
-      state: 'Utah',
-      city: 'Salt Lake City',
-      street: '368 Lamberts Branch Road',
-    },
-    avatarUrl: '/static/images/avatars/avatar_10.png',
-    createdAt: 1522702800000,
-    email: 'merrile.burgett@devias.io',
-    name: 'Merrile Burgett',
-    phone: '801-301-7894',
-    status: 'Member',
-  },
 ];
+
+const UsersList = () => (
+  <>
+    <Box backgroundColor='background.default' minHeight='100%' py={3}>
+      <Container maxWidth={false}>
+        <UserListToolbar />
+        <Box pt={3}>
+          <UserListResults users={users} />
+        </Box>
+      </Container>
+    </Box>
+  </>
+);
+
+export default UsersList;

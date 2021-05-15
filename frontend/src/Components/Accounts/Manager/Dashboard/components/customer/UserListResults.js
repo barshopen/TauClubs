@@ -7,6 +7,7 @@ import {
   Box,
   Card,
   Checkbox,
+  Chip,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +17,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-const CustomerListResults = ({ customers, ...rest }) => {
+const UserListResults = ({ users, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -25,7 +26,7 @@ const CustomerListResults = ({ customers, ...rest }) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map(customer => customer.id);
+      newSelectedCustomerIds = users.map(user => user.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -83,17 +84,6 @@ const CustomerListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color='primary'
-                    indeterminate={
-                      selectedCustomerIds.length > 0 &&
-                      selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>City</TableCell>
@@ -101,27 +91,21 @@ const CustomerListResults = ({ customers, ...rest }) => {
                 <TableCell>Registration date</TableCell>
                 <TableCell>Clubs</TableCell>
                 <TableCell>Status</TableCell>
+                <TableCell>Approve</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map(customer => (
+              {users.slice(0, limit).map(customer => (
                 <TableRow
                   hover
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}>
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={event => handleSelectOne(event, customer.id)}
-                      value='true'
-                    />
-                  </TableCell>
                   <TableCell>
                     <Box alignItems='center' display='flex'>
                       <Avatar
                         src={customer.avatarUrl}
                         style={{
-                          marginRight: '10px',
+                          marginRight: '20px',
                           width: '30px',
                           height: '30px',
                         }}>
@@ -139,7 +123,21 @@ const CustomerListResults = ({ customers, ...rest }) => {
                     {moment(customer.createdAt).format('DD/MM/YYYY')}
                   </TableCell>
                   <TableCell>{['chess']}</TableCell>
-                  <TableCell>{customer.status}</TableCell>
+                  <TableCell>
+                    <Chip
+                      color='primary'
+                      label={customer.status}
+                      size='small'
+                    />
+                  </TableCell>
+
+                  <TableCell padding='checkbox'>
+                    <Checkbox
+                      checked={customer.status === 'Member'}
+                      onChange={event => handleSelectOne(event, customer.id)}
+                      value='true'
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -148,7 +146,7 @@ const CustomerListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component='div'
-        count={customers.length}
+        count={users.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -159,8 +157,8 @@ const CustomerListResults = ({ customers, ...rest }) => {
   );
 };
 
-CustomerListResults.propTypes = {
-  customers: PropTypes.node.isRequired,
+UserListResults.propTypes = {
+  users: PropTypes.node.isRequired,
 };
 
-export default CustomerListResults;
+export default UserListResults;

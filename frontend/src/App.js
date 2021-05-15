@@ -5,13 +5,14 @@ import Container from '@material-ui/core/Container';
 import { useSetRecoilState } from 'recoil';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
-import SideBar from './Components/SideBar';
+import SideBar from './Components/GeneralSideBar/SideBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';
 import GeneralProfile from './Components/Accounts/GeneralProfile';
+import AppSideBar from './Components/GeneralSideBar/AppSideBar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +47,7 @@ const App = () => {
         <div className={classes.root}>
           <NavBar />
           <Container className={classes.container}>
-            <SideBar />
+            <AppSideBar />
             <div className={classes.content}>
               <Switch>
                 <Route path='/' exact component={Feed} />

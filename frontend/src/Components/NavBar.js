@@ -35,9 +35,6 @@ import {
 import SearchFor from '../assets/search-icon.png';
 
 const useStyles = makeStyles(theme => ({
-  grow: {
-    flexGrow: 1,
-  },
   appBar: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -100,10 +97,12 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
+      justifyContent: 'flex-end',
     },
   },
   sectionMobile: {
     display: 'flex',
+    justifyContent: 'flex-end',
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
@@ -389,10 +388,12 @@ export default function NavBar() {
               }}
             />
           </div>
-          <div className={classes.grow} />
 
           {user ? (
-            <>
+            <div style={{ flex: 'auto' }}>
+              {/* <div style={{ flex: 'auto' }}></div> */}
+              {/* <div style={{ position: 'absolute', right: '5px', top: '10px' }}></div> */}
+
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
                   title='Messages'
@@ -427,7 +428,7 @@ export default function NavBar() {
                   icon={<MoreVertIcon />}
                 />
               </div>
-            </>
+            </div>
           ) : (
             <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
           )}

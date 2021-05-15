@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Button,
@@ -8,14 +7,20 @@ import {
   InputAdornment,
   SvgIcon,
 } from '@material-ui/core';
-import { Search as SearchIcon } from '@material-ui/icons';
+import React from 'react';
+import { Search as SearchIcon } from 'react-feather';
 
-const ProductListToolbar = props => (
+const UserListToolbar = props => (
   <Box {...props}>
-    <Box style={{ mt: 3 }}>
+    <Box display='flex' justifyContent='flex-end'>
+      <Button color='primary' variant='contained'>
+        Add User
+      </Button>
+    </Box>
+    <Box mt={3}>
       <Card>
         <CardContent>
-          <Box style={{ maxWidth: 500 }}>
+          <Box maxWidth={500}>
             <TextField
               fullWidth
               InputProps={{
@@ -27,7 +32,7 @@ const ProductListToolbar = props => (
                   </InputAdornment>
                 ),
               }}
-              placeholder='Search Club'
+              placeholder='Search User'
               variant='outlined'
             />
           </Box>
@@ -37,4 +42,4 @@ const ProductListToolbar = props => (
   </Box>
 );
 
-export default ProductListToolbar;
+export default UserListToolbar;

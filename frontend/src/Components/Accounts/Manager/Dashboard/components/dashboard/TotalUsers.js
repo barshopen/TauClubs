@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Avatar,
   Box,
@@ -6,43 +8,47 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import React from 'react';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
-import { red } from '@material-ui/core/colors';
+import { green } from '@material-ui/core/colors';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
-const Budget = props => (
+const TotalUsers = props => (
   <Card style={{ height: '100%', position: 'relative' }} {...props}>
     <CardContent>
       <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
         <Grid item>
           <Typography color='textSecondary' gutterBottom variant='h6'>
-            BUDGET
+            TOTAL USERS
           </Typography>
           <Typography color='textPrimary' variant='h3'>
-            $24,000
+            1,600
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             style={{
-              backgroundColor: red[600],
+              backgroundColor: green[600],
+              position: 'absolute',
+              right: '15px',
             }}>
-            <MoneyIcon />
+            <PeopleIcon />
           </Avatar>
         </Grid>
       </Grid>
       <Box position='absolute' bottom='25px' display='flex' alignItems='center'>
-        <ArrowDownwardIcon style={{ color: red[900] }} />
+        <ArrowUpwardIcon style={{ color: green[900] }} />
         <Typography
+          variant='body2'
           style={{
-            color: red[900],
+            color: green[900],
             mr: 1,
-          }}
-          variant='body2'>
-          12%
+          }}>
+          16%
         </Typography>
-        <Typography color='textSecondary' variant='caption'>
+        <Typography
+          color='textSecondary'
+          variant='caption'
+          style={{ marginLeft: '10px' }}>
           Since last month
         </Typography>
       </Box>
@@ -50,4 +56,4 @@ const Budget = props => (
   </Card>
 );
 
-export default Budget;
+export default TotalUsers;

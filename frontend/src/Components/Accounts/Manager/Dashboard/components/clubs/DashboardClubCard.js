@@ -12,7 +12,10 @@ import {
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
-const ProductCard = ({ product, ...rest }) => (
+const DashboardClubCard = ({
+  club: { media, title, description, totalDownloads },
+  ...rest
+}) => (
   <Card
     style={{
       display: 'flex',
@@ -25,28 +28,37 @@ const ProductCard = ({ product, ...rest }) => (
         style={{
           display: 'flex',
           justifyContent: 'center',
+
           pb: 3,
         }}>
-        <Avatar alt='Product' src={product.media} variant='square' />
+        <Avatar
+          alt='club'
+          src={media}
+          variant='square'
+          style={{ marginBottom: '10px' }}
+        />
       </Box>
       <Typography align='center' color='textPrimary' gutterBottom variant='h4'>
-        {product.title}
+        {title}
       </Typography>
       <Typography align='center' color='textPrimary' variant='body1'>
-        {product.description}
+        {description}
       </Typography>
     </CardContent>
     <Box style={{ flexGrow: 1 }} />
     <Divider />
     <Box style={{ p: 2 }}>
-      <Grid container spacing={2} style={{ justifyContent: 'space-between' }}>
+      <Grid
+        container
+        spacing={2}
+        style={{ justifyContent: 'space-between', padding: '10px' }}>
         <Grid
           item
           style={{
             alignItems: 'center',
             display: 'flex',
           }}>
-          <AccessTimeIcon color='action' />
+          <AccessTimeIcon color='action' style={{ marginRight: '5px' }} />
           <Typography
             color='textSecondary'
             display='inline'
@@ -61,13 +73,13 @@ const ProductCard = ({ product, ...rest }) => (
             alignItems: 'center',
             display: 'flex',
           }}>
-          <GetAppIcon color='action' />
+          <GetAppIcon color='action' style={{ marginRight: '5px' }} />
           <Typography
             color='textSecondary'
             display='inline'
             style={{ pl: 1 }}
             variant='body2'>
-            {product.totalDownloads} Downloads
+            {totalDownloads} Users
           </Typography>
         </Grid>
       </Grid>
@@ -75,8 +87,9 @@ const ProductCard = ({ product, ...rest }) => (
   </Card>
 );
 
-ProductCard.propTypes = {
+DashboardClubCard.propTypes = {
   product: PropTypes.node.isRequired,
+  club: PropTypes.node.isRequired,
 };
 
-export default ProductCard;
+export default DashboardClubCard;

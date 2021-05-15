@@ -2,7 +2,6 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -10,10 +9,8 @@ import {
   useTheme,
   colors,
 } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-const Sales = props => {
+const ClubsActivity = props => {
   const theme = useTheme();
 
   const data = {
@@ -21,19 +18,19 @@ const Sales = props => {
       {
         backgroundColor: colors.indigo[500],
         data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This year',
+        label: 'This week',
       },
       {
         backgroundColor: colors.grey[200],
         data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year',
+        label: 'Last week',
       },
     ],
     labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug'],
   };
 
   const options = {
-    animation: false,
+    animation: true,
     cornerRadius: 20,
     layout: { padding: 0 },
     legend: { display: false },
@@ -42,16 +39,16 @@ const Sales = props => {
     scales: {
       xAxes: [
         {
-          barThickness: 12,
-          maxBarThickness: 10,
+          barThickness: 7,
+          maxBarThickness: 7,
           barPercentage: 0.5,
           categoryPercentage: 0.5,
           ticks: {
             fontColor: theme.palette.text.secondary,
           },
           gridLines: {
-            display: false,
-            drawBorder: false,
+            display: true,
+            drawBorder: true,
           },
         },
       ],
@@ -66,7 +63,7 @@ const Sales = props => {
             borderDash: [2],
             borderDashOffset: [2],
             color: theme.palette.divider,
-            drawBorder: false,
+            drawBorder: true,
             zeroLineBorderDash: [2],
             zeroLineBorderDashOffset: [2],
             zeroLineColor: theme.palette.divider,
@@ -89,14 +86,7 @@ const Sales = props => {
 
   return (
     <Card {...props}>
-      <CardHeader
-        action={
-          <Button endIcon={<ArrowDropDownIcon />} size='small' variant='text'>
-            Last 7 days
-          </Button>
-        }
-        title='Latest Sales'
-      />
+      <CardHeader title='Last Clubs Active' />
       <Divider />
       <CardContent>
         <Box
@@ -107,18 +97,8 @@ const Sales = props => {
           <Bar data={data} options={options} />
         </Box>
       </CardContent>
-      <Divider />
-      <Box display='flex' justifyContent='flex-end' p={2}>
-        <Button
-          color='primary'
-          endIcon={<ArrowRightIcon />}
-          size='small'
-          variant='text'>
-          Overview
-        </Button>
-      </Box>
     </Card>
   );
 };
 
-export default Sales;
+export default ClubsActivity;

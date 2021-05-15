@@ -15,7 +15,10 @@ import {
 const SettingsNotifications = props => (
   <form {...props}>
     <Card>
-      <CardHeader subheader='Manage the notifications' title='Notifications' />
+      <CardHeader
+        subheader='Manage the notifications to the users'
+        title='Notifications'
+      />
       <Divider />
       <CardContent>
         <Grid container spacing={6} wrap='wrap'>
@@ -29,20 +32,15 @@ const SettingsNotifications = props => (
             }}
             xs={12}>
             <Typography color='textPrimary' gutterBottom variant='h6'>
-              Notifications
+              Events
             </Typography>
             <FormControlLabel
               control={<Checkbox color='primary' defaultChecked />}
+              label='Web Push Notifications'
+            />
+            <FormControlLabel
+              control={<Checkbox color='primary' />}
               label='Email'
-            />
-            <FormControlLabel
-              control={<Checkbox color='primary' defaultChecked />}
-              label='Push Notifications'
-            />
-            <FormControlLabel control={<Checkbox />} label='Text Messages' />
-            <FormControlLabel
-              control={<Checkbox color='primary' defaultChecked />}
-              label='Phone calls'
             />
           </Grid>
           <Grid
@@ -59,15 +57,11 @@ const SettingsNotifications = props => (
             </Typography>
             <FormControlLabel
               control={<Checkbox color='primary' defaultChecked />}
+              label='Web Push Notifications'
+            />
+            <FormControlLabel
+              control={<Checkbox color='primary' />}
               label='Email'
-            />
-            <FormControlLabel
-              control={<Checkbox />}
-              label='Push Notifications'
-            />
-            <FormControlLabel
-              control={<Checkbox color='primary' defaultChecked />}
-              label='Phone calls'
             />
           </Grid>
         </Grid>

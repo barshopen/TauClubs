@@ -1,17 +1,7 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  Hidden,
-  List,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Divider, List, Typography } from '@material-ui/core';
 import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
@@ -19,11 +9,12 @@ import {
   User as UserIcon,
   Users as UsersIcon,
 } from 'react-feather';
-import NavItem from './NavItem';
+import NavItem from '../Accounts/Manager/Dashboard/components/NavItem';
+import SideBar from './SideBar';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
+
   name: 'Katarina Smith',
 };
 
@@ -34,12 +25,12 @@ const items = [
     title: 'Dashboard',
   },
   {
-    href: '/profile/customers',
+    href: '/profile/users',
     icon: UsersIcon,
     title: 'Users',
   },
   {
-    href: '/profile/products',
+    href: '/profile/clubs',
     icon: ShoppingBagIcon,
     title: 'Clubs',
   },
@@ -55,17 +46,8 @@ const items = [
   },
 ];
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    position: 'absolute',
-    top: '65px',
-    width: '250px',
-  },
-}));
-
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
-  const classes = useStyles();
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -74,7 +56,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box display='flex' flexDirection='column' height='100%'>
+    <Box>
       <Box alignItems='center' display='flex' flexDirection='column' p={2}>
         <Avatar
           component={RouterLink}
@@ -83,14 +65,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
             cursor: 'pointer',
             width: 64,
             height: 64,
+            marginBottom: '10px',
           }}
           to='/profile/account'
         />
         <Typography color='textPrimary' variant='h5'>
           {user.name}
-        </Typography>
-        <Typography color='textSecondary' variant='body2'>
-          {user.jobTitle}
         </Typography>
       </Box>
       <Divider />
@@ -109,23 +89,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     </Box>
   );
 
-  return (
-    <>
-      <Hidden mdDown>
-        <Drawer
-          classes={{
-            paper: classes.paper,
-          }}
-          anchor='left'
-          open
-          variant='persistent'
-          className={classes.drawer}>
-          {content}
-        </Drawer>
-      </Hidden>
-    </>
-  );
+  return <SideBar content={content} dashboardContext />;
 };
+
 DashboardSidebar.propTypes = {
   onMobileClose: PropTypes.func,
   openMobile: PropTypes.bool,

@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { NavLink } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -81,21 +82,20 @@ const orders = [
   },
 ];
 
-const LatestOrders = props => (
+const LatestJoinedUsers = props => (
   <Card {...props}>
-    <CardHeader title='Latest Orders' />
+    <CardHeader title='Latest Applications' />
     <Divider />
     <PerfectScrollbar>
       <Box minWidth={800}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Order Ref</TableCell>
-              <TableCell>Customer</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell sortDirection='desc'>
                 <Tooltip enterDelay={300} title='Sort'>
                   <TableSortLabel active direction='desc'>
-                    Date
+                    Application Date
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -105,7 +105,6 @@ const LatestOrders = props => (
           <TableBody>
             {orders.map(order => (
               <TableRow hover key={order.id}>
-                <TableCell>{order.ref}</TableCell>
                 <TableCell>{order.customer.name}</TableCell>
                 <TableCell>
                   {moment(order.createdAt).format('DD/MM/YYYY')}
@@ -120,15 +119,17 @@ const LatestOrders = props => (
       </Box>
     </PerfectScrollbar>
     <Box display='flex' justifyContent='flex-end' p={2}>
-      <Button
-        color='primary'
-        endIcon={<ArrowRightIcon />}
-        size='small'
-        variant='text'>
-        View all
-      </Button>
+      <NavLink to='/profile/users'>
+        <Button
+          color='primary'
+          endIcon={<ArrowRightIcon />}
+          size='small'
+          variant='text'>
+          View all
+        </Button>
+      </NavLink>
     </Box>
   </Card>
 );
 
-export default LatestOrders;
+export default LatestJoinedUsers;
