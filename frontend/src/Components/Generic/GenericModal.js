@@ -1,114 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Container from '@material-ui/core/Container';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
-import styled from 'styled-components';
+import { X as XIcon } from 'react-feather';
+import { Box } from '@material-ui/core';
 
-const primary = '#3898EC';
-const secondary = '#87898a';
-
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+const useStyles = makeStyles(theme => ({
+  container: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(2, 4, 3),
+    borderRadius: '5px',
   },
-  content: {
-    left: '30%',
-    right: '30%',
-    top: '20%',
-    bottom: '20%',
-    height: '56vh',
-    position: 'absolute',
-    border: '2px solid black',
-    background: '#fff',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    padding: '20px',
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-};
+}));
 
-const Button = styled.button`
-  border: solid ${({ color }) => color} 1px;
-  text-align: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  width: 75px;
-  height: 40px;
-  background-color: ${({ color }) => color};
-  margin: 30px 80px;
-`;
+export default function GenericModal({ ClickableTrigger, Content, maxWidth }) {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
-const Line = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-function GenericModal({
-  showModal,
-  setShowModal,
-  hideButtons,
-  Title,
-  Container,
-  children,
-}) {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Modal
-      ariaHideApp={false}
-      isOpen={showModal}
-      onRequestClose={() => setShowModal(false)}
-      style={customStyles}
-      contentLabel={Title}>
-      <Container>
-        {children}
+    <div>
+      <ClickableTrigger onClick={handleOpen} />
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}>
+        <Fade in={open}>
+          <Container className={classes.container} maxWidth={maxWidth}>
+            <Box
+              style={{
+                display: 'flex',
+                flexDirection: 'row-reverse',
+              }}>
+              <XIcon
+                onClick={handleClose}
+                style={{ marginBottom: '10px', cursor: 'pointer' }}
+              />
+            </Box>
 
-        {!hideButtons && (
-          <Line>
-            <Button
-              color={primary}
-              type='button'
-              label='Create'
-              onClick={() => setShowModal(false)}>
-              Publish
-            </Button>
-            <Button
-              color={secondary}
-              type='button'
-              label='Cancel'
-              onClick={() => setShowModal(false)}>
-              Cancel
-            </Button>
-          </Line>
-        )}
-      </Container>
-    </Modal>
+            <Content open={open} setOpen={setOpen} />
+          </Container>
+        </Fade>
+      </Modal>
+    </div>
   );
 }
 
 GenericModal.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  hideButtons: PropTypes.bool,
-  setShowModal: PropTypes.func.isRequired,
-  Title: PropTypes.string,
-  children: PropTypes.node,
-  Container: PropTypes.oneOfType([
+  Content: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
-  ]),
+  ]).isRequired,
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]).isRequired,
+  maxWidth: PropTypes.oneOf(['lg', 'md', 'sm', 'xl', 'xs', false]),
 };
 
 GenericModal.defaultProps = {
-  Title: '',
-  hideButtons: false,
-  children: React.createElement('div'),
-  Container: styled.div``, // a default container
+  maxWidth: 'sm',
 };
-
-export default GenericModal;

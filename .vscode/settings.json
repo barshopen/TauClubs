@@ -3,21 +3,23 @@
     "files.eol": "\n",
     
     // enforce working with env
-    "python.pythonPath": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+    "python.pythonPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
     "python.terminal.activateEnvironment": true,
     
     // autopep8 related settings
     "python.formatting.provider": "black",
-
+    "python.formatting.autopep8Args": [
+        "--aggressive", "--aggressive"
+    ],
     "[python]":{
         "editor.formatOnSave":true,
     },
     
     // pylint related settings
-    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.linting.flake8Args": ["--config=${workspaceFolder}/.flake8"],
-    "python.linting.flake8Path": "flake8",
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy","--rcfile=${workspaceFolder}\\.pylintrc"],
+    "python.linting.pylintPath": "pylint",
     
     // frontend related settings for eslint and prettier
     "prettier.singleQuote": true,

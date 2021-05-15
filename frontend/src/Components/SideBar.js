@@ -6,45 +6,35 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import {
-  Avatar,
-  Box,
-  Button,
-  Hidden,
-  Typography,
-  Link,
-} from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Hidden from '@material-ui/core/Hidden';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import AddIcon from '@material-ui/icons/Add';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import styled from 'styled-components';
-
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
-import GenericModal from './Generic/GenericModal';
+import NewClubModal from '../Scenarios/NewClubModal';
+import ContactUsModal from '../Scenarios/ContactUsModal';
 
 const drawerWidth = 240;
 
 const SideBardListItems = [
   {
     text: 'Feed',
-    route: '/#',
+    route: '/',
     icon: LibraryBooksIcon,
   },
   {
     text: 'Explore',
     route: '/explore',
     icon: ExploreIcon,
-  },
-  {
-    text: 'Add New Club',
-    route: '/#',
-    icon: AddIcon,
   },
 ];
 
@@ -83,13 +73,6 @@ SideBarListItem.defaultProps = {
   to: '/#',
 };
 
-const ModalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50vh;
-`;
-
 const Copyright = () => (
   <Typography
     style={{ marginTop: '10px', wordBreak: 'break-word' }}
@@ -105,7 +88,6 @@ const Copyright = () => (
 
 export default function SideBar() {
   const [clubsData, setClubsData] = useState([]);
-  const [contactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     getClubs().then(mydata => setClubsData(mydata));
@@ -131,6 +113,7 @@ export default function SideBar() {
             <listItem.icon />
           </SideBarListItem>
         ))}
+        <NewClubModal />
       </List>
       <Divider />
       <List
@@ -156,18 +139,7 @@ export default function SideBar() {
             For more information
           </Typography>
           <Box display='flex' justifyContent='center' pt={2}>
-            <GenericModal
-              showModal={contactModal}
-              setShowModal={setShowContactModal}
-              Container={ModalContainer}
-              hideButtons
-            />
-            <Button
-              color='primary'
-              variant='contained'
-              onClick={() => setShowContactModal(true)}>
-              Contact Us
-            </Button>
+            <ContactUsModal />
           </Box>
           <Copyright />
         </Box>

@@ -8,13 +8,9 @@ import NavBar from './Components/NavBar';
 import SideBar from './Components/SideBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
-import Signin from './Scenarios/SignIn';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
-import NewClub from './Scenarios/NewClub';
 import { whoami } from './Shared/api';
 import { currentUser } from './Shared/atoms';
-
-import GeneralProfile from './Components/Accounts/GeneralProfile';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 
 const App = () => {
   const classes = useStyles();
-  const [showNewClubModal, setShowNewClubModal] = useState(false);
   const setUser = useSetRecoilState(currentUser);
 
   useEffect(() => {
@@ -46,10 +41,6 @@ const App = () => {
 
   return (
     <>
-      <NewClub
-        showModal={showNewClubModal}
-        setClubModal={setShowNewClubModal}
-      />
       <Router>
         <div className={classes.root}>
           <NavBar />
@@ -60,9 +51,7 @@ const App = () => {
                 <Route path='/' exact component={Feed} />
                 <Route path='/explore' component={ExploreClubs} />
                 <Route path='/contact' component={Contact} />
-                <Route path='/signin' component={Signin} />
                 <Route path='/club' component={ClubSection} />
-                <Route path='/profile' component={GeneralProfile} />
               </Switch>
             </div>
           </Container>
