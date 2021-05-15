@@ -97,16 +97,14 @@ const users = [
 ];
 
 const UsersList = () => (
-  <>
-    <Box backgroundColor='background.default' minHeight='100%' py={3}>
-      <Container maxWidth={false}>
-        <UserListToolbar />
-        <Box pt={3}>
-          <UserListResults users={users} />
-        </Box>
-      </Container>
-    </Box>
-  </>
+  <Box backgroundColor='background.default' minHeight='100%' py={3}>
+    <Container style={{ padding: '0' }} maxWidth={false}>
+      <UserListToolbar />
+      <Box pt={3}>
+        <UserListResults users={users} />
+      </Box>
+    </Container>
+  </Box>
 );
 
 export default UsersList;
