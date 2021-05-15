@@ -1,33 +1,38 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import {
-  AppBar,
-  Toolbar,
-  Tooltip,
-  IconButton,
-  Typography,
-  InputBase,
-  Badge,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
-
-import {
-  ExitToApp as ExitToAppIcon,
-  Home as HomeIcon,
-  Search as SearchIcon,
-  AccountCircle,
-  Mail as MailIcon,
-  Notifications as NotificationsIcon,
-  MoreVert as MoreIcon,
-  Menu as MenuIcon,
-} from '@material-ui/icons';
+import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
-import { getClubs } from '../api';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import Hidden from '@material-ui/core/Hidden';
+import { Button } from '@material-ui/core';
+import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
+import { logOut, getClubs } from '../Shared/api';
+import SignInModal from '../Scenarios/SignInModal';
+
+import {
+  showSideBarMobileState,
+  currentUser,
+  selectedOptionState,
+} from '../Shared/atoms';
+import SearchFor from '../assets/search-icon.png';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -38,6 +43,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'black',
     font: 'Roboto',
+    zIndex: theme.zIndex.drawer + 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -80,7 +86,6 @@ const useStyles = makeStyles(theme => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -124,15 +129,27 @@ const StyledMenu = withStyles({
   />
 ));
 
-const MenuItemWithToolTip = ({ title, content, icon, ...rest }) => (
-  <IconButton color='inherit' {...rest}>
-    <Tooltip title={title} arrow>
-      <Badge badgeContent={content} color='secondary'>
-        {icon}
-      </Badge>
-    </Tooltip>
-  </IconButton>
-);
+function MenuItemWithToolTip({ title, content, icon, ...rest }) {
+  return (
+    <IconButton color='inherit' {...rest}>
+      <Tooltip title={title} arrow>
+        <Badge badgeContent={content} color='secondary'>
+          {icon}
+        </Badge>
+      </Tooltip>
+    </IconButton>
+  );
+}
+
+MenuItemWithToolTip.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.number,
+  icon: PropTypes.element.isRequired,
+};
+
+MenuItemWithToolTip.defaultProps = {
+  content: null,
+};
 
 const fetchClubs = async () => {
   const res = await getClubs();
@@ -140,21 +157,53 @@ const fetchClubs = async () => {
 };
 
 export default function NavBar() {
+  // hooks
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
+    showSideBarMobileState
+  );
+  const { data, isLoading } = useQuery('allClubs', fetchClubs);
+  const [user, setUser] = useRecoilState(currentUser);
+  const [search, setSearch] = useState('');
+  const userMessages = useMemo(() => 4, []);
+  const userNotifications = useMemo(() => 7, []);
 
+  const handleLogout = () => {
+    logOut();
+    setUser(false);
+  };
+
+  // primitive consts
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const menuId = 'primary-search-account-menu';
+  const mobileMenuId = 'primary-search-account-menu-mobile';
 
-  const { data } = useQuery('allClubs', fetchClubs);
+  // funcs
+  const showSideBarMobileToggleHandler = () => {
+    setShowSideBarMobile(!showSideBarMobile);
+  };
+  const setSelectedOptionState = useSetRecoilState(selectedOptionState);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
-  // get data about the current user
-  const isUser = true; // for now - later, if signed in will be true.
+  const defaultFilterOptions = useMemo(() => {
+    if (data) {
+      return search
+        ? data.slice(0, 20).concat([
+            {
+              name: `Search for ${search}`,
+              icon: SearchFor,
+            },
+          ])
+        : data;
+    }
+    return [];
+  }, [data, search]);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -169,10 +218,34 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const userMessages = useMemo(() => 4, []);
-  const userNotifications = useMemo(() => 7, []);
+  const SignInModalClickableTrigger = ({ onClick }) => (
+    <>
+      <div className={classes.sectionDesktop}>
+        <Button
+          color='primary'
+          variant='contained'
+          size='small'
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}>
+          Sign In
+        </Button>
+      </div>
+      <div className={classes.sectionMobile}>
+        <LogInIcon
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}
+        />
+      </div>
+    </>
+  );
+  SignInModalClickableTrigger.propTypes = {
+    onClick: PropTypes.func.isRequired,
+  };
 
-  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <StyledMenu
       anchorEl={anchorEl}
@@ -180,12 +253,13 @@ export default function NavBar() {
       keepMounted
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to='/profile'>My account</NavLink>
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>Log out</MenuItem>
     </StyledMenu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <StyledMenu
       anchorEl={mobileMoreAnchorEl}
@@ -217,32 +291,55 @@ export default function NavBar() {
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
           title='Profile'
-          icon={<AccountCircle />}
+          icon={<AccountCircleIcon />}
         />
         <p>Profile</p>
+      </MenuItem>
+
+      <MenuItem>
+        <MenuItemWithToolTip
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          onClick={handleLogout}
+          icon={<LogOutIcon />}
+        />
+        <p>Log out</p>
       </MenuItem>
     </StyledMenu>
   );
 
+  const searchImageStyle = {
+    marginRight: '10px',
+    width: '12%',
+    height: '12%',
+  };
+
   return (
     <div className={classes.grow}>
-      <AppBar className={classes.appBar} position='static'>
+      <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            edge='start'
-            className={classes.menuButton}
-            color='inherit'
-            aria-label='menu'>
-            <MenuIcon />
-          </IconButton>
+          <Hidden smUp implementation='css'>
+            <IconButton
+              edge='start'
+              className={classes.menuButton}
+              color='inherit'
+              aria-label='menu'
+              onClick={showSideBarMobileToggleHandler}>
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
           <MenuItemWithToolTip
             edge='start'
             className={classes.menuButton}
             aria-label='open drawer'
             title='Home'
             icon={
-              <NavLink to='/'>
-                <HomeIcon fontSize='small' />
+              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
+                <HomeIcon
+                  onClick={() => setSelectedOptionState('')}
+                  fontSize='small'
+                />
               </NavLink>
             }
           />
@@ -257,10 +354,27 @@ export default function NavBar() {
 
             <Autocomplete
               id='combo-box-demo'
-              options={data}
-              getOptionLabel={option => option.name}
+              size='small'
+              autoComplete
+              autoHighlight
+              autoSelect
+              onChange={(event, newValue) => {
+                setSelectedOptionState(newValue?.id || '');
+              }}
+              options={isLoading ? ['loading...'] : defaultFilterOptions}
+              getOptionLabel={option => option.render ?? option.name}
+              renderOption={option => (
+                <>
+                  {option.icon && (
+                    <img src={option.icon} alt='' style={searchImageStyle} />
+                  )}
+                  {option.name}
+                </>
+              )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+                setSearch(rest.inputProps.value);
+
                 return (
                   <InputBase
                     {...params.InputProps}
@@ -277,7 +391,7 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
 
-          {isUser ? (
+          {user ? (
             <>
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
@@ -299,7 +413,7 @@ export default function NavBar() {
                   aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
                   title='Profile'
-                  icon={<AccountCircle />}
+                  icon={<AccountCircleIcon />}
                 />
               </div>
 
@@ -310,24 +424,17 @@ export default function NavBar() {
                   aria-haspopup='true'
                   onClick={handleMobileMenuOpen}
                   title='Show More'
-                  icon={<MoreIcon />}
+                  icon={<MoreVertIcon />}
                 />
               </div>
             </>
           ) : (
-            <MenuItemWithToolTip
-              title='Sign In'
-              icon={
-                <NavLink to='/signin'>
-                  <ExitToAppIcon />
-                </NavLink>
-              }
-            />
+            <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
           )}
         </Toolbar>
       </AppBar>
-      {isUser && renderMobileMenu}
-      {isUser && renderMenu}
+      {user && renderMobileMenu}
+      {user && renderMenu}
     </div>
   );
 }

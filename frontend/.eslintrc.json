@@ -18,19 +18,17 @@
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "indent": ["error", 2],
+    "indent": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "warn",
     "jsx-quotes": ["error", "prefer-single"],
     "prettier/prettier": "error",
-    "react/jsx-indent": [
-      "error",
-      2,
-      { "checkAttributes": true, "indentLogicalExpressions": true }
-    ],
+    "react/jsx-indent": "off",
     "linebreak-style": ["error", "unix"],
     "no-unused-vars": "warn",
     "no-use-before-define": "off",
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-param-reassign": "off",
+    "prefer-const": "warn"
   }
 }
