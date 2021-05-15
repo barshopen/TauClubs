@@ -6,8 +6,9 @@ from mongoengine import (
     URLField,
     DateTimeField,
     ListField,
-    IntField,
     LazyReferenceField,
+    FloatField,
+    IntField,
 )
 import json
 
@@ -76,31 +77,24 @@ class ClubMembership(Document):
 
 
 class Event(Document):
-    # id = UUIDField()  # consider ObjectIdField
     title = StringField(max_length=200, required=True)
-    description = StringField(required=True)
-    creationTime = DateTimeField(
-        required=True, validation=None
-    )  # check validation define
-    duration = IntField(required=True, validation=None)  # check validation
-    lastUpdateTime = DateTimeField(
-        required=True, validation=None
-    )  # not sure if relevant
-    membersAttending = ListField(LazyReferenceField("User"), required=True)
-    creatingClub = StringField(
-        max_length=200, required=True
-    )  # check how to define LazyReferenceField
+    description = StringField()
+    creationTime = DateTimeField(required=True, validation=None)
+    duration = FloatField(required=True, validation=None)  # check validation
+    lastUpdateTime = DateTimeField(required=True, validation=None)
+    membersAttending = ListField(LazyReferenceField("User"))
+    creatingClub = ReferenceField("Club", max_length=200, required=True)
     profileImage = URLField()
-    intrested = ListField(
-        LazyReferenceField("User"), required=True
-    )  # check if can define the list
+    intrested = ListField(LazyReferenceField("User"))
+    meta = {"collection": "events"}
 
 
 class Tag(Document):
     # validation hex of 6 nibbles(#ABCDEF)
     name = StringField(max_length=200, required=True)
-    color = StringField(required=True)
+    color = IntField(required=True)
     clubsWithTag = ListField(required=True)  # list of clubs
+    meta = {"collection": "tags"}
 
 
 class Message(Document):
@@ -113,8 +107,11 @@ class Message(Document):
     lastUpdateTime = DateTimeField(
         required=True, validation=None
     )  # not sure if relevant
-    likes = ListField(required=True)  # check if can define the list
-    creatingClub = StringField(max_length=200, required=True)  # check how to deine
-    creatingUser = StringField(
-        max_length=200, required=True
+    likes = ListField()  # check if can define the list
+    creatingClub = ReferenceField(
+        "Club", max_length=200, required=True
+    )  # check how to deine
+    creatingUser = ReferenceField(
+        "User", max_length=200, required=True
     )  # check how to define LazyReferenceField
+    meta = {"collection": "messages"}

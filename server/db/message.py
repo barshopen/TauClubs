@@ -1,37 +1,37 @@
 import datetime
-from server.db.models import Message
-from bson.objectid import ObjectId
+from server.db.models import Message, ClubMembership
 
 
-def createMessage(title, content, likes, club, user):
-    if user.role != "A":
-        return None  # error only admin can create message
+def currentTime():
     now = datetime.datetime.utcnow()
+    return now
+
+
+def createMessage(title, content, club, user):
+    try:
+        membership = ClubMembership.objects(club=club, member=user).first()
+        if membership.role != "A":
+            return None  # error only admin can create message
+    except:
+        return None  # invalid membership
     message = Message(
         title=title,
         content=content,
-        likes=likes,
         creatingClub=club,
         creatingUser=user,
-        creationTime=now,
-        lastUpdateTime=now,
+        creationTime=currentTime(),
+        lastUpdateTime=currentTime(),
     )
+    message.save()
     return message
 
 
-def updateTime(message: Message):
-    now = datetime.datetime.utcnow()
-    message.lastUpdateTime = now
-
-
 def updateMessageContent(message: Message, content):
-    message.content = content
-    updateTime(message)
+    message.update(content=content, lastUpdateTime=currentTime())
 
 
 def updateMessageTitle(message: Message, title):
-    message.title = title
-    updateTime(message)
+    message.update(title=title, lastUpdateTime=currentTime())
 
 
 def get_message_by_club(club):
@@ -39,9 +39,15 @@ def get_message_by_club(club):
 
 
 def get_message(id: str):
-    return Message.objects.get(_id=ObjectId(id)).to_json()
+    return Message.objects.get(id=id).to_json()
 
 
 def delete_message(id: str):
-    message = Message.objects.get(_id=ObjectId(id))
+    message = Message.objects.get(id=id)
     message.delete()
+
+
+def add_likes(message_id, user_id):
+    message = Message.objects.get(id=message_id)
+    message.likes.append(user_id)
+    message.update(likes=message.likes, lastUpdateTime=currentTime())

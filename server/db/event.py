@@ -3,25 +3,23 @@ import datetime
 from bson.objectid import ObjectId
 
 
-def createEvent(title, duration, club, description=None, profileImage=None):
+def currentTime():
     now = datetime.datetime.utcnow()
+    return now
+
+
+def createEvent(title, duration, club, description=None, profileImage=None):
     newEvent = Event(
         title=title,
         description=description,
-        creationTime=now,
+        creationTime=currentTime(),
         duration=duration,
-        lastUpdateTime=now,
-        membersAttending=[],
+        lastUpdateTime=currentTime(),
         creatingClub=club,
         profileImage=profileImage,
-        intrested=[],
     )
+    newEvent.save()
     return newEvent
-
-
-def updateEvent(event):
-    now = datetime.datetime.utcnow()
-    event.lastUpdateTime = now
 
 
 def updateEventContent(
@@ -32,29 +30,39 @@ def updateEventContent(
     if description:
         event.description
     if duration:
-        event.duration
+        event.duration = duration
     if profileImage:
-        event.profileImage
-    updateEvent(event)
+        event.profileImage = profileImage
+    now = currentTime()
+    event.update(
+        lastUpdateTime=now,
+        title=event.title,
+        description=event.duration,
+        profileImage=event.profileImage,
+    )
     return event
 
 
 def addAttending(event, user):
     event.membersAttending.append(user)
-    updateEvent(event)
+    now = currentTime()
+    event.update(
+        lastUpdateTime=now, membersAttending=event.membersAttending.append(user)
+    )
     return event
 
 
 def addIntrested(event, user):
     event.intrested.append(user)
-    updateEvent(event)
+    now = currentTime()
+    event.update(lastUpdateTime=now, intrested=event.intrested.append(user))
     return event
 
 
 def deleteEvent(event_id):
-    event = Event.objects.get(_id=ObjectId(event_id))
+    event = Event.objects.get(id=event_id)
     event.delete()
 
 
 def getEvent(event_id):
-    return Event.objects.get(_id=ObjectId(event_id)).to_json()
+    return Event.objects.get(id=event_id).to_json()
