@@ -19,13 +19,3 @@ if [ $changes -ne 0 ]; then
             esac
  
 fi
-
-
-printf "${HUSKY} ${GREEN} making sure ${REQUIREMENTS} is updated ...\n ${NC} "
-
-$PIP freeze > $REQUIREMENTS
-changes=`git diff --name-only HEAD $REQUIREMENTS | wc -l`;
-
-if [ $changes -ne 0 ]; then
-    autoCommitChanges ${REQUIREMENTS} UPDATE
-fi

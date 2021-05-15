@@ -4,7 +4,7 @@ import ManagerAccount from './Manager/ManagerAccount';
 
 const GeneralProfile = () => {
   // need to come from backend
-  const isManger = true;
+  const isManger = false;
   return isManger ? <ManagerAccount /> : <UserAccount />;
 };
 export default GeneralProfile;

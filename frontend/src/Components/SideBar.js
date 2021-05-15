@@ -6,45 +6,35 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import {
-  Avatar,
-  Box,
-  Button,
-  Hidden,
-  Typography,
-  Link,
-} from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Hidden from '@material-ui/core/Hidden';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import AddIcon from '@material-ui/icons/Add';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import styled from 'styled-components';
-
 import { useRecoilState } from 'recoil';
 import { getClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
-import GenericModal from './Generic/GenericModal';
+import NewClubModal from '../Scenarios/NewClubModal';
+import ContactUsModal from '../Scenarios/ContactUsModal';
 
 const drawerWidth = 240;
 
 const SideBardListItems = [
   {
     text: 'Feed',
-    route: '/#',
+    route: '/',
     icon: LibraryBooksIcon,
   },
   {
     text: 'Explore',
     route: '/explore',
     icon: ExploreIcon,
-  },
-  {
-    text: 'Add New Club',
-    route: '/#',
-    icon: AddIcon,
   },
 ];
 
@@ -61,6 +51,19 @@ const useStyles = makeStyles(theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+  },
+  footer: {
+    position: 'relative',
+    height: '40%',
+    [theme.breakpoints.up('md')]: {
+      height: '60%',
+    },
+  },
+  copyRight: {
+    marginTop: '10px',
+    wordBreak: 'break-word',
+    fontSize: '12px',
+    [theme.breakpoints.up('md')]: { fontSize: '14px' },
   },
 }));
 
@@ -83,18 +86,8 @@ SideBarListItem.defaultProps = {
   to: '/#',
 };
 
-const ModalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50vh;
-`;
-
-const Copyright = () => (
-  <Typography
-    style={{ marginTop: '10px', wordBreak: 'break-word' }}
-    variant='body2'
-    color='textSecondary'>
+const Copyright = ({ className }) => (
+  <Typography className={className} variant='body2' color='textSecondary'>
     {'Copyright © '}
     <Link color='inherit' href='/'>
       TauClubs
@@ -103,9 +96,12 @@ const Copyright = () => (
   </Typography>
 );
 
+Copyright.propTypes = {
+  className: PropTypes.string.isRequired,
+};
+
 export default function SideBar() {
   const [clubsData, setClubsData] = useState([]);
-  const [contactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     getClubs().then(mydata => setClubsData(mydata));
@@ -131,6 +127,7 @@ export default function SideBar() {
             <listItem.icon />
           </SideBarListItem>
         ))}
+        <NewClubModal />
       </List>
       <Divider />
       <List
@@ -145,31 +142,15 @@ export default function SideBar() {
           </SideBarListItem>
         ))}
       </List>
-      <Box display='flex' flexDirection='column'>
-        <Box
-          backgroundColor='background.default'
-          m={2}
-          p={2}
-          position='absolute'
-          bottom='0'>
+      <Box className={classes.footer}>
+        <Box m={2} p={2} position='absolute' bottom='0'>
           <Typography align='center' variant='body2'>
             For more information
           </Typography>
           <Box display='flex' justifyContent='center' pt={2}>
-            <GenericModal
-              showModal={contactModal}
-              setShowModal={setShowContactModal}
-              Container={ModalContainer}
-              hideButtons
-            />
-            <Button
-              color='primary'
-              variant='contained'
-              onClick={() => setShowContactModal(true)}>
-              Contact Us
-            </Button>
+            <ContactUsModal />
           </Box>
-          <Copyright />
+          <Copyright className={classes.copyRight} />
         </Box>
       </Box>
     </div>

@@ -4,32 +4,28 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from 'react-query';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import {
-  Button,
-  Hidden,
-  Typography,
-  AppBar,
-  Toolbar,
-  Tooltip,
-  InputBase,
-  IconButton,
-  Badge,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
+import Hidden from '@material-ui/core/Hidden';
+import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
-
-import {
-  Menu as MenuIcon,
-  Home as HomeIcon,
-  Search as SearchIcon,
-  AccountCircle as AccountCircleIcon,
-  Mail as MailIcon,
-  Notifications as NotificationsIcon,
-  MoreVert as MoreVertIcon,
-} from '@material-ui/icons';
 import { logOut, getClubs } from '../Shared/api';
+import SignInModal from '../Scenarios/SignInModal';
 
 import {
   showSideBarMobileState,
@@ -222,6 +218,34 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const SignInModalClickableTrigger = ({ onClick }) => (
+    <>
+      <div className={classes.sectionDesktop}>
+        <Button
+          color='primary'
+          variant='contained'
+          size='small'
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}>
+          Sign In
+        </Button>
+      </div>
+      <div className={classes.sectionMobile}>
+        <LogInIcon
+          onClick={() => {
+            setAnchorEl(false);
+            onClick();
+          }}
+        />
+      </div>
+    </>
+  );
+  SignInModalClickableTrigger.propTypes = {
+    onClick: PropTypes.func.isRequired,
+  };
+
   const renderMenu = (
     <StyledMenu
       anchorEl={anchorEl}
@@ -405,20 +429,7 @@ export default function NavBar() {
               </div>
             </>
           ) : (
-            <NavLink to='/signin'>
-              <div className={classes.sectionDesktop}>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  size='small'
-                  onClick={() => setAnchorEl(false)}>
-                  Sign in
-                </Button>
-              </div>
-              <div className={classes.sectionMobile}>
-                <LogInIcon onClick={() => setAnchorEl(false)} />
-              </div>
-            </NavLink>
+            <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
           )}
         </Toolbar>
       </AppBar>
