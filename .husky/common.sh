@@ -1,6 +1,7 @@
 SHOULDNT_CHANGE='package.json yarn.lock'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+REQUIREMENTS=requirements.txt
 
 NC='\033[0m' # No Color
 HUSKY='[HUSKY] '
