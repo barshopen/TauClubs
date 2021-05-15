@@ -16,6 +16,8 @@ from server.db.event import (
     getEvent,
     deleteEvent,
 )
+from server.db.tag import get_club_with_tag, addTagToClub, delete_tag_to_club
+from server.db.models import validatePermession
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id, get_userauth_user_by_id
 
@@ -87,19 +89,15 @@ def messagesNew(club_id, message_id):  # after delete update name
 @login_required
 @db_app.route("/clubs/<club_id>/create_message")
 def message_creation(club_id):
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
-    if user.role != "A":
-        return "Restrict", 400
     result = createMessage(
         title=request.form.get("title"),
         content=request.form.get("content"),
-        likes=[],
         club=get_club(club_id),
         user=user,
     )
-    if not result:
-        return "Failed", 400
-
     return result, 200
 
 
@@ -109,10 +107,8 @@ def message_update(club_id, message_id):
     if not club_id:
         return "Failed", 400
 
-    user = get_userauth_user_by_id(current_user.get_id())
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
-
     message = get_message(id=message_id)
     title = request.form.get("title")
     content = request.form.get("content")
@@ -129,10 +125,9 @@ def message_delete(club_id, message_id):
     if not club_id:
         return "Failed", 400
 
-    user = get_userauth_user_by_id(current_user.get_id())
-
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
+
     delete_message(message_id)
 
 
@@ -146,9 +141,9 @@ def events(club_id, event_id):  # after delete update name
 @login_required
 @db_app.route("/clubs/<club_id>/create_event")
 def event_creation(club_id):
-    user = get_userauth_user_by_id(current_user.get_id())
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
+
     result = createEvent(
         title=request.form.get("title"),
         duration=request.form.get("duration"),
@@ -168,8 +163,7 @@ def event_update(club_id, event_id):
     if not club_id:
         return "Failed", 400
 
-    user = get_userauth_user_by_id(current_user.get_id())
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
 
     event = getEvent(event_id)
@@ -194,9 +188,7 @@ def event_delete(club_id, event_id):
     if not club_id:
         return "Failed", 400
 
-    user = get_userauth_user_by_id(current_user.get_id())
-
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
     deleteEvent(event_id)
 
@@ -209,7 +201,7 @@ def event_attending(club_id, event_id):
 
     user = get_userauth_user_by_id(current_user.get_id())
 
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
     event = getEvent(event_id)
     addAttending(event, user)
@@ -223,7 +215,7 @@ def event_interesting(club_id, event_id):
 
     user = get_userauth_user_by_id(current_user.get_id())
 
-    if user.role != "A":
+    if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
     event = getEvent(event_id)
     addIntrested(event, user)

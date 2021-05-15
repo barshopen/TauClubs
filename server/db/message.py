@@ -1,5 +1,5 @@
 import datetime
-from server.db.models import Message, ClubMembership
+from server.db.models import Message
 
 
 def currentTime():
@@ -8,12 +8,6 @@ def currentTime():
 
 
 def createMessage(title, content, club, user):
-    try:
-        membership = ClubMembership.objects(club=club, member=user).first()
-        if membership.role != "A":
-            return None  # error only admin can create message
-    except:
-        return None  # invalid membership
     message = Message(
         title=title,
         content=content,

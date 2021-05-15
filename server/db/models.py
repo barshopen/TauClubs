@@ -115,3 +115,15 @@ class Message(Document):
         "User", max_length=200, required=True
     )  # check how to define LazyReferenceField
     meta = {"collection": "messages"}
+
+
+def validatePermession(user_id, club_id):
+    try:
+        club = Club.objects.get(id=club_id)
+        user = User.objects.get(id=user_id)
+        membership = ClubMembership.objects(club=club, member=user).first()
+        if membership.role != "A":
+            return False  # error only admin can create message
+        return True
+    except:
+        return False  # invalid membership
