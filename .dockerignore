@@ -1,13 +1,17 @@
-**/.env/*
-**/.git/*
-**/.husky/*
-**/.pytest_cache/*
-**/.vscode/*
-**/frontend/*
-**/node_modules/*
+.env/
+**/.git/
+**/.husky/
+**/.pytest_cache/
+**/.vscode/
+**/frontend/
+**/node_modules/
 **/.gitignore
 **/.pylintrc
-Readme.md
+
+**/Dockerfile
+**/Readme.md
+**/.gitignore
+
 server/__pycache__/*
 server/.env_example
 
