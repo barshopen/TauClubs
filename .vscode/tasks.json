@@ -19,8 +19,18 @@
 			},
 			"dependsOn":["Build dockerfile"],
 			"dockerRun": {
-				"image": "tauclubs"
-			}
+				"image": "tauclubs:latest",
+				"remove": true,
+				"ports": [
+					{
+						"containerPort": 443,
+						"hostPort": 3000,
+						"protocol": "tcp"
+					}
+				]
+			},
+			
+			
 		},
 		{
 			"label": "Front build",
