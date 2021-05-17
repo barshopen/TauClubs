@@ -45,7 +45,7 @@ def filter_by_id(data, data_id):
 
 
 @db_app.route("/clubs", defaults={"club_id": ""})
-@db_app.route("/clubs/<club_id>")
+@db_app.route("/clubs/<club_id>", methods=["POST"])
 def clubs(club_id):
     """
     example queries:

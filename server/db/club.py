@@ -7,7 +7,7 @@ from .clubmembership import createAdminMembership
 
 
 def create_club(
-    name: str,
+    club_name: str,
     contact_mail: str,
     description: str = "",
     short_description: str = "",
@@ -16,7 +16,7 @@ def create_club(
     now = datetime.datetime.utcnow()
     club = Club(
         contactMail=contact_mail,
-        name=name,
+        name=club_name,
         description=description,
         shortDescription=short_description,
         tags=tags,
@@ -34,7 +34,6 @@ def establish_club(
     short_description: str = "",
     tags=None,
 ):
-
     newclub = create_club(name, contact_mail, description, short_description, tags)
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
@@ -47,7 +46,7 @@ def get_clubs(name: str, tag: str):
         list(
             map(
                 lambda club: club.to_dict(),
-                Club.objects.filter(name_Q & tags_Q),
+                Club.objects.filter(name_Q | tags_Q),
             )
         )
     )

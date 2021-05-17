@@ -1,12 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { useSetRecoilState } from 'recoil';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { currentUser } from '../Shared/atoms';
 import GenericModal from '../Components/Generic/GenericModal';
+
+const REACT_APP_GOOGLE_CLIENT_ID =
+  '18740809626-1et94g7dbvpmr4ajbc289d6p4rq35i7k.apps.googleusercontent.com';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInModal({ ClickableTrigger }) {
+function ModalContent() {
   const classes = useStyles();
   const setUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
@@ -50,23 +53,23 @@ export default function SignInModal({ ClickableTrigger }) {
     setLoginError(true);
   }
 
-  function ModalContent() {
-    return (
-      <div className={classes.root}>
-        <Typography variant='h5'>Login to TauClubs</Typography>
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          buttonText='Log in with Google'
-          onSuccess={loginSuccess}
-          onFailure={loginFailure}
-          cookiePolicy='single_host_origin'
-          redirectUri='postmessage'
-          scope='openid'
-        />
-      </div>
-    );
-  }
+  return (
+    <div className={classes.root}>
+      <Typography variant='h5'>Login to TauClubs</Typography>
+      <GoogleLogin
+        clientId={REACT_APP_GOOGLE_CLIENT_ID}
+        buttonText='Log in with Google'
+        onSuccess={loginSuccess}
+        onFailure={loginFailure}
+        cookiePolicy='single_host_origin'
+        redirectUri='postmessage'
+        scope='openid'
+      />
+    </div>
+  );
+}
 
+export default function SignInModal({ ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}

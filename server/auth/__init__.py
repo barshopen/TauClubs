@@ -8,7 +8,7 @@ from flask_login import (
     login_user,
     logout_user,
 )
-
+from mongoengine.errors import DoesNotExist
 from server.auth.userauth import UserAuth, create_user_auth
 from server.auth import google_token
 
@@ -48,7 +48,7 @@ def sendUserData():
 
     try:
         user = UserAuth.objects.get(email=users_email)
-    except Exception:
+    except DoesNotExist:
         user = create_user_auth(
             user_info["given_name"],
             user_info["family_name"],
@@ -56,6 +56,9 @@ def sendUserData():
             user_info["picture"],
         )
         user.save()
+    except Exception as e:
+        print(type(e).__name__, e)
+        return "Could not complete request", 400
 
     login_user(user, remember=True)
 
