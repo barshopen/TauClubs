@@ -18,7 +18,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState } from 'recoil';
-import { getClubs } from '../Shared/api';
+import { getMyClubs } from '../Shared/api';
 import { showSideBarMobileState } from '../Shared/atoms';
 import NewClubModal from '../Scenarios/NewClubModal';
 import ContactUsModal from '../Scenarios/ContactUsModal';
@@ -103,7 +103,7 @@ export default function SideBar() {
   const [clubsData, setClubsData] = useState([]);
 
   useEffect(() => {
-    getClubs().then(mydata => setClubsData(mydata));
+    getMyClubs().then(mydata => setClubsData(mydata));
   }, []);
   const classes = useStyles();
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(

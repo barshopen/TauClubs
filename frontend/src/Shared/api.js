@@ -17,6 +17,9 @@ export const getClub = (clubId = null) => getDb('club', clubId);
 
 export const getClubs = (clubId = null) => getDb('clubs', clubId);
 
+export const getMyClubs = () => getDb('my_clubs');
+
+export const joinClub = id => getDb(`join_club/${id}`);
 export const getUpcomingEvents = (eventId = null) =>
   getDb('upcoming_events', eventId);
 

@@ -1,7 +1,6 @@
-# from bson.objectid import ObjectId
-# import json
-# from mongoengine.queryset.visitor import Q
 from .models import ClubMembership, User, Club
+from mongoengine.errors import DoesNotExist
+from flask import jsonify
 
 
 def createMembership(user, club, role):
@@ -17,8 +16,8 @@ def createMembership(user, club, role):
 
 def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
-    club = Club.object.get(pk=club_id)
-    return createRegularMembership(user, club)
+    club = Club.objects.get(pk=club_id)
+    return createRegularMembership(user, club).to_json()
 
 
 def createRegularMembership(user: User, club: Club):
@@ -36,7 +35,17 @@ def members_count(clubName: str):
 
 def get_user_clubs(user_email: str):
     user = User.objects.get(contactMail=user_email)
-    return ClubMembership.objects(member=user).to_json()
+    res = []
+    for doc in ClubMembership.objects(member=user):
+        try:
+            res.append(doc.club.to_dict())
+        except DoesNotExist as e:
+            print(doc, e)
+            # if for some odd reason it finds a non existing doc referenced in club,
+            # the current doc should be deleted because clubMembership has no meaning
+            # without the club.
+            doc.delete()
+    return jsonify(res)
 
 
 # def clubs_by_admin(member: User):

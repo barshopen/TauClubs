@@ -92,7 +92,7 @@ function ClubSection() {
         <Route
           path='/club/joinus/:clubId'
           clubName={clubData?.name}
-          component={() => <JoinUs clubName={clubData?.name} />}
+          component={() => <JoinUs clubName={clubData?.name} clubId={clubId} />}
         />
       </Switch>
     </SimpleContaConiner>

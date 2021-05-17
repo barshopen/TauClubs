@@ -1,7 +1,7 @@
 from os import path
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
-from server.db.clubmembership import get_user_clubs, createRegularMembership
+from server.db.clubmembership import get_user_clubs, join_club
 
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id
@@ -69,14 +69,14 @@ def club_by_id(club_id):
 
 @db_app.route("/my_clubs")
 @login_required
-def my_clubs(club_id):
+def my_clubs():
     cur_user_email = get_userauth_email_by_id(current_user.get_id())
     return get_user_clubs(cur_user_email)
 
 
-@db_app.route("/join_club")
+@db_app.route("/join_club/<club_id>")
 @login_required
-def join_club(club_id):
+def join_club_by_id(club_id):
     cur_user_email = get_userauth_email_by_id(current_user.get_id())
     return join_club(cur_user_email, club_id)
 
