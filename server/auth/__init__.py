@@ -29,6 +29,14 @@ def load_user(user_id):
     return UserAuth.objects(id=user_id).first()
 
 
+@auth_app.route("/whoami", methods=["GET"])
+@login_required
+def whoami():
+    if not current_user.is_authenticated:
+        return None
+    return getUserInfo(current_user.get_id())
+
+
 @auth_app.route("/login", methods=["POST"])
 def sendUserData():
     id_token = request.headers.get("id_token")
@@ -65,14 +73,6 @@ def sendUserData():
     login_user(user, remember=True)
 
     return whoami()
-
-
-@auth_app.route("/whoami", methods=["GET"])
-@login_required
-def whoami():
-    if not current_user.is_authenticated:
-        return None
-    return getUserInfo(current_user.get_id())
 
 
 @auth_app.route("/logout")
