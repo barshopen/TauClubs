@@ -34,8 +34,6 @@ const allUsersClubs = [
   },
 ];
 
-// const clubs = getAllClubsOfThisManager;
-
 const Clubs = () => {
   const PAGE_SIZE = 5;
   const totalPages = Math.floor(allUsersClubs.length / PAGE_SIZE) + 1;

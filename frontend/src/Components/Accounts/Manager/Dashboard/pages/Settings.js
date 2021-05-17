@@ -1,4 +1,3 @@
-// import { Helmet } from 'react-helmet';
 import React from 'react';
 import { Box, Container } from '@material-ui/core';
 import SettingsNotifications from '../components/settings/SettingsNotifications';

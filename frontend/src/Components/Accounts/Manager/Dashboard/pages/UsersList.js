@@ -3,6 +3,7 @@ import { Box, Container } from '@material-ui/core';
 import UserListResults from '../components/customer/UserListResults';
 import UserListToolbar from '../components/customer/UserListToolbar';
 
+// TODO remove when backend is connected
 const users = [
   {
     id: 1,

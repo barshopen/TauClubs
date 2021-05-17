@@ -391,9 +391,6 @@ export default function NavBar() {
 
           {user ? (
             <div style={{ flex: 'auto' }}>
-              {/* <div style={{ flex: 'auto' }}></div> */}
-              {/* <div style={{ position: 'absolute', right: '5px', top: '10px' }}></div> */}
-
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
                   title='Messages'
@@ -430,7 +427,9 @@ export default function NavBar() {
               </div>
             </div>
           ) : (
-            <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
+            <div style={{ flex: 'auto' }}>
+              <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
+            </div>
           )}
         </Toolbar>
       </AppBar>

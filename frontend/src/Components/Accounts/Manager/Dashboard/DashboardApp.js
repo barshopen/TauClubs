@@ -17,7 +17,6 @@ const DashboardApp = () => (
       <Switch>
         <Route path='/profile' exact component={Dashboard} />
         <Route path='/profile/users' component={UsersList} />/
-        <Route path='/profile/dashboard' component={Dashboard} />
         <Route path='/profile/clubs' component={Clubs} />
         <Route path='/profile/account' component={Account} />
         <Route path='/profile/settings' component={Settings} />

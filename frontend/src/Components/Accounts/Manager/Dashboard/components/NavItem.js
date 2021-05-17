@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React from 'react';
 import {
   NavLink as RouterLink,

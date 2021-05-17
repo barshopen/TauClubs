@@ -20,7 +20,7 @@ const user = {
 
 const items = [
   {
-    href: '/profile/dashboard',
+    href: '/profile',
     icon: BarChartIcon,
     title: 'Dashboard',
   },

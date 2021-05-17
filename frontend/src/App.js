@@ -5,7 +5,6 @@ import Container from '@material-ui/core/Container';
 import { useSetRecoilState } from 'recoil';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
-import SideBar from './Components/GeneralSideBar/SideBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
 import ClubSection from './Scenarios/ClubSection/ClubSection';

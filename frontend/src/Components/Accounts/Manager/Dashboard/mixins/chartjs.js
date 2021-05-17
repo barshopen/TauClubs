@@ -1,8 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Chart } from 'react-chartjs-2';
 
-// ChartJS extension rounded bar chart
-// https://codepen.io/jedtrow/full/ygRYgo
 function draw() {
   const { ctx } = this._chart;
   const vm = this._view;
@@ -17,8 +15,6 @@ function draw() {
   let borderSkipped;
   let radius;
 
-  // If radius is less than 0 or is large enough to cause drawing errors a max
-  //      radius is imposed. If cornerRadius is not defined set it to 0.
   let { cornerRadius } = this._chart.config.options;
   if (cornerRadius < 0) {
     cornerRadius = 0;
@@ -48,14 +44,11 @@ function draw() {
     borderSkipped = vm.borderSkipped || 'left';
   }
 
-  // Canvas doesn't allow us to stroke inside the width so we can
-  // adjust the sizes to fit if we're setting a stroke on the line
   if (borderWidth) {
-    // borderWidth shold be less than bar width and bar height.
     const barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
     borderWidth = borderWidth > barSize ? barSize : borderWidth;
     const halfStroke = borderWidth / 2;
-    // Adjust borderWidth when bar top position is near vm.base(zero).
+
     const borderLeft =
       left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
     const borderRight =
@@ -63,12 +56,12 @@ function draw() {
     const borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
     const borderBottom =
       bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
-    // not become a vertical line?
+
     if (borderLeft !== borderRight) {
       top = borderTop;
       bottom = borderBottom;
     }
-    // not become a horizontal line?
+
     if (borderTop !== borderBottom) {
       left = borderLeft;
       right = borderRight;
