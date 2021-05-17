@@ -38,6 +38,7 @@ def sendUserData():
         user_info = google_token.validate_id_token(
             id_token, os.getenv("GOOGLE_CLIENT_ID")
         )
+        print(user_info)
     except ValueError:
         return "Invalid ID token", 401
 
@@ -62,7 +63,14 @@ def sendUserData():
 
     login_user(user, remember=True)
 
-    return whoami()
+    dict = {
+        "id": current_user.get_id(),
+        "email": user_info["email"],
+        "given_name": user_info["given_name"],
+        "family_name": user_info["family_name"],
+        "picture": user_info["picture"],
+    }
+    return dict
 
 
 @auth_app.route("/whoami", methods=["GET"])
