@@ -47,7 +47,6 @@ function ModalContent() {
     }
 
     completeAuth();
-    console.log({ user });
   }
 
   function loginFailure(d) {
