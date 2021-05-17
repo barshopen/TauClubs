@@ -46,7 +46,6 @@ def sendUserData():
         user_info = google_token.validate_id_token(
             id_token, os.getenv("GOOGLE_CLIENT_ID")
         )
-        print(user_info)
     except ValueError:
         return "Invalid ID token", 401
 
