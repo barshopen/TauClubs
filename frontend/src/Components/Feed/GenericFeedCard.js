@@ -18,9 +18,31 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: '100%',
-    marginTop: 20,
-    marginBottom: 20,
+    [theme.breakpoints.down('xl')]: {
+      marginLeft: '15%',
+      maxWidth: '75%',
+      marginTop: '2%',
+      marginBottom: '2%',
+    },
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: '15%',
+      maxWidth: '75%',
+    },
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '0%',
+      maxWidth: '100%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0%',
+      maxWidth: '100%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '-11%',
+      marginRight: '-11%',
+      maxWidth: '130%',
+      marginTop: '5%',
+      marginBottom: '5%',
+    },
   },
   media: {
     height: 0,
