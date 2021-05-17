@@ -1,7 +1,7 @@
 # from bson.objectid import ObjectId
 # import json
 # from mongoengine.queryset.visitor import Q
-from .models import ClubMembership
+from .models import ClubMembership, User
 
 
 def createMembership(user, club, role):
@@ -22,3 +22,13 @@ def createRegularMembership(user, club):
 
 def createAdminMembership(user, club):
     createMembership(user, club, "A")
+
+
+def members_count(clubName: str):
+    return ClubMembership.objects(clubName=clubName).count()
+
+def my_clubs(member: User):
+    return ClubMembership.objects(member=member).to_json()
+
+def clubs_by_admin(member: User):
+    return ClubMembership.objects(member=member, role="A").to_json()

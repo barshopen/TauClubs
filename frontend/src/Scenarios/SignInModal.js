@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import { currentUser } from '../Shared/atoms';
 import GenericModal from '../Components/Generic/GenericModal';
 
+const REACT_APP_GOOGLE_CLIENT_ID =
+  '18740809626-1et94g7dbvpmr4ajbc289d6p4rq35i7k.apps.googleusercontent.com';
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -54,7 +57,7 @@ function ModalContent() {
     <div className={classes.root}>
       <Typography variant='h5'>Login to TauClubs</Typography>
       <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+        clientId={REACT_APP_GOOGLE_CLIENT_ID}
         buttonText='Log in with Google'
         onSuccess={loginSuccess}
         onFailure={loginFailure}

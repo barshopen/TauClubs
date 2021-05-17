@@ -27,7 +27,7 @@ def filter_by_id(data, data_id):
 
 
 @db_app.route("/clubs", defaults={"club_id": ""})
-@db_app.route("/clubs/<club_id>")
+@db_app.route("/clubs/<club_id>", methods=["POST"])
 def clubs(club_id):
     """
     example queries:
@@ -49,14 +49,14 @@ def clubs(club_id):
 def club_creation():
     print("got here")
     print(current_user.get_id())
+    print(request.json)
     email = get_userauth_email_by_id(current_user.get_id())
-    print(email)
+
     result = establish_club(
-        "tauclubs2021@gmail.com",
-        name=request.form.get("name"),
-        contact_mail=request.form.get("contact_mail"),
-        description=request.form.get("description"),
-        short_description=request.form.get("short_description"),
+        foundingUserEmail=email,
+        name=request.json.get("club_name"),
+        contact_mail=request.json.get("contact_mail"),
+        description=request.json.get("description"),
     )
     if not result:
         return "Failed", 400
