@@ -5,3 +5,4 @@
 **/.pytest_cache/*
 **/__staticbuild__/*
 **/yarn-error.log/*
+**/build/*
