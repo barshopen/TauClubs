@@ -8,7 +8,7 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
-import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
+import { getMessages, getClub, getUpcomingEvents } from '../../Shared/api';
 
 const Container = styled.div`
   display: grid;
@@ -53,7 +53,7 @@ function ClubBoard() {
   const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
-    getClubs(clubId).then(mydata => setIsAdmin(mydata.admin));
+    getClub(clubId).then(mydata => setIsAdmin(mydata.admin));
 
     getMessages().then(mydata => setMessagesData(mydata.slice(0, 7)));
 

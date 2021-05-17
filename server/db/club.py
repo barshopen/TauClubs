@@ -10,7 +10,6 @@ def create_club(
     club_name: str,
     contact_mail: str,
     description: str = "",
-    short_description: str = "",
     tags=[],
 ) -> Club:
     now = datetime.datetime.utcnow()
@@ -18,7 +17,6 @@ def create_club(
         contactMail=contact_mail,
         name=club_name,
         description=description,
-        shortDescription=short_description,
         tags=tags,
         creationTime=now,
         lastUpdateTime=now,
@@ -31,10 +29,9 @@ def establish_club(
     name: str,
     contact_mail: str,
     description: str = "",
-    short_description: str = "",
     tags=None,
 ):
-    newclub = create_club(name, contact_mail, description, short_description, tags)
+    newclub = create_club(name, contact_mail, description, tags)
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 
@@ -53,7 +50,7 @@ def get_clubs(name: str, tag: str):
 
 
 def get_club(id: str):
-    return Club.objects.get(_id=ObjectId(id)).to_json()
+    return Club.objects.get(pk=ObjectId(id)).to_json()
 
 
 def members_count(club: Club):

@@ -1,6 +1,8 @@
 from os import path
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
+from server.db.clubmembership import get_user_clubs, createRegularMembership
+
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id
 
@@ -26,28 +28,9 @@ def filter_by_id(data, data_id):
     return json.dumps(data)
 
 
-@db_app.route("/clubs", defaults={"club_id": ""})
-@db_app.route("/clubs/<club_id>", methods=["POST"])
-def clubs(club_id):
-    """
-    example queries:
-    * {mainroute}/club -> returns all clubs
-    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-        foodies
-    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-        containes foodies AND have a 'Math' tag
-    """
-    if club_id:
-        return get_club(id=club_id)
-    clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
-
-
-@login_required
 @db_app.route("/create_club", methods=["POST"])
+@login_required
 def club_creation():
-    print("got here")
     print(current_user.get_id())
     print(request.json)
     email = get_userauth_email_by_id(current_user.get_id())
@@ -62,6 +45,40 @@ def club_creation():
         return "Failed", 400
 
     return result, 200
+
+
+@db_app.route("/clubs")
+def clubs():
+    """
+    example queries:
+    * {mainroute}/clubs -> returns all clubs
+    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
+    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
+        foodies
+    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
+        containes foodies OR have a 'Math' tag
+    """
+    clubs_params = request.args.to_dict()
+    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+
+
+@db_app.route("/club/<club_id>")
+def club_by_id(club_id):
+    return get_club(id=club_id)
+
+
+@db_app.route("/my_clubs")
+@login_required
+def my_clubs(club_id):
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    return get_user_clubs(cur_user_email)
+
+
+@db_app.route("/join_club")
+@login_required
+def join_club(club_id):
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    return join_club(cur_user_email, club_id)
 
 
 @db_app.route("/messagesv2")

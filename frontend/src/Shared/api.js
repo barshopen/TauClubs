@@ -13,6 +13,8 @@ export const getAuth = subroute => getApi(`/auth/${subroute}`);
 
 export const getMessages = (messageId = null) => getDb('messages', messageId);
 
+export const getClub = (clubId = null) => getDb('club', clubId);
+
 export const getClubs = (clubId = null) => getDb('clubs', clubId);
 
 export const getUpcomingEvents = (eventId = null) =>

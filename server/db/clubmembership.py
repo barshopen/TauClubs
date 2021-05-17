@@ -1,7 +1,7 @@
 # from bson.objectid import ObjectId
 # import json
 # from mongoengine.queryset.visitor import Q
-from .models import ClubMembership, User
+from .models import ClubMembership, User, Club
 
 
 def createMembership(user, club, role):
@@ -9,26 +9,35 @@ def createMembership(user, club, role):
         club=club,
         clubName=club.name,
         member=user,
-        memberFirstName=user.firstName,
-        memberLastName=user.lastName,
+        memberName=f"{user.firstName} {user.lastName}",
         role=role,
     )
-    membership.save()
+    return membership.save()
 
 
-def createRegularMembership(user, club):
-    createMembership(user, club, "U")
+def join_club(user_email: str, club_id: str):
+    user = User.objects.get(contactMail=user_email)
+    club = Club.object.get(pk=club_id)
+    return createRegularMembership(user, club)
 
 
-def createAdminMembership(user, club):
-    createMembership(user, club, "A")
+def createRegularMembership(user: User, club: Club):
+    return createMembership(user, club, "U")
+
+
+def createAdminMembership(user_email: str, club: Club):
+    user = User.objects.get(contactMail=user_email)
+    return createMembership(user, club, "A")
 
 
 def members_count(clubName: str):
     return ClubMembership.objects(clubName=clubName).count()
 
-def my_clubs(member: User):
-    return ClubMembership.objects(member=member).to_json()
 
-def clubs_by_admin(member: User):
-    return ClubMembership.objects(member=member, role="A").to_json()
+def get_user_clubs(user_email: str):
+    user = User.objects.get(contactMail=user_email)
+    return ClubMembership.objects(member=user).to_json()
+
+
+# def clubs_by_admin(member: User):
+#     return ClubMembership.objects(member=member, role="A").to_json()

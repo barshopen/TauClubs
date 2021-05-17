@@ -16,7 +16,6 @@ class Club(Document):
     name = StringField(max_length=50, required=True)
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
-    shortDescription = StringField(max_length=100)
     tags = ListField()  # list of tags
     creationTime = DateTimeField(
         required=True, validation=None
@@ -30,7 +29,6 @@ class Club(Document):
             "name": self.name,
             "profileImage": self.profileImage,
             "description": self.description,
-            "shortDescription": self.shortDescription,
             "tags": self.tags,
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),

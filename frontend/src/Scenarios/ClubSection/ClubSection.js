@@ -6,7 +6,7 @@ import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
-import { getClubs } from '../../Shared/api';
+import { getClub } from '../../Shared/api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -58,7 +58,7 @@ function ClubSection() {
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
-    getClubs(clubId).then(mydata => {
+    getClub(clubId).then(mydata => {
       setClubData(mydata);
     });
   }, [clubId]);
