@@ -9,9 +9,6 @@ class UserAuth(UserMixin, Document):
     email = EmailField(required=True, unique=True)
     userauth = ReferenceField(User)
 
-    def __repr__(self):
-        return f"< User {self.name} >"
-
 
 def get_userauth_email_by_id(id: str):
     return UserAuth.objects.get(_id=ObjectId(id)).email
