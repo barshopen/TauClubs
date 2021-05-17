@@ -68,10 +68,10 @@ def club_creation():
     email = get_userauth_email_by_id(current_user.get_id())
     result = establish_club(
         email,
-        name=request.form.get("name"),
-        contact_mail=request.form.get("contact_mail"),
-        description=request.form.get("description"),
-        short_description=request.form.get("short_description"),
+        name=request.json.get("name"),
+        contact_mail=request.json.get("contact_mail"),
+        description=request.json.get("description"),
+        short_description=request.json.get("short_description"),
     )
     if not result:
         return "Failed", 400
@@ -79,7 +79,7 @@ def club_creation():
     return result, 200
 
 
-@db_app.route("/clubs/<club_id>/messages/<message_id>")
+@db_app.route("/clubs/<club_id>/messages/<message_id>", methods=["POST"])
 def messagesNew(club_id, message_id):  # after delete update name
     if not club_id:
         return "Failed", 400
@@ -87,7 +87,7 @@ def messagesNew(club_id, message_id):  # after delete update name
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/create_message")
+@db_app.route("/clubs/<club_id>/create_message", methods=["POST"])
 def message_creation(club_id):
     if not validatePermession(current_user.get_id(), club_id):
         return "Failed", 400
@@ -102,7 +102,7 @@ def message_creation(club_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
+@db_app.route("/clubs/<club_id>/messages/<message_id>/update", methods=["POST"])
 def message_update(club_id, message_id):
     if not club_id:
         return "Failed", 400
@@ -120,7 +120,7 @@ def message_update(club_id, message_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/delete")
+@db_app.route("/clubs/<club_id>/messages/<message_id>/delete", methods=["POST"])
 def message_delete(club_id, message_id):
     if not club_id:
         return "Failed", 400
@@ -131,7 +131,7 @@ def message_delete(club_id, message_id):
     delete_message(message_id)
 
 
-@db_app.route("/clubs/<club_id>/events/<event_id>")
+@db_app.route("/clubs/<club_id>/events/<event_id>", methods=["POST"])
 def events(club_id, event_id):  # after delete update name
     if not club_id:
         return "Failed", 400
@@ -139,7 +139,7 @@ def events(club_id, event_id):  # after delete update name
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/create_event")
+@db_app.route("/clubs/<club_id>/create_event", methods=["POST"])
 def event_creation(club_id):
     if not validatePermession(current_user.get_id(), club_id):
         return "Restrict", 400
@@ -158,7 +158,7 @@ def event_creation(club_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/update")
+@db_app.route("/clubs/<club_id>/messages/<event_id>/update", methods=["POST"])
 def event_update(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -183,7 +183,7 @@ def event_update(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/delete")
+@db_app.route("/clubs/<club_id>/messages/<event_id>/delete", methods=["POST"])
 def event_delete(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -194,7 +194,7 @@ def event_delete(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
+@db_app.route("/clubs/<club_id>/messages/<event_id>/attend", methods=["POST"])
 def event_attending(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -208,7 +208,7 @@ def event_attending(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/interested")
+@db_app.route("/clubs/<club_id>/messages/<event_id>/interested", methods=["POST"])
 def event_interesting(club_id, event_id):
     if not club_id:
         return "Failed", 400
