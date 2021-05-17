@@ -3,7 +3,6 @@ import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useQuery } from 'react-query';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -24,7 +23,8 @@ import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
 import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
-import { logOut, getClubs } from '../Shared/api';
+import { logOut } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 import SignInModal from '../Scenarios/SignInModal';
 
 import {
@@ -151,11 +151,6 @@ MenuItemWithToolTip.defaultProps = {
   content: null,
 };
 
-const fetchClubs = async () => {
-  const res = await getClubs();
-  return res;
-};
-
 export default function NavBar() {
   // hooks
   const classes = useStyles();
@@ -164,7 +159,9 @@ export default function NavBar() {
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
-  const { data, isLoading } = useQuery('allClubs', fetchClubs);
+
+  const { clubs: data } = useClubs();
+
   const [user, setUser] = useRecoilState(currentUser);
   const [search, setSearch] = useState('');
   const userMessages = useMemo(() => 4, []);
@@ -361,7 +358,7 @@ export default function NavBar() {
               onChange={(event, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
-              options={isLoading ? ['loading...'] : defaultFilterOptions}
+              options={defaultFilterOptions}
               getOptionLabel={option => option.render ?? option.name}
               renderOption={option => (
                 <>

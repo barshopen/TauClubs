@@ -1,17 +1,13 @@
-const getApi = route =>
-  fetch(route, {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-  }).then(res => res.json());
+import { get, post } from './HTTP';
 
 export const getDb = (subroute, id) =>
-  id ? getApi(`/db/${subroute}/${id}`) : getApi(`/db/${subroute}`);
+  id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
-export const getAuth = subroute => getApi(`/auth/${subroute}`);
+export const getAuth = subroute => get(`/auth/${subroute}`);
 
-export const getMessages = (messageId = null) => getDb('messages', messageId);
+export const getMessages = (clubId = null) => getDb('messages', clubId);
+
+// export const getMessage = (clubId = null, messageId = null) => getDb('messages', clubId);
 
 export const getClubs = (clubId = null) => getDb('clubs', clubId);
 
@@ -33,4 +29,7 @@ export const getFeedData = (currentTab = 'all') => {
   ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
 };
 
-export const logOut = () => getApi('/auth/logout');
+export const logOut = () => get('/auth/logout');
+
+export const createNewMessgae = ({ payload }) =>
+  post(`/clubs/create_message`, payload);
