@@ -70,14 +70,13 @@ def sendUserData():
         "lastName": user_info["family_name"],
         "picture": user_info["picture"],
     }
-    return dict
+    return whoami(dict)
 
 
 @auth_app.route("/whoami", methods=["GET"])
 @login_required
-def whoami():
-    d = {"google_id": current_user.get_id()}
-    return d
+def whoami(dict):
+    return dict
 
 
 @auth_app.route("/logout")
