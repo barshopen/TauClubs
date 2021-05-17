@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
-import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import { getClubs } from '../../Shared/api';
 
 const NavBarContainer = styled.div`
@@ -64,38 +64,44 @@ function ClubSection() {
   }, [clubId]);
 
   return (
-    <SimpleContaConiner style={{ height: '80vh' }}>
+    <Container>
       {/* TODO derieve data from api request. */}
-      <Header>Chess</Header>
-      <HeaderPhoto>
-        <img
-          src={clubData ? `/${clubData.profileImage}` : ''}
-          width={1000}
-          height={200}
-          alt='wallpaper'
-        />
-        <NavBarContainer>
-          <Nav>
-            <NavLink to={`/club/board/${clubId}`} start='2'>
-              Club Board
-            </NavLink>
-            <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-            <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
-            <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
-          </Nav>
-        </NavBarContainer>
-      </HeaderPhoto>
-      <Switch>
-        <Route path='/club/board/:clubId' component={ClubBoard} />
-        <Route path='/club/about/:clubId' component={AboutUs} />
-        <Route path='/club/contact/:clubId' component={Contact} />
-        <Route
-          path='/club/joinus/:clubId'
-          clubName={clubData?.name}
-          component={() => <JoinUs clubName={clubData?.name} />}
-        />
-      </Switch>
-    </SimpleContaConiner>
+      <Container>
+        <Header>Chess</Header>
+        <HeaderPhoto>
+          <img
+            src={clubData ? `/${clubData.profileImage}` : ''}
+            width='100%'
+            height={200}
+            alt='wallpaper'
+          />
+        </HeaderPhoto>
+      </Container>
+
+      <NavBarContainer>
+        <Nav>
+          <NavLink to={`/club/board/${clubId}`} start='2'>
+            Club Board
+          </NavLink>
+          <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
+          <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
+          <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
+        </Nav>
+      </NavBarContainer>
+
+      <Container>
+        <Switch>
+          <Route path='/club/board/:clubId' component={ClubBoard} />
+          <Route path='/club/about/:clubId' component={AboutUs} />
+          <Route path='/club/contact/:clubId' component={Contact} />
+          <Route
+            path='/club/joinus/:clubId'
+            clubName={clubData?.name}
+            component={() => <JoinUs clubName={clubData?.name} />}
+          />
+        </Switch>
+      </Container>
+    </Container>
   );
 }
 

@@ -46,7 +46,7 @@ const App = () => {
           <NavBar />
           <Container className={classes.container}>
             <SideBar />
-            <div className={classes.content} margin-left='200'>
+            <div className={classes.content}>
               <Switch>
                 <Route path='/' exact component={Feed} />
                 <Route path='/explore' component={ExploreClubs} />

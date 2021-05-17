@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, makeStyles } from 'react';
+import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
@@ -8,25 +9,8 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
+import FeedCard from '../../Components/Feed/GenericFeedCard';
 import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 10fr 1fr 20fr 1fr;
-  width: 100%;
-  grid-gap: 10px;
-`;
-
-const IconContainer = styled.div`
-  & div {
-    /* TODO change this. find a better way to do it. */
-    position: relative;
-    top: 30px;
-    right: 90px;
-    cursor: pointer;
-  }
-  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-`;
 
 function IconBu({ ariaLabel, onClick }) {
   return (
@@ -60,23 +44,14 @@ function ClubBoard() {
     getUpcomingEvents().then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
   }, [clubId]);
   return (
-    <>
-      <Container>
-        <div>
-          <Messages data={messagesData} />
-        </div>
-        <IconContainer show={isAdmin}>
-          <NewMessageModal ClickableTrigger={IconBu} />
-        </IconContainer>
-
-        <div>
-          <UpcomingEvents data={upcomingEvents} />
-        </div>
-        <IconContainer show={isAdmin}>
-          <NewEventModal ClickableTrigger={IconBu} />
-        </IconContainer>
-      </Container>
-    </>
+    <Container>
+      {messagesData?.map(feedItem => (
+        <FeedCard feedItem={feedItem} />
+      ))}
+      {upcomingEvents?.map(feedItem => (
+        <FeedCard feedItem={feedItem} />
+      ))}
+    </Container>
   );
 }
 
