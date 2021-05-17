@@ -32,7 +32,7 @@ def load_user(user_id):
 @auth_app.route("/whoami", methods=["GET"])
 def whoami():
     if not current_user.is_authenticated:
-        return {}
+        return {"id": -1}
     return getUserInfo(current_user.get_id())
 
 
@@ -46,7 +46,6 @@ def sendUserData():
         user_info = google_token.validate_id_token(
             id_token, os.getenv("GOOGLE_CLIENT_ID")
         )
-        print(user_info)
     except ValueError:
         return "Invalid ID token", 401
 
