@@ -30,10 +30,9 @@ def load_user(user_id):
 
 
 @auth_app.route("/whoami", methods=["GET"])
-@login_required
 def whoami():
     if not current_user.is_authenticated:
-        return None
+        return {}
     return getUserInfo(current_user.get_id())
 
 
