@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ClubsView from '../Components/ClubsView';
 import { getClubs } from '../Shared/api';
 
-const width = '95%';
+const width = '100%';
 
 function ExploreClubs() {
   const [clubsData, setClubsData] = useState();
@@ -12,9 +12,7 @@ function ExploreClubs() {
   }, []);
 
   return (
-    <>
-      <ClubsView width={width} data={clubsData} Container={StyledContainer} />
-    </>
+    <ClubsView width={width} data={clubsData} Container={StyledContainer} />
   );
 }
 
