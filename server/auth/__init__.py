@@ -66,8 +66,8 @@ def sendUserData():
     dict = {
         "id": current_user.get_id(),
         "email": user_info["email"],
-        "given_name": user_info["given_name"],
-        "family_name": user_info["family_name"],
+        "firstName": user_info["given_name"],
+        "lastName": user_info["family_name"],
         "picture": user_info["picture"],
     }
     return dict
