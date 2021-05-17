@@ -46,7 +46,7 @@ def get_clubs(name: str, tag: str):
         list(
             map(
                 lambda club: club.to_dict(),
-                Club.objects.filter(name_Q & tags_Q),
+                Club.objects.filter(name_Q | tags_Q),
             )
         )
     )
