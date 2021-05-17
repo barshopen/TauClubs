@@ -1,5 +1,3 @@
-PIP=.env/Scripts/pip.exe
-REQUIREMENTS=requirements.txt
 SHOULDNT_CHANGE='package.json yarn.lock'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'

@@ -2,17 +2,16 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { Label } from './Label';
+import ChipsArray from './ChipsArray';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    minHeight: '240px',
+    width: '237px',
   },
 });
 
@@ -31,25 +30,24 @@ const ClubCard = props => {
           image={img}
           title='Contemplative Reptile'
         />
-        <CardContent>
-          <Typography gutterBottom variant='h5' component='h2'>
+        <CardContent style={{ padding: '10x' }}>
+          <Typography
+            gutterBottom
+            variant='h5'
+            component='h2'
+            marginRight='10px'>
             {title},
-            <Typography variant='body2' color='textSecondary' component='span'>
+            <Typography
+              variant='body2'
+              color='textSecondary'
+              component='span'
+              style={{ marginLeft: '10px' }}>
               {`${count} Members `}
             </Typography>
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        {tags &&
-          tags.map(tag => (
-            <Button size='medium' color='primary'>
-              <Label key={tag} color={color}>
-                {tag}
-              </Label>
-            </Button>
-          ))}
-      </CardActions>
+      {tags && <ChipsArray tags={tags} color={color} />}
     </Card>
   );
 };
