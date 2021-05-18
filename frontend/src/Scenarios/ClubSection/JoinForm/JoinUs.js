@@ -94,7 +94,7 @@ const JoinUs = ({ clubName, clubId }) => {
     event.preventDefault();
     setIsLoading(true);
 
-    joinClub(clubId).then(() => {
+    joinClub({ clubId }).then(() => {
       setActiveStep(prev => prev + 1);
       setIsLoading(false);
     });

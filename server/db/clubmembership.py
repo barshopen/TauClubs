@@ -1,5 +1,5 @@
 from .models import ClubMembership, User, Club
-from mongoengine.errors import DoesNotExist
+from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
 
 
@@ -11,13 +11,17 @@ def createMembership(user, club, role):
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
     )
+
     return membership.save()
 
 
 def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
     club = Club.objects.get(pk=club_id)
-    return createRegularMembership(user, club).to_json()
+    try:
+        return createRegularMembership(user, club).to_json()
+    except NotUniqueError:
+        return None
 
 
 def createRegularMembership(user: User, club: Club):

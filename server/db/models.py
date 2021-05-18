@@ -65,7 +65,7 @@ ROLES = {
 
 
 class ClubMembership(Document):
-    club = ReferenceField("Club")
+    club = ReferenceField("Club", unique_with="member")
     clubName = StringField(max_length=50, required=True)
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)

@@ -74,11 +74,14 @@ def my_clubs():
     return get_user_clubs(cur_user_email)
 
 
-@db_app.route("/join_club/<club_id>")
+@db_app.route("/join_club", methods=["POST"])
 @login_required
-def join_club_by_id(club_id):
+def join_club_by_id():
+    club_id = request.json.get("clubId")
     cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    return join_club(cur_user_email, club_id)
+    res = join_club(cur_user_email, club_id)
+    if not res:
+        return "Could not complete request", 400
 
 
 @db_app.route("/messagesv2")
