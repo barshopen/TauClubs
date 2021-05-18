@@ -1,6 +1,7 @@
 from os import path
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
+
 from server.db.message import (
     get_message,
     createMessage,
@@ -18,6 +19,8 @@ from server.db.event import (
 )
 from server.db.tag import get_club_with_tag, addTagToClub, delete_tag_to_club
 from server.db.models import validatePermession
+from server.db.clubmembership import get_user_clubs, join_club
+
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id, get_userauth_user_by_id
 
@@ -44,27 +47,11 @@ def filter_by_id(data, data_id):
     return json.dumps(data)
 
 
-@db_app.route("/clubs", defaults={"club_id": ""})
-@db_app.route("/clubs/<club_id>", methods=["POST"])
-def clubs(club_id):
-    """
-    example queries:
-    * {mainroute}/club -> returns all clubs
-    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-        foodies
-    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-        containes foodies AND have a 'Math' tag
-    """
-    if club_id:
-        return get_club(id=club_id)
-    clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
-
-
-@login_required
 @db_app.route("/create_club", methods=["POST"])
+@login_required
 def club_creation():
+    print(current_user.get_id())
+    print(request.json)
     email = get_userauth_email_by_id(current_user.get_id())
     result = establish_club(
         email,
@@ -157,6 +144,7 @@ def event_creation(club_id):
     return result, 200
 
 
+
 @login_required
 @db_app.route("/clubs/<club_id>/messages/<event_id>/update", methods=["POST"])
 def event_update(club_id, event_id):
@@ -219,6 +207,43 @@ def event_interesting(club_id, event_id):
         return "Restrict", 400
     event = getEvent(event_id)
     addIntrested(event, user)
+
+@db_app.route("/clubs")
+def clubs():
+    """
+    example queries:
+    * {mainroute}/clubs -> returns all clubs
+    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
+    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
+        foodies
+    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
+        containes foodies OR have a 'Math' tag
+    """
+    clubs_params = request.args.to_dict()
+    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+
+
+@db_app.route("/club/<club_id>")
+def club_by_id(club_id):
+    return get_club(id=club_id)
+
+
+@db_app.route("/my_clubs")
+@login_required
+def my_clubs():
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    return get_user_clubs(cur_user_email)
+
+
+@db_app.route("/join_club", methods=["POST"])
+@login_required
+def join_club_by_id():
+    club_id = request.json.get("clubId")
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    res = join_club(cur_user_email, club_id)
+    if not res:
+        return "Could not complete request", 400
+
 
 
 @db_app.route("/messagesv2")

@@ -14,7 +14,7 @@ class UserAuth(UserMixin, Document):
 
 
 def get_userauth_email_by_id(id: str):
-    return UserAuth.objects.get(_id=ObjectId(id)).email
+    return UserAuth.objects.get(pk=ObjectId(id)).email
 
 
 def get_userauth_user_by_id(id: str):
