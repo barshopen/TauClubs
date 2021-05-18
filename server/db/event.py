@@ -19,7 +19,7 @@ def createEvent(title, duration, club, description=None, profileImage=None):
         profileImage=profileImage,
     )
     newEvent.save()
-    return newEvent
+    return newEvent  # maybe to json
 
 
 def updateEventContent(
@@ -66,3 +66,7 @@ def deleteEvent(event_id):
 
 def getEvent(event_id):
     return Event.objects.get(id=event_id).to_json()
+
+
+def get_all_events():
+    return Event.objects().to_json()

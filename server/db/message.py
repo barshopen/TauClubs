@@ -36,6 +36,14 @@ def get_message(id: str):
     return Message.objects.get(id=id).to_json()
 
 
+def get_messages_by_club(club):
+    return Message.objects(creatingClub=club).to_json()
+
+
+def get_messages():
+    return Message.objects().to_json()
+
+
 def delete_message(id: str):
     message = Message.objects.get(id=id)
     message.delete()

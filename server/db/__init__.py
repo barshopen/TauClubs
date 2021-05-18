@@ -3,21 +3,23 @@ from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 
 from server.db.message import (
-    get_message,
     createMessage,
+    get_messages,
     updateMessageContent,
     updateMessageTitle,
     delete_message,
+    get_message,
+    get_messages_by_club,
 )
 from server.db.event import (
     createEvent,
+    get_all_events,
     updateEventContent,
     addAttending,
     addIntrested,
     getEvent,
     deleteEvent,
 )
-from server.db.tag import get_club_with_tag, addTagToClub, delete_tag_to_club
 from server.db.models import validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
 
@@ -66,30 +68,107 @@ def club_creation():
     return result, 200
 
 
-@db_app.route("/clubs/<club_id>/messages/<message_id>", methods=["POST"])
-def messagesNew(club_id, message_id):  # after delete update name
+@db_app.route("/clubs")
+def clubs():
+    """
+    example queries:
+    * {mainroute}/clubs -> returns all clubs
+    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
+    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
+        foodies
+    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
+        containes foodies OR have a 'Math' tag
+    """
+    clubs_params = request.args.to_dict()
+    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+
+
+@db_app.route("/club/<club_id>")
+def club_by_id(club_id):
+    return get_club(id=club_id)
+
+
+@db_app.route("/my_clubs")
+@login_required
+def my_clubs():
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    return get_user_clubs(cur_user_email)
+
+
+@db_app.route("/join_club", methods=["POST"])
+@login_required
+def join_club_by_id():
+    club_id = request.json.get("clubId")
+    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    res = join_club(cur_user_email, club_id)
+    if not res:
+        return "Could not complete request", 400
+
+
+@db_app.route("/clubs/<club_id>/messages/get_messages")
+def messages(club_id):
     if not club_id:
         return "Failed", 400
-    return get_message(id=message_id)
+    club = get_club(club_id)
+    return get_messages_by_club(club)
+
+
+@db_app.route("/messages")
+def all_messages():
+    return get_messages()
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/create_message", methods=["POST"])
-def message_creation(club_id):
+@db_app.route("/clubs/create_message", methods=["POST"])
+def message_creation():
+    club_id = request.json.get("clubId")
     if not validatePermession(current_user.get_id(), club_id):
         return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
+    club = get_club(club_id)
     result = createMessage(
-        title=request.form.get("title"),
-        content=request.form.get("content"),
-        club=get_club(club_id),
+        title=request.json.get("title"),
+        content=request.json.get("content"),
+        club=club,
         user=user,
     )
     return result, 200
 
 
+@db_app.route("/clubs/<club_id>/events/<event_id>")
+def get_event(club_id, event_id):
+    if not club_id:
+        return "Failed", 400
+    return getEvent(id=event_id)
+
+
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/update", methods=["POST"])
+@db_app.route("/clubs/create_event", methods=["POST"])
+def event_creation():
+    club_id = request.json.get("clubId")
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Restrict", 400
+    result = createEvent(
+        title=request.json.get("title"),
+        duration=request.json.get("duration"),
+        club=get_club(club_id),
+        description=request.json.get("description"),
+        profileImage=request.json.get("profileImage"),  # check if not filed
+    )
+    if not result:
+        return "Failed", 400
+
+    return result, 200
+
+
+@db_app.route("/upcoming_events")
+def upcoming_events():
+    return get_all_events()
+
+
+#####################################################################################################
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
 def message_update(club_id, message_id):
     if not club_id:
         return "Failed", 400
@@ -116,33 +195,6 @@ def message_delete(club_id, message_id):
         return "Restrict", 400
 
     delete_message(message_id)
-
-
-@db_app.route("/clubs/<club_id>/events/<event_id>", methods=["POST"])
-def events(club_id, event_id):  # after delete update name
-    if not club_id:
-        return "Failed", 400
-    return getEvent(id=event_id)
-
-
-@login_required
-@db_app.route("/clubs/<club_id>/create_event", methods=["POST"])
-def event_creation(club_id):
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Restrict", 400
-
-    result = createEvent(
-        title=request.form.get("title"),
-        duration=request.form.get("duration"),
-        club=get_club(club_id),
-        description=request.form.get("description"),
-        profileImage=request.form.get("profileImage"),  # check if not filed
-    )
-    if not result:
-        return "Failed", 400
-
-    return result, 200
-
 
 
 @login_required
@@ -207,63 +259,6 @@ def event_interesting(club_id, event_id):
         return "Restrict", 400
     event = getEvent(event_id)
     addIntrested(event, user)
-
-@db_app.route("/clubs")
-def clubs():
-    """
-    example queries:
-    * {mainroute}/clubs -> returns all clubs
-    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-        foodies
-    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-        containes foodies OR have a 'Math' tag
-    """
-    clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
-
-
-@db_app.route("/club/<club_id>")
-def club_by_id(club_id):
-    return get_club(id=club_id)
-
-
-@db_app.route("/my_clubs")
-@login_required
-def my_clubs():
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    return get_user_clubs(cur_user_email)
-
-
-@db_app.route("/join_club", methods=["POST"])
-@login_required
-def join_club_by_id():
-    club_id = request.json.get("clubId")
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    res = join_club(cur_user_email, club_id)
-    if not res:
-        return "Could not complete request", 400
-
-
-
-@db_app.route("/messagesv2")
-def messagesv2(message_id: str = ""):
-    data = get_json_data("messages.json")
-    return filter_by_id(data, message_id)
-
-
-@db_app.route("/messages")
-@db_app.route("/messages/<message_id>")
-def messages(message_id: str = ""):
-    data = get_json_data("messages.json")
-    return filter_by_id(data, message_id)
-
-
-@db_app.route("/upcoming_events")
-@db_app.route("/upcoming_events/<event_id>")
-def upcoming_events(event_id: str = ""):
-    data = get_json_data("upcoming_events.json")
-    return filter_by_id(data, event_id)
 
 
 @db_app.route("/users")

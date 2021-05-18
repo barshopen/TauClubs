@@ -75,7 +75,7 @@ class ClubMembership(Document):
 
 
 class Event(Document):
-    # id = UUIDField()  # consider ObjectIdField
+    meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
     creationTime = DateTimeField(
@@ -119,6 +119,21 @@ class Message(Document):
         "User", max_length=200, required=True
     )  # check how to define LazyReferenceField
     meta = {"collection": "messages"}
+
+    def to_dict(self):
+        return {
+            "id": str(self.pk),
+            "title": self.title,
+            "content": self.content,
+            "creationTime": self.creationTime.isoformat(),
+            "lastUpdateTime": self.lastUpdateTime.isoformat(),
+            "likes": self.likes,
+            "creatingClub": self.creatingClub.to_dict(),
+            "creatingUser": "sharon",  #######
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 def validatePermession(user_id, club_id):
