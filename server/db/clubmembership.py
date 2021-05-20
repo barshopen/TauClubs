@@ -11,21 +11,22 @@ def createMembership(user, club, role):
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
     )
-
-    return membership.save()
+    membership.save()
+    return membership
 
 
 def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
     club = Club.objects.get(pk=club_id)
     try:
-        return createRegularMembership(user, club).to_json()
+        return createRegularMembership(user, club)
     except NotUniqueError:
         return None
 
 
 def createRegularMembership(user: User, club: Club):
     return createMembership(user, club, "U")
+    
 
 
 def createAdminMembership(user_email: str, club: Club):

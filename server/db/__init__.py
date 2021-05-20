@@ -104,9 +104,10 @@ def my_clubs():
 def join_club_by_id():
     club_id = request.json.get("clubId")
     cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    res = join_club(cur_user_email, club_id)
+    res = join_club(cur_user_email, club_id).to_json()
     if not res:
         return "Could not complete request", 400
+    return res, 200
 
 
 @db_app.route("/messages")

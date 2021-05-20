@@ -9,7 +9,7 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
-import { getClubs } from '../../Shared/api';
+import { getClub } from '../../Shared/api';
 import useClubFeed from '../../hooks/useClubFeed';
 
 const Container = styled.div`
@@ -55,13 +55,15 @@ const ClubBoard = () => {
     messagesData,
     loadingEvents,
     upcomingEvents,
+    // clubData
   } = useClubFeed({ clubId });
 
   useEffect(() => {
-    getClubs(clubId).then(mydata => {
+    getClub(clubId).then(mydata => {
       setIsAdmin(mydata.admin);
     });
   }, [clubId]);
+
   return (
     <>
       <Container>
