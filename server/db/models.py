@@ -21,15 +21,13 @@ class Club(Document):
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
-    creationTime = DateTimeField(required=True, validation=None)
-    lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
-    contactMail = StringField(required=True)
+    creationTime = DateTimeField(required=True)
+    lastUpdateTime = DateTimeField()
+    contactMail = EmailField(required=True)
 
     def get_the_name(listTags):
-        print("here")
         for tag_id in listTags:
             listTags.append(tag=Tag.objects.get(pk=tag_id).to_dict())
-        print(listTags)
         return json.dumps(listTags)
 
     def to_dict(self):
