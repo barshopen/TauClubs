@@ -16,6 +16,7 @@ from server.db.message import (
 )
 from server.db.event import (
     createEvent,
+    events_by_user,
     get_all_events,
     updateEventContent,
     addAttending,
@@ -197,11 +198,22 @@ def unlike_message(club_id, message_id):
     return result, 200
 
 
+@db_app.route("/upcoming_events")
+def upcoming_events():
+    return get_all_events()
+
+
+@db_app.route("/my_events")
+def my_events():
+    user = get_userauth_user_by_id(current_user.get_id())
+    return events_by_user(user)
+
+
 @db_app.route("/clubs/<club_id>/events/<event_id>")
 def get_event(club_id, event_id):
     if not club_id:
         return "Failed", 400
-    return getEvent(id=event_id)
+    return getEvent(id=event_id).to_json()
 
 
 @login_required
@@ -212,10 +224,12 @@ def event_creation():
         return "Restrict", 400
     result = createEvent(
         title=request.json.get("title"),
-        duration=request.json.get("duration"),
-        club=get_club(club_id),
         description=request.json.get("description"),
-        profileImage=request.json.get("profileImage"),  # check if not filed
+        duration=request.json.get("duration"),
+        startTime=request.json.get("startTime"),
+        location=request.json.get("location"),
+        club=get_club(club_id),
+        profileImage=request.json.get("profileImage"),
     )
     if not result:
         return "Failed", 400
@@ -223,16 +237,11 @@ def event_creation():
     return result, 200
 
 
-@db_app.route("/upcoming_events")
-def upcoming_events():
-    return get_all_events()
-
-
-########################################################################################
+#
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/update", methods=["POST"])
+@db_app.route("/clubs/<club_id>/messages/<event_id>/update")
 def event_update(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -242,22 +251,26 @@ def event_update(club_id, event_id):
 
     event = getEvent(event_id)
 
-    title = request.form.get("title")
-    description = request.form.get("description")
-    duration = request.form.get("duration")
-    profileImage = request.form.get("profileImage")
+    title = request.json.get("title")
+    description = request.json.get("description")
+    duration = request.json.get("duration")
+    profileImage = request.json.get("profileImage")
+    startTime = request.json.get("startTime")
+    location = request.json.get("location")
     event = updateEventContent(
         event,
         title=title,
         description=description,
         duration=duration,
         profileImage=profileImage,
+        startTime=startTime,
+        location=location,
     )
-    return event
+    return event.to_json(), 200
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/delete", methods=["POST"])
+@db_app.route("/clubs/<club_id>/messages/<event_id>/delete")
 def event_delete(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -268,17 +281,18 @@ def event_delete(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/attend", methods=["POST"])
+@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
 def event_attending(club_id, event_id):
     if not club_id:
         return "Failed", 400
 
     user = get_userauth_user_by_id(current_user.get_id())
-
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Restrict", 400
+    club = get_club(club_id)
+    if not is_user_member(user, club):
+        return "Failed, not member", 400
     event = getEvent(event_id)
     addAttending(event, user)
+    return event.to_json()
 
 
 @login_required
@@ -288,11 +302,12 @@ def event_interesting(club_id, event_id):
         return "Failed", 400
 
     user = get_userauth_user_by_id(current_user.get_id())
-
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Restrict", 400
+    club = get_club(club_id)
+    if not is_user_member(user, club):
+        return "Failed, not member", 400
     event = getEvent(event_id)
     addIntrested(event, user)
+    return event.to_json()
 
 
 ######################################################

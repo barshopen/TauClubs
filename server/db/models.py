@@ -55,9 +55,6 @@ class User(Document):
     def full_name(self):
         return self.firstName + " " + self.lastName
 
-    def to_json(self):
-        return json.dumps(self.to_dict())
-
 
 ROLES = {
     "A": "Admin",
@@ -84,8 +81,8 @@ class Event(Document):
     creationTime = DateTimeField(required=True, validation=None)
     lastUpdateTime = DateTimeField(required=True, validation=None)
     profileImage = URLField()
-    intrested = ListField()
-    membersAttending = ListField()
+    intrested = ListField(ReferenceField("User"))
+    membersAttending = ListField(ReferenceField("User"))
 
     def to_dict(self):
         return {
