@@ -59,6 +59,7 @@ function NewClubContent({ setOpen }) {
     });
     setOpen(false);
   };
+
   return (
     <form
       className={classes.root}

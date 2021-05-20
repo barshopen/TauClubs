@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import Loader from 'react-loader-spinner';
 import ClubsView from '../Components/ClubsView';
-import { getClubs } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 
 const width = '100%';
 
-function ExploreClubs() {
-  const [clubsData, setClubsData] = useState();
-  useEffect(() => {
-    getClubs().then(mydata => setClubsData(mydata.slice(0, 5)));
-  }, []);
+const ExploreClubs = () => {
+  const { loadingClubs, clubs: clubsData } = useClubs();
+  // const loading = true;
+  // - fix location of the loader
 
   return (
-    <ClubsView width={width} data={clubsData} Container={StyledContainer} />
+    <>
+      {loadingClubs ? (
+        <Loader type='TailSpin' color='#00BFFF' height={150} width={150} />
+      ) : (
+        <ClubsView width={width} data={clubsData} Container={StyledContainer} />
+      )}
+    </>
   );
-}
+};
 
 const StyledContainer = styled.div`
   display: grid;
