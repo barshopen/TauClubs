@@ -15,6 +15,13 @@ from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
 
 
+def names_of_tags(listTags):
+    re = []
+    for tag_id in listTags:
+        re.append(Tag.objects.get(pk=tag_id).to_dict())
+    return re
+
+
 class Club(Document):
     meta = {"collection": "clubs"}
     name = StringField(max_length=50, required=True)
@@ -25,18 +32,13 @@ class Club(Document):
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
 
-    def get_the_name(listTags):
-        for tag_id in listTags:
-            listTags.append(tag=Tag.objects.get(pk=tag_id).to_dict())
-        return json.dumps(listTags)
-
     def to_dict(self):
         return {
             "id": str(self.pk),
             "name": self.name,
             "profileImage": self.profileImage,
             "description": self.description,
-            # "tags": Club.get_the_name(self.tags),
+            "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
@@ -116,7 +118,6 @@ class Tag(Document):
             "id": str(self.pk),
             "name": self.name,
             "color": self.color,
-            "clubsWithTag": self.clubsWithTag,
         }
 
     def to_json(self):

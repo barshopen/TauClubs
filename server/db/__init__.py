@@ -310,7 +310,8 @@ def event_interesting(club_id, event_id):
 
 @db_app.route("/clubs/<club_id>/tags")
 def tags(club_id):
-    return tags_for_club(club_id)
+    club = get_club(club_id)
+    return tags_for_club(club)
 
 
 @login_required

@@ -1,6 +1,6 @@
 import json
 from mongoengine.queryset.visitor import Q
-from server.db.models import Tag, Club
+from server.db.models import Tag, Club, names_of_tags
 
 
 def get_clubs_with_tag(tag_id):
@@ -36,13 +36,5 @@ def delete_tag_to_club(club_id, tag_id):
     Club.update(tags=club.tags)
 
 
-def tags_for_club(club_id):
-    club_Q = Q(clubsWithTag__contains=club_id)
-    return json.dumps(
-        list(
-            map(
-                lambda tag: tag.to_dict(),
-                Tag.objects.filter(club_Q),
-            )
-        )
-    )
+def tags_for_club(club):
+    return json.dumps(names_of_tags(club.tags))
