@@ -23,3 +23,16 @@ def create_user_auth(firstName, lastName, email, picture):
     user = UserAuth(email=email, userauth=full_user)
     user.save()
     return user
+
+
+def getUserInfo(id):
+    user_auth = UserAuth.objects.get(id=id)
+    user = user_auth.userauth
+    dict = {
+        "id": id,
+        "email": user.contactMail,
+        "firstName": user.firstName,
+        "lastName": user.lastName,
+        "picture": user.picture,
+    }
+    return dict

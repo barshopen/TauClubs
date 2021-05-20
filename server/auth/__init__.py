@@ -9,8 +9,9 @@ from flask_login import (
     logout_user,
 )
 from mongoengine.errors import DoesNotExist
-from server.auth.userauth import UserAuth, create_user_auth
+from server.auth.userauth import UserAuth, create_user_auth, getUserInfo
 from server.auth import google_token
+
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
 dotenv.load_dotenv()
@@ -26,6 +27,13 @@ def init(app):
 @login_manager.user_loader
 def load_user(user_id):
     return UserAuth.objects(id=user_id).first()
+
+
+@auth_app.route("/whoami", methods=["GET"])
+def whoami():
+    if not current_user.is_authenticated:
+        return {"id": -1}
+    return getUserInfo(current_user.get_id())
 
 
 @auth_app.route("/login", methods=["POST"])
@@ -63,13 +71,6 @@ def sendUserData():
     login_user(user, remember=True)
 
     return whoami()
-
-
-@auth_app.route("/whoami", methods=["GET"])
-@login_required
-def whoami():
-    d = {"google_id": current_user.get_id()}
-    return d
 
 
 @auth_app.route("/logout")
