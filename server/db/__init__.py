@@ -1,4 +1,5 @@
 from os import path
+from server.db.tag import delete_tag_to_club, tags_for_club
 from server.db.user import is_user_member
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
@@ -56,8 +57,6 @@ def filter_by_id(data, data_id):
 @db_app.route("/create_club", methods=["POST"])
 @login_required
 def club_creation():
-    print(current_user.get_id())
-    print(request.json)
     email = get_userauth_email_by_id(current_user.get_id())
     result = establish_club(
         email,
@@ -161,7 +160,7 @@ def message_update(club_id, message_id):
         updateMessageTitle(message, title)
     if content:
         updateMessageContent(message, content)
-    return message.to_dict()
+    return message.to_json()
 
 
 @login_required
@@ -306,6 +305,21 @@ def event_interesting(club_id, event_id):
         return "Failed", 400
     addIntrested(event, user)
     return event.to_json()
+
+
+@db_app.route("/clubs/<club_id>/tags")
+def tags(club_id):
+    return tags_for_club(club_id)
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/tags/<tag_id>")
+def remove_tag(club_id, tag_id):
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Restrict", 400
+    delete_tag_to_club(club_id, tag_id)
+    club = get_club(club_id)
+    return club.to_json()
 
 
 ######################################################
