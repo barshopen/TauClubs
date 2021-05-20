@@ -1,3 +1,4 @@
+from server.auth.userauth import get_userauth_user_by_id
 from mongoengine import (
     Document,
     StringField,
@@ -13,6 +14,7 @@ from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
+from flask_login import current_user
 
 
 def names_of_tags(listTags):
@@ -20,6 +22,15 @@ def names_of_tags(listTags):
     for tag_id in listTags:
         re.append(Tag.objects.get(pk=tag_id).to_dict())
     return re
+
+
+def is_admin(club):
+    try:
+        user = get_userauth_user_by_id(current_user.get_id())
+        clubmembership = ClubMembership.objects.get(club=club, user=user)
+        return clubmembership.role == "A"
+    except DoesNotExist:
+        return False
 
 
 class Club(Document):
@@ -43,7 +54,7 @@ class Club(Document):
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
             "membersCount": 12,
-            "admin": False,
+            "admin": is_admin(self),
         }
 
     def to_json(self):
