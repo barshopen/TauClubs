@@ -237,9 +237,6 @@ def event_creation():
     return result, 200
 
 
-#
-
-
 @login_required
 @db_app.route("/clubs/<club_id>/messages/<event_id>/update")
 def event_update(club_id, event_id):
@@ -280,32 +277,33 @@ def event_delete(club_id, event_id):
     deleteEvent(event_id)
 
 
-@login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
-def event_attending(club_id, event_id):
+def validate_user_event_permession(club_id, event_id):
     if not club_id:
-        return "Failed", 400
-
+        return None
     user = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
     if not is_user_member(user, club):
-        return "Failed, not member", 400
+        return None
     event = getEvent(event_id)
+    return event, user
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
+def event_attending(club_id, event_id):
+    event, user = validate_user_event_permession(club_id, event_id)
+    if not event:
+        return "Failed", 400
     addAttending(event, user)
     return event.to_json()
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/interested", methods=["POST"])
+@db_app.route("/clubs/<club_id>/messages/<event_id>/interested")
 def event_interesting(club_id, event_id):
-    if not club_id:
+    event, user = validate_user_event_permession(club_id, event_id)
+    if not event:
         return "Failed", 400
-
-    user = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not is_user_member(user, club):
-        return "Failed, not member", 400
-    event = getEvent(event_id)
     addIntrested(event, user)
     return event.to_json()
 
