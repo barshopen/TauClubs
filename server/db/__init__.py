@@ -161,48 +161,9 @@ def event_creation():
     return result, 200
 
 
-
 @db_app.route("/upcoming_events")
 def upcoming_events():
     return get_all_events()
-
-@db_app.route("/clubs")
-def clubs():
-    """
-    example queries:
-    * {mainroute}/clubs -> returns all clubs
-    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-        foodies
-    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-        containes foodies OR have a 'Math' tag
-    """
-    clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
-
-
-@db_app.route("/club/<club_id>")
-def club_by_id(club_id):
-    return get_club(id=club_id)
-
-
-@db_app.route("/my_clubs")
-@login_required
-def my_clubs():
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    return get_user_clubs(cur_user_email)
-
-
-@db_app.route("/join_club", methods=["POST"])
-@login_required
-def join_club_by_id():
-    club_id = request.json.get("clubId")
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    res = join_club(cur_user_email, club_id)
-    if not res:
-        return "Could not complete request", 400
-
-
 
 
 #####################################################################################################
