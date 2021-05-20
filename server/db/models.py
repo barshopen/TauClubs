@@ -90,7 +90,7 @@ class Event(Document):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField(required=True, validation=None)
+    duration = FloatField( validation=None)
     startTime = DateTimeField(required=True)
     location = StringField()
     creatingClub = ReferenceField("Club", max_length=200, required=True)

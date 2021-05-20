@@ -1,25 +1,19 @@
-import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import { getClubs } from '../Shared/api';
 
-const fetchClubs = async clubId => {
-  const res = await getClubs(clubId);
+const fetchClubs = async () => {
+  const res = await getClubs();
   return res;
 };
 
-const useClubs = (clubId = null) => {
-  const storeKey = ['clubs', clubId];
+const useClubs = () => {
+  const storeKey = ['clubs'];
 
-  const { loading: loadingClubs, data: clubs } = useQuery(storeKey, () =>
-    fetchClubs(clubId)
-  );
-
-  const getClubById = useMemo(() => clubs?.find(({ id }) => id === clubId), []);
+  const { loading: loadingClubs, data: clubs } = useQuery(storeKey, fetchClubs);
 
   return {
     loadingClubs,
     clubs,
-    getClubById,
   };
 };
 

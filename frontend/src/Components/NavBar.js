@@ -129,17 +129,15 @@ const StyledMenu = withStyles({
   />
 ));
 
-function MenuItemWithToolTip({ title, content, icon, ...rest }) {
-  return (
-    <IconButton color='inherit' {...rest}>
-      <Tooltip title={title} arrow>
-        <Badge badgeContent={content} color='secondary'>
-          {icon}
-        </Badge>
-      </Tooltip>
-    </IconButton>
-  );
-}
+const MenuItemWithToolTip = ({ title, content, icon, ...rest }) => (
+  <IconButton color='inherit' {...rest}>
+    <Tooltip title={title} arrow>
+      <Badge badgeContent={content} color='secondary'>
+        {icon}
+      </Badge>
+    </Tooltip>
+  </IconButton>
+);
 
 MenuItemWithToolTip.propTypes = {
   title: PropTypes.string.isRequired,
@@ -295,6 +293,7 @@ export default function NavBar() {
 
       <MenuItem>
         <MenuItemWithToolTip
+          title='Log out'
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'

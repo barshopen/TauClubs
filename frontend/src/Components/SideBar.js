@@ -100,18 +100,18 @@ Copyright.propTypes = {
 };
 
 export default function SideBar() {
+  const classes = useStyles();
   const [clubsData, setClubsData] = useState([]);
 
-  useEffect(() => {
-    getMyClubs().then(mydata => setClubsData(mydata));
-  }, []);
-  const classes = useStyles();
+  useEffect(() => getMyClubs().then(mydata => setClubsData(mydata)), []);
+
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
   const showSideBarMobileToggleHandler = () => {
     setShowSideBarMobile(!showSideBarMobile);
   };
+
   const DrawerContent = (
     <div>
       <Toolbar />

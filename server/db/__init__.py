@@ -2,6 +2,8 @@ from os import path
 from server.db.user import is_user_member
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
+import datetime
+
 
 from server.db.message import (
     add_like,
@@ -116,20 +118,20 @@ def all_messages():
 
 
 @login_required
-@db_app.route("/clubs/create_message", methods=["POST"])
+@db_app.route("/club/create_message", methods=["POST"])
 def message_creation():
     club_id = request.json.get("clubId")
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user.id, club_id):
+        return "Failed", 400
     club = get_club(club_id)
     result = createMessage(
-        title=request.json.get("title"),
-        content=request.json.get("content"),
+        title=request.json.get('data')["message_title"],
+        content=request.json.get('data')["message_content"],
         club=club,
         user=user,
     )
-    return result, 200
+    return result.to_json(), 200
 
 
 @db_app.route("/clubs/<club_id>/messages/get_messages")
@@ -218,16 +220,17 @@ def get_event(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/create_event", methods=["POST"])
+@db_app.route("/club/create_event", methods=["POST"])
 def event_creation():
     club_id = request.json.get("clubId")
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user.id, club_id):
         return "Restrict", 400
     result = createEvent(
-        title=request.json.get("title"),
-        description=request.json.get("description"),
+        title=request.json.get('data')["event_title"],
+        description=request.json.get('data')["event_description"],
         duration=request.json.get("duration"),
-        startTime=request.json.get("startTime"),
+        startTime=datetime.datetime.strptime(request.json.get('data')["event_startDateTime"], '%Y-%m-%d %H:%M:%S.%f'),
         location=request.json.get("location"),
         club=get_club(club_id),
         profileImage=request.json.get("profileImage"),

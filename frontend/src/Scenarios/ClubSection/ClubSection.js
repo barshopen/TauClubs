@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AboutUs from './AboutUs';
@@ -6,7 +6,7 @@ import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
-import { getClub } from '../../Shared/api';
+import useClub from '../../hooks/useClub';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -51,17 +51,13 @@ const NavLink = styled(Link)`
   }
 `;
 
-function ClubSection() {
+const ClubSection = () => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
-  const [clubData, setClubData] = useState();
 
-  useEffect(() => {
-    getClub(clubId).then(mydata => {
-      setClubData(mydata);
-    });
-  }, [clubId]);
+  const { clubData } = useClub(clubId);
+  const admin = true;
 
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
@@ -86,17 +82,28 @@ function ClubSection() {
         </NavBarContainer>
       </HeaderPhoto>
       <Switch>
-        <Route path='/club/board/:clubId' component={ClubBoard} />
-        <Route path='/club/about/:clubId' component={AboutUs} />
-        <Route path='/club/contact/:clubId' component={Contact} />
+        <Route
+          path='/club/board/:clubId'
+          component={() => (
+            // <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
+            <ClubBoard currentUserIsClubsAdmin={admin} />
+          )}
+        />
+        <Route
+          path='/club/about/:clubId'
+          component={() => <AboutUs description={clubData?.description} />}
+        />
+        <Route
+          path='/club/contact/:clubId'
+          component={() => <Contact clubName={clubData?.name} />}
+        />
         <Route
           path='/club/joinus/:clubId'
-          clubName={clubData?.name}
           component={() => <JoinUs clubName={clubData?.name} clubId={clubId} />}
         />
       </Switch>
     </SimpleContaConiner>
   );
-}
+};
 
 export default ClubSection;
