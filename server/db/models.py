@@ -20,7 +20,7 @@ class Club(Document):
     name = StringField(max_length=50, required=True)
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
-    tags = ListField(ObjectIdField)
+    tags = ListField()  # list of tags
     creationTime = DateTimeField(
         required=True, validation=None
     )  # check validation define
@@ -106,19 +106,8 @@ class Tag(Document):
     # validation hex of 6 nibbles(#ABCDEF)
     name = StringField(max_length=200, required=True)
     color = IntField(required=True)
-    clubsWithTag = ListField(ObjectIdField, required=True)
+    clubsWithTag = ListField(required=True)  # list of clubs
     meta = {"collection": "tags"}
-
-    def to_dict(self):
-        return {
-            "id": str(self.pk),
-            "name": self.name,
-            "color": self.color,
-            "clubsWithTag": self.clubsWithTag,
-        }
-
-    def to_json(self):
-        return json.dumps(self.to_dict())
 
 
 class Message(Document):
