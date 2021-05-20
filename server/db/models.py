@@ -74,6 +74,17 @@ class ClubMembership(Document):
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
 
+    def to_dict(self):
+        return {
+            "id": str(self.pk),
+            "clubName": self.clubName,
+            "memberName": self.memberName,
+            "role": self.role,
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class Event(Document):
     meta = {"collection": "events"}
