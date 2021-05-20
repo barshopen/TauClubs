@@ -10,9 +10,13 @@ const postApi = (route, data) =>
     body: JSON.stringify(data),
   }).then(res => res.json());
 
-export const createClub = data => postApi('/db/create_club', data);
-export const joinClub = data => postApi('/db/join_club', data);
-export const leaveClub = data => postApi('/db/leave_club', data);
+// export const createClub = data => postApi('/db/create_club', data);
+// export const joinClub = data => postApi('/db/join_club', data);
+// export const leaveClub = data => postApi('/db/leave_club', data);
+
+export const createClub = data => post('/db/create_club', data);
+export const joinClub = data => post('/db/join_club', data);
+export const leaveClub = data => post('/db/leave_club', data);
 
 export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);

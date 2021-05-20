@@ -9,12 +9,8 @@ import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
-<<<<<<< HEAD
 import { getClubs } from '../../Shared/api';
 import useClubFeed from '../../hooks/useClubFeed';
-=======
-import { getMessages, getClub, getUpcomingEvents } from '../../Shared/api';
->>>>>>> a67580a66acae71b1badbd2627354b726a544504
 
 const Container = styled.div`
   display: grid;
