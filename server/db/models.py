@@ -106,10 +106,9 @@ class Event(Document):
 
 
 class Tag(Document):
-    # validation hex of 6 nibbles(#ABCDEF)
     name = StringField(max_length=200, required=True)
     color = IntField(required=True)
-    clubsWithTag = ListField(ObjectIdField, required=True)  # list of clubs
+    clubsWithTag = ListField(ObjectIdField(), required=True)  # list of clubs
     meta = {"collection": "tags"}
 
     def to_dict(self):
