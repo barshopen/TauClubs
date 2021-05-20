@@ -26,7 +26,7 @@ from server.db.event import (
 )
 from server.db.models import validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
-
+from server.db.tag import delete_tag_to_club, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_email_by_id, get_userauth_user_by_id
 
@@ -306,6 +306,21 @@ def event_interesting(club_id, event_id):
         return "Failed", 400
     addIntrested(event, user)
     return event.to_json()
+
+
+@db_app.route("/clubs/<club_id>/tags")
+def tags(club_id):
+    return tags_for_club(club_id)
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/tags/<tag_id>")
+def remove_tag(club_id, tag_id):
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Restrict", 400
+    delete_tag_to_club(club_id, tag_id)
+    club = get_club(club_id)
+    return club.to_json()
 
 
 ######################################################

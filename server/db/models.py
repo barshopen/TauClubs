@@ -20,12 +20,17 @@ class Club(Document):
     name = StringField(max_length=50, required=True)
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
-    tags = ListField()  # list of tags
-    creationTime = DateTimeField(
-        required=True, validation=None
-    )  # check validation define
+    tags = ListField(ObjectIdField())
+    creationTime = DateTimeField(required=True, validation=None)
     lastUpdateTime = DateTimeField(validation=None)  # not sure if relevant
     contactMail = StringField(required=True)
+
+    def get_the_name(listTags):
+        print("here")
+        for tag_id in listTags:
+            listTags.append(tag=Tag.objects.get(pk=tag_id).to_dict())
+        print(listTags)
+        return json.dumps(listTags)
 
     def to_dict(self):
         return {
@@ -33,7 +38,7 @@ class Club(Document):
             "name": self.name,
             "profileImage": self.profileImage,
             "description": self.description,
-            "tags": self.tags,
+            # "tags": Club.get_the_name(self.tags),
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
@@ -106,8 +111,19 @@ class Tag(Document):
     # validation hex of 6 nibbles(#ABCDEF)
     name = StringField(max_length=200, required=True)
     color = IntField(required=True)
-    clubsWithTag = ListField(required=True)  # list of clubs
+    clubsWithTag = ListField(ObjectIdField, required=True)  # list of clubs
     meta = {"collection": "tags"}
+
+    def to_dict(self):
+        return {
+            "id": str(self.pk),
+            "name": self.name,
+            "color": self.color,
+            "clubsWithTag": self.clubsWithTag,
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class Message(Document):
