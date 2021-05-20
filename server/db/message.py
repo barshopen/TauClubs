@@ -1,4 +1,5 @@
 import datetime
+import json
 from server.db.models import Message
 
 
@@ -41,7 +42,14 @@ def get_messages_by_club(club):
 
 
 def get_messages():
-    return Message.objects().to_json()
+    return json.dumps(
+        list(
+            map(
+                lambda message: message.to_dict(),
+                Message.objects(),
+            )
+        )
+    )
 
 
 def delete_message(id: str):

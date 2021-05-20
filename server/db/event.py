@@ -1,6 +1,6 @@
+import json
 from server.db.models import Event
 import datetime
-from bson.objectid import ObjectId
 
 
 def currentTime():
@@ -8,14 +8,18 @@ def currentTime():
     return now
 
 
-def createEvent(title, duration, club, description=None, profileImage=None):
+def createEvent(
+    title, duration, club, startTime, location=None, description=None, profileImage=None
+):
     newEvent = Event(
         title=title,
         description=description,
         creationTime=currentTime(),
         duration=duration,
+        startTime=startTime,
         lastUpdateTime=currentTime(),
         creatingClub=club,
+        location=location,
         profileImage=profileImage,
     )
     newEvent.save()
@@ -69,4 +73,11 @@ def getEvent(event_id):
 
 
 def get_all_events():
-    return Event.objects().to_json()
+    return json.dumps(
+        list(
+            map(
+                lambda event: event.to_dict(),
+                Event.objects(),
+            )
+        )
+    )

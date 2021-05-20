@@ -6,11 +6,12 @@ from mongoengine import (
     URLField,
     DateTimeField,
     ListField,
-    LazyReferenceField,
-    FloatField,
     IntField,
 )
 import json
+
+from mongoengine.errors import DoesNotExist
+from mongoengine.fields import FloatField
 
 
 class Club(Document):
@@ -51,6 +52,9 @@ class User(Document):
     picture = URLField()
     meta = {"collection": "users"}
 
+    def full_name(self):
+        return self.firstName + " " + self.lastName
+
     def to_dict(self):
         return {
             # TODO
@@ -78,19 +82,32 @@ class Event(Document):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    creationTime = DateTimeField(
-        required=True, validation=None
-    )  # check validation define
-    duration = IntField(required=True, validation=None)  # check validation
-    lastUpdateTime = DateTimeField(
-        required=True, validation=None
-    )  # not sure if relevant
-    membersAttending = ListField(required=True)  # check if can define the list
-    creatingClub = StringField(
-        max_length=200, required=True
-    )  # check how to define LazyReferenceField
+    duration = FloatField(required=True, validation=None)
+    startTime = DateTimeField(required=True)
+    location = StringField()
+    creatingClub = ReferenceField("Club", max_length=200, required=True)
+    creationTime = DateTimeField(required=True, validation=None)
+    lastUpdateTime = DateTimeField(required=True, validation=None)
     profileImage = URLField()
-    intrested = ListField(required=True)  # check if can define the list
+    intrested = ListField()
+    membersAttending = ListField()
+
+    def to_dict(self):
+        return {
+            "id": str(self.pk),
+            "title": self.title,
+            "description": self.description,
+            "duration": self.duration,
+            "startTime": self.startTime.isoformat(),
+            "location": self.location,
+            "creationTime": self.creationTime.isoformat(),
+            "lastUpdateTime": self.lastUpdateTime.isoformat(),
+            "clubName": self.creatingClub.name,
+            "profileImage": self.profileImage,
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class Tag(Document):
@@ -108,6 +125,7 @@ class Message(Document):
     creationTime = DateTimeField(
         required=True, validation=None
     )  # check validation define
+    profileImage = URLField()
     lastUpdateTime = DateTimeField(
         required=True, validation=None
     )  # not sure if relevant
@@ -128,8 +146,9 @@ class Message(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "likes": self.likes,
-            "creatingClub": self.creatingClub.to_dict(),
-            "creatingUser": "sharon",  #######
+            "clubName": self.creatingClub.name,
+            "userName": self.creatingUser.full_name(),
+            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):
@@ -144,5 +163,5 @@ def validatePermession(user_id, club_id):
         if membership.role != "A":
             return False  # error only admin can create message
         return True
-    except:
+    except DoesNotExist:
         return False  # invalid membership
