@@ -1,4 +1,5 @@
 import datetime
+import json
 from server.db.models import Message
 
 
@@ -28,12 +29,30 @@ def updateMessageTitle(message: Message, title):
     message.update(title=title, lastUpdateTime=currentTime())
 
 
-def get_message_by_club(club):
-    return Message.objects(creatingClub=club).to_json()
-
-
 def get_message(id: str):
-    return Message.objects.get(id=id).to_json()
+    return Message.objects.get(id=id)
+
+
+def get_messages_by_club(club):
+    return json.dumps(
+        list(
+            map(
+                lambda message: message.to_dict(),
+                Message.objects(creatingClub=club),
+            )
+        )
+    )
+
+
+def get_messages():
+    return json.dumps(
+        list(
+            map(
+                lambda message: message.to_dict(),
+                Message.objects(),
+            )
+        )
+    )
 
 
 def delete_message(id: str):
@@ -41,7 +60,17 @@ def delete_message(id: str):
     message.delete()
 
 
-def add_likes(message_id, user_id):
+def add_like(message_id, user):
     message = Message.objects.get(id=message_id)
-    message.likes.append(user_id)
-    message.update(likes=message.likes, lastUpdateTime=currentTime())
+    if user.id not in message.likes:
+        message.likes.append(user.id)
+        message.update(likes=message.likes, lastUpdateTime=currentTime())
+    return message.to_dict()
+
+
+def unlike(message_id, user):
+    message = Message.objects.get(id=message_id)
+    if user.id in message.likes:
+        message.likes.remove(user.id)
+        message.update(likes=message.likes, lastUpdateTime=currentTime())
+    return message.to_dict()

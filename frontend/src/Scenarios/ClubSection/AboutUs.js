@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { getClubs } from '../../Shared/api';
+import { getClub } from '../../Shared/api';
 
 const ContainerOuter = styled.div`
   margin: 40px;
@@ -17,7 +17,7 @@ function AboutUs() {
   const [clubData, setClubData] = useState();
 
   useEffect(() => {
-    getClubs(clubId).then(mydata => setClubData(mydata));
+    getClub(clubId).then(mydata => setClubData(mydata));
   }, [clubId]);
   useEffect(() => {}, [clubData]);
   return <ContainerOuter>{clubData?.description}</ContainerOuter>;

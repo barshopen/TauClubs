@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { newUserData } from '../../../Shared/atoms';
 import { Form, Description } from './index';
+import { joinClub } from '../../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -23,9 +24,9 @@ const useStyles = makeStyles(theme => ({
   layout: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
-    width: ' 50%',
+    width: '50%',
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: ' 70%',
+      width: '70%',
       height: '550px',
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ['General', 'Description'];
 
-const JoinUs = ({ clubName }) => {
+const JoinUs = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,10 +93,11 @@ const JoinUs = ({ clubName }) => {
   const handleSubmit = event => {
     event.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+
+    joinClub({ clubId }).then(() => {
       setActiveStep(prev => prev + 1);
       setIsLoading(false);
-    }, 2000);
+    });
   };
 
   const handleNext = () => {
@@ -186,6 +188,7 @@ const JoinUs = ({ clubName }) => {
 
 JoinUs.propTypes = {
   clubName: PropTypes.string,
+  clubId: PropTypes.string.isRequired,
 };
 
 JoinUs.defaultProps = {

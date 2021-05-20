@@ -1,5 +1,19 @@
 import { get, post } from './HTTP';
 
+const postApi = (route, data) =>
+  fetch(route, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(res => res.json());
+
+export const createClub = data => postApi('/db/create_club', data);
+export const joinClub = data => postApi('/db/join_club', data);
+export const leaveClub = data => postApi('/db/leave_club', data);
+
 export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
@@ -9,7 +23,11 @@ export const getMessages = (clubId = null) => getDb('messages', clubId);
 
 // export const getMessage = (clubId = null, messageId = null) => getDb('messages', clubId);
 
+export const getClub = (clubId = null) => getDb('club', clubId);
+
 export const getClubs = (clubId = null) => getDb('clubs', clubId);
+
+export const getMyClubs = () => getDb('my_clubs');
 
 export const getUpcomingEvents = (eventId = null) =>
   getDb('upcoming_events', eventId);

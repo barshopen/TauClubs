@@ -1,6 +1,7 @@
+import json
 from server.db.models import Event
 import datetime
-from bson.objectid import ObjectId
+from mongoengine.queryset.visitor import Q
 
 
 def currentTime():
@@ -8,22 +9,32 @@ def currentTime():
     return now
 
 
-def createEvent(title, duration, club, description=None, profileImage=None):
+def createEvent(
+    title, duration, club, startTime, location=None, description=None, profileImage=None
+):
     newEvent = Event(
         title=title,
         description=description,
         creationTime=currentTime(),
         duration=duration,
+        startTime=startTime,
         lastUpdateTime=currentTime(),
         creatingClub=club,
+        location=location,
         profileImage=profileImage,
     )
     newEvent.save()
-    return newEvent
+    return newEvent.to_dict()
 
 
 def updateEventContent(
-    event, title=None, description=None, duration=None, profileImage=None
+    event,
+    startTime=None,
+    location=None,
+    title=None,
+    description=None,
+    duration=None,
+    profileImage=None,
 ):
     if title:
         event.title = title
@@ -33,6 +44,10 @@ def updateEventContent(
         event.duration = duration
     if profileImage:
         event.profileImage = profileImage
+    if startTime:
+        event.startTime = startTime
+    if location:
+        event.location = location
     now = currentTime()
     event.update(
         lastUpdateTime=now,
@@ -65,4 +80,27 @@ def deleteEvent(event_id):
 
 
 def getEvent(event_id):
-    return Event.objects.get(id=event_id).to_json()
+    return Event.objects.get(id=event_id)
+
+
+def get_all_events():
+    return json.dumps(
+        list(
+            map(
+                lambda event: event.to_dict(),
+                Event.objects(),
+            )
+        )
+    )
+
+
+def events_by_user(user):
+    event_Q = Q(membersAttending__contains=user)
+    return json.dumps(
+        list(
+            map(
+                lambda event: event.to_dict(),
+                Event.objects.filter(event_Q),
+            )
+        )
+    )

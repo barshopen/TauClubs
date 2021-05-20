@@ -169,7 +169,7 @@ export default function NavBar() {
 
   const handleLogout = () => {
     logOut();
-    setUser(false);
+    setUser(null);
   };
 
   // primitive consts
