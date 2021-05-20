@@ -1,10 +1,13 @@
 from os import path
+from server.db.user import is_user_member
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 
 from server.db.message import (
+    add_like,
     createMessage,
     get_messages,
+    unlike,
     updateMessageContent,
     updateMessageTitle,
     delete_message,
@@ -85,7 +88,7 @@ def clubs():
 
 @db_app.route("/club/<club_id>")
 def club_by_id(club_id):
-    return get_club(id=club_id)
+    return get_club(id=club_id).to_json()
 
 
 @db_app.route("/my_clubs")
@@ -103,14 +106,6 @@ def join_club_by_id():
     res = join_club(cur_user_email, club_id)
     if not res:
         return "Could not complete request", 400
-
-
-@db_app.route("/clubs/<club_id>/messages/get_messages")
-def messages(club_id):
-    if not club_id:
-        return "Failed", 400
-    club = get_club(club_id)
-    return get_messages_by_club(club)
 
 
 @db_app.route("/messages")
@@ -132,6 +127,73 @@ def message_creation():
         club=club,
         user=user,
     )
+    return result, 200
+
+
+@db_app.route("/clubs/<club_id>/messages/get_messages")
+def messages_by_club(club_id):
+    if not club_id:
+        return "Failed", 400
+    club = get_club(club_id)
+    return get_messages_by_club(club)
+
+
+@db_app.route("/clubs/<club_id>/messages/<message_id>")
+def message(club_id, message_id):
+    if not club_id:
+        return "Failed", 400
+    return get_message(message_id).to_json()
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
+def message_update(club_id, message_id):
+    if not club_id:
+        return "Failed", 400
+
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Restrict", 400
+    message = get_message(id=message_id)
+    title = request.json.get("title")
+    content = request.json.get("content")
+    if title:
+        updateMessageTitle(message, title)
+    if content:
+        updateMessageContent(message, content)
+    return message.to_dict()
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<message_id>/delete")
+def message_delete(club_id, message_id):
+    if not club_id:
+        return "Failed", 400
+
+    if not validatePermession(current_user.get_id(), club_id):
+        return "Restrict", 400
+
+    delete_message(message_id)
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<message_id>/like")
+def like_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = add_like(message_id, user)
+    return result, 200
+
+
+@login_required
+@db_app.route("/clubs/<club_id>/messages/<message_id>/unlike")
+def unlike_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = unlike(message_id, user)
     return result, 200
 
 
@@ -166,35 +228,7 @@ def upcoming_events():
     return get_all_events()
 
 
-#####################################################################################################
-@login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
-def message_update(club_id, message_id):
-    if not club_id:
-        return "Failed", 400
-
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Restrict", 400
-    message = get_message(id=message_id)
-    title = request.form.get("title")
-    content = request.form.get("content")
-    if title:
-        updateMessageTitle(message, title)
-    if content:
-        updateMessageContent(message, content)
-    return message
-
-
-@login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/delete", methods=["POST"])
-def message_delete(club_id, message_id):
-    if not club_id:
-        return "Failed", 400
-
-    if not validatePermession(current_user.get_id(), club_id):
-        return "Restrict", 400
-
-    delete_message(message_id)
+########################################################################################
 
 
 @login_required
@@ -259,6 +293,10 @@ def event_interesting(club_id, event_id):
         return "Restrict", 400
     event = getEvent(event_id)
     addIntrested(event, user)
+
+
+######################################################
+# how do we us it?
 
 
 @db_app.route("/users")

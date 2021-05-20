@@ -9,6 +9,7 @@ from mongoengine import (
     IntField,
 )
 import json
+from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
@@ -45,7 +46,6 @@ class Club(Document):
 
 
 class User(Document):
-    # id = UUIDField()  # consider ObjectIdField
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
@@ -54,11 +54,6 @@ class User(Document):
 
     def full_name(self):
         return self.firstName + " " + self.lastName
-
-    def to_dict(self):
-        return {
-            # TODO
-        }
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -119,23 +114,13 @@ class Tag(Document):
 
 
 class Message(Document):
-    # id = UUIDField()  # consider ObjectIdField
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)
-    creationTime = DateTimeField(
-        required=True, validation=None
-    )  # check validation define
-    profileImage = URLField()
-    lastUpdateTime = DateTimeField(
-        required=True, validation=None
-    )  # not sure if relevant
-    likes = ListField()  # check if can define the list
-    creatingClub = ReferenceField(
-        "Club", max_length=200, required=True
-    )  # check how to deine
-    creatingUser = ReferenceField(
-        "User", max_length=200, required=True
-    )  # check how to define LazyReferenceField
+    creationTime = DateTimeField(required=True)
+    lastUpdateTime = DateTimeField(required=True)
+    likes = ListField(ObjectIdField)
+    creatingClub = ReferenceField("Club", max_length=200, required=True)
+    creatingUser = ReferenceField("User", max_length=200, required=True)
     meta = {"collection": "messages"}
 
     def to_dict(self):

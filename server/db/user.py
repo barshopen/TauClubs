@@ -1,7 +1,7 @@
 from server.db.models import User, Club, ClubMembership
 from server.db.clubmembership import createRegularMembership
 from pymongo.errors import DuplicateKeyError
-from mongoengine.errors import NotUniqueError
+from mongoengine.errors import DoesNotExist, NotUniqueError
 
 
 def create_user(firstName, lastName, contactMail, picture):
@@ -25,3 +25,11 @@ def listOfClubsPerUser(user):
 
 def joinClubAsUser(user: User, club: Club):
     createRegularMembership(user, club)
+
+
+def is_user_member(user, club):
+    try:
+        ClubMembership.objects(club=club, member=user)
+        return True
+    except DoesNotExist:
+        return False

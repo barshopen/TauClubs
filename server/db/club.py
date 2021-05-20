@@ -50,7 +50,7 @@ def get_clubs(name: str, tag: str):
 
 
 def get_club(id: str):
-    return Club.objects.get(pk=ObjectId(id)).to_json()
+    return Club.objects.get(pk=ObjectId(id))
 
 
 def members_count(club: Club):
