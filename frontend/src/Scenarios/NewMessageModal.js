@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useRouteMatch } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import GenericModal from '../Components/Generic/GenericModal';
+import { createNewMessgae } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -25,46 +27,54 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewMessageContnet({ setOpen }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
   const classes = useStyles();
+  const [formValues, setFormValues] = useState({});
+  const {
+    params: { clubId },
+  } = useRouteMatch('/club/*/:clubId');
 
-  const handleChangeTitle = e => {
-    setTitle(e.target.value);
+  const handleChange = e => {
+    setFormValues(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
-  const handleChangeContent = e => {
-    setContent(e.target.value);
+
+  const submitHandler = e => {
+    e.preventDefault();
+    createNewMessgae({ payload: { clubId, data: formValues } });
+
+    setOpen(false);
   };
+
   return (
-    <form className={classes.root} noValidate autoComplete='off'>
+    <form
+      className={classes.root}
+      onSubmit={submitHandler}
+      noValidate
+      autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
         Publish New Message
       </Typography>
 
       <TextField
-        id='message-title'
+        name='message_title'
         label='Message Title'
         variant='outlined'
-        value={title}
-        onChange={handleChangeTitle}
+        onChange={handleChange}
       />
       <TextField
-        id='message-content'
+        name='message_content'
         label='Message Content'
         multiline
         variant='outlined'
-        value={content}
-        onChange={handleChangeContent}
+        onChange={handleChange}
         rows={4}
         rowsMax={10}
       />
 
       <div className={classes.buttons}>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(false)}>
+        <Button type='submit' variant='contained' color='primary'>
           Publish
         </Button>
         <Button variant='contained' onClick={() => setOpen(false)}>

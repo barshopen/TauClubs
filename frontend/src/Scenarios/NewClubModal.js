@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import GenericModal from '../Components/Generic/GenericModal';
+import { createClub } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -49,16 +50,10 @@ function NewClubContent({ setOpen }) {
 
   const submitHandler = e => {
     e.preventDefault();
-    fetch('/db/create_club', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(values),
-    });
+    createClub(values);
     setOpen(false);
   };
+
   return (
     <form
       className={classes.root}

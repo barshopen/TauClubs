@@ -14,6 +14,10 @@ def get_userauth_email_by_id(id: str):
     return UserAuth.objects.get(pk=ObjectId(id)).email
 
 
+def get_userauth_user_by_id(id: str):
+    return UserAuth.objects.get(pk=ObjectId(id)).userauth
+
+
 def create_user_auth(firstName, lastName, email, picture):
     full_user = create_user(firstName, lastName, email, picture)
     user = UserAuth(email=email, userauth=full_user)
