@@ -73,3 +73,11 @@ def is_user_member(user, club):
         return True
     except DoesNotExist:
         return False
+
+
+def is_manager(user):
+    try:
+        ClubMembership.objects(member=user)
+        return True
+    except DoesNotExist:
+        return False

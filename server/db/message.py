@@ -17,6 +17,7 @@ def createMessage(title, content, club, user):
         creationTime=currentTime(),
         lastUpdateTime=currentTime(),
     )
+    club.update(lastUpdateTime=currentTime())
     message.save()
     return message
 

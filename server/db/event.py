@@ -24,6 +24,7 @@ def createEvent(
         profileImage=profileImage,
     )
     newEvent.save()
+    club.update(lastUpdateTime=currentTime())
     return newEvent.to_dict()
 
 
