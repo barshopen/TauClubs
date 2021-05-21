@@ -35,9 +35,7 @@ const App = () => {
   const setUser = useSetRecoilState(currentUser);
 
   useEffect(() => {
-    whoami().then(d => {
-      setUser(d);
-    });
+    whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
   }, []);
 
   return (

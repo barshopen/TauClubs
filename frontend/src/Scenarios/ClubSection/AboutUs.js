@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { getClubs } from '../../Shared/api';
 
 const ContainerOuter = styled.div`
   margin: 40px;
@@ -10,17 +9,11 @@ const ContainerOuter = styled.div`
   justify-content: center;
 `;
 
-function AboutUs() {
-  const {
-    params: { clubId },
-  } = useRouteMatch('/club/*/:clubId');
-  const [clubData, setClubData] = useState();
+const AboutUs = ({ description }) => (
+  <ContainerOuter>{description}</ContainerOuter>
+);
 
-  useEffect(() => {
-    getClubs(clubId).then(mydata => setClubData(mydata));
-  }, [clubId]);
-  useEffect(() => {}, [clubData]);
-  return <ContainerOuter>{clubData?.description}</ContainerOuter>;
-}
+AboutUs.propTypes = { description: PropTypes.string };
+AboutUs.defaultProps = { description: '' };
 
 export default AboutUs;

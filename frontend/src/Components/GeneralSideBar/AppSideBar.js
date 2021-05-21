@@ -23,6 +23,7 @@ import { showSideBarMobileState } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
+import { getMyClubs } from '../Shared/api';
 
 const drawerWidth = 240;
 
@@ -104,14 +105,12 @@ Copyright.propTypes = {
   className: PropTypes.string.isRequired,
 };
 
-const AppSideBar = () => {
+export default function AppSideBar() {
+  const classes = useStyles();
   const [clubsData, setClubsData] = useState([]);
 
-  useEffect(() => {
-    getClubs().then(mydata => setClubsData(mydata));
-  }, []);
+  useEffect(() => getMyClubs().then(mydata => setClubsData(mydata)), []);
 
-  const classes = useStyles();
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
@@ -163,6 +162,4 @@ const AppSideBar = () => {
       content={content}
     />
   );
-};
-
-export default AppSideBar;
+}

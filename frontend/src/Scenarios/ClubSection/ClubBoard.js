@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
-import PropTypes from 'prop-types';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
-import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
+import useClubFeed from '../../hooks/useClubFeed';
 
 const Container = styled.div`
   display: grid;
@@ -28,13 +29,11 @@ const IconContainer = styled.div`
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
-function IconBu({ ariaLabel, onClick }) {
-  return (
-    <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-      <AddIcon />
-    </IconButton>
-  );
-}
+const IconBu = ({ ariaLabel, onClick }) => (
+  <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
+    <AddIcon />
+  </IconButton>
+);
 
 IconBu.propTypes = {
   ariaLabel: PropTypes.string,
@@ -44,40 +43,65 @@ IconBu.defaultProps = {
   ariaLabel: '',
 };
 
-function ClubBoard() {
-  const [messagesData, setMessagesData] = useState();
-  const [upcomingEvents, setUpcomingEvents] = useState();
+const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
-  const [isAdmin, setIsAdmin] = useState();
 
-  useEffect(() => {
-    getClubs(clubId).then(mydata => setIsAdmin(mydata.admin));
+  const {
+    loadingMessages,
+    messagesData,
+    loadingEvents,
+    upcomingEvents,
+  } = useClubFeed({ clubId });
 
-    getMessages().then(mydata => setMessagesData(mydata.slice(0, 7)));
-
-    getUpcomingEvents().then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
-  }, [clubId]);
   return (
     <>
       <Container>
         <div>
-          <Messages data={messagesData} />
+          {loadingMessages ? (
+            <Loader
+              type='TailSpin'
+              color='#00BFFF'
+              height={50}
+              alignItems='center'
+              width={50}
+            />
+          ) : (
+            <Messages data={messagesData} />
+          )}
         </div>
-        <IconContainer show={isAdmin}>
+        <IconContainer show={currentUserIsClubsAdmin}>
           <NewMessageModal ClickableTrigger={IconBu} />
         </IconContainer>
 
         <div>
-          <UpcomingEvents data={upcomingEvents} />
+          {loadingEvents ? (
+            <Loader
+              type='TailSpin'
+              color='#00BFFF'
+              height={50}
+              alignItems='center'
+              width={50}
+            />
+          ) : (
+            <UpcomingEvents data={upcomingEvents} />
+          )}
         </div>
-        <IconContainer show={isAdmin}>
+        <IconContainer show={currentUserIsClubsAdmin}>
           <NewEventModal ClickableTrigger={IconBu} />
         </IconContainer>
       </Container>
     </>
   );
-}
+};
 
 export default ClubBoard;
+
+ClubBoard.propTypes = {
+  currentUserIsClubsAdmin: PropTypes.bool,
+};
+
+ClubBoard.defaultProps = {
+  currentUserIsClubsAdmin: false,
+};
