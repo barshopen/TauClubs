@@ -138,6 +138,30 @@ def upcoming_events():
     return get_all_events()
 
 
+@login_required
+@db_app.route("/club/create_event", methods=["POST"])
+def event_creation():
+    club_id = request.json.get("clubId")
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
+        return "Restrict", 400
+    result = createEvent(
+        title=request.json.get("data")["event_title"],
+        description=request.json.get("data")["event_description"],
+        duration=request.json.get("duration"),
+        startTime=datetime.datetime.strptime(
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%d %H:%M:%S.%f"
+        ),
+        location=request.json.get("location"),
+        club=get_club(club_id),
+        profileImage=request.json.get("profileImage"),
+    )
+    if not result:
+        return "Failed", 400
+
+    return result, 200
+
+
 ##################################################
 # from here it is not supported yet at the front end so haven't checked
 
@@ -221,30 +245,6 @@ def get_event(club_id, event_id):
     if not club_id:
         return "Failed", 400
     return getEvent(id=event_id).to_json()
-
-
-@login_required
-@db_app.route("/club/create_event", methods=["POST"])
-def event_creation():
-    club_id = request.json.get("clubId")
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    result = createEvent(
-        title=request.json.get("data")["event_title"],
-        description=request.json.get("data")["event_description"],
-        duration=request.json.get("duration"),
-        startTime=datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%d %H:%M:%S.%f"
-        ),
-        location=request.json.get("location"),
-        club=get_club(club_id),
-        profileImage=request.json.get("profileImage"),
-    )
-    if not result:
-        return "Failed", 400
-
-    return result, 200
 
 
 @login_required
