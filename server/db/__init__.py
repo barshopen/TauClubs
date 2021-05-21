@@ -150,7 +150,7 @@ def event_creation():
         description=request.json.get("data")["event_description"],
         duration=request.json.get("duration"),
         startTime=datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%d %H:%M:%S.%f"
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         ),
         location=request.json.get("location"),
         club=get_club(club_id),
