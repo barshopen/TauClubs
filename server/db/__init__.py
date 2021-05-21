@@ -133,6 +133,15 @@ def message_creation():
     return result.to_json(), 200
 
 
+@db_app.route("/upcoming_events")
+def upcoming_events():
+    return get_all_events()
+
+
+##################################################
+# from here it is not supported yet at the front end so haven't checked
+
+
 @db_app.route("/club/<club_id>/messages/get_messages")
 def messages_by_club(club_id):
     if not club_id:
@@ -199,11 +208,6 @@ def unlike_message(club_id, message_id):
         return "Failed", 400
     result = unlike(message_id, user)
     return result, 200
-
-
-@db_app.route("/upcoming_events")
-def upcoming_events():
-    return get_all_events()
 
 
 @db_app.route("/my_events")
