@@ -1,7 +1,9 @@
 **/node_modules/*
+**/.vscode/*
 **/__pycache__/*
 **/.env/*
 **/.env
 **/.pytest_cache/*
 **/__staticbuild__/*
 **/yarn-error.log/*
+**/build/*
