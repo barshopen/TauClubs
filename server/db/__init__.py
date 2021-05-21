@@ -1,5 +1,5 @@
 from os import path
-from server.db.user import is_user_member
+from server.db.clubmembership import is_user_member
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 import datetime
@@ -30,7 +30,7 @@ from server.db.models import validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
 from server.db.tag import delete_tag_to_club, tags_for_club
 from flask_login import current_user, login_required
-from server.auth.userauth import get_userauth_email_by_id, get_userauth_user_by_id
+from server.auth.userauth import get_userauth_user_by_id
 
 
 STATIC_FOLDER_NAME = "mock-api"
@@ -58,9 +58,8 @@ def filter_by_id(data, data_id):
 @db_app.route("/create_club", methods=["POST"])
 @login_required
 def club_creation():
-    print(current_user.get_id())
-    print(request.json)
-    email = get_userauth_email_by_id(current_user.get_id())
+    user = get_userauth_user_by_id(current_user.get_id())
+    email = user.contactMail
     result = establish_club(
         email,
         name=request.json.get("name"),
@@ -70,7 +69,6 @@ def club_creation():
     )
     if not result:
         return "Failed", 400
-
     return result, 200
 
 
@@ -97,15 +95,16 @@ def club_by_id(club_id):
 @db_app.route("/my_clubs")
 @login_required
 def my_clubs():
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
-    return get_user_clubs(cur_user_email)
+    user = get_userauth_user_by_id(current_user.get_id())
+    return get_user_clubs(user)
 
 
 @db_app.route("/join_club", methods=["POST"])
 @login_required
 def join_club_by_id():
     club_id = request.json.get("clubId")
-    cur_user_email = get_userauth_email_by_id(current_user.get_id())
+    user = get_userauth_user_by_id(current_user.get_id())
+    cur_user_email = user.contactMail
     res = join_club(cur_user_email, club_id).to_json()
     if not res:
         return "Could not complete request", 400
@@ -122,19 +121,19 @@ def all_messages():
 def message_creation():
     club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user.id, club_id):
+    if not validatePermession(user, club_id):
         return "Failed", 400
     club = get_club(club_id)
     result = createMessage(
-        title=request.json.get('data')["message_title"],
-        content=request.json.get('data')["message_content"],
+        title=request.json.get("data")["message_title"],
+        content=request.json.get("data")["message_content"],
         club=club,
         user=user,
     )
     return result.to_json(), 200
 
 
-@db_app.route("/clubs/<club_id>/messages/get_messages")
+@db_app.route("/club/<club_id>/messages/get_messages")
 def messages_by_club(club_id):
     if not club_id:
         return "Failed", 400
@@ -142,7 +141,7 @@ def messages_by_club(club_id):
     return get_messages_by_club(club)
 
 
-@db_app.route("/clubs/<club_id>/messages/<message_id>")
+@db_app.route("/club/<club_id>/messages/<message_id>")
 def message(club_id, message_id):
     if not club_id:
         return "Failed", 400
@@ -150,12 +149,13 @@ def message(club_id, message_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/update")
+@db_app.route("/club/<club_id>/messages/<message_id>/update")
 def message_update(club_id, message_id):
     if not club_id:
         return "Failed", 400
 
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Restrict", 400
     message = get_message(id=message_id)
     title = request.json.get("title")
@@ -168,19 +168,19 @@ def message_update(club_id, message_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/delete")
+@db_app.route("/club/<club_id>/messages/<message_id>/delete")
 def message_delete(club_id, message_id):
     if not club_id:
         return "Failed", 400
-
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Restrict", 400
 
     delete_message(message_id)
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/like")
+@db_app.route("/club/<club_id>/messages/<message_id>/like")
 def like_message(club_id, message_id):
     club = get_club(club_id)
     user = get_userauth_user_by_id(current_user.get_id())
@@ -191,7 +191,7 @@ def like_message(club_id, message_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<message_id>/unlike")
+@db_app.route("/club/<club_id>/messages/<message_id>/unlike")
 def unlike_message(club_id, message_id):
     club = get_club(club_id)
     user = get_userauth_user_by_id(current_user.get_id())
@@ -212,7 +212,7 @@ def my_events():
     return events_by_user(user)
 
 
-@db_app.route("/clubs/<club_id>/events/<event_id>")
+@db_app.route("/club/<club_id>/events/<event_id>")
 def get_event(club_id, event_id):
     if not club_id:
         return "Failed", 400
@@ -224,13 +224,15 @@ def get_event(club_id, event_id):
 def event_creation():
     club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user.id, club_id):
+    if not validatePermession(user, club_id):
         return "Restrict", 400
     result = createEvent(
-        title=request.json.get('data')["event_title"],
-        description=request.json.get('data')["event_description"],
+        title=request.json.get("data")["event_title"],
+        description=request.json.get("data")["event_description"],
         duration=request.json.get("duration"),
-        startTime=datetime.datetime.strptime(request.json.get('data')["event_startDateTime"], '%Y-%m-%d %H:%M:%S.%f'),
+        startTime=datetime.datetime.strptime(
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%d %H:%M:%S.%f"
+        ),
         location=request.json.get("location"),
         club=get_club(club_id),
         profileImage=request.json.get("profileImage"),
@@ -242,12 +244,13 @@ def event_creation():
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/update")
+@db_app.route("/club/<club_id>/messages/<event_id>/update")
 def event_update(club_id, event_id):
     if not club_id:
         return "Failed", 400
 
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Restrict", 400
 
     event = getEvent(event_id)
@@ -271,12 +274,13 @@ def event_update(club_id, event_id):
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/delete")
+@db_app.route("/club/<club_id>/messages/<event_id>/delete")
 def event_delete(club_id, event_id):
     if not club_id:
         return "Failed", 400
 
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Restrict", 400
     deleteEvent(event_id)
 
@@ -284,44 +288,47 @@ def event_delete(club_id, event_id):
 def validate_user_event_permession(club_id, event_id):
     if not club_id:
         return None
-    user = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
     if not is_user_member(user, club):
         return None
     event = getEvent(event_id)
-    return event, user
+    return event
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/attend")
+@db_app.route("/club/<club_id>/messages/<event_id>/attend")
 def event_attending(club_id, event_id):
-    event, user = validate_user_event_permession(club_id, event_id)
+    event = validate_user_event_permession(club_id, event_id)
     if not event:
         return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
     addAttending(event, user)
     return event.to_json()
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/messages/<event_id>/interested")
+@db_app.route("/club/<club_id>/messages/<event_id>/interested")
 def event_interesting(club_id, event_id):
-    event, user = validate_user_event_permession(club_id, event_id)
+    event = validate_user_event_permession(club_id, event_id)
     if not event:
         return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
     addIntrested(event, user)
     return event.to_json()
 
 
-@db_app.route("/clubs/<club_id>/tags")
+@db_app.route("/club/<club_id>/tags")
 def tags(club_id):
     club = get_club(club_id)
     return tags_for_club(club)
 
 
 @login_required
-@db_app.route("/clubs/<club_id>/tags/<tag_id>")
+@db_app.route("/club/<club_id>/tags/<tag_id>")
 def remove_tag(club_id, tag_id):
-    if not validatePermession(current_user.get_id(), club_id):
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Restrict", 400
     delete_tag_to_club(club_id, tag_id)
     club = get_club(club_id)

@@ -26,7 +26,6 @@ def join_club(user_email: str, club_id: str):
 
 def createRegularMembership(user: User, club: Club):
     return createMembership(user, club, "U")
-    
 
 
 def createAdminMembership(user_email: str, club: Club):
@@ -38,12 +37,14 @@ def members_count(clubName: str):
     return ClubMembership.objects(clubName=clubName).count()
 
 
-def get_user_clubs(user_email: str):
-    user = User.objects.get(contactMail=user_email)
+def get_user_clubs(user):
     res = []
     for doc in ClubMembership.objects(member=user):
         try:
-            res.append(doc.club.to_dict())
+            dict = doc.club.to_dict()
+            if doc.role == "A":
+                dict["admin"] = True
+            res.append(dict)
         except DoesNotExist as e:
             print(doc, e)
             # if for some odd reason it finds a non existing doc referenced in club,
@@ -55,3 +56,20 @@ def get_user_clubs(user_email: str):
 
 # def clubs_by_admin(member: User):
 #     return ClubMembership.objects(member=member, role="A").to_json()
+
+
+def listOfClubsPerUser(user):
+    clubs = ClubMembership.objects(member=user)
+    return clubs.to_json()  # need to decide hoe do we want to get it
+
+
+def joinClubAsUser(user: User, club: Club):
+    createRegularMembership(user, club)
+
+
+def is_user_member(user, club):
+    try:
+        ClubMembership.objects(club=club, member=user)
+        return True
+    except DoesNotExist:
+        return False

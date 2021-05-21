@@ -90,7 +90,7 @@ class Event(Document):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField( validation=None)
+    duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
     location = StringField()
     creatingClub = ReferenceField("Club", max_length=200, required=True)
@@ -162,10 +162,9 @@ class Message(Document):
         return json.dumps(self.to_dict())
 
 
-def validatePermession(user_id, club_id):
+def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
-        user = User.objects.get(id=user_id)
         membership = ClubMembership.objects(club=club, member=user).first()
         if membership.role != "A":
             return False  # error only admin can create message
