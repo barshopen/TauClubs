@@ -78,11 +78,13 @@ def is_user_member(user, club):
 
 
 def is_manager(user):
+    dict = {}
     try:
         ClubMembership.objects(member=user)
-        return True
+        dict["manager"] = True
     except DoesNotExist:
-        return False
+        dict["manager"] = False
+    return dict
 
 
 def clubs_by_user_manager(user):
