@@ -1,5 +1,9 @@
 from os import path
-from server.db.clubmembership import is_user_member
+from server.db.clubmembership import (
+    clubs_by_user_manager,
+    clubs_by_user_member,
+    is_user_member,
+)
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 import datetime
@@ -9,6 +13,7 @@ from server.db.message import (
     add_like,
     createMessage,
     get_messages,
+    get_messages_for_all_clubs_by_user,
     unlike,
     updateMessageContent,
     updateMessageTitle,
@@ -113,7 +118,9 @@ def join_club_by_id():
 
 @db_app.route("/messages")
 def all_messages():
-    return get_messages()
+    user = get_userauth_user_by_id(current_user.get_id())
+    clubs = clubs_by_user_member(user)
+    return get_messages_for_all_clubs_by_user(clubs)
 
 
 @login_required

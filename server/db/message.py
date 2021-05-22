@@ -45,6 +45,14 @@ def get_messages_by_club(club):
         )
     )
 
+def get_messages_for_all_clubs_by_user(clubs):
+    club_Q = Q(creatingClub__in=clubs)
+    return list(
+        map(
+            lambda message: message.to_dict(),
+            Message.objects.filter(club_Q),
+        )
+    )
 
 def get_messages():
     return json.dumps(
