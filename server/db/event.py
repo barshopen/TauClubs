@@ -121,10 +121,10 @@ def events_between_dates(before, after, clubs):
 def dict_two_months_events(clubs):
     today = datetime.datetime.today()
     dict = {}
-    before = months_ago(today, today.months)
-    after = months_ago(today, today.months - 1)
+    before = today
+    after = months_ago(today, 1)
     dict["event_current_month"] = len(events_between_dates(before, after, clubs))
     before = after
-    after = months_ago(today, today.months - 2)
+    after = months_ago(today, 2)
     dict["event_last_month"] = len(events_between_dates(before, after, clubs))
     return dict

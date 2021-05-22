@@ -110,7 +110,7 @@ def users_for_club_between_dates(club, before, after):
 
 def dict_users_and_update_by_club(clubs):
     today = datetime.datetime.today()
-    after = months_ago(6, today)
+    after = months_ago(today, 6)
     dict = {}
     for club in clubs:
         dict[club.name] = {"çlub": club.to_dict()}  # club data
