@@ -119,7 +119,7 @@ def join_club_by_id():
 def all_messages():
     user = get_userauth_user_by_id(current_user.get_id())
     clubs = clubs_by_user_member(user)
-    return get_messages_for_all_clubs_by_user(clubs)
+    return json.dumps(get_messages_for_all_clubs_by_user(clubs))
 
 
 @login_required
