@@ -62,10 +62,9 @@ def club_creation():
     email = user.contactMail
     result = establish_club(
         email,
-        name=request.json.get("name"),
+        name=request.json.get("club_name"),
         contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description"),
-        short_description=request.json.get("short_description"),
+        description=request.json.get("description")
     )
     if not result:
         return "Failed", 400
