@@ -97,6 +97,16 @@ def clubs_by_user_manager(user):
     )
 
 
+def clubs_by_user_member(user):
+    # return all clubs that the user manage
+    return list(
+        map(
+            lambda memberships: memberships.club,
+            ClubMembership.objects.filter(member=user),
+        )
+    )
+
+
 def users_for_club_between_dates(club, before, after):
     before_Q = Q(startTime__lt=before, club=club)  # bigger
     after_Q = Q(startTime__gt=after, club=club)
