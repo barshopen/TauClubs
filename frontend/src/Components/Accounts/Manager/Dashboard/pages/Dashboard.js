@@ -8,7 +8,7 @@ import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
 const Dashboard = ({ data }) => {
-  const { clubs, events, messages, users } = {
+  const { clubs, events, messages } = {
     clubs: {},
     events: {},
     messages: {},
@@ -27,7 +27,7 @@ const Dashboard = ({ data }) => {
             <TotalEvents events={events} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalUsers total={users?.length} />
+            <TotalUsers total={clubs} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
             <ClubsActivity />
