@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -33,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 const App = () => {
   const classes = useStyles();
   const setUser = useSetRecoilState(currentUser);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
@@ -42,13 +43,16 @@ const App = () => {
     <>
       <Router>
         <div className={classes.root}>
-          <NavBar />
+          <NavBar search={search} setSearch={setSearch} />
           <Container className={classes.container}>
             <AppSideBar />
             <div className={classes.content}>
               <Switch>
-                <Route path='/' exact component={Feed} />
-                <Route path='/explore' component={ExploreClubs} />
+                {!search && <Route path='/' exact component={Feed} />}
+                <Route
+                  path={search ? '/' : '/explore'}
+                  component={() => <ExploreClubs search={search} />}
+                />
                 <Route path='/contact' component={Contact} />
                 <Route path='/club' component={ClubSection} />
                 <Route path='/profile' component={GeneralProfile} />
