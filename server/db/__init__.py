@@ -12,7 +12,6 @@ import datetime
 from server.db.message import (
     add_like,
     createMessage,
-    get_messages,
     get_messages_for_all_clubs_by_user,
     unlike,
     updateMessageContent,
@@ -24,7 +23,8 @@ from server.db.message import (
 from server.db.event import (
     createEvent,
     events_by_user,
-    get_all_events,
+    get_events_by_club,
+    get_events_for_all_clubs_by_user,
     updateEventContent,
     addAttending,
     addIntrested,
@@ -141,7 +141,9 @@ def message_creation():
 
 @db_app.route("/upcoming_events")
 def upcoming_events():
-    return get_all_events()
+    user = get_userauth_user_by_id(current_user.get_id())
+    clubs = clubs_by_user_member(user)
+    return get_events_for_all_clubs_by_user(clubs)
 
 
 @login_required
@@ -178,6 +180,14 @@ def messages_by_club(club_id):
         return "Failed", 400
     club = get_club(club_id)
     return get_messages_by_club(club)
+
+
+@db_app.route("/club/<club_id>/messages/get_events")
+def events_by_club(club_id):
+    if not club_id:
+        return "Failed", 400
+    club = get_club(club_id)
+    return get_events_by_club(club)
 
 
 @db_app.route("/club/<club_id>/messages/<message_id>")
