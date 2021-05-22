@@ -70,7 +70,7 @@ class User(Document):
             "name": self.full_name(),
             "contactMail": self.contactMail,
             "picture": self.picture,
-            "joinTime": self.joinTime.isoformat(),
+            # "joinTime": self.joinTime.isoformat(),
         }
 
     def to_json(self):

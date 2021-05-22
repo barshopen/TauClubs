@@ -16,13 +16,16 @@ import { getDashboardData } from '../../../../Shared/api';
 const DashboardApp = () => {
   const storeKey = ['dashboard'];
   const { data } = useQuery(storeKey, () => getDashboardData);
-  console.log({ data });
 
   return (
     <ThemeProvider theme={theme}>
       <DashboardLayout>
         <Switch>
-          <Route path='/profile' exact component={Dashboard} />
+          <Route
+            path='/profile'
+            exact
+            component={() => <Dashboard data={data} />}
+          />
           <Route path='/profile/users' component={UsersList} />/
           <Route path='/profile/clubs' component={Clubs} />
           <Route path='/profile/account' component={Account} />

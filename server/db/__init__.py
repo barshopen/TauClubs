@@ -182,7 +182,7 @@ def messages_by_club(club_id):
     return get_messages_by_club(club)
 
 
-@db_app.route("/club/<club_id>/messages/get_events")
+@db_app.route("/club/<club_id>/events/get_events")
 def events_by_club(club_id):
     if not club_id:
         return "Failed", 400

@@ -11,7 +11,15 @@ export const leaveClub = data => post('/db/leave_club', data);
 
 export const whoami = () => get(`/auth/whoami`);
 
-export const getMessages = (clubId = null) => getDb('messages', clubId);
+export const getMessagesByClub = (clubId = null) =>
+  getDb(`club/${clubId}/messages/get_messages`);
+
+export const getMessages = () => getDb('messages');
+
+export const getUpcomingEvents = () => getDb('upcoming_events');
+
+export const getUpcomingEventsByClub = (clubId = null) =>
+  getDb(`club/${clubId}/events/get_events`);
 
 // export const getMessage = (clubId = null, messageId = null) => getDb('messages', clubId);
 
@@ -31,9 +39,6 @@ export const getClubs = ({ name, tag }) => {
 };
 
 export const getMyClubs = () => getDb('my_clubs');
-
-export const getUpcomingEvents = (eventId = null) =>
-  getDb('upcoming_events', eventId);
 
 export const getFeedData = (currentTab = 'all') => {
   if (currentTab === 'messages') {
@@ -59,15 +64,3 @@ export const createNewEvent = ({ payload }) =>
 export const isUserManager = () => get('/isManager');
 
 export const getDashboardData = () => get('dashboard/data');
-
-// example queries:
-// * {mainroute}/clubs -> returns all clubs
-// * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-// * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-//     foodies
-// * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-//     containes foodies OR have a 'Math' tag
-// """
-
-// export const searchClubs = (name = null, tag = null) =>
-//   get('/clubs', { name, tag });

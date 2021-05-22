@@ -30,3 +30,4 @@ def clubs_for_manager():
     dict["clubs"] = dict_users_and_update_by_club(
         clubs
     )  # dict with 3 fields: club info, last update, users that joined last 6 months
+    return dict

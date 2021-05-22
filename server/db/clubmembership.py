@@ -108,12 +108,10 @@ def clubs_by_user_member(user):
 
 
 def users_for_club_between_dates(club, before, after):
-    before_Q = Q(startTime__lt=before, club=club)  # bigger
-    after_Q = Q(startTime__gt=after, club=club)
     return list(
         map(
             lambda membership: membership.member.to_dict(),
-            ClubMembership.objects.filter(before_Q & after_Q),
+            ClubMembership.objects.filter(club=club),
         )
     )
 
