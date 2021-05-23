@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,7 +7,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,10 +16,11 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState } from 'recoil';
-import { getClubs } from '../Shared/api';
-import { showSideBarMobileState } from '../Shared/atoms';
-import NewClubModal from '../Scenarios/NewClubModal';
-import ContactUsModal from '../Scenarios/ContactUsModal';
+import { getMyClubs } from '../../Shared/api';
+import { showSideBarMobileState } from '../../Shared/atoms';
+import NewClubModal from '../../Scenarios/NewClubModal';
+import ContactUsModal from '../../Scenarios/ContactUsModal';
+import SideBar from './SideBar';
 
 const drawerWidth = 240;
 
@@ -43,6 +42,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
+      position: 'relative',
     },
     width: drawerWidth,
     flexShrink: 0,
@@ -53,8 +53,11 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     position: 'relative',
-    height: '40%',
+    height: '30%',
     [theme.breakpoints.up('md')]: {
+      height: '40%',
+    },
+    [theme.breakpoints.up('lg')]: {
       height: '60%',
     },
   },
@@ -62,7 +65,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: '10px',
     wordBreak: 'break-word',
     fontSize: '12px',
-    [theme.breakpoints.up('md')]: { fontSize: '14px' },
+    [theme.breakpoints.up('lg')]: { fontSize: '14px' },
   },
 }));
 
@@ -99,24 +102,23 @@ Copyright.propTypes = {
   className: PropTypes.string.isRequired,
 };
 
-export default function SideBar() {
+export default function AppSideBar() {
+  const classes = useStyles();
   const [clubsData, setClubsData] = useState([]);
 
-  useEffect(() => {
-    getClubs().then(mydata => setClubsData(mydata));
-  }, []);
-  const classes = useStyles();
+  useEffect(() => getMyClubs().then(mydata => setClubsData(mydata)), []);
+
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
   const showSideBarMobileToggleHandler = () => {
     setShowSideBarMobile(!showSideBarMobile);
   };
-  const DrawerContent = (
+
+  const content = (
     <div>
       <Toolbar />
       <Divider />
-
       <List>
         {SideBardListItems.map(listItem => (
           <SideBarListItem
@@ -129,12 +131,7 @@ export default function SideBar() {
         <NewClubModal />
       </List>
       <Divider />
-      <List
-        subheader={
-          <ListSubheader className={classes.subheaderCentered}>
-            My Clubs
-          </ListSubheader>
-        }>
+      <List subheader={<ListSubheader>My Clubs</ListSubheader>}>
         {clubsData.map(d => (
           <SideBarListItem key={d.id} text={d.name} to={`/club/board/${d.id}`}>
             <Avatar alt={d.name} src={`/${d.profileImage}`} />
@@ -156,34 +153,10 @@ export default function SideBar() {
   );
 
   return (
-    <>
-      <Hidden smUp implementation='css'>
-        <Drawer
-          variant='temporary'
-          open={showSideBarMobile}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          className={classes.drawer}
-          onClose={showSideBarMobileToggleHandler}>
-          {DrawerContent}
-        </Drawer>
-      </Hidden>
-
-      <Hidden xsDown implementation='css'>
-        <Drawer
-          className={classes.drawer}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          variant='permanent'
-          open>
-          {DrawerContent}
-        </Drawer>
-      </Hidden>
-    </>
+    <SideBar
+      open={showSideBarMobile}
+      onClose={showSideBarMobileToggleHandler}
+      content={content}
+    />
   );
 }

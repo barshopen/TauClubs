@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
-import { getClubs } from '../../Shared/api';
+import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
+import useClub from '../../hooks/useClub';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -51,58 +51,59 @@ const NavLink = styled(Link)`
   }
 `;
 
-function ClubSection() {
+const ClubSection = () => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
-  const [clubData, setClubData] = useState();
 
-  useEffect(() => {
-    getClubs(clubId).then(mydata => {
-      setClubData(mydata);
-    });
-  }, [clubId]);
+  const { clubData } = useClub(clubId);
+  const admin = true;
 
   return (
-    <Container>
+    <SimpleContaConiner style={{ height: '80vh' }}>
       {/* TODO derieve data from api request. */}
-      <Container>
-        <Header>Chess</Header>
-        <HeaderPhoto>
-          <img
-            src={clubData ? `/${clubData.profileImage}` : ''}
-            width='100%'
-            height={200}
-            alt='wallpaper'
-          />
-        </HeaderPhoto>
-      </Container>
-
-      <NavBarContainer>
-        <Nav>
-          <NavLink to={`/club/board/${clubId}`} start='2'>
-            Club Board
-          </NavLink>
-          <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-          <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
-          <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
-        </Nav>
-      </NavBarContainer>
-
-      <Container>
-        <Switch>
-          <Route path='/club/board/:clubId' component={ClubBoard} />
-          <Route path='/club/about/:clubId' component={AboutUs} />
-          <Route path='/club/contact/:clubId' component={Contact} />
-          <Route
-            path='/club/joinus/:clubId'
-            clubName={clubData?.name}
-            component={() => <JoinUs clubName={clubData?.name} />}
-          />
-        </Switch>
-      </Container>
-    </Container>
+      <Header>Chess</Header>
+      <HeaderPhoto>
+        <img
+          src={clubData ? `/${clubData.profileImage}` : ''}
+          width={1000}
+          height={200}
+          alt='wallpaper'
+        />
+        <NavBarContainer>
+          <Nav>
+            <NavLink to={`/club/board/${clubId}`} start='2'>
+              Club Board
+            </NavLink>
+            <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
+            <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
+            <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
+          </Nav>
+        </NavBarContainer>
+      </HeaderPhoto>
+      <Switch>
+        <Route
+          path='/club/board/:clubId'
+          component={() => (
+            // <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
+            <ClubBoard currentUserIsClubsAdmin={admin} />
+          )}
+        />
+        <Route
+          path='/club/about/:clubId'
+          component={() => <AboutUs description={clubData?.description} />}
+        />
+        <Route
+          path='/club/contact/:clubId'
+          component={() => <Contact clubName={clubData?.name} />}
+        />
+        <Route
+          path='/club/joinus/:clubId'
+          component={() => <JoinUs clubName={clubData?.name} clubId={clubId} />}
+        />
+      </Switch>
+    </SimpleContaConiner>
   );
-}
+};
 
 export default ClubSection;

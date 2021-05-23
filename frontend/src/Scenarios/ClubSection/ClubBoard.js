@@ -1,24 +1,39 @@
-import React, { useState, useEffect, makeStyles } from 'react';
-import Container from '@material-ui/core/Container';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
-import PropTypes from 'prop-types';
 import Messages from '../../Components/Messages';
 import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
-import FeedCard from '../../Components/Feed/GenericFeedCard';
-import { getMessages, getClubs, getUpcomingEvents } from '../../Shared/api';
+import useClubFeed from '../../hooks/useClubFeed';
 
-function IconBu({ ariaLabel, onClick }) {
-  return (
-    <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-      <AddIcon />
-    </IconButton>
-  );
-}
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 10fr 1fr 20fr 1fr;
+  width: 100%;
+  grid-gap: 10px;
+`;
+
+const IconContainer = styled.div`
+  & div {
+    /* TODO change this. find a better way to do it. */
+    position: relative;
+    top: 30px;
+    right: 90px;
+    cursor: pointer;
+  }
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+`;
+
+const IconBu = ({ ariaLabel, onClick }) => (
+  <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
+    <AddIcon />
+  </IconButton>
+);
 
 IconBu.propTypes = {
   ariaLabel: PropTypes.string,
@@ -28,31 +43,65 @@ IconBu.defaultProps = {
   ariaLabel: '',
 };
 
-function ClubBoard() {
-  const [messagesData, setMessagesData] = useState();
-  const [upcomingEvents, setUpcomingEvents] = useState();
+const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
-  const [isAdmin, setIsAdmin] = useState();
 
-  useEffect(() => {
-    getClubs(clubId).then(mydata => setIsAdmin(mydata.admin));
+  const {
+    loadingMessages,
+    messagesData,
+    loadingEvents,
+    upcomingEvents,
+  } = useClubFeed({ clubId });
 
-    getMessages().then(mydata => setMessagesData(mydata.slice(0, 7)));
-
-    getUpcomingEvents().then(mydata => setUpcomingEvents(mydata.slice(0, 7)));
-  }, [clubId]);
   return (
-    <Container>
-      {messagesData?.map(feedItem => (
-        <FeedCard feedItem={feedItem} />
-      ))}
-      {upcomingEvents?.map(feedItem => (
-        <FeedCard feedItem={feedItem} />
-      ))}
-    </Container>
+    <>
+      <Container>
+        <div>
+          {loadingMessages ? (
+            <Loader
+              type='TailSpin'
+              color='#00BFFF'
+              height={50}
+              alignItems='center'
+              width={50}
+            />
+          ) : (
+            <Messages data={messagesData} />
+          )}
+        </div>
+        <IconContainer show={currentUserIsClubsAdmin}>
+          <NewMessageModal ClickableTrigger={IconBu} />
+        </IconContainer>
+
+        <div>
+          {loadingEvents ? (
+            <Loader
+              type='TailSpin'
+              color='#00BFFF'
+              height={50}
+              alignItems='center'
+              width={50}
+            />
+          ) : (
+            <UpcomingEvents data={upcomingEvents} />
+          )}
+        </div>
+        <IconContainer show={currentUserIsClubsAdmin}>
+          <NewEventModal ClickableTrigger={IconBu} />
+        </IconContainer>
+      </Container>
+    </>
   );
-}
+};
 
 export default ClubBoard;
+
+ClubBoard.propTypes = {
+  currentUserIsClubsAdmin: PropTypes.bool,
+};
+
+ClubBoard.defaultProps = {
+  currentUserIsClubsAdmin: false,
+};
