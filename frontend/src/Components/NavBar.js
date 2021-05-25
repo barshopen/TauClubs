@@ -351,7 +351,7 @@ export default function NavBar({ search, setSearch }) {
               size='small'
               autoComplete
               autoHighlight
-              autoSelect
+              autoSelect={false}
               onChange={(event, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
