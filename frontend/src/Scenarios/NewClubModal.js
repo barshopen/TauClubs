@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import GenericModal from '../Components/Generic/GenericModal';
+import { createClub } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -38,28 +39,54 @@ const useStyles = makeStyles(theme => ({
 
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
+  const [values, setValues] = useState({});
+
+  const handleChange = e => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submitHandler = e => {
+    e.preventDefault();
+    createClub(values);
+    setOpen(false);
+  };
 
   return (
-    <form className={classes.root} noValidate autoComplete='off'>
+    <form
+      className={classes.root}
+      noValidate
+      autoComplete='off'
+      onSubmit={submitHandler}>
       <Typography variant='h6' className={classes.header}>
         Create New Club
       </Typography>
 
-      <TextField id='club-name' label='Club Name' variant='outlined' />
-      <TextField id='contact-email' label='Contact Email' variant='outlined' />
       <TextField
-        id='club-description'
+        name='club_name'
+        label='Club Name'
+        variant='outlined'
+        onChange={handleChange}
+      />
+      <TextField
+        name='contact_mail'
+        label='Contact Email'
+        variant='outlined'
+        onChange={handleChange}
+      />
+      <TextField
+        name='description'
         label='Club Description'
         multiline
         variant='outlined'
         rows={4}
         rowsMax={10}
+        onChange={handleChange}
       />
       <div className={classes.buttons}>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(false)}>
+        <Button variant='contained' color='primary' type='submit'>
           Publish
         </Button>
       </div>

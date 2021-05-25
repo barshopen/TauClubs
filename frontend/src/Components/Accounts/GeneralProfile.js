@@ -1,10 +1,11 @@
 import React from 'react';
 import UserAccount from './User/UserAccount';
 import ManagerAccount from './Manager/ManagerAccount';
+import { isUserManager } from '../../Shared/api';
 
 const GeneralProfile = () => {
-  // need to come from backend
-  const isManger = false;
-  return isManger ? <ManagerAccount /> : <UserAccount />;
+  const isManager = isUserManager();
+  return isManager ? <ManagerAccount /> : <UserAccount />;
 };
+
 export default GeneralProfile;

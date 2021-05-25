@@ -5,20 +5,18 @@ import AccountProfile from './AccountProfile';
 import AccountProfileDetails from './AccountProfileDetails';
 
 const Account = () => (
-  <>
-    <Box backgroundColor='background.default' minHeight='100%' py={3}>
-      <Container maxWidth='lg'>
-        <Grid container spacing={3}>
-          <Grid item lg={4} md={6} xs={12}>
-            <AccountProfile />
-          </Grid>
-          <Grid item lg={8} md={6} xs={12}>
-            <AccountProfileDetails />
-          </Grid>
+  <Box backgroundColor='background.default' minHeight='100%' py={3}>
+    <Container maxWidth='lg'>
+      <Grid container spacing={3} padding={0}>
+        <Grid item lg={4} md={6} xs={12}>
+          <AccountProfile />
         </Grid>
-      </Container>
-    </Box>
-  </>
+        <Grid item lg={8} md={6} xs={12}>
+          <AccountProfileDetails />
+        </Grid>
+      </Grid>
+    </Container>
+  </Box>
 );
 
 export default Account;

@@ -3,7 +3,6 @@ import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useQuery } from 'react-query';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -24,7 +23,8 @@ import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
 import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
-import { logOut, getClubs } from '../Shared/api';
+import { logOut } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 import SignInModal from '../Scenarios/SignInModal';
 
 import {
@@ -35,9 +35,6 @@ import {
 import SearchFor from '../assets/search-icon.png';
 
 const useStyles = makeStyles(theme => ({
-  grow: {
-    flexGrow: 1,
-  },
   appBar: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -100,10 +97,12 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
+      justifyContent: 'flex-end',
     },
   },
   sectionMobile: {
     display: 'flex',
+    justifyContent: 'flex-end',
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
@@ -129,17 +128,15 @@ const StyledMenu = withStyles({
   />
 ));
 
-function MenuItemWithToolTip({ title, content, icon, ...rest }) {
-  return (
-    <IconButton color='inherit' {...rest}>
-      <Tooltip title={title} arrow>
-        <Badge badgeContent={content} color='secondary'>
-          {icon}
-        </Badge>
-      </Tooltip>
-    </IconButton>
-  );
-}
+const MenuItemWithToolTip = ({ title, content, icon, ...rest }) => (
+  <IconButton color='inherit' {...rest}>
+    <Tooltip title={title} arrow>
+      <Badge badgeContent={content} color='secondary'>
+        {icon}
+      </Badge>
+    </Tooltip>
+  </IconButton>
+);
 
 MenuItemWithToolTip.propTypes = {
   title: PropTypes.string.isRequired,
@@ -151,12 +148,7 @@ MenuItemWithToolTip.defaultProps = {
   content: null,
 };
 
-const fetchClubs = async () => {
-  const res = await getClubs();
-  return res;
-};
-
-export default function NavBar() {
+export default function NavBar({ search, setSearch }) {
   // hooks
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -164,15 +156,16 @@ export default function NavBar() {
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
-  const { data, isLoading } = useQuery('allClubs', fetchClubs);
+
+  const { clubs: data } = useClubs();
+
   const [user, setUser] = useRecoilState(currentUser);
-  const [search, setSearch] = useState('');
   const userMessages = useMemo(() => 4, []);
   const userNotifications = useMemo(() => 7, []);
 
   const handleLogout = () => {
     logOut();
-    setUser(false);
+    setUser(null);
   };
 
   // primitive consts
@@ -298,6 +291,7 @@ export default function NavBar() {
 
       <MenuItem>
         <MenuItemWithToolTip
+          title='Log out'
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
@@ -357,11 +351,11 @@ export default function NavBar() {
               size='small'
               autoComplete
               autoHighlight
-              autoSelect
+              autoSelect={false}
               onChange={(event, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
-              options={isLoading ? ['loading...'] : defaultFilterOptions}
+              options={defaultFilterOptions}
               getOptionLabel={option => option.render ?? option.name}
               renderOption={option => (
                 <>
@@ -389,10 +383,9 @@ export default function NavBar() {
               }}
             />
           </div>
-          <div className={classes.grow} />
 
           {user ? (
-            <>
+            <div style={{ flex: 'auto' }}>
               <div className={classes.sectionDesktop}>
                 <MenuItemWithToolTip
                   title='Messages'
@@ -427,9 +420,11 @@ export default function NavBar() {
                   icon={<MoreVertIcon />}
                 />
               </div>
-            </>
+            </div>
           ) : (
-            <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
+            <div style={{ flex: 'auto' }}>
+              <SignInModal ClickableTrigger={SignInModalClickableTrigger} />
+            </div>
           )}
         </Toolbar>
       </AppBar>
@@ -438,3 +433,13 @@ export default function NavBar() {
     </div>
   );
 }
+
+NavBar.propTypes = {
+  search: PropTypes.string,
+  setSearch: PropTypes.func,
+};
+
+NavBar.defaultProps = {
+  search: '',
+  setSearch: null,
+};

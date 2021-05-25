@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+import { useRouteMatch } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+// import {
+//   DateTimePicker,
+//   LocalizationProvider,
+//   // AdapterDateFns,
+// } from '@material-ui/lab';
+import { createNewEvent } from '../Shared/api';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme => ({
@@ -25,56 +33,76 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewEventContent({ setOpen }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
   const classes = useStyles();
+  const [formValues, setFormValues] = useState({
+    event_startDateTime: moment().format(),
+  });
 
-  const handleChangeTitle = e => {
-    setTitle(e.target.value);
+  const {
+    params: { clubId },
+  } = useRouteMatch('/club/*/:clubId');
+
+  const handleChange = e =>
+    setFormValues(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
+  const submitHandler = e => {
+    e.preventDefault();
+
+    createNewEvent({ payload: { clubId, data: formValues } });
+    setOpen(false);
   };
-  const handleChangeContent = e => {
-    setContent(e.target.value);
-  };
+
   return (
-    <form className={classes.root} noValidate autoComplete='off'>
+    <form
+      className={classes.root}
+      onSubmit={submitHandler}
+      noValidate
+      autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
         Create New Event
       </Typography>
 
       <TextField
-        id='event-title'
+        name='event_title'
         label='Event title'
         variant='outlined'
-        value={title}
-        onChange={handleChangeTitle}
+        onChange={handleChange}
       />
       <TextField
-        id='event-description'
+        name='event_description'
         label='Event Description'
         multiline
         variant='outlined'
-        value={content}
-        onChange={handleChangeContent}
+        onChange={handleChange}
         rows={4}
         rowsMax={10}
       />
       <TextField
-        id='datetime-picker'
+        name='event_startDateTime'
         label='Start Date'
         type='datetime-local'
         variant='outlined'
-        defaultValue='2017-05-24T10:30'
+        format='MM/dd/yyyy'
+        defaultValue={moment().format()}
+        onChange={handleChange}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
         }}
       />
+      {/* 
+      <DateTimePicker
+        renderInput={props => <TextField {...props} />}
+        label='DateTimePicker'
+        name='event_startDateTime'
+        onChange={handleChange}
+      /> */}
+
       <div className={classes.buttons}>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(false)}>
+        <Button type='submit' variant='contained' color='primary'>
           Publish
         </Button>
         <Button variant='contained' onClick={() => setOpen(false)}>
