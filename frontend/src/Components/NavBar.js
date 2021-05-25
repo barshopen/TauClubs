@@ -148,7 +148,7 @@ MenuItemWithToolTip.defaultProps = {
   content: null,
 };
 
-export default function NavBar() {
+export default function NavBar({ search, setSearch }) {
   // hooks
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -160,7 +160,6 @@ export default function NavBar() {
   const { clubs: data } = useClubs();
 
   const [user, setUser] = useRecoilState(currentUser);
-  const [search, setSearch] = useState('');
   const userMessages = useMemo(() => 4, []);
   const userNotifications = useMemo(() => 7, []);
 
@@ -434,3 +433,13 @@ export default function NavBar() {
     </div>
   );
 }
+
+NavBar.propTypes = {
+  search: PropTypes.string,
+  setSearch: PropTypes.func,
+};
+
+NavBar.defaultProps = {
+  search: '',
+  setSearch: null,
+};

@@ -1,13 +1,13 @@
 import { useQuery } from 'react-query';
-import { getMessages, getUpcomingEvents } from '../Shared/api';
+import { getMessagesByClub, getUpcomingEventsByClub } from '../Shared/api';
 
-const fetchMessages = async () => {
-  const res = await getMessages();
+const fetchMessages = async clubId => {
+  const res = await getMessagesByClub(clubId);
   return res;
 };
 
-const fetchEvents = async () => {
-  const res = await getUpcomingEvents();
+const fetchEvents = async clubId => {
+  const res = await getUpcomingEventsByClub(clubId);
   return res;
 };
 
@@ -15,17 +15,15 @@ const useClubFeed = ({ clubId }) => {
   const storeKeyMessages = ['messages', clubId];
   const storeKeyEvents = ['events', clubId];
 
-  const { loading: loadingMessages, data: messagesData } = useQuery(
-    storeKeyMessages,
-    fetchMessages
-    // () =>  fetchMessages(clubId) - backend resolve
-  );
+  const {
+    loading: loadingMessages,
+    data: messagesData,
+  } = useQuery(storeKeyMessages, () => fetchMessages(clubId));
 
-  const { loading: loadingEvents, data: upcomingEvents } = useQuery(
-    storeKeyEvents,
-    fetchEvents
-    // () => fetchMessages(clubId) - backend resolve
-  );
+  const {
+    loading: loadingEvents,
+    data: upcomingEvents,
+  } = useQuery(storeKeyEvents, () => fetchEvents(clubId));
 
   return {
     loadingMessages,

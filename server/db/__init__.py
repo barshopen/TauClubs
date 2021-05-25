@@ -1,5 +1,9 @@
 from os import path
-from server.db.clubmembership import is_user_member
+from server.db.clubmembership import (
+    clubs_by_user_manager,
+    clubs_by_user_member,
+    is_user_member,
+)
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
 import datetime
@@ -8,7 +12,7 @@ import datetime
 from server.db.message import (
     add_like,
     createMessage,
-    get_messages,
+    get_messages_for_all_clubs_by_user,
     unlike,
     updateMessageContent,
     updateMessageTitle,
@@ -19,7 +23,8 @@ from server.db.message import (
 from server.db.event import (
     createEvent,
     events_by_user,
-    get_all_events,
+    get_events_by_club,
+    get_events_for_all_clubs_by_user,
     updateEventContent,
     addAttending,
     addIntrested,
@@ -62,10 +67,9 @@ def club_creation():
     email = user.contactMail
     result = establish_club(
         email,
-        name=request.json.get("name"),
+        name=request.json.get("club_name"),
         contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description"),
-        short_description=request.json.get("short_description"),
+        description=request.json.get("description")
     )
     if not result:
         return "Failed", 400
@@ -113,7 +117,9 @@ def join_club_by_id():
 
 @db_app.route("/messages")
 def all_messages():
-    return get_messages()
+    user = get_userauth_user_by_id(current_user.get_id())
+    clubs = clubs_by_user_member(user)
+    return json.dumps(get_messages_for_all_clubs_by_user(clubs))
 
 
 @login_required
@@ -135,7 +141,9 @@ def message_creation():
 
 @db_app.route("/upcoming_events")
 def upcoming_events():
-    return get_all_events()
+    user = get_userauth_user_by_id(current_user.get_id())
+    clubs = clubs_by_user_member(user)
+    return get_events_for_all_clubs_by_user(clubs)
 
 
 @login_required
@@ -172,6 +180,14 @@ def messages_by_club(club_id):
         return "Failed", 400
     club = get_club(club_id)
     return get_messages_by_club(club)
+
+
+@db_app.route("/club/<club_id>/events/get_events")
+def events_by_club(club_id):
+    if not club_id:
+        return "Failed", 400
+    club = get_club(club_id)
+    return get_events_by_club(club)
 
 
 @db_app.route("/club/<club_id>/messages/<message_id>")

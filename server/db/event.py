@@ -1,5 +1,5 @@
 import json
-from server.db.models import Event
+from server.db.models import Event, months_ago
 import datetime
 from mongoengine.queryset.visitor import Q
 
@@ -84,6 +84,29 @@ def getEvent(event_id):
     return Event.objects.get(id=event_id)
 
 
+def get_events_by_club(club):
+    return json.dumps(
+        list(
+            map(
+                lambda event: event.to_dict(),
+                Event.objects(creatingClub=club),
+            )
+        )
+    )
+
+
+def get_events_for_all_clubs_by_user(clubs):
+    club_Q = Q(creatingClub__in=clubs)
+    return json.dumps(
+        list(
+            map(
+                lambda message: message.to_dict(),
+                Event.objects.filter(club_Q),
+            )
+        )
+    )
+
+
 def get_all_events():
     return json.dumps(
         list(
@@ -105,3 +128,26 @@ def events_by_user(user):
             )
         )
     )
+
+
+def events_between_dates(before, after, clubs):
+    before_Q = Q(creationTime__lt=before, creatingClub__in=clubs)  # bigger
+    after_Q = Q(creationTime__gt=after, creatingClub__in=clubs)
+    return list(
+        map(
+            lambda message: message.to_dict(),
+            Event.objects.filter(before_Q & after_Q),
+        )
+    )
+
+
+def dict_two_months_events(clubs):
+    today = datetime.datetime.today()
+    dict = {}
+    before = today
+    after = months_ago(today, 1)
+    dict["event_current_month"] = len(events_between_dates(before, after, clubs))
+    before = after
+    after = months_ago(today, 2)
+    dict["event_last_month"] = len(events_between_dates(before, after, clubs))
+    return dict

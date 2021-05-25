@@ -11,12 +11,15 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MessageIcon from '@material-ui/icons/Message';
 import { red } from '@material-ui/core/colors';
 
-const TotalMessages = props => {
-  const messagesOfClubTotal = 1200;
-  const precentage = '12%';
+const currentMonthLocation = 5;
+const lastMonthLocation = 5;
+
+const TotalMessages = ({ messages }) => {
+  const precentage =
+    (messages[currentMonthLocation] / messages[lastMonthLocation]) * 100;
 
   return (
-    <Card style={{ height: '100%', position: 'relative' }} {...props}>
+    <Card style={{ height: '100%', position: 'relative' }}>
       <CardContent>
         <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
           <Grid item>
@@ -24,7 +27,7 @@ const TotalMessages = props => {
               TOTAL MESSAGES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {messagesOfClubTotal}
+              {messages[currentMonthLocation]}
             </Typography>
           </Grid>
           <Grid item>

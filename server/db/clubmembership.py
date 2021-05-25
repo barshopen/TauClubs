@@ -1,6 +1,8 @@
-from .models import ClubMembership, User, Club
+import datetime
+from .models import ClubMembership, User, Club, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
+from mongoengine.queryset.visitor import Q
 
 
 def createMembership(user, club, role):
@@ -76,8 +78,54 @@ def is_user_member(user, club):
 
 
 def is_manager(user):
+    dict = {}
     try:
         ClubMembership.objects(member=user)
-        return True
+        dict["manager"] = True
     except DoesNotExist:
-        return False
+        dict["manager"] = False
+    return dict
+
+
+def clubs_by_user_manager(user):
+    # return all clubs that the user manage
+    return list(
+        map(
+            lambda memberships: memberships.club,
+            ClubMembership.objects.filter(member=user, role="A"),
+        )
+    )
+
+
+def clubs_by_user_member(user):
+    # return all clubs that the user manage
+    return list(
+        map(
+            lambda memberships: memberships.club,
+            ClubMembership.objects.filter(member=user),
+        )
+    )
+
+
+def users_for_club_between_dates(club, before, after):
+    return list(
+        map(
+            lambda membership: membership.member.to_dict(),
+            ClubMembership.objects.filter(club=club),
+        )
+    )
+
+
+def dict_users_and_update_by_club(clubs):
+    today = datetime.datetime.today()
+    after = months_ago(today, 6)
+    dict = {}
+    for club in clubs:
+        dict[club.name] = {"çlub": club.to_dict()}  # club data
+        dict[club.name][
+            "last_update"
+        ] = club.lastUpdateTime  # last update time for club
+        dict[club.name]["users"] = users_for_club_between_dates(
+            club, today, after
+        )  # member for the club between dates, why not all?
+    return dict
