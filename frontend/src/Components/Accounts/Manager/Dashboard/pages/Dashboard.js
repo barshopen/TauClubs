@@ -7,7 +7,7 @@ import TotalClubs from '../components/dashboard/TotalClubs';
 import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
-const Dashboard = ({ data }) => {
+const Dashboard = () => {
   const { clubs, events, messages } = {
     clubs: {},
     events: {},

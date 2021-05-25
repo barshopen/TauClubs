@@ -1,0 +1,92 @@
+# This workflow will do a clean install of node dependencies, build the source code, and upload it as a build artifact.
+# The output build-artifact of this workflow is named frontend-build-artifact
+# After that, it will invoke another job which will build a docker image and push it into ECR
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    
+env:
+  IMAGE_NAME: tauclubs
+jobs:
+  CRA-Build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      working-directory: frontend
+
+    - name: Build frontend
+      run: yarn build
+      working-directory: frontend
+
+    - name: Upload frontend artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: frontend-build-artifact
+        path: frontend/build/
+
+  docker:
+    needs: CRA-Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Download static build 
+      uses: actions/download-artifact@v2
+      with:
+        name: frontend-build-artifact
+        path: server/__staticbuild__
+    
+    - name: Create env file
+      run: |
+        touch .env
+        echo FLASK_ENV=production >> .env
+        echo MONGO_DB_HOST_USER=${{ secrets.MONGO_DB_HOST_USER }} >> .env
+        echo MONGO_DB_HOST_PASSWORD=${{ secrets.MONGO_DB_HOST_PASSWORD }} >> .env
+        echo MONGO_DB_CLUSTER_URL=${{ secrets.MONGO_DB_CLUSTER_URL }} >> .env
+        echo MONGO_DB_CLUSTER_DB_NAME=${{ secrets.MONGO_DB_CLUSTER_DB_NAME }} >> .env
+        echo DB_SECRET=${{ secrets.DB_SECRET }} >> .env
+        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+        echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: tauclubs
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build --file Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+
