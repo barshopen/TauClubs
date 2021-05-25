@@ -14,13 +14,36 @@ import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: '100%',
-    marginTop: 20,
-    marginBottom: 20,
+    [theme.breakpoints.down('xl')]: {
+      marginLeft: '15%',
+      maxWidth: '75%',
+      marginTop: '2%',
+      marginBottom: '2%',
+    },
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: '15%',
+      maxWidth: '75%',
+    },
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '0%',
+      maxWidth: '100%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0%',
+      maxWidth: '100%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '-11%',
+      marginRight: '-11%',
+      maxWidth: '130%',
+      marginTop: '5%',
+      marginBottom: '5%',
+    },
   },
   media: {
     height: 0,
@@ -41,21 +64,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function FeedCard({
-  date,
-  title,
-  profileImage,
-  description,
-  clubName,
-  location,
-  startTime,
-  // duration,
-}) {
+function FeedCard({ feedItem }) {
+  const {
+    title,
+    clubName,
+    profileImage,
+    description,
+    startTime,
+    location,
+    lastUpdateTime,
+  } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isImg = profileImage !== '';
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
-  const displayLastUpdate = new Date(date).toLocaleString('en-GB');
+  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -88,9 +111,12 @@ function FeedCard({
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label='go to club home page'>
-          <HomeIcon />
-        </IconButton>
+        <NavLink to='/clubs'>
+          {' '}
+          <IconButton aria-label='go to club home page'>
+            <HomeIcon />
+          </IconButton>
+        </NavLink>
         <IconButton aria-label='add to favorites'>
           <FavoriteIcon />
         </IconButton>
@@ -117,25 +143,22 @@ function FeedCard({
 }
 
 FeedCard.propTypes = {
-  title: PropTypes.string,
-  clubName: PropTypes.string,
-  date: PropTypes.string,
-  profileImage: PropTypes.string,
-  description: PropTypes.string,
-  location: PropTypes.string,
-  startTime: PropTypes.string,
-  // duration: PropTypes.string,
+  feedItem: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      clubName: PropTypes.string,
+      date: PropTypes.string,
+      profileImage: PropTypes.string,
+      description: PropTypes.string,
+      location: PropTypes.string,
+      startTime: PropTypes.string,
+      // duration: PropTypes.string,
+    })
+  ),
 };
 
 FeedCard.defaultProps = {
-  date: '',
-  title: '',
-  clubName: '',
-  profileImage: '',
-  description: '',
-  location: '',
-  startTime: '',
-  // duration: '',
+  feedItem: [],
 };
 
 export default FeedCard;
