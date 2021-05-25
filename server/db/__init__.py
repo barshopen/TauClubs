@@ -1,6 +1,5 @@
 from os import path
 from server.db.clubmembership import (
-    clubs_by_user_manager,
     clubs_by_user_member,
     is_user_member,
 )
@@ -69,7 +68,7 @@ def club_creation():
         email,
         name=request.json.get("club_name"),
         contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description")
+        description=request.json.get("description"),
     )
     if not result:
         return "Failed", 400
@@ -116,6 +115,7 @@ def join_club_by_id():
 
 
 @db_app.route("/messages")
+@login_required
 def all_messages():
     user = get_userauth_user_by_id(current_user.get_id())
     clubs = clubs_by_user_member(user)
@@ -140,6 +140,7 @@ def message_creation():
 
 
 @db_app.route("/upcoming_events")
+@login_required
 def upcoming_events():
     user = get_userauth_user_by_id(current_user.get_id())
     clubs = clubs_by_user_member(user)
@@ -250,6 +251,7 @@ def unlike_message(club_id, message_id):
     return result, 200
 
 
+@login_required
 @db_app.route("/my_events")
 def my_events():
     user = get_userauth_user_by_id(current_user.get_id())
