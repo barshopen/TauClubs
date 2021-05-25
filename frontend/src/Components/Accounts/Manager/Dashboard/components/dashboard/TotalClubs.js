@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React from 'react';
 
 import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
