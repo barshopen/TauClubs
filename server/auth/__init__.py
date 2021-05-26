@@ -9,7 +9,8 @@ from flask_login import (
     logout_user,
 )
 from mongoengine.errors import DoesNotExist
-from server.auth.userauth import UserAuth, create_user_auth, getUserInfo
+from server.auth.userauth import create_user_auth, getUserInfo
+from server.db.models import UserAuth
 from server.auth import google_token
 
 
