@@ -99,10 +99,10 @@ def messages_between_dates(before, after, clubs):
     )
 
 
-def dict_six_months_messages(clubs):
+def dict_two_months_messages(clubs):
     today = datetime.datetime.today()
     dict = {}
-    for i in range(6):
+    for i in range(2):
         before = months_ago(today, i)
         after = months_ago(today, i - 1)
         dict[today.month - i] = messages_between_dates(before, after, clubs)

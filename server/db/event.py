@@ -146,8 +146,8 @@ def dict_two_months_events(clubs):
     dict = {}
     before = today
     after = months_ago(today, 1)
-    dict["event_current_month"] = len(events_between_dates(before, after, clubs))
+    dict[today.month] = len(events_between_dates(before, after, clubs))
     before = after
     after = months_ago(today, 2)
-    dict["event_last_month"] = len(events_between_dates(before, after, clubs))
+    dict[today.month - 1] = len(events_between_dates(before, after, clubs))
     return dict

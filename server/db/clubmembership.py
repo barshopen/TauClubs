@@ -107,7 +107,23 @@ def clubs_by_user_member(user):
     )
 
 
-def users_for_club_between_dates(club, before, after):
+def users_for_club_between_dates(club, before, after):  # change to request time
+    before_Q = Q(approveTime__lt=before, club=club)  # bigger
+    after_Q = Q(approveTime__gt=after, club=club)
+    return ClubMembership.objects.filter(after_Q & before_Q).count()
+
+
+def users_for_club_six_months(club):
+    today = datetime.datetime.today()
+    dict = {}
+    for i in range(6):
+        before = months_ago(today, i)
+        after = months_ago(today, i - 1)
+        dict[today.month - i] = users_for_club_between_dates(club, before, after)
+    return dict
+
+
+def users_for_club(club):
     return list(
         map(
             lambda membership: membership.member.to_dict(),
@@ -117,15 +133,27 @@ def users_for_club_between_dates(club, before, after):
 
 
 def dict_users_and_update_by_club(clubs):
-    today = datetime.datetime.today()
-    after = months_ago(today, 6)
     dict = {}
     for club in clubs:
         dict[club.name] = {"çlub": club.to_dict()}  # club data
-        dict[club.name][
-            "last_update"
-        ] = club.lastUpdateTime  # last update time for club
-        dict[club.name]["users"] = users_for_club_between_dates(
-            club, today, after
-        )  # member for the club between dates, why not all?
+        dict[club.name]["lastUpdate"] = club.lastUpdateTime  # last update time for club
+        dict[club.name]["users"] = users_for_club(club)  # member for the club
+        dict[club.name]["usersByDated"] = users_for_club_six_months(club)
     return dict
+
+
+def is_member(user, club):
+    try:
+        membership = ClubMembership.objects(club=club, member=user)
+        return membership
+    except DoesNotExist:
+        return False
+
+
+def remove_club_from_user(membership):
+    membership.delete()
+
+
+def approve(club, user, answer):
+    membership = ClubMembership.objects(member=user, club=club)
+    membership.update(role=answer)

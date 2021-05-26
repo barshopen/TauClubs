@@ -15,3 +15,7 @@ def create_user(firstName, lastName, contactMail, picture):
     except [NotUniqueError, DuplicateKeyError]:
         user = User.objects.get(contactMail=contactMail)
     return user
+
+
+def get_user(user_id):
+    return User.objects.get(id=user_id)

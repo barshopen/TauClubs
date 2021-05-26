@@ -29,7 +29,7 @@ class Club(Document):
     profileImage = URLField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
-    creationTime = DateTimeField(required=True)
+    creationTime = DateTimeField()
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
 
@@ -40,7 +40,7 @@ class Club(Document):
             "profileImage": self.profileImage,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
-            "creationTime": self.creationTime.isoformat(),
+            "creationTime": self.id.generation_time.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
             "membersCount": 12,
@@ -56,9 +56,6 @@ class User(Document):
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
     picture = URLField()
-    joinTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
     meta = {"collection": "users"}
 
     def full_name(self):
@@ -70,7 +67,7 @@ class User(Document):
             "name": self.full_name(),
             "contactMail": self.contactMail,
             "picture": self.picture,
-            # "joinTime": self.joinTime.isoformat(),
+            "joinTime": self.id.generation_time.isoformat(),
         }
 
     def to_json(self):
@@ -86,12 +83,10 @@ class ClubMembership(Document):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    joinTime = (
+    RequestTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
-    approveTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    approveTime = DateTimeField()
 
     def to_dict(self):
         return {
