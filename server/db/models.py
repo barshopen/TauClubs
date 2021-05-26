@@ -130,7 +130,7 @@ class Event(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "profileImage": self.profileImage,
+            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):
