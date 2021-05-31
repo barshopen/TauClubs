@@ -9,7 +9,6 @@ from server.db.manager_data import dashboard_app
 from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
 from flask_mongoengine import MongoEngine
-from server.db import messages_requests, events_requests, clubs_requests
 
 dotenv.load_dotenv()
 
