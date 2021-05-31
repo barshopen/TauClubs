@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
 import { createClub } from '../Shared/api';
 
@@ -40,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
+  const [picture, setPicture] = useState();
 
   const handleChange = e => {
     setValues({
@@ -48,6 +50,9 @@ function NewClubContent({ setOpen }) {
     });
   };
 
+  const handleDrop = pictureFiles => {
+    setPicture(pictureFiles);
+  };
   const submitHandler = e => {
     e.preventDefault();
     createClub(values);
@@ -84,6 +89,15 @@ function NewClubContent({ setOpen }) {
         rows={4}
         rowsMax={10}
         onChange={handleChange}
+      />
+      <ImageUploader
+        withIcon
+        withPreview
+        singleImage
+        buttonText='Pick a profile image'
+        onChange={handleDrop}
+        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+        maxFileSize={5242880}
       />
       <div className={classes.buttons}>
         <Button variant='contained' color='primary' type='submit'>
