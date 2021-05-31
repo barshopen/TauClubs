@@ -21,7 +21,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function GenericModal({ ClickableTrigger, Content, maxWidth }) {
+export default function GenericModal({
+  ClickableTrigger,
+  Content,
+  maxWidth,
+  onChange,
+}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -58,7 +63,7 @@ export default function GenericModal({ ClickableTrigger, Content, maxWidth }) {
               />
             </Box>
 
-            <Content open={open} setOpen={setOpen} />
+            <Content open={open} setOpen={setOpen} onChange={onChange} />
           </Container>
         </Fade>
       </Modal>
@@ -67,6 +72,7 @@ export default function GenericModal({ ClickableTrigger, Content, maxWidth }) {
 }
 
 GenericModal.propTypes = {
+  onChange: PropTypes.func,
   Content: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
@@ -82,4 +88,5 @@ GenericModal.propTypes = {
 
 GenericModal.defaultProps = {
   maxWidth: 'sm',
+  onChange: undefined,
 };

@@ -32,15 +32,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewEventContent({ setOpen }) {
+function NewEventContent({ setOpen, onChange: addEvent }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
     event_startDateTime: moment().format(),
   });
-
-  const {
-    params: { clubId },
-  } = useRouteMatch('/club/*/:clubId');
 
   const handleChange = e =>
     setFormValues(prev => ({
@@ -50,8 +46,7 @@ function NewEventContent({ setOpen }) {
 
   const submitHandler = e => {
     e.preventDefault();
-
-    createNewEvent({ payload: { clubId, data: formValues } });
+    addEvent({ data: formValues });
     setOpen(false);
   };
 
@@ -115,13 +110,15 @@ function NewEventContent({ setOpen }) {
 
 NewEventContent.propTypes = {
   setOpen: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default function NewEventModal({ ClickableTrigger }) {
+export default function NewEventModal({ ClickableTrigger, addEvent }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewEventContent}
+      onChange={addEvent}
     />
   );
 }
@@ -132,4 +129,5 @@ NewEventModal.propTypes = {
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
+  addEvent: PropTypes.func.isRequired,
 };
