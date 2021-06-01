@@ -1,12 +1,16 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
+import Leave from './JoinForm/Leave';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
+import { currentUser } from '../../Shared/atoms';
+import getClub from '../../Shared/api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -57,8 +61,16 @@ const ClubSection = () => {
   } = useRouteMatch('/club/*/:clubId');
 
   const { clubData } = useClub(clubId);
-  const admin = true;
+  const admin = true; /// need to check in params the admin field
+  const member = false;
+  const user = useRecoilValue(currentUser);
 
+  let join = null;
+  if (user && member) {
+    join = <NavLink to={`/club/leave/${clubId}`}>Leave club</NavLink>;
+  } else if (user && !member) {
+    join = <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>;
+  }
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
       <Header>{clubData?.name}</Header>
@@ -76,7 +88,7 @@ const ClubSection = () => {
             </NavLink>
             <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
             <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
-            <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
+            {join}
           </Nav>
         </NavBarContainer>
       </HeaderPhoto>
@@ -96,10 +108,21 @@ const ClubSection = () => {
           path='/club/contact/:clubId'
           component={() => <Contact clubName={clubData?.name} />}
         />
-        <Route
-          path='/club/joinus/:clubId'
-          component={() => <JoinUs clubName={clubData?.name} clubId={clubId} />}
-        />
+        {user && join ? (
+          <Route
+            path='/club/joinus/:clubId'
+            component={() => (
+              <JoinUs clubName={clubData?.name} clubId={clubId} />
+            )}
+          />
+        ) : (
+          <Route
+            path='/club/leave/:clubId'
+            component={() => (
+              <Leave clubName={clubData?.name} clubId={clubId} />
+            )}
+          />
+        )}
       </Switch>
     </SimpleContaConiner>
   );
