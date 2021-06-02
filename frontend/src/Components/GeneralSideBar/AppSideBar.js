@@ -101,7 +101,7 @@ export default function AppSideBar() {
     },
     {
       text: 'Explore',
-      route: '/explore',
+      route: !user ? '/' : '/explore',
       icon: ExploreIcon,
     },
   ];
