@@ -63,7 +63,7 @@ function NewClubContent({ setOpen }) {
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
-    data.append('image', values.contact_mail);
+    data.append('image', values.image);
     createClub(data);
     setOpen(false);
   };

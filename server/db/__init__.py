@@ -33,7 +33,7 @@ from server.db.event import (
     getEvent,
     deleteEvent,
 )
-from server.db.models import validatePermession
+from server.db.models import Club, validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
 from server.db.tag import delete_tag_to_club, tags_for_club
 from flask_login import current_user, login_required
@@ -68,7 +68,7 @@ def club_creation():
     user = get_userauth_user_by_id(current_user.get_id())
     result = establish_club(
         image=request.files["image"],
-        email=user.contactMail,
+        foundingUserEmail=user.contactMail,
         name=request.form["club_name"],
         contact_mail=request.form["contact_mail"],
         description=request.form["description"],
@@ -90,12 +90,6 @@ def clubs():
     * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
         containes foodies OR have a 'Math' tag
     """
-    #  x = send_file(
-    #     Club.objects.get(pk=ObjectId("60b7516617273ee384a9fabd")).profileImage,
-    #    download_name="sharon.png",
-    # )
-    # print(x)
-    # return None
     clubs_params = request.args.to_dict()
     return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
 
@@ -147,6 +141,17 @@ def message_creation():
         user=user,
     )
     return result.to_json(), 200
+
+
+@login_required
+@db_app.route("/club/<club_id>/image")
+def get_club_image(club_id):
+    club = get_club(club_id)
+    image = club.profileImage
+    return send_file(
+        image,
+        download_name=club.name + "." + image.format,
+    )
 
 
 @db_app.route("/upcoming_events")
