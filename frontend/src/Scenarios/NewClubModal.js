@@ -41,14 +41,8 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
-  const [picture, setPicture] = useState(null, () => {
-    console.log(picture);
-  });
-  const data = new FormData();
 
   const handleChange = e => {
-    data.append([e.target.name], e.target.value);
-    console.log(data);
     setValues({
       ...values,
       [e.target.name]: e.target.value,
@@ -56,9 +50,7 @@ function NewClubContent({ setOpen }) {
   };
 
   const handleDrop = pictureFiles => {
-    setPicture(URL.createObjectURL(pictureFiles[0]));
-    data.append('file', pictureFiles[0]);
-    console.log(data);
+    // setPicture(URL.createObjectURL(pictureFiles[0]));
     setValues({
       ...values,
       image: pictureFiles[0],
@@ -67,13 +59,12 @@ function NewClubContent({ setOpen }) {
 
   const submitHandler = e => {
     e.preventDefault();
-    console.log(values.club_name);
-    const dat = new FormData();
-    dat.append('club_name', values.club_name);
-    dat.append('description', values.description);
-    dat.append('contact_mail', values.contact_mail);
-    dat.append('image', values.contact_mail);
-    createClub(dat);
+    const data = new FormData();
+    data.append('club_name', values.club_name);
+    data.append('description', values.description);
+    data.append('contact_mail', values.contact_mail);
+    data.append('image', values.contact_mail);
+    createClub(data);
     setOpen(false);
   };
 
