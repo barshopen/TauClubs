@@ -1,4 +1,5 @@
 import datetime
+from bson.objectid import ObjectId
 from mongoengine import (
     Document,
     StringField,
@@ -8,10 +9,11 @@ from mongoengine import (
     DateTimeField,
     ListField,
     IntField,
+    ImageField,
 )
 import json
 from mongoengine.base.fields import ObjectIdField
-
+from flask import send_file
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
 
@@ -26,7 +28,7 @@ def names_of_tags(listTags):
 class Club(Document):
     meta = {"collection": "clubs"}
     name = StringField(max_length=50, required=True)
-    profileImage = URLField()
+    profileImage = ImageField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
     creationTime = DateTimeField(required=True)
@@ -34,10 +36,14 @@ class Club(Document):
     contactMail = EmailField(required=True)
 
     def to_dict(self):
+        x = send_file(
+            Club.objects.get(pk=ObjectId("60b7516617273ee384a9fabd")).profileImage,
+            download_name="myfile.png",
+        )
         return {
             "id": str(self.pk),
             "name": self.name,
-            "profileImage": self.profileImage,
+            "profileImage": x,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.creationTime.isoformat(),

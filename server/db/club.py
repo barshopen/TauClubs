@@ -2,11 +2,13 @@ import datetime
 from bson.objectid import ObjectId
 import json
 from mongoengine.queryset.visitor import Q
+from werkzeug.utils import send_file
 from .models import Club
 from .clubmembership import createAdminMembership
 
 
 def create_club(
+    image,
     club_name: str,
     contact_mail: str,
     description: str = "",
@@ -16,6 +18,7 @@ def create_club(
     club = Club(
         contactMail=contact_mail,
         name=club_name,
+        profileImage=image,
         description=description,
         tags=tags,
         creationTime=now,
@@ -25,13 +28,14 @@ def create_club(
 
 
 def establish_club(
+    image,
     foundingUserEmail: str,
     name: str,
     contact_mail: str,
     description: str = "",
     tags=None,
 ):
-    newclub = create_club(name, contact_mail, description, tags)
+    newclub = create_club(image, name, contact_mail, description, tags)
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 

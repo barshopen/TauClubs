@@ -15,15 +15,15 @@ const useClubFeed = ({ clubId }) => {
   const storeKeyMessages = ['messages', clubId];
   const storeKeyEvents = ['events', clubId];
 
-  const {
-    loading: loadingMessages,
-    data: messagesData,
-  } = useQuery(storeKeyMessages, () => fetchMessages(clubId));
+  const { loading: loadingMessages, data: messagesData } = useQuery(
+    storeKeyMessages,
+    () => fetchMessages(clubId)
+  );
 
-  const {
-    loading: loadingEvents,
-    data: upcomingEvents,
-  } = useQuery(storeKeyEvents, () => fetchEvents(clubId));
+  const { loading: loadingEvents, data: upcomingEvents } = useQuery(
+    storeKeyEvents,
+    () => fetchEvents(clubId)
+  );
 
   return {
     loadingMessages,
