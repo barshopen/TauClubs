@@ -385,7 +385,7 @@ def remove_tag(club_id, tag_id):
 
 
 @login_required
-@db_app.route("/approve", methods=["POST"])
+@db_app.route("/approve_user", methods=["POST"])
 def approve_user():
     club_id = request.json.get("clubId")
     user_id = request.json.get("userId")
@@ -401,7 +401,7 @@ def approve_user():
 
 
 @login_required
-@db_app.route("/approve", methods=["POST"])
+@db_app.route("/approve_manager", methods=["POST"])
 def approve_manager():
     club_id = request.json.get("clubId")
     user_id = request.json.get("userId")
