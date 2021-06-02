@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { useRouteMatch } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
@@ -11,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 //   LocalizationProvider,
 //   // AdapterDateFns,
 // } from '@material-ui/lab';
-import { createNewEvent } from '../Shared/api';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme => ({
