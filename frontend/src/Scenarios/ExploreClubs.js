@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import Loader from 'react-loader-spinner';
+import PropTypes from 'prop-types';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
 
 const width = '100%';
 
-const ExploreClubs = () => {
-  const { loadingClubs, clubs: clubsData } = useClubs();
+const ExploreClubs = ({ search }) => {
+  const { loadingClubs, clubs: clubsData } = useClubs(search);
+
   // const loading = true;
   // - fix location of the loader
 
@@ -20,6 +22,14 @@ const ExploreClubs = () => {
       )}
     </>
   );
+};
+
+ExploreClubs.propTypes = {
+  search: PropTypes.string,
+};
+
+ExploreClubs.defaultProps = {
+  search: '',
 };
 
 const StyledContainer = styled.div`

@@ -1,30 +1,44 @@
 import { get, post } from './HTTP';
 
+export const getDb = (subroute, id) =>
+  id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
+
 export const createClub = data => post('/db/create_club', data);
 
 export const joinClub = data => post('/db/join_club', data);
 
 export const leaveClub = data => post('/db/leave_club', data);
 
-export const getDb = (subroute, id) =>
-  id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
+export const whoami = () => get(`/auth/whoami`);
 
-export const getAuth = subroute => get(`/auth/${subroute}`);
+export const getMessagesByClub = (clubId = null) =>
+  getDb(`club/${clubId}/messages/get_messages`);
 
-export const getMessages = (clubId = null) => getDb('messages', clubId);
+export const getMessages = () => getDb('messages');
+
+export const getUpcomingEvents = () => getDb('upcoming_events');
+
+export const getUpcomingEventsByClub = (clubId = null) =>
+  getDb(`club/${clubId}/events/get_events`);
 
 // export const getMessage = (clubId = null, messageId = null) => getDb('messages', clubId);
 
 export const getClub = clubId => getDb('club', clubId);
 
-export const getClubs = () => getDb('clubs');
+export const getClubs = ({ name, tag }) => {
+  if (name && tag) {
+    return getDb(`/clubs?name=${name}&tag=${tag}`);
+  }
+  if (name) {
+    return getDb(`/clubs?name=${name}`);
+  }
+  if (tag) {
+    return getDb(`/clubs?tag=${tag}`);
+  }
+  return getDb(`/clubs`);
+};
 
 export const getMyClubs = () => getDb('my_clubs');
-
-export const getUpcomingEvents = (eventId = null) =>
-  getDb('upcoming_events', eventId);
-
-export const whoami = () => getAuth('whoami');
 
 export const getFeedData = (currentTab = 'all') => {
   if (currentTab === 'messages') {
@@ -46,3 +60,7 @@ export const createNewMessgae = ({ payload }) =>
 
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
+
+export const isUserManager = () => get('/isManager');
+
+export const getDashboardData = () => get('dashboard/data');

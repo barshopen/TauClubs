@@ -1,7 +1,11 @@
 import os
-from flask import Flask, request
+from server.db.clubmembership import is_manager
+from server.auth.userauth import get_userauth_user_by_id
+from flask import Flask, json, request
 import dotenv
+from flask_login import login_required, current_user
 from server.db import db_app
+from server.db.manager_data import dashboard_app
 from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
 from flask_mongoengine import MongoEngine
@@ -23,6 +27,8 @@ init(app)
 
 # blueprint for auth
 app.register_blueprint(auth_app)
+
+app.register_blueprint(dashboard_app)
 
 
 MONGO_DB_HOST_USER = os.getenv("MONGO_DB_HOST_USER")
@@ -53,3 +59,10 @@ def not_found(e):
 @disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
 def index():
     return app.send_static_file("index.html")
+
+
+@app.route("/isManager")
+@login_required
+def is_user_manager():
+    user = get_userauth_user_by_id(current_user.get_id())
+    return json.dumps(is_manager(user))

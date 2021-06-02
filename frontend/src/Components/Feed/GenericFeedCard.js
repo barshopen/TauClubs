@@ -112,7 +112,6 @@ function FeedCard({ feedItem }) {
       </CardContent>
       <CardActions disableSpacing>
         <NavLink to='/clubs'>
-          {' '}
           <IconButton aria-label='go to club home page'>
             <HomeIcon />
           </IconButton>

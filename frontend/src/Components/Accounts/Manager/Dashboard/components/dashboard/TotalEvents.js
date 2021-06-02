@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 
 import {
@@ -19,12 +20,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TotalEvents = props => {
+const TotalEvents = ({ eventCurrentMonth, eventLastMonth }) => {
   const classes = useStyles();
-  const precentage = '12%';
+  const precentage = (eventCurrentMonth / eventLastMonth) * 100;
 
   return (
-    <Card style={{ height: '100%', position: 'relative' }} {...props}>
+    <Card style={{ height: '100%', position: 'relative' }}>
       <CardContent className={classes.root}>
         <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
           <Grid item>
@@ -32,7 +33,7 @@ const TotalEvents = props => {
               TOTAL EVENTS
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              15
+              {eventCurrentMonth}
             </Typography>
           </Grid>
           <Grid item>

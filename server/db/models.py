@@ -1,3 +1,4 @@
+import datetime
 from mongoengine import (
     Document,
     StringField,
@@ -55,16 +56,28 @@ class User(Document):
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
     picture = URLField()
+    joinTime = (
+        DateTimeField()
+    )  # chaneg to required, havent change it because nedd to change the db
     meta = {"collection": "users"}
 
     def full_name(self):
         return self.firstName + " " + self.lastName
 
+    def to_dict(self):
+        return {
+            "id": str(self.pk),
+            "name": self.full_name(),
+            "contactMail": self.contactMail,
+            "picture": self.picture,
+            # "joinTime": self.joinTime.isoformat(),
+        }
 
-ROLES = {
-    "A": "Admin",
-    "U": "User",
-}
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+
+ROLES = {"A": "Admin", "U": "User", "P": "Pendding"}
 
 
 class ClubMembership(Document):
@@ -73,6 +86,12 @@ class ClubMembership(Document):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
+    joinTime = (
+        DateTimeField()
+    )  # chaneg to required, havent change it because nedd to change the db
+    approveTime = (
+        DateTimeField()
+    )  # chaneg to required, havent change it because nedd to change the db
 
     def to_dict(self):
         return {
@@ -111,7 +130,7 @@ class Event(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "profileImage": self.profileImage,
+            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):
@@ -171,3 +190,11 @@ def validatePermession(user, club_id):
         return True
     except DoesNotExist:
         return False  # invalid membership
+
+
+def months_ago(today, months):  # until 12 months
+    if today.month > months:
+        return datetime.datetime(today.year, today.month - months, 1)
+    if today.month == months:
+        return datetime.datetime(today.year, 12, 1)
+    return datetime.datetime(today.year - 1, 12 + today.month - months, 1)

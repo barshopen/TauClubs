@@ -61,8 +61,7 @@ const ClubSection = () => {
 
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
-      {/* TODO derieve data from api request. */}
-      <Header>Chess</Header>
+      <Header>{clubData?.name}</Header>
       <HeaderPhoto>
         <img
           src={clubData ? `/${clubData.profileImage}` : ''}

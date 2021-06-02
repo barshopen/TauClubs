@@ -1,42 +1,36 @@
-import React from 'react';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  LinearProgress,
-  Typography,
-} from '@material-ui/core';
-import { orange } from '@material-ui/core/colors';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+/* eslint-disable react/prop-types */
 
-const TotalClubs = props => (
-  <Card style={{ height: '100%', position: 'relative' }} {...props}>
+import React from 'react';
+
+import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
+import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+
+const TotalUsers = ({ clubs }) => (
+  <Card style={{ height: '100%', position: 'relative' }}>
     <CardContent>
       <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
         <Grid item>
           <Typography color='textSecondary' gutterBottom variant='h6'>
-            TASKS PROGRESS
+            TOTAL ClUBS
           </Typography>
           <Typography color='textPrimary' variant='h3'>
-            75.5%
+            {clubs?.length}
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             style={{
-              backgroundColor: orange[600],
+              backgroundColor: green[600],
+              position: 'absolute',
+              right: '15px',
             }}>
-            <InsertChartIcon />
+            <PeopleIcon />
           </Avatar>
         </Grid>
       </Grid>
-      <Box pt={3}>
-        <LinearProgress value={75.5} variant='determinate' />
-      </Box>
     </CardContent>
   </Card>
 );
 
-export default TotalClubs;
+export default TotalUsers;
