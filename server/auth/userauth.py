@@ -1,13 +1,6 @@
-from mongoengine import Document, EmailField, ReferenceField
-from flask_login import UserMixin
-from server.db.models import User
+from server.db.models import UserAuth
 from server.db.user import create_user
 from bson.objectid import ObjectId
-
-
-class UserAuth(UserMixin, Document):
-    email = EmailField(required=True, unique=True)
-    userauth = ReferenceField(User)
 
 
 def get_userauth_email_by_id(id: str):
