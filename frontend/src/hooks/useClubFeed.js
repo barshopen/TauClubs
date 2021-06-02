@@ -21,15 +21,15 @@ const useClubFeed = ({ clubId }) => {
   const storeKeyEvents = ['events', clubId];
   const queryClient = useQueryClient();
 
-  const {
-    loading: loadingMessages,
-    data: messagesData,
-  } = useQuery(storeKeyMessages, () => fetchMessages(clubId));
+  const { loading: loadingMessages, data: messagesData } = useQuery(
+    storeKeyMessages,
+    () => fetchMessages(clubId)
+  );
 
-  const {
-    loading: loadingEvents,
-    data: upcomingEvents,
-  } = useQuery(storeKeyEvents, () => fetchEvents(clubId));
+  const { loading: loadingEvents, data: upcomingEvents } = useQuery(
+    storeKeyEvents,
+    () => fetchEvents(clubId)
+  );
 
   const { mutate: addMessage } = useMutation(
     ({ data }) => createNewMessgae({ payload: { clubId, data } }),
