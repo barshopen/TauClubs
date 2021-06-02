@@ -15,27 +15,16 @@ import { NavLink } from 'react-router-dom';
 import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { useRecoilState } from 'recoil';
 import useClubs from '../../hooks/useClubs';
-import { showSideBarMobileState } from '../../Shared/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { getMyClubs } from '../../Shared/api';
+import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
+
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
 
 const drawerWidth = 240;
-
-const SideBardListItems = [
-  {
-    text: 'Feed',
-    route: '/',
-    icon: LibraryBooksIcon,
-  },
-  {
-    text: 'Explore',
-    route: '/explore',
-    icon: ExploreIcon,
-  },
-];
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -104,7 +93,25 @@ Copyright.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
+
   const { myClubs } = useClubs();
+  const [clubsData, setClubsData] = useState([]);
+  const user = useRecoilValue(currentUser);
+  const SideBardListItems = [
+    {
+      text: 'Feed',
+      route: '/',
+      icon: LibraryBooksIcon,
+    },
+    {
+      text: 'Explore',
+      route: !user ? '/' : '/explore',
+      icon: ExploreIcon,
+    },
+  ];
+
+  useEffect(() => getMyClubs().then(mydata => setClubsData(mydata)), []);
+
 
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
@@ -118,24 +125,32 @@ export default function AppSideBar() {
       <Toolbar />
       <Divider />
       <List>
-        {SideBardListItems.map(listItem => (
-          <SideBarListItem
-            text={listItem.text}
-            key={listItem.text}
-            to={listItem.route}>
-            <listItem.icon />
-          </SideBarListItem>
-        ))}
-        <NewClubModal />
+        {SideBardListItems.map(listItem => {
+          if (
+            (listItem.text === 'Feed' && user) ||
+            listItem.text === 'Explore'
+          ) {
+            return (
+              <SideBarListItem
+                text={listItem.text}
+                key={listItem.text}
+                to={listItem.route}>
+                <listItem.icon />
+              </SideBarListItem>
+            );
+          }
+          return null;
+        })}
+        {user && <NewClubModal />}
       </List>
       <Divider />
-      <List subheader={<ListSubheader>My Clubs</ListSubheader>}>
+      {user && (<List subheader={<ListSubheader>My Clubs</ListSubheader>}>
         {myClubs?.map(d => (
           <SideBarListItem key={d.id} text={d.name} to={`/club/board/${d.id}`}>
             <Avatar alt={d.name} src={`/${d.profileImage}`} />
           </SideBarListItem>
         ))}
-      </List>
+      </List>)}
       <Box className={classes.footer}>
         <Box m={2} p={2} position='absolute' bottom='0'>
           <Typography align='center' variant='body2'>
