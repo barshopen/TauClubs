@@ -48,8 +48,12 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
 
-  const { loadingMessages, messagesData, loadingEvents, upcomingEvents } =
-    useClubFeed({ clubId });
+  const {
+    loadingMessages,
+    messagesData,
+    loadingEvents,
+    upcomingEvents,
+  } = useClubFeed({ clubId });
 
   return (
     <>
