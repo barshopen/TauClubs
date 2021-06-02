@@ -69,8 +69,9 @@ const JoinUs = ({ clubName, clubId }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { refetchMyClubs } = useClubs();
-  const [approvedUsingPrivateData, setApprovedUsingPrivateData] =
-    useState(false);
+  const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
+    false
+  );
   const setUserData = useSetRecoilState(newUserData);
 
   const getStepContent = step => {
