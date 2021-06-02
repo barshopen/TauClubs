@@ -67,8 +67,9 @@ const JoinUs = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [approvedUsingPrivateData, setApprovedUsingPrivateData] =
-    useState(false);
+  const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
+    false
+  );
   const setUserData = useSetRecoilState(newUserData);
 
   const getStepContent = step => {
