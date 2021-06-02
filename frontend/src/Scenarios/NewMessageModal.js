@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import GenericModal from '../Components/Generic/GenericModal';
-import { createNewMessgae } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -26,12 +24,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewMessageContnet({ setOpen }) {
+function NewMessageContnet({ setOpen, onChange: addMessage }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({});
-  const {
-    params: { clubId },
-  } = useRouteMatch('/club/*/:clubId');
 
   const handleChange = e => {
     setFormValues(prev => ({
@@ -40,10 +35,9 @@ function NewMessageContnet({ setOpen }) {
     }));
   };
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     e.preventDefault();
-    createNewMessgae({ payload: { clubId, data: formValues } });
-
+    addMessage({ data: formValues });
     setOpen(false);
   };
 
@@ -87,13 +81,15 @@ function NewMessageContnet({ setOpen }) {
 
 NewMessageContnet.propTypes = {
   setOpen: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default function NewMessageModal({ ClickableTrigger }) {
+export default function NewMessageModal({ ClickableTrigger, addMessage }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewMessageContnet}
+      onChange={addMessage}
     />
   );
 }
@@ -104,4 +100,5 @@ NewMessageModal.propTypes = {
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
+  addMessage: PropTypes.func.isRequired,
 };

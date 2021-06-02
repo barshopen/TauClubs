@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -16,7 +16,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getMyClubs } from '../../Shared/api';
+import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
@@ -91,7 +91,8 @@ Copyright.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [clubsData, setClubsData] = useState([]);
+
+  const { myClubs } = useClubs();
   const user = useRecoilValue(currentUser);
   const SideBardListItems = [
     {
@@ -105,8 +106,6 @@ export default function AppSideBar() {
       icon: ExploreIcon,
     },
   ];
-
-  useEffect(() => getMyClubs().then(mydata => setClubsData(mydata)), []);
 
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
@@ -141,7 +140,7 @@ export default function AppSideBar() {
       <Divider />
       {user && (
         <List subheader={<ListSubheader>My Clubs</ListSubheader>}>
-          {clubsData.map(d => (
+          {myClubs?.map(d => (
             <SideBarListItem
               key={d.id}
               text={d.name}

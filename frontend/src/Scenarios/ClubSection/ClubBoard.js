@@ -53,6 +53,8 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
     messagesData,
     loadingEvents,
     upcomingEvents,
+    addMessage,
+    addEvent,
   } = useClubFeed({ clubId });
 
   return (
@@ -72,7 +74,7 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
           )}
         </div>
         <IconContainer show={currentUserIsClubsAdmin}>
-          <NewMessageModal ClickableTrigger={IconBu} />
+          <NewMessageModal ClickableTrigger={IconBu} addMessage={addMessage} />
         </IconContainer>
 
         <div>
@@ -89,7 +91,7 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
           )}
         </div>
         <IconContainer show={currentUserIsClubsAdmin}>
-          <NewEventModal ClickableTrigger={IconBu} />
+          <NewEventModal ClickableTrigger={IconBu} addEvent={addEvent} />
         </IconContainer>
       </Container>
     </>
