@@ -1,12 +1,10 @@
-/* eslint-disable react/prop-types */
-
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
-const TotalUsers = ({ clubs }) => (
+const TotalClubs = ({ clubs }) => (
   <Card style={{ height: '100%', position: 'relative' }}>
     <CardContent>
       <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
@@ -15,7 +13,7 @@ const TotalUsers = ({ clubs }) => (
             TOTAL ClUBS
           </Typography>
           <Typography color='textPrimary' variant='h3'>
-            {clubs?.length}
+            {Object.keys(clubs).length}
           </Typography>
         </Grid>
         <Grid item>
@@ -33,4 +31,12 @@ const TotalUsers = ({ clubs }) => (
   </Card>
 );
 
-export default TotalUsers;
+export default TotalClubs;
+
+TotalClubs.propTypes = {
+  clubs: PropTypes.shape({}),
+};
+
+TotalClubs.defaultProps = {
+  clubs: {},
+};

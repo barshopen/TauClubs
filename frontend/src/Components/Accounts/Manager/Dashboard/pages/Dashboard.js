@@ -7,12 +7,14 @@ import TotalClubs from '../components/dashboard/TotalClubs';
 import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
-const Dashboard = () => {
-  const { clubs, events, messages } = {
-    clubs: {},
-    events: {},
-    messages: {},
-  };
+const Dashboard = ({ data }) => {
+  console.log({ data });
+  const { clubs, events, messages } = data;
+
+  // console.log({ clubs });
+  // console.log({ events });
+  // console.log({ messages });
+
   return (
     <Box backgroundColor='background.default' minHeight='100%' py={3}>
       <Container maxWidth={false}>
@@ -23,7 +25,7 @@ const Dashboard = () => {
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TotalMessages messages={messages} />
           </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
+          {/* <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TotalEvents events={events} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
@@ -34,7 +36,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
             <LatestJoinedUsers style={{ width: '100%' }} />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>

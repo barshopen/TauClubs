@@ -286,7 +286,9 @@ export default function NavBar({ search, setSearch }) {
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-        <p>Profile</p>
+        <NavLink to='/profile'>
+          <p>Profile</p>
+        </NavLink>
       </MenuItem>
 
       <MenuItem>

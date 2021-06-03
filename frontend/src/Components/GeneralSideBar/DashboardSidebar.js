@@ -52,9 +52,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
   const current = useRecoilValue(currentUser);
   const user = {
-    avatar: current.picture,
+    // avatar: current.picture,
 
-    name: `${current.firstName} ${current.lastName}`,
+    // name: `${current.firstName} ${current.lastName}`,
+    name: 'hhh',
   };
 
   const content = (

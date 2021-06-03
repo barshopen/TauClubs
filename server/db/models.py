@@ -220,7 +220,6 @@ def dict_two_months(clubs, func):
     for i in range(2):
         before = months_ago(today, i)
         after = months_ago(today, i + 1)
-        dict[get_name_for_month(i)] = {
-            before.strftime("%B"): len(func(before, after, clubs))
-        }
+        dict[get_name_for_month(i)] = {'month':before.strftime("%B")}
+        dict[get_name_for_month(i)]['total']=len(func(before, after, clubs))
     return dict

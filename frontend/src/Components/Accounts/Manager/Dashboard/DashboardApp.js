@@ -14,8 +14,12 @@ import theme from './theme';
 import { getDashboardData } from '../../../../Shared/api';
 
 const DashboardApp = () => {
+  const fetchDashboardData = async () => {
+    const res = await getDashboardData();
+    return res;
+  };
   const storeKey = ['dashboard'];
-  const { data } = useQuery(storeKey, () => getDashboardData);
+  const { data } = useQuery(storeKey, fetchDashboardData);
 
   return (
     <ThemeProvider theme={theme}>
