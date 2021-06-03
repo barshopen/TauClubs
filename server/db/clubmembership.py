@@ -2,6 +2,7 @@ import datetime
 from .models import ClubMembership, User, Club, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
+from mongoengine.queryset.visitor import Q
 
 
 def createMembership(user, club, role):
@@ -77,8 +78,8 @@ def is_user_member(user, club):
 def is_manager(user):
     dict = {}
     try:
-        ClubMembership.objects(member=user)
-        dict["manager"] = True
+        clubmembership = ClubMembership.objects(member=user, role="A").first()
+        dict["manager"] = clubmembership is not None
     except DoesNotExist:
         dict["manager"] = False
     return dict
@@ -115,7 +116,7 @@ def users_for_club_six_months(club):
     dict = {}
     for i in range(6):
         before = months_ago(today, i)
-        after = months_ago(today, i - 1)
+        after = months_ago(today, i + 1)
         dict[today.month - i] = users_for_club_between_dates(club, before, after)
     return dict
 

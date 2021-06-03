@@ -1,9 +1,6 @@
 import os
-from server.db.clubmembership import is_manager
-from server.auth.userauth import get_userauth_user_by_id
 from flask import Flask, json, request
 import dotenv
-from flask_login import login_required, current_user
 from server.db import db_app
 from server.db.manager_data import dashboard_app
 from server.auth import auth_app, init
@@ -59,10 +56,3 @@ def not_found(e):
 @disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
 def index():
     return app.send_static_file("index.html")
-
-
-@app.route("/isManager")
-@login_required
-def is_user_manager():
-    user = get_userauth_user_by_id(current_user.get_id())
-    return json.dumps(is_manager(user))

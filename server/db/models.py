@@ -62,6 +62,8 @@ class User(Document):
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
     picture = URLField()
+    country = StringField()
+    phone = StringField()
     meta = {"collection": "users"}
 
     def full_name(self):
@@ -204,3 +206,21 @@ def months_ago(today, months):  # until 12 months
     if today.month == months:
         return datetime.datetime(today.year, 12, 1)
     return datetime.datetime(today.year - 1, 12 + today.month - months, 1)
+
+
+def get_name_for_month(i):
+    if i == 0:
+        return "currentMonth"
+    return "lastMonth"
+
+
+def dict_two_months(clubs, func):
+    today = datetime.datetime.today()
+    dict = {}
+    for i in range(2):
+        before = months_ago(today, i)
+        after = months_ago(today, i + 1)
+        dict[get_name_for_month(i)] = {
+            before.strftime("%B"): len(func(before, after, clubs))
+        }
+    return dict

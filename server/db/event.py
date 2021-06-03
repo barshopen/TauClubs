@@ -1,5 +1,5 @@
 import json
-from server.db.models import Event, months_ago
+from server.db.models import Event, dict_two_months
 import datetime
 from mongoengine.queryset.visitor import Q
 
@@ -142,12 +142,4 @@ def events_between_dates(before, after, clubs):
 
 
 def dict_two_months_events(clubs):
-    today = datetime.datetime.today()
-    dict = {}
-    before = today
-    after = months_ago(today, 1)
-    dict[today.month] = len(events_between_dates(before, after, clubs))
-    before = after
-    after = months_ago(today, 2)
-    dict[today.month - 1] = len(events_between_dates(before, after, clubs))
-    return dict
+    return dict_two_months(clubs, events_between_dates)
