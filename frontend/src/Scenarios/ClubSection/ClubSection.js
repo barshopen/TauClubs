@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
-import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
 import Leave from './JoinForm/Leave';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
@@ -110,7 +109,7 @@ const ClubSection = () => {
         <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
       );
     } else if (clubData?.pending) {
-      join = <NavWithoutLink>Pennding</NavWithoutLink>;
+      join = <NavWithoutLink>Pending</NavWithoutLink>;
     } else {
       join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
     }
