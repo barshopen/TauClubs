@@ -1,6 +1,6 @@
 import datetime
 import json
-from server.db.models import Message, months_ago
+from server.db.models import Message, dict_two_months
 from mongoengine.queryset.visitor import Q
 
 
@@ -100,10 +100,4 @@ def messages_between_dates(before, after, clubs):
 
 
 def dict_two_months_messages(clubs):
-    today = datetime.datetime.today()
-    dict = {}
-    for i in range(2):
-        before = months_ago(today, i)
-        after = months_ago(today, i - 1)
-        dict[today.month - i] = messages_between_dates(before, after, clubs)
-    return dict
+    return dict_two_months(clubs, messages_between_dates)

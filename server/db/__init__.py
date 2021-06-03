@@ -1,5 +1,5 @@
 from os import path
-from server.db.user import get_user
+from server.db.user import get_user, update
 from server.db.clubmembership import (
     approve,
     clubs_by_user_member,
@@ -414,6 +414,23 @@ def approve_manager():
     user = get_user(user_id)
     approve(club, user, "A")
     return 200
+
+
+@login_required
+@db_app.route("/updateuser", methods=["POST"])
+def update_user_data():
+    user = get_userauth_user_by_id(current_user.get_id())
+    try:
+        update(
+            user,
+            request.json.get("firstName"),
+            request.json.get("lastName"),
+            request.json.get("phone"),
+            request.json.get("country"),
+        )
+        return "Success", 200
+    except Exception:
+        return "failed", 400
 
 
 ######################################################

@@ -14,6 +14,7 @@ from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
+from flask_login import UserMixin, current_user
 
 
 def names_of_tags(listTags):
@@ -34,6 +35,11 @@ class Club(Document):
     contactMail = EmailField(required=True)
 
     def to_dict(self):
+        if current_user.is_authenticated:
+            user = UserAuth.objects.get(id=current_user.get_id()).userauth
+            admin = validatePermession(user, self.id)
+        else:
+            admin = False
         return {
             "id": str(self.pk),
             "name": self.name,
@@ -44,7 +50,7 @@ class Club(Document):
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
             "membersCount": 12,
-            "admin": False,
+            "admin": admin,
         }
 
     def to_json(self):
@@ -56,6 +62,8 @@ class User(Document):
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
     picture = URLField()
+    country = StringField()
+    phone = StringField()
     meta = {"collection": "users"}
 
     def full_name(self):
@@ -72,6 +80,11 @@ class User(Document):
 
     def to_json(self):
         return json.dumps(self.to_dict())
+
+
+class UserAuth(UserMixin, Document):
+    email = EmailField(required=True, unique=True)
+    userauth = ReferenceField(User)
 
 
 ROLES = {"A": "Admin", "U": "User", "P": "Pendding"}
@@ -180,7 +193,7 @@ def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
         membership = ClubMembership.objects(club=club, member=user).first()
-        if membership.role != "A":
+        if not membership or membership.role != "A":
             return False  # error only admin can create message
         return True
     except DoesNotExist:
@@ -193,3 +206,21 @@ def months_ago(today, months):  # until 12 months
     if today.month == months:
         return datetime.datetime(today.year, 12, 1)
     return datetime.datetime(today.year - 1, 12 + today.month - months, 1)
+
+
+def get_name_for_month(i):
+    if i == 0:
+        return "currentMonth"
+    return "lastMonth"
+
+
+def dict_two_months(clubs, func):
+    today = datetime.datetime.today()
+    dict = {}
+    for i in range(2):
+        before = months_ago(today, i)
+        after = months_ago(today, i + 1)
+        dict[get_name_for_month(i)] = {
+            before.strftime("%B"): len(func(before, after, clubs))
+        }
+    return dict

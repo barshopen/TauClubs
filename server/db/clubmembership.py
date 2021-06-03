@@ -44,8 +44,6 @@ def get_user_clubs(user):
     for doc in ClubMembership.objects(member=user):
         try:
             dict = doc.club.to_dict()
-            if doc.role == "A":
-                dict["admin"] = True
             res.append(dict)
         except DoesNotExist as e:
             print(doc, e)
@@ -80,8 +78,8 @@ def is_user_member(user, club):
 def is_manager(user):
     dict = {}
     try:
-        ClubMembership.objects(member=user)
-        dict["manager"] = True
+        clubmembership = ClubMembership.objects(member=user, role="A").first()
+        dict["manager"] = clubmembership is not None
     except DoesNotExist:
         dict["manager"] = False
     return dict
@@ -118,7 +116,7 @@ def users_for_club_six_months(club):
     dict = {}
     for i in range(6):
         before = months_ago(today, i)
-        after = months_ago(today, i - 1)
+        after = months_ago(today, i + 1)
         dict[today.month - i] = users_for_club_between_dates(club, before, after)
     return dict
 

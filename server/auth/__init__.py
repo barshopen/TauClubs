@@ -9,7 +9,8 @@ from flask_login import (
     logout_user,
 )
 from mongoengine.errors import DoesNotExist
-from server.auth.userauth import UserAuth, create_user_auth, getUserInfo
+from server.auth.userauth import create_user_auth, getUserInfo
+from server.db.models import UserAuth
 from server.auth import google_token
 
 
@@ -77,4 +78,5 @@ def sendUserData():
 @login_required
 def logout():
     logout_user()
+    #  return 'Logout',400
     return redirect("http://localhost:3000")

@@ -19,3 +19,7 @@ def create_user(firstName, lastName, contactMail, picture):
 
 def get_user(user_id):
     return User.objects.get(id=user_id)
+
+
+def update(user, firstName, lastName, phone, country):
+    user.update(firstName=firstName, lastName=lastName, phone=phone, country=country)
