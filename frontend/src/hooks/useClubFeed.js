@@ -1,5 +1,10 @@
-import { useQuery } from 'react-query';
-import { getMessagesByClub, getUpcomingEventsByClub } from '../Shared/api';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import {
+  getMessagesByClub,
+  getUpcomingEventsByClub,
+  createNewMessgae,
+  createNewEvent,
+} from '../Shared/api';
 
 const fetchMessages = async clubId => {
   const res = await getMessagesByClub(clubId);
@@ -14,6 +19,7 @@ const fetchEvents = async clubId => {
 const useClubFeed = ({ clubId }) => {
   const storeKeyMessages = ['messages', clubId];
   const storeKeyEvents = ['events', clubId];
+  const queryClient = useQueryClient();
 
   const {
     loading: loadingMessages,
@@ -25,11 +31,31 @@ const useClubFeed = ({ clubId }) => {
     data: upcomingEvents,
   } = useQuery(storeKeyEvents, () => fetchEvents(clubId));
 
+  const { mutate: addMessage } = useMutation(
+    ({ data }) => createNewMessgae({ payload: { clubId, data } }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(storeKeyMessages);
+      },
+    }
+  );
+
+  const { mutate: addEvent } = useMutation(
+    ({ data }) => createNewEvent({ payload: { clubId, data } }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(storeKeyEvents);
+      },
+    }
+  );
+
   return {
     loadingMessages,
     messagesData,
     loadingEvents,
     upcomingEvents,
+    addMessage,
+    addEvent,
   };
 };
 

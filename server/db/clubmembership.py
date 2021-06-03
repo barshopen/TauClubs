@@ -2,7 +2,6 @@ import datetime
 from .models import ClubMembership, User, Club, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
-from mongoengine.queryset.visitor import Q
 
 
 def createMembership(user, club, role):
@@ -44,8 +43,6 @@ def get_user_clubs(user):
     for doc in ClubMembership.objects(member=user):
         try:
             dict = doc.club.to_dict()
-            if doc.role == "A":
-                dict["admin"] = True
             res.append(dict)
         except DoesNotExist as e:
             print(doc, e)

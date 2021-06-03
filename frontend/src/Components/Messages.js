@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import GenericControl from './Generic/GenericControl';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
+// slice(0, 5) - backend sort from newest to oldest
 function Messages({ data }) {
   return (
     <GenericControl header='Messages'>
