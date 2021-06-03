@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -9,6 +9,9 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core';
+import { useRecoilState } from 'recoil';
+import { currentUser } from '../../../Shared/atoms';
+import { updateUserData, whoami } from '../../../Shared/api';
 
 const states = [
   {
@@ -18,13 +21,13 @@ const states = [
 ];
 
 const AccountProfileDetails = props => {
+  const [user, setUser] = useRecoilState(currentUser);
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
     phone: '',
-    state: 'Alabama',
-    country: 'USA',
+    country: 'Israel',
   });
 
   const handleChange = event => {
@@ -33,6 +36,13 @@ const AccountProfileDetails = props => {
       [event.target.name]: event.target.value,
     });
   };
+
+  const submitHandler = () => {
+    updateUserData(values);
+  };
+  useEffect(() => {
+    whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
+  }, []);
 
   return (
     <form autoComplete='off' noValidate {...props}>
@@ -71,6 +81,7 @@ const AccountProfileDetails = props => {
                 name='email'
                 onChange={handleChange}
                 required
+                disabled
                 value={values.email}
                 variant='outlined'
               />
@@ -117,7 +128,7 @@ const AccountProfileDetails = props => {
         </CardContent>
         <Divider />
         <Box display='flex' justifyContent='flex-end' p={2}>
-          <Button color='primary' variant='contained'>
+          <Button color='primary' variant='contained' onClick={submitHandler}>
             Save details
           </Button>
         </Box>

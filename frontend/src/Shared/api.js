@@ -47,10 +47,9 @@ export const getFeedData = (currentTab = 'all') => {
   if (currentTab === 'events') {
     return getUpcomingEvents();
   }
-  return Promise.all([
-    getUpcomingEvents(),
-    getMessages(),
-  ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
+  return Promise.all([getUpcomingEvents(), getMessages()]).then(
+    ([upcomingEvents, messages]) => upcomingEvents.concat(messages)
+  );
 };
 
 export const logOut = () => get('/auth/logout');
@@ -61,6 +60,8 @@ export const createNewMessgae = ({ payload }) =>
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
 
-export const isUserManager = () => get('/isManager');
+export const isUserManager = () => get('/dashboard/isManager');
 
 export const getDashboardData = () => get('dashboard/data');
+
+export const updateUserData = data => post('/db/updateuser', data);

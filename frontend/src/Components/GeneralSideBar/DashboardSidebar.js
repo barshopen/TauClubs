@@ -9,14 +9,10 @@ import {
   User as UserIcon,
   Users as UsersIcon,
 } from 'react-feather';
+import { useRecoilValue } from 'recoil';
 import NavItem from '../Accounts/Manager/Dashboard/components/NavItem';
 import SideBar from './SideBar';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-
-  name: 'Katarina Smith',
-};
+import { currentUser } from '../../Shared/atoms';
 
 const items = [
   {
@@ -54,6 +50,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       onMobileClose();
     }
   }, [location.pathname]);
+  const current = useRecoilValue(currentUser);
+  const user = {
+    avatar: current.picture,
+
+    name: `${current.firstName} ${current.lastName}`,
+  };
 
   const content = (
     <Box>

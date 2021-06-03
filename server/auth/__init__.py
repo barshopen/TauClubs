@@ -78,4 +78,5 @@ def sendUserData():
 @login_required
 def logout():
     logout_user()
+    #  return 'Logout',400
     return redirect("http://localhost:3000")
