@@ -46,7 +46,7 @@ mongodb = MongoEngine()
 app.config["MONGODB_SETTINGS"] = {"host": URL_HOST}
 mongodb.init_app(app)
 
-
+@disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
 @app.errorhandler(404)
 def not_found(e):
     print(e)
