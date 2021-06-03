@@ -20,7 +20,7 @@ const NavBarContainer = styled.div`
 
 const Header = styled.h2`
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
+  font-size: 2rem;
   margin: 25px 0;
   font-weight: normal;
   text-align: center;
@@ -37,7 +37,7 @@ const HeaderPhoto = styled.div`
 const Nav = styled.nav`
   height: 38px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 `;
 
 const NavLink = styled(Link)`
@@ -132,7 +132,6 @@ const ClubSection = () => {
               Club Board
             </NavLink>
             <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-            <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
             {join}
           </Nav>
         </NavBarContainer>
@@ -146,11 +145,12 @@ const ClubSection = () => {
         />
         <Route
           path='/club/about/:clubId'
-          component={() => <AboutUs description={clubData?.description} />}
-        />
-        <Route
-          path='/club/contact/:clubId'
-          component={() => <Contact clubName={clubData?.name} />}
+          component={() => (
+            <AboutUs
+              description={clubData?.description}
+              contactMail={clubData?.contactMail}
+            />
+          )}
         />
         {user && !clubData?.pending && !clubData?.member && (
           <Route
