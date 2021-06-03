@@ -9,6 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -16,6 +17,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
+import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,11 +80,14 @@ function FeedCard({ feedItem }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isImg = profileImage !== '';
-  const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayStartTime = new Date(startTime).toLocalesString('en-GB');
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleInterested = () => {
+    // send to backendss
+  };
+  const handleAttend = () => {
+    // send to backend
   };
   return (
     <Card className={classes.root} m={75}>
@@ -111,23 +117,23 @@ function FeedCard({ feedItem }) {
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <NavLink to='/clubs'>
-          <IconButton aria-label='go to club home page'>
-            <HomeIcon />
+        <Tooltip title='go to club'>
+          <NavLink to='/clubs'>
+            <IconButton aria-label='go to club home page'>
+              <HomeIcon />
+            </IconButton>
+          </NavLink>
+        </Tooltip>
+        <Tooltip title='Attend'>
+          <IconButton aria-label='attend' onClick={handleAttend}>
+            <EventAvailableOutlinedIcon />
           </IconButton>
-        </NavLink>
-        <IconButton aria-label='add to favorites'>
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label='show more'>
-          <ExpandMoreIcon />
-        </IconButton>
+        </Tooltip>
+        <Tooltip title='Interested'>
+          <IconButton aria-label='interested' onClick={handleInterested}>
+            <StarBorderOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
@@ -140,6 +146,64 @@ function FeedCard({ feedItem }) {
     </Card>
   );
 }
+
+export const FeedCardMessage = ({ feedItem }) => {
+  const { title, clubName, profileImage, description, lastUpdateTime } =
+    feedItem;
+  const classes = useStyles();
+  const [expanded, setExpanded] = React.useState(false);
+  const isImg = profileImage !== '';
+  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <Card className={classes.root} m={75}>
+      <CardHeader
+        avatar={<Avatar alt='club image' src={profileImage} />}
+        titleTypographyProps={{ variant: 'h5' }}
+        title={title}
+        subheader={displayLastUpdate.concat(` ${clubName}`)}
+      />
+
+      {isImg && (
+        <CardMedia
+          className={classes.media}
+          image={profileImage}
+          title={title}
+        />
+      )}
+      <CardContent>
+        <Typography paragraph variant='h6' color='initial' component='p'>
+          {description}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <NavLink to='/clubs'>
+          <IconButton aria-label='go to club home page'>
+            <HomeIcon />
+          </IconButton>
+        </NavLink>
+        <Tooltip title='Like'>
+          <IconButton aria-label='add to favorites'>
+            <FavoriteIcon />
+          </IconButton>
+        </Tooltip>
+        <IconButton
+          className={clsx(classes.expand, {
+            [classes.expandOpen]: expanded,
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label='show more'>
+          <ExpandMoreIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
+};
 
 FeedCard.propTypes = {
   feedItem: PropTypes.arrayOf(

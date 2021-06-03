@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
-import GenericFeedMessage from './Generic/GenericFeedMessage';
+import GenericFeedEvent from './Generic/GenericFeedEvent';
 
 function UpcomingEvents({ data }) {
   return (
     <GenericControl header='Upcoming Events'>
       <MessagesContainer>
         {data.map(({ id, title, date, text }) => (
-          <GenericFeedMessage title={title} date={date} key={id}>
+          <GenericFeedEvent title={title} date={date} key={id}>
             <Content>{text}</Content>
             <Link to='/#'> View Location</Link>
-          </GenericFeedMessage>
+          </GenericFeedEvent>
         ))}
       </MessagesContainer>
     </GenericControl>
