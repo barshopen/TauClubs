@@ -102,16 +102,14 @@ const ClubSection = () => {
   const { clubData } = useClub(clubId);
 
   const user = useRecoilValue(currentUser);
-  const pendding = false;
-  const admin = false;
-  const member = true;
+
   let join = null;
   if (user) {
-    if (member) {
+    if (clubData?.member) {
       join = (
         <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
       );
-    } else if (pendding) {
+    } else if (clubData?.pending) {
       join = <NavWithoutLink>Pennding</NavWithoutLink>;
     } else {
       join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
@@ -143,8 +141,7 @@ const ClubSection = () => {
         <Route
           path='/club/board/:clubId'
           component={() => (
-            // <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
-            <ClubBoard currentUserIsClubsAdmin={admin} />
+            <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
           )}
         />
         <Route
@@ -155,7 +152,7 @@ const ClubSection = () => {
           path='/club/contact/:clubId'
           component={() => <Contact clubName={clubData?.name} />}
         />
-        {user && !pendding && !member && (
+        {user && !clubData?.pending && !clubData?.member && (
           <Route
             path='/club/joinus/:clubId'
             component={() => (
@@ -163,7 +160,7 @@ const ClubSection = () => {
             )}
           />
         )}
-        {user && member && (
+        {user && clubData?.member && (
           <Route
             path='/club/leave/:clubId'
             component={() => (

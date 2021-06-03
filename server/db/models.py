@@ -37,14 +37,14 @@ class Club(Document):
     def to_dict(self):
         admin = False
         member = False
-        pennding = False
+        pending = False
         if current_user.is_authenticated:
             user = UserAuth.objects.get(id=current_user.get_id()).userauth
             admin = validatePermession(user, self.id)
             memebership = ClubMembership.objects(member=user, club=self).first()
             if memebership is not None:
                 member = admin or memebership.role == "U"
-                pennding = memebership.role == "P"
+                pending = memebership.role == "P"
         return {
             "id": str(self.pk),
             "name": self.name,
@@ -57,7 +57,7 @@ class Club(Document):
             "membersCount": 12,
             "admin": admin,
             "member": member,
-            "pennding": pennding,
+            "pending": pending,
         }
 
     def to_json(self):
@@ -95,7 +95,7 @@ class UserAuth(UserMixin, Document):
     userauth = ReferenceField(User)
 
 
-ROLES = {"A": "Admin", "U": "User", "P": "Pendding"}
+ROLES = {"A": "Admin", "U": "User", "P": "Pending"}
 
 
 class ClubMembership(Document):
