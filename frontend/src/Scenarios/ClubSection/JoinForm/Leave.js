@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,8 +9,8 @@ import PropTypes from 'prop-types';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { newUserData } from '../../../Shared/atoms';
-import { Form, LeaveDescription } from './index';
+import useClubs from '../../../hooks/useClubs';
+import { LeaveDescription } from './index';
 import { leaveClub } from '../../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
@@ -66,13 +65,10 @@ const steps = ['Information'];
 const Leave = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const { refetchMyClubs } = useClubs();
   const [isLoading, setIsLoading] = useState(false);
 
-  const setUserData = useSetRecoilState(newUserData);
-
-  const getStepContent = step => {
-    <LeaveDescription />;
-  };
+  const getStepContent = () => <LeaveDescription />;
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -81,15 +77,8 @@ const Leave = ({ clubName, clubId }) => {
     leaveClub({ clubId }).then(() => {
       setActiveStep(prev => prev + 1);
       setIsLoading(false);
+      refetchMyClubs();
     });
-  };
-
-  const handleNext = () => {
-    setActiveStep(prev => prev + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prev => prev - 1);
   };
 
   return (
@@ -100,22 +89,20 @@ const Leave = ({ clubName, clubId }) => {
             Leave {clubName}
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map(label => (
-              <Step key={label}>
-                <StepLabel
-                  StepIconProps={{
-                    classes: { root: classes.stepIcon },
-                  }}>
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
+            <Step key='information'>
+              <StepLabel
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}>
+                information
+              </StepLabel>
+            </Step>
           </Stepper>
           <>
             {activeStep === steps.length ? (
               <>
                 <Typography variant='h5' gutterBottom>
-                  Sad that you are leaving our club
+                  Sad to see you leave
                 </Typography>
               </>
             ) : (
@@ -140,20 +127,12 @@ const Leave = ({ clubName, clubId }) => {
                 )}
 
                 <div className={classes.buttons}>
-                  <Button onClick={handleBack} className={classes.button}>
-                    Back
-                  </Button>
                   <Button
                     variant='contained'
                     color='primary'
-                    disabled={activeStep === 0}
-                    onClick={
-                      activeStep === steps.length - 1
-                        ? handleSubmit
-                        : handleNext
-                    }
+                    onClick={handleSubmit}
                     className={classes.button}>
-                    {activeStep === steps.length - 1 ? 'Quit' : 'Next'}
+                    Quit
                   </Button>
                 </div>
               </>

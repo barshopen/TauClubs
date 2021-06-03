@@ -35,11 +35,16 @@ class Club(Document):
     contactMail = EmailField(required=True)
 
     def to_dict(self):
+        admin = False
+        member = False
+        pennding = False
         if current_user.is_authenticated:
             user = UserAuth.objects.get(id=current_user.get_id()).userauth
             admin = validatePermession(user, self.id)
-        else:
-            admin = False
+            memebership = ClubMembership.objects(member=user, club=self).first()
+            if memebership is not None:
+                member = admin or memebership.role == "U"
+                pennding = memebership.role == "P"
         return {
             "id": str(self.pk),
             "name": self.name,
@@ -51,6 +56,8 @@ class Club(Document):
             "contactMail": self.contactMail,
             "membersCount": 12,
             "admin": admin,
+            "member": member,
+            "pennding": pennding,
         }
 
     def to_json(self):

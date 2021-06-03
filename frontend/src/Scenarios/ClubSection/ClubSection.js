@@ -10,7 +10,6 @@ import Leave from './JoinForm/Leave';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
 import { currentUser } from '../../Shared/atoms';
-import getClub from '../../Shared/api';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -54,6 +53,46 @@ const NavLink = styled(Link)`
     color: #00b874;
   }
 `;
+const NavLinkJoin = styled(Link)`
+  display: inline-grid;
+  text-decoration: none;
+  font: Roboto;
+  grid-column-start: ${props => props.start};
+  font-size: 1rem;
+  color: green;
+  justify-self: center;
+  align-self: center;
+  &.active {
+    color: #00b874;
+  }
+`;
+const NavLinkLeave = styled(Link)`
+  display: inline-grid;
+  text-decoration: none;
+  font: Roboto;
+  grid-column-start: ${props => props.start};
+  font-size: 1rem;
+  color: red;
+  justify-self: center;
+  align-self: center;
+  &.active {
+    color: #00b874;
+  }
+`;
+const NavWithoutLink = styled.h1`
+  display: inline-grid;
+  text-decoration: none;
+  font: Roboto;
+  grid-column-start: ${props => props.start};
+  font-size: 1rem;
+  font-weight: bold;
+  color: blueviolet;
+  justify-self: right;
+  align-self: center;
+  &.active {
+    color: #00b874;
+  }
+`;
 
 const ClubSection = () => {
   const {
@@ -61,16 +100,24 @@ const ClubSection = () => {
   } = useRouteMatch('/club/*/:clubId');
 
   const { clubData } = useClub(clubId);
-  const admin = true; /// need to check in params the admin field
-  const member = false;
-  const user = useRecoilValue(currentUser);
 
+  const user = useRecoilValue(currentUser);
+  const pendding = false;
+  const admin = false;
+  const member = true;
   let join = null;
-  if (user && member) {
-    join = <NavLink to={`/club/leave/${clubId}`}>Leave club</NavLink>;
-  } else if (user && !member) {
-    join = <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>;
+  if (user) {
+    if (member) {
+      join = (
+        <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
+      );
+    } else if (pendding) {
+      join = <NavWithoutLink>Pennding</NavWithoutLink>;
+    } else {
+      join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
+    }
   }
+
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
       <Header>{clubData?.name}</Header>
@@ -108,14 +155,15 @@ const ClubSection = () => {
           path='/club/contact/:clubId'
           component={() => <Contact clubName={clubData?.name} />}
         />
-        {user && join ? (
+        {user && !pendding && !member && (
           <Route
             path='/club/joinus/:clubId'
             component={() => (
               <JoinUs clubName={clubData?.name} clubId={clubId} />
             )}
           />
-        ) : (
+        )}
+        {user && member && (
           <Route
             path='/club/leave/:clubId'
             component={() => (
@@ -129,3 +177,4 @@ const ClubSection = () => {
 };
 
 export default ClubSection;
+/// need to change after join the status
