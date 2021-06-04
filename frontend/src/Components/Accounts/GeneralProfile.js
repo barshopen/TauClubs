@@ -4,14 +4,17 @@ import UserAccount from './User/UserAccount';
 import ManagerAccount from './Manager/ManagerAccount';
 import { isUserManager } from '../../Shared/api';
 
+const checkIfUserIsManager = async () => {
+  const res = await isUserManager();
+  return res;
+};
+
 const GeneralProfile = () => {
   const {
     data: { manager: isManager },
-  } = useQuery('isManager', isUserManager);
+  } = useQuery('isManager', checkIfUserIsManager);
 
-  // const isManager = true;
-  // return isManager ? <ManagerAccount /> : <UserAccount />;
-  return null;
+  return isManager ? <ManagerAccount /> : <UserAccount />;
 };
 
 export default GeneralProfile;

@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { useRecoilState } from 'recoil';
 import { currentUser } from '../../../Shared/atoms';
-import { updateUserData, whoami } from '../../../Shared/api';
+import { whoami, updateUserData } from '../../../Shared/api';
 
 const states = [
   {

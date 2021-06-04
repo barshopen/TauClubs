@@ -83,7 +83,7 @@ const SideBar = ({ open, onClose, content, dashboardContext }) => {
 };
 
 SideBar.propTypes = {
-  open: PropTypes.func,
+  open: PropTypes.node,
   onClose: PropTypes.func,
   content: PropTypes.node.isRequired,
   dashboardContext: PropTypes.bool,

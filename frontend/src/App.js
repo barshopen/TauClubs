@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useMutation } from 'react-query';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -30,14 +31,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const fetchCurrentUser = async () => {
+  const res = await whoami();
+  return res;
+};
+
 const App = () => {
   const classes = useStyles();
   const [user, setUser] = useRecoilState(currentUser);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
-  }, []);
+  useMutation(fetchCurrentUser, {
+    onSuccess: setUser,
+  });
+
   return (
     <>
       <Router>
