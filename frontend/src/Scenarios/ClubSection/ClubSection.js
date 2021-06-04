@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
@@ -39,7 +39,7 @@ const Nav = styled.nav`
   grid-template-columns: repeat(5, 1fr);
 `;
 
-const NavLink = styled(Link)`
+const NavLinkStyle = css`
   display: inline-grid;
   text-decoration: none;
   font: Roboto;
@@ -52,45 +52,19 @@ const NavLink = styled(Link)`
     color: #00b874;
   }
 `;
-const NavLinkJoin = styled(Link)`
-  display: inline-grid;
-  text-decoration: none;
-  font: Roboto;
-  grid-column-start: ${props => props.start};
-  font-size: 1rem;
-  color: green;
-  justify-self: center;
-  align-self: center;
-  &.active {
-    color: #00b874;
-  }
+
+const NavLink = styled(Link)`
+  ${NavLinkStyle};
 `;
-const NavLinkLeave = styled(Link)`
-  display: inline-grid;
-  text-decoration: none;
-  font: Roboto;
-  grid-column-start: ${props => props.start};
-  font-size: 1rem;
+const NavLinkJoin = styled(NavLink)`
+  color: green;
+`;
+const NavLinkLeave = styled(NavLink)`
   color: red;
-  justify-self: center;
-  align-self: center;
-  &.active {
-    color: #00b874;
-  }
 `;
 const NavWithoutLink = styled.h1`
-  display: inline-grid;
-  text-decoration: none;
-  font: Roboto;
-  grid-column-start: ${props => props.start};
-  font-size: 1rem;
-  font-weight: bold;
+  ${NavLinkStyle};
   color: blueviolet;
-  justify-self: right;
-  align-self: center;
-  &.active {
-    color: #00b874;
-  }
 `;
 
 const ClubSection = () => {
