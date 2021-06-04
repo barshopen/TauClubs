@@ -13,12 +13,13 @@ import './mixins/chartjs';
 import theme from './theme';
 import { getDashboardData } from '../../../../Shared/api';
 
+const fetchDashboardData = async () => {
+  const res = await getDashboardData();
+  return res;
+};
+
 const DashboardApp = () => {
-  const fetchDashboardData = async () => {
-    const res = await getDashboardData();
-    return res;
-  };
-  const storeKey = ['dashboard'];
+  const storeKey = ['dashboardData'];
   const { data } = useQuery(storeKey, fetchDashboardData);
 
   return (
