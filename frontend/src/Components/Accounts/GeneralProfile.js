@@ -5,7 +5,7 @@ import { isUserManager } from '../../Shared/api';
 
 const GeneralProfile = () => {
   const isManager = isUserManager();
-  return isManager ? <ManagerAccount /> : <UserAccount />;
+  return isManager.manager ? <ManagerAccount /> : <UserAccount />;
 };
 
 export default GeneralProfile;
