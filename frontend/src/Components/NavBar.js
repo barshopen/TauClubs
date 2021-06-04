@@ -157,8 +157,6 @@ export default function NavBar({ search, setSearch }) {
     showSideBarMobileState
   );
 
-  console.log({ search });
-
   const { clubs: data } = useClubs();
 
   const [user, setUser] = useRecoilState(currentUser);
@@ -189,14 +187,14 @@ export default function NavBar({ search, setSearch }) {
   const defaultFilterOptions = useMemo(() => {
     if (data) {
       return search
-        ? data.slice(0, 20).concat([
+        ? data.slice(0, 5).concat([
             {
               name: `${search}`,
               icon: SearchFor,
               prefix: true,
             },
           ])
-        : data;
+        : data.slice(0, 5);
     }
     return [];
   }, [data, search]);
