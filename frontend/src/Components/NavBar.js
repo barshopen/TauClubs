@@ -247,7 +247,9 @@ export default function NavBar({ search, setSearch }) {
       open={isMenuOpen}
       onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>
-        <NavLink to='/profile'>My account</NavLink>
+        <NavLink exact to='/profile'>
+          My account
+        </NavLink>
       </MenuItem>
       <MenuItem onClick={handleLogout}>Log out</MenuItem>
     </StyledMenu>
@@ -286,7 +288,7 @@ export default function NavBar({ search, setSearch }) {
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-        <NavLink to='/profile'>
+        <NavLink exact to='/profile'>
           <p>Profile</p>
         </NavLink>
       </MenuItem>

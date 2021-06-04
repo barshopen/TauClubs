@@ -5,10 +5,10 @@ import ManagerAccount from './Manager/ManagerAccount';
 import { isUserManager } from '../../Shared/api';
 
 const GeneralProfile = () => {
-  const {
-    data: { manager },
-  } = useQuery('isManager', isUserManager);
+  const { data, error } = useQuery('isUserManager', isUserManager);
 
+  console.log({ data });
+  const manager = true;
   return manager ? <ManagerAccount /> : <UserAccount />;
 };
 
