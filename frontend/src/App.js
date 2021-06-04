@@ -38,6 +38,7 @@ const App = () => {
   useEffect(() => {
     whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
   }, []);
+
   return (
     <>
       <Router>

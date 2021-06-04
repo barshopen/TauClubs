@@ -157,6 +157,8 @@ export default function NavBar({ search, setSearch }) {
     showSideBarMobileState
   );
 
+  console.log({ search });
+
   const { clubs: data } = useClubs();
 
   const [user, setUser] = useRecoilState(currentUser);
@@ -189,8 +191,9 @@ export default function NavBar({ search, setSearch }) {
       return search
         ? data.slice(0, 20).concat([
             {
-              name: `Search for ${search}`,
+              name: `${search}`,
               icon: SearchFor,
+              prefix: true,
             },
           ])
         : data;
@@ -362,11 +365,12 @@ export default function NavBar({ search, setSearch }) {
                   {option.icon && (
                     <img src={option.icon} alt='' style={searchImageStyle} />
                   )}
-                  {option.name}
+                  {option.prefix ? `Search for ${option.name}` : option.name}
                 </>
               )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+
                 setSearch(rest.inputProps.value);
 
                 return (
