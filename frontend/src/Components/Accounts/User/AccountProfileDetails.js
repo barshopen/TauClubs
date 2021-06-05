@@ -23,9 +23,9 @@ const states = [
 const AccountProfileDetails = props => {
   const [user, setUser] = useRecoilState(currentUser);
   const [values, setValues] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
     phone: '',
     country: 'Israel',
   });

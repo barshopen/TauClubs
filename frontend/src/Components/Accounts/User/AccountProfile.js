@@ -17,10 +17,10 @@ import { currentUser } from '../../../Shared/atoms';
 const AccountProfile = props => {
   const current = useRecoilValue(currentUser);
   const user = {
-    avatar: current.picture,
+    avatar: current?.picture,
     city: 'Tel aviv',
     country: 'Israel',
-    name: `${current.firstName} ${current.lastName}`,
+    name: `${current?.firstName} ${current?.lastName}`,
     timezone: 'GTM-7',
   };
   return (

@@ -18,7 +18,7 @@ const lastMonthLocation = 5;
 
 const TotalMessages = ({ messages }) => {
   const precentage =
-    (messages.currentMonthLocation / messages.lastMonthLocation) * 100;
+    (messages?.currentMonthLocation / messages?.lastMonthLocation) * 100;
 
   return (
     <Card style={{ height: '100%', position: 'relative' }}>
@@ -29,7 +29,7 @@ const TotalMessages = ({ messages }) => {
               TOTAL MESSAGES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {messages.currentMonthLocation}
+              {messages?.currentMonthLocation}
             </Typography>
           </Grid>
           <Grid item>
