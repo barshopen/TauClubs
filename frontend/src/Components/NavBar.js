@@ -187,13 +187,14 @@ export default function NavBar({ search, setSearch }) {
   const defaultFilterOptions = useMemo(() => {
     if (data) {
       return search
-        ? data.slice(0, 20).concat([
+        ? data.slice(0, 5).concat([
             {
-              name: `Search for ${search}`,
+              name: `${search}`,
               icon: SearchFor,
+              prefix: true,
             },
           ])
-        : data;
+        : data.slice(0, 5);
     }
     return [];
   }, [data, search]);
@@ -362,11 +363,12 @@ export default function NavBar({ search, setSearch }) {
                   {option.icon && (
                     <img src={option.icon} alt='' style={searchImageStyle} />
                   )}
-                  {option.name}
+                  {option.prefix ? `Search for ${option.name}` : option.name}
                 </>
               )}
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
+
                 setSearch(rest.inputProps.value);
 
                 return (
