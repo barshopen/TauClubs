@@ -1,6 +1,6 @@
 import React from 'react';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
-import Button from '@pluralsight/ps-design-system-button';
+import PropTypes from 'prop-types';
 
 const EmptyStateSearch = ({ search }) => (
   <EmptyState
@@ -24,3 +24,11 @@ const EmptyStateSearch = ({ search }) => (
 );
 
 export default EmptyStateSearch;
+
+EmptyStateSearch.propTypes = {
+  search: PropTypes.string,
+};
+
+EmptyStateSearch.defaultProps = {
+  search: '',
+};
