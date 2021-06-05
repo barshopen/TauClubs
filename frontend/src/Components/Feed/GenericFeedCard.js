@@ -142,22 +142,21 @@ function FeedCard({ feedItem }) {
 }
 
 FeedCard.propTypes = {
-  feedItem: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      clubName: PropTypes.string,
-      date: PropTypes.string,
-      profileImage: PropTypes.string,
-      description: PropTypes.string,
-      location: PropTypes.string,
-      startTime: PropTypes.string,
-      // duration: PropTypes.string,
-    })
-  ),
+  feedItem: PropTypes.shape({
+    title: PropTypes.string,
+    clubName: PropTypes.string,
+    date: PropTypes.string,
+    profileImage: PropTypes.string,
+    description: PropTypes.string,
+    location: PropTypes.string,
+    startTime: PropTypes.string,
+    // duration: PropTypes.string,
+    lastUpdateTime: PropTypes.string,
+  }),
 };
 
 FeedCard.defaultProps = {
-  feedItem: [],
+  feedItem: {},
 };
 
 export default FeedCard;

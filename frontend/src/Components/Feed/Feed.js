@@ -16,7 +16,7 @@ const Feed = () => {
       {/* <FeedNavBar setCurrentTab='all' /> */}
       <Container>
         {data?.map(feedItem => (
-          <FeedCard feedItem={feedItem} />
+          <FeedCard key={feedItem.id} feedItem={feedItem} />
         ))}
       </Container>
     </Container>

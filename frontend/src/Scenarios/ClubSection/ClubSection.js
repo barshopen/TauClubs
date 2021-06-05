@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import EmptyState from '@pluralsight/ps-design-system-emptystate';
+import Typography from '@material-ui/core/Typography';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import Contact from './Contact';
@@ -13,14 +15,6 @@ const NavBarContainer = styled.div`
   border-style: solid;
   padding: 5px;
   margin: 15px 0;
-`;
-
-const Header = styled.h2`
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  margin: 25px 0;
-  font-weight: normal;
-  text-align: center;
 `;
 
 const HeaderPhoto = styled.div`
@@ -61,25 +55,35 @@ const ClubSection = () => {
 
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
-      <Header>{clubData?.name}</Header>
-      <HeaderPhoto>
-        <img
-          src={clubData ? `/${clubData.profileImage}` : ''}
-          width={1000}
-          height={200}
-          alt='wallpaper'
+      <Typography variant='h5'>{clubData?.name}</Typography>
+
+      {clubData?.profileImage ? (
+        <HeaderPhoto>
+          <img src={`/${clubData.profileImage}`} height={200} alt='wallpaper' />
+        </HeaderPhoto>
+      ) : (
+        <EmptyState
+          style={{ color: 'black', height: 200 }}
+          heading={
+            <EmptyState.Heading style={{ fontSize: 14 }}>
+              No image yet! Click here to add an image
+            </EmptyState.Heading>
+          }
+          illustration={<EmptyState.Illustration name='image' />}
+          size='small'
         />
-        <NavBarContainer>
-          <Nav>
-            <NavLink to={`/club/board/${clubId}`} start='2'>
-              Club Board
-            </NavLink>
-            <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-            <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
-            <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
-          </Nav>
-        </NavBarContainer>
-      </HeaderPhoto>
+      )}
+
+      <NavBarContainer>
+        <Nav>
+          <NavLink to={`/club/board/${clubId}`} start='2'>
+            Club Board
+          </NavLink>
+          <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
+          <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
+          <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
+        </Nav>
+      </NavBarContainer>
       <Switch>
         <Route
           path='/club/board/:clubId'
