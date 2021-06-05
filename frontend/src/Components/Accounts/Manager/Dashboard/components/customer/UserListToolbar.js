@@ -12,11 +12,7 @@ import { Search as SearchIcon } from 'react-feather';
 
 const UserListToolbar = props => (
   <Box {...props}>
-    <Box display='flex' justifyContent='flex-end'>
-      <Button color='primary' variant='contained'>
-        Add User
-      </Button>
-    </Box>
+    <Box display='flex' justifyContent='flex-end' />
     <Box mt={3}>
       <Card>
         <CardContent>

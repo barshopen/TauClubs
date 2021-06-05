@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useRecoilState } from 'recoil';
+import { useMutation } from 'react-query';
 import { currentUser } from '../../../Shared/atoms';
 import { whoami, updateUserData } from '../../../Shared/api';
 
@@ -22,13 +23,8 @@ const states = [
 
 const AccountProfileDetails = props => {
   const [user, setUser] = useRecoilState(currentUser);
-  const [values, setValues] = useState({
-    firstName: user?.firstName,
-    lastName: user?.lastName,
-    email: user?.email,
-    phone: '',
-    country: 'Israel',
-  });
+
+  const [values, setValues] = useState(user);
 
   const handleChange = event => {
     setValues({
@@ -37,12 +33,14 @@ const AccountProfileDetails = props => {
     });
   };
 
-  const submitHandler = () => {
-    updateUserData(values);
+  const { mutate: changeUserData } = useMutation(whoami, {
+    onSuccess: setUser,
+  });
+
+  const submitHandler = async () => {
+    await updateUserData(values);
+    changeUserData();
   };
-  useEffect(() => {
-    whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
-  }, []);
 
   return (
     <form autoComplete='off' noValidate {...props}>

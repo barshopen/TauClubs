@@ -5,7 +5,7 @@ import { green } from '@material-ui/core/colors';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
 const TotalClubs = ({ clubs }) => (
-  <Card style={{ height: '100%', position: 'relative' }}>
+  <Card style={{ height: '100%', position: 'relative', paddingBottom: '50px' }}>
     <CardContent>
       <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
         <Grid item>
@@ -13,7 +13,7 @@ const TotalClubs = ({ clubs }) => (
             TOTAL ClUBS
           </Typography>
           <Typography color='textPrimary' variant='h3'>
-            {Object.keys(clubs).length}
+            {Object.keys(clubs).length || 0}
           </Typography>
         </Grid>
         <Grid item>

@@ -82,8 +82,8 @@ const orders = [
   },
 ];
 
-const LatestJoinedUsers = props => (
-  <Card {...props}>
+const LatestJoinedUsers = ({ allUsers }) => (
+  <Card>
     <CardHeader title='Latest Applications' />
     <Divider />
     <PerfectScrollbar>
@@ -103,17 +103,26 @@ const LatestJoinedUsers = props => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map(order => (
-              <TableRow hover key={order.id}>
-                <TableCell>{order.customer.name}</TableCell>
-                <TableCell>
-                  {moment(order.createdAt).format('DD/MM/YYYY')}
-                </TableCell>
-                <TableCell>
-                  <Chip color='primary' label={order.status} size='small' />
-                </TableCell>
-              </TableRow>
-            ))}
+            {allUsers?.map(({ users, club }) =>
+              users.map(user => (
+                <TableRow hover key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>
+                    {moment(user.joinTime).format('DD/MM/YYYY')}
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      color='primary'
+                      label={user?.status ? 'pending' : 'member'}
+                      size='small'
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Chip color='primary' label={club} size='small' />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </Box>

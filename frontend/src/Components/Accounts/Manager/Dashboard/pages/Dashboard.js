@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Grid } from '@material-ui/core';
 import TotalMessages from '../components/dashboard/TotalMessages';
 import LatestJoinedUsers from '../components/dashboard/LatestJoinedUsers';
@@ -8,12 +8,12 @@ import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
 const Dashboard = ({ data }) => {
-  console.log({ data });
   const { clubs, events, messages } = data || {};
 
-  // console.log({ clubs });
-  // console.log({ events });
-  // console.log({ messages });
+  const allUsers = Object.values(clubs).map(({ users, club }) => ({
+    users,
+    club: club.name,
+  }));
 
   return (
     <Box backgroundColor='background.default' minHeight='100%' py={3}>
@@ -25,18 +25,18 @@ const Dashboard = ({ data }) => {
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TotalMessages messages={messages} />
           </Grid>
-          {/* <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TotalEvents events={events} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalUsers total={clubs} />
+            <TotalUsers clubs={clubs} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <ClubsActivity />
+            <ClubsActivity clubs={clubs} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <LatestJoinedUsers style={{ width: '100%' }} />
-          </Grid> */}
+            <LatestJoinedUsers allUsers={allUsers} style={{ width: '100%' }} />
+          </Grid>
         </Grid>
       </Container>
     </Box>

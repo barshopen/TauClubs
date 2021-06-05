@@ -11,14 +11,16 @@ import {
 import React from 'react';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MessageIcon from '@material-ui/icons/Message';
-import { red } from '@material-ui/core/colors';
+import { red, green } from '@material-ui/core/colors';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
-const currentMonthLocation = 5;
-const lastMonthLocation = 5;
-
-const TotalMessages = ({ messages }) => {
+const TotalMessages = ({ messages: { currentMonth, lastMonth } }) => {
   const precentage =
-    (messages?.currentMonthLocation / messages?.lastMonthLocation) * 100;
+    lastMonth?.total === 0
+      ? 100
+      : (currentMonth?.total / (lastMonth?.total || 1)) * 100;
+
+  const isAmountHeigher = currentMonth?.total > lastMonth?.total;
 
   return (
     <Card style={{ height: '100%', position: 'relative' }}>
@@ -29,7 +31,7 @@ const TotalMessages = ({ messages }) => {
               TOTAL MESSAGES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {messages?.currentMonthLocation}
+              {currentMonth?.total}
             </Typography>
           </Grid>
           <Grid item>
@@ -46,14 +48,18 @@ const TotalMessages = ({ messages }) => {
           bottom='25px'
           display='flex'
           alignItems='center'>
-          <ArrowDownwardIcon style={{ color: red[900] }} />
+          {isAmountHeigher ? (
+            <ArrowUpwardIcon style={{ color: green[900] }} />
+          ) : (
+            <ArrowDownwardIcon style={{ color: red[900] }} />
+          )}
           <Typography
             style={{
-              color: red[900],
+              color: isAmountHeigher ? green[900] : red[900],
               mr: 1,
             }}
             variant='body2'>
-            {precentage}
+            {precentage}%
           </Typography>
           <Typography
             color='textSecondary'

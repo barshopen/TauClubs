@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-const UserListResults = ({ users, ...rest }) => {
+const UserListResults = ({ users: allUsers }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -66,7 +66,7 @@ const UserListResults = ({ users, ...rest }) => {
       .join('');
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box minWidth={1050}>
           <Table>
@@ -83,58 +83,60 @@ const UserListResults = ({ users, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.slice(0, limit).map(customer => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}>
-                  <TableCell>
-                    <Box alignItems='center' display='flex'>
-                      <Avatar
-                        src={customer.avatarUrl}
-                        style={{
-                          marginRight: '20px',
-                          width: '30px',
-                          height: '30px',
-                        }}>
-                        {getInitials(customer.name)}
-                      </Avatar>
-                      <Typography color='textPrimary' variant='body1'>
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>{`${customer.address.city}`}</TableCell>
-                  <TableCell>{customer.phone}</TableCell>
-                  <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
-                  </TableCell>
-                  <TableCell>{['chess']}</TableCell>
-                  <TableCell>
-                    <Chip
-                      color='primary'
-                      label={customer.status}
-                      size='small'
-                    />
-                  </TableCell>
+              {allUsers?.slice(0, limit).map(({ users, club }) =>
+                users.map(user => (
+                  <TableRow
+                    hover
+                    key={user.id}
+                    selected={selectedCustomerIds.indexOf(user.id) !== -1}>
+                    <TableCell>
+                      <Box alignItems='center' display='flex'>
+                        <Avatar
+                          src={user.picture}
+                          style={{
+                            marginRight: '20px',
+                            width: '30px',
+                            height: '30px',
+                          }}>
+                          {getInitials(user.name)}
+                        </Avatar>
+                        <Typography color='textPrimary' variant='body1'>
+                          {user.name}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{user.contactMail}</TableCell>
+                    <TableCell>{`${user?.city || ''}`}</TableCell>
+                    <TableCell>{user?.phone || ''}</TableCell>
+                    <TableCell>
+                      {moment(user?.joinTime).format('DD/MM/YYYY')}
+                    </TableCell>
+                    <TableCell>{club}</TableCell>
+                    <TableCell>
+                      <Chip
+                        color='primary'
+                        label={user?.status || 'member'}
+                        size='small'
+                      />
+                    </TableCell>
 
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={customer.status === 'Member'}
-                      onChange={event => handleSelectOne(event, customer.id)}
-                      value='true'
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell padding='checkbox'>
+                      <Checkbox
+                        checked={user?.status === 'Member'}
+                        onChange={event => handleSelectOne(event, user?.id)}
+                        value='true'
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <TablePagination
         component='div'
-        count={users.length}
+        count={allUsers.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

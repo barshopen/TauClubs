@@ -133,7 +133,7 @@ def users_for_club(club):
 def dict_users_and_update_by_club(clubs):
     dict = {}
     for club in clubs:
-        dict[club.name] = {"çlub": club.to_dict()}  # club data
+        dict[club.name] = {"club": club.to_dict()}  # club data
         dict[club.name]["lastUpdate"] = club.lastUpdateTime  # last update time for club
         dict[club.name]["users"] = users_for_club(club)  # member for the club
         dict[club.name]["usersByDated"] = users_for_club_six_months(club)

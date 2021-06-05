@@ -44,18 +44,17 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
+  const current = useRecoilValue(currentUser);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
   }, [location.pathname]);
-  const current = useRecoilValue(currentUser);
-  const user = {
-    // avatar: current.picture,
 
-    // name: `${current.firstName} ${current.lastName}`,
-    name: 'hhh',
+  const user = {
+    avatar: current.picture,
+    name: `${current.firstName} ${current.lastName}`,
   };
 
   const content = (
@@ -63,7 +62,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       <Box alignItems='center' display='flex' flexDirection='column' p={2}>
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={user.picture}
           style={{
             cursor: 'pointer',
             width: 64,

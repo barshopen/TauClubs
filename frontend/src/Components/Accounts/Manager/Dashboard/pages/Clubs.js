@@ -34,9 +34,10 @@ const allUsersClubs = [
   },
 ];
 
-const Clubs = () => {
+const Clubs = ({ clubs }) => {
   const PAGE_SIZE = 5;
-  const totalPages = Math.floor(allUsersClubs.length / PAGE_SIZE) + 1;
+  const totalPages = Math.floor(Object.keys(clubs).length / PAGE_SIZE) + 1;
+  console.log({ clubs });
 
   return (
     <>
@@ -45,8 +46,8 @@ const Clubs = () => {
           <ProductListToolbar />
           <Box pt={3}>
             <Grid container spacing={3}>
-              {allUsersClubs.map(club => (
-                <Grid item key={club.id} lg={4} md={6} xs={12}>
+              {Object.values(clubs).map(club => (
+                <Grid item lg={4} md={6} xs={12}>
                   <DashboardClubCard club={club} />
                 </Grid>
               ))}
