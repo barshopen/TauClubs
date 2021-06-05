@@ -9,7 +9,7 @@ import TotalEvents from '../components/dashboard/TotalEvents';
 
 const Dashboard = ({ data }) => {
   console.log({ data });
-  const { clubs, events, messages } = data;
+  const { clubs, events, messages } = data || {};
 
   // console.log({ clubs });
   // console.log({ events });

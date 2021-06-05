@@ -5,7 +5,7 @@ from server.db.clubmembership import (
     dict_users_and_update_by_club,
     is_manager,
 )
-from flask import Blueprint, json
+from flask import Blueprint
 from flask_login import login_required, current_user
 from server.auth.userauth import get_userauth_user_by_id
 
@@ -34,4 +34,4 @@ def clubs_for_manager():
 @login_required
 def is_user_manager():
     user = get_userauth_user_by_id(current_user.get_id())
-    return json.dumps(is_manager(user))
+    return is_manager(user)

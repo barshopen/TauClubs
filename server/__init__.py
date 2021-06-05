@@ -1,5 +1,5 @@
 import os
-from flask import Flask, json, request
+from flask import Flask, request
 import dotenv
 from server.db import db_app
 from server.db.manager_data import dashboard_app
@@ -42,6 +42,7 @@ URL_HOST = (
 mongodb = MongoEngine()
 app.config["MONGODB_SETTINGS"] = {"host": URL_HOST}
 mongodb.init_app(app)
+
 
 @disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
 @app.errorhandler(404)

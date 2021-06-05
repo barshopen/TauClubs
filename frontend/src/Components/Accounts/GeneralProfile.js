@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import UserAccount from './User/UserAccount';
 import ManagerAccount from './Manager/ManagerAccount';
 import { isUserManager } from '../../Shared/api';
 
 const GeneralProfile = () => {
-  const {
-    data: { manager },
-  } = useQuery('isManager', isUserManager);
-
+  const [manager, setManager] = useState(false);
+  useEffect(() => {
+    isUserManager().then(res => {
+      setManager(res);
+    });
+  }, []);
   return manager ? <ManagerAccount /> : <UserAccount />;
 };
 
