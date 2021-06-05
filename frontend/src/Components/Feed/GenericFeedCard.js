@@ -69,6 +69,7 @@ const useStyles = makeStyles(theme => ({
 
 function FeedCard({ feedItem }) {
   const {
+    clubId,
     title,
     clubName,
     profileImage,
@@ -80,15 +81,19 @@ function FeedCard({ feedItem }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isImg = profileImage !== '';
-  const displayStartTime = new Date(startTime).toLocalesString('en-GB');
+  const displayStartTime = new Date(startTime).toLocaleString('en-GB');
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
-  const handleInterested = () => {
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const handleInterested = () =>
     // send to backendss
-  };
-  const handleAttend = () => {
+    null;
+  const handleAttend = () =>
     // send to backend
-  };
+    null;
   return (
     <Card className={classes.root} m={75}>
       <CardHeader
@@ -118,7 +123,7 @@ function FeedCard({ feedItem }) {
       </CardContent>
       <CardActions disableSpacing>
         <Tooltip title='go to club'>
-          <NavLink to='/clubs'>
+          <NavLink to={`/club/board/${clubId}`}>
             <IconButton aria-label='go to club home page'>
               <HomeIcon />
             </IconButton>
@@ -134,6 +139,15 @@ function FeedCard({ feedItem }) {
             <StarBorderOutlinedIcon />
           </IconButton>
         </Tooltip>
+        <IconButton
+          className={clsx(classes.expand, {
+            [classes.expandOpen]: expanded,
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label='show more'>
+          <ExpandMoreIcon />
+        </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
@@ -146,18 +160,12 @@ function FeedCard({ feedItem }) {
     </Card>
   );
 }
-
-export const FeedCardMessage = ({ feedItem }) => {
-  const { title, clubName, profileImage, description, lastUpdateTime } =
+function FeedCardMessage({ feedItem }) {
+  const { clubId, title, clubName, profileImage, description, lastUpdateTime } =
     feedItem;
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const isImg = profileImage !== '';
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
     <Card className={classes.root} m={75}>
@@ -181,7 +189,7 @@ export const FeedCardMessage = ({ feedItem }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <NavLink to='/clubs'>
+        <NavLink to={`/club/board/${clubId}`}>
           <IconButton aria-label='go to club home page'>
             <HomeIcon />
           </IconButton>
@@ -191,23 +199,15 @@ export const FeedCardMessage = ({ feedItem }) => {
             <FavoriteIcon />
           </IconButton>
         </Tooltip>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label='show more'>
-          <ExpandMoreIcon />
-        </IconButton>
       </CardActions>
     </Card>
   );
-};
+}
 
 FeedCard.propTypes = {
   feedItem: PropTypes.arrayOf(
     PropTypes.shape({
+      clubId: PropTypes.string,
       title: PropTypes.string,
       clubName: PropTypes.string,
       date: PropTypes.string,
@@ -221,6 +221,24 @@ FeedCard.propTypes = {
 };
 
 FeedCard.defaultProps = {
+  feedItem: [],
+};
+
+FeedCardMessage.propTypes = {
+  feedItem: PropTypes.arrayOf(
+    PropTypes.shape({
+      clubId: PropTypes.string,
+      title: PropTypes.string,
+      clubName: PropTypes.string,
+      profileImage: PropTypes.string,
+      description: PropTypes.string,
+      lastUpdateTime: PropTypes.string,
+      // duration: PropTypes.string,
+    })
+  ),
+};
+
+FeedCardMessage.defaultProps = {
   feedItem: [],
 };
 

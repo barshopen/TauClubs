@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
-import { NavLink } from 'react-router-dom';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
