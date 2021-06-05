@@ -54,7 +54,7 @@ const ClubSection = () => {
   const admin = true;
 
   return (
-    <SimpleContaConiner style={{ height: '80vh' }}>
+    <SimpleContaConiner>
       <Typography variant='h5'>{clubData?.name}</Typography>
 
       {clubData?.profileImage ? (

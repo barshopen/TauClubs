@@ -4,7 +4,7 @@ import FeedCard from './GenericFeedCard';
 import { getFeedData } from '../../Shared/api';
 
 const Feed = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   useEffect(() => {
     getFeedData().then(d => {
       setData(d);
