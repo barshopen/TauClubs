@@ -62,8 +62,8 @@ function NewClubContent({ setOpen }) {
   return (
     <form
       className={classes.root}
-      noValidate
-      autoComplete='off'
+      Validate
+      autoComplete='on'
       onSubmit={submitHandler}>
       <Typography variant='h6' className={classes.header}>
         Create New Club
@@ -72,22 +72,28 @@ function NewClubContent({ setOpen }) {
       <TextField
         name='club_name'
         label='Club Name'
+        placeholder='Enter club name'
         variant='outlined'
+        required
         onChange={handleChange}
       />
       <TextField
         name='contact_mail'
         label='Contact Email'
+        placeholder='Enter Contact Mail'
         variant='outlined'
+        required
         onChange={handleChange}
       />
       <TextField
         name='description'
         label='Club Description'
+        placeholder='Enter club description'
         multiline
         variant='outlined'
         rows={4}
         rowsMax={10}
+        required
         onChange={handleChange}
       />
       <ImageUploader
