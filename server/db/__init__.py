@@ -1,4 +1,7 @@
 from os import path
+from bson.objectid import ObjectId
+
+from flask import send_file
 from server.db.clubmembership import (
     clubs_by_user_member,
     is_user_member,
@@ -63,13 +66,14 @@ def filter_by_id(data, data_id):
 @login_required
 def club_creation():
     user = get_userauth_user_by_id(current_user.get_id())
-    email = user.contactMail
     result = establish_club(
-        email,
-        name=request.json.get("club_name"),
-        contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description"),
+        image=request.files["image"],
+        email=user.contactMail,
+        name=request.form["club_name"],
+        contact_mail=request.form["contact_mail"],
+        description=request.form["description"],
     )
+
     if not result:
         return "Failed", 400
     return result, 200
@@ -86,6 +90,12 @@ def clubs():
     * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
         containes foodies OR have a 'Math' tag
     """
+    #  x = send_file(
+    #     Club.objects.get(pk=ObjectId("60b7516617273ee384a9fabd")).profileImage,
+    #    download_name="sharon.png",
+    # )
+    # print(x)
+    # return None
     clubs_params = request.args.to_dict()
     return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
 

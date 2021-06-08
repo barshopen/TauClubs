@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
-  const [picture, setPicture] = useState();
 
   const handleChange = e => {
     setValues({
@@ -51,11 +50,21 @@ function NewClubContent({ setOpen }) {
   };
 
   const handleDrop = pictureFiles => {
-    setPicture(pictureFiles);
+    // setPicture(URL.createObjectURL(pictureFiles[0]));
+    setValues({
+      ...values,
+      image: pictureFiles[0],
+    });
   };
+
   const submitHandler = e => {
     e.preventDefault();
-    createClub(values);
+    const data = new FormData();
+    data.append('club_name', values.club_name);
+    data.append('description', values.description);
+    data.append('contact_mail', values.contact_mail);
+    data.append('image', values.contact_mail);
+    createClub(data);
     setOpen(false);
   };
 
@@ -68,7 +77,6 @@ function NewClubContent({ setOpen }) {
       <Typography variant='h6' className={classes.header}>
         Create New Club
       </Typography>
-
       <TextField
         name='club_name'
         label='Club Name'

@@ -1,9 +1,9 @@
-import { get, post } from './HTTP';
+import { get, post, postClub } from './HTTP';
 
 export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
-export const createClub = data => post('/db/create_club', data);
+export const createClub = data => postClub('/db/create_club', data);
 
 export const joinClub = data => post('/db/join_club', data);
 
@@ -47,10 +47,9 @@ export const getFeedData = (currentTab = 'all') => {
   if (currentTab === 'events') {
     return getUpcomingEvents();
   }
-  return Promise.all([
-    getUpcomingEvents(),
-    getMessages(),
-  ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
+  return Promise.all([getUpcomingEvents(), getMessages()]).then(
+    ([upcomingEvents, messages]) => upcomingEvents.concat(messages)
+  );
 };
 
 export const logOut = () => get('/auth/logout');
