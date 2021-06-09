@@ -12,14 +12,18 @@ const fetchMyClubs = async () => {
 };
 
 const useClubs = filterByValue => {
-  const storeKeyClubs = ['clubs', filterByValue];
+  const storeKeyClubs = ['clubs', filterByValue || ''];
   const storeKeyMyClubs = ['myClubs'];
 
-  const { loading: loadingClubs, data: clubs } = useQuery(storeKeyClubs, () =>
-    fetchClubs(filterByValue)
-  );
+  const { loading: loadingClubs, data: clubs } = useQuery(storeKeyClubs, () => {
+    console.log({ storeKeyClubs });
+    return fetchClubs(filterByValue);
+  });
 
-  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs);
+  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, () => {
+    console.log({ storeKeyMyClubs });
+    return fetchMyClubs();
+  });
 
   return {
     loadingClubs,

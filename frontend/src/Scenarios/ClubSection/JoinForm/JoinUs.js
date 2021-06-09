@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { useQueryClient } from 'react-query';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 import { makeStyles } from '@material-ui/core/styles';
@@ -68,11 +70,13 @@ const JoinUs = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const { refetchMyClubs } = useClubs();
+  // const { refetchMyClubs } = useClubs();
   const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
     false
   );
+  const queryClient = useQueryClient();
   const setUserData = useSetRecoilState(newUserData);
+  const history = useHistory();
 
   const getStepContent = step => {
     switch (step) {
@@ -96,10 +100,13 @@ const JoinUs = ({ clubName, clubId }) => {
     event.preventDefault();
     setIsLoading(true);
 
-    joinClub({ clubId }).then(() => {
+    joinClub({ clubId }).then(async () => {
       setActiveStep(prev => prev + 1);
+      await queryClient.invalidateQueries(['club', clubId]);
+
+      // await refetchMyClubs();
+      history.goBack();
       setIsLoading(false);
-      refetchMyClubs();
     });
   };
 

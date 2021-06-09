@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -67,6 +69,8 @@ const Leave = ({ clubName, clubId }) => {
   const [activeStep, setActiveStep] = useState(0);
   const { refetchMyClubs } = useClubs();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const history = useHistory();
 
   const getStepContent = () => <LeaveDescription />;
 
@@ -74,11 +78,14 @@ const Leave = ({ clubName, clubId }) => {
     event.preventDefault();
     setIsLoading(true);
 
-    leaveClub({ clubId }).then(() => {
-      setActiveStep(prev => prev + 1);
-      setIsLoading(false);
-      refetchMyClubs();
-    });
+    leaveClub({ clubId })
+      .then(async () => {
+        setActiveStep(prev => prev + 1);
+        await queryClient.invalidateQueries(['club', clubId]);
+        history.goBack();
+        // refetchMyClubs();
+      })
+      .then(() => setIsLoading(false));
   };
 
   return (
