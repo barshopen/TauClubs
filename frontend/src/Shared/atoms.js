@@ -15,9 +15,12 @@ const showSideBarMobileState = atom({
 
 const selectedOptionState = atom({ key: 'selectedOptionState', default: '' });
 
+const mainSearch = atom({ key: 'mainSearch', default: '' });
+
 export {
   newUserData,
   currentUser,
   selectedOptionState,
   showSideBarMobileState,
+  mainSearch,
 };

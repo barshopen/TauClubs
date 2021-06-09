@@ -31,6 +31,7 @@ import {
   showSideBarMobileState,
   currentUser,
   selectedOptionState,
+  mainSearch,
 } from '../Shared/atoms';
 import SearchFor from '../assets/search-icon.png';
 
@@ -148,14 +149,14 @@ MenuItemWithToolTip.defaultProps = {
   content: null,
 };
 
-export default function NavBar({ search, setSearch }) {
-  // hooks
+export default function NavBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
+  const [search, setSearch] = useRecoilState(mainSearch);
 
   const { clubs: data } = useClubs();
 
