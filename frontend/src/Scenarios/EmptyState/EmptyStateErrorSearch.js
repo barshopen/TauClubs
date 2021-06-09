@@ -1,34 +1,30 @@
 import React from 'react';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
-import PropTypes from 'prop-types';
+import { useRecoilValue } from 'recoil';
+import { mainSearch } from '../../Shared/atoms';
 
-const EmptyStateErorSearch = ({ search }) => (
-  <EmptyState
-    style={{ color: 'black' }}
-    heading={<EmptyState.Heading>Oops, We didn’t find it</EmptyState.Heading>}
-    caption={
-      <>
-        <EmptyState.Caption style={{ color: 'black' }}>
-          We have searched hard for a club with the name <b>{search}</b> but to
-          no results :/
-        </EmptyState.Caption>
-        <EmptyState.Caption style={{ color: 'black' }}>
-          Try something else...
-        </EmptyState.Caption>
-      </>
-    }
-    illustration={
-      <EmptyState.Illustration name={EmptyState.Illustration.names.error} />
-    }
-  />
-);
+const EmptyStateErorSearch = () => {
+  const search = useRecoilValue(mainSearch);
+  return (
+    <EmptyState
+      style={{ color: 'black' }}
+      heading={<EmptyState.Heading>Oops, We didn’t find it</EmptyState.Heading>}
+      caption={
+        <>
+          <EmptyState.Caption style={{ color: 'black' }}>
+            We have searched hard for a club with the name <b>{search}</b> but
+            to no results :/
+          </EmptyState.Caption>
+          <EmptyState.Caption style={{ color: 'black' }}>
+            Try something else...
+          </EmptyState.Caption>
+        </>
+      }
+      illustration={
+        <EmptyState.Illustration name={EmptyState.Illustration.names.error} />
+      }
+    />
+  );
+};
 
 export default EmptyStateErorSearch;
-
-EmptyStateErorSearch.propTypes = {
-  search: PropTypes.string,
-};
-
-EmptyStateErorSearch.defaultProps = {
-  search: '',
-};

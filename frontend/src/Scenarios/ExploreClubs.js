@@ -2,43 +2,38 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Loader from 'react-loader-spinner';
-import PropTypes from 'prop-types';
+import BaseLoader from 'react-loader-spinner';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
 import EmptyStateErorSearch from './EmptyState/EmptyStateErrorSearch';
 
 const width = '100%';
 
-const ExploreClubs = ({ search, setSearch }) => {
-  const { loadingClubs, clubs: clubsData } = useClubs(search);
+const Loader = styled(BaseLoader)`
+  margin-top: 25%;
+`;
 
-  // const loading = true;
-  // - fix location of the loader
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
-  console.log({ loadingClubs });
+const ExploreClubs = () => {
+  const { loadingClubs, clubs: clubsData } = useClubs();
 
   return (
     <>
       {loadingClubs ? (
-        <Loader type='TailSpin' color='#00BFFF' height={150} width={150} />
-      ) : clubsData?.length > 0 ? (
+        <Wrapper>
+          <Loader type='TailSpin' color='#00BFFF' height={150} width={150} />
+        </Wrapper>
+      ) : clubsData.length > 0 ? (
         <ClubsView width={width} data={clubsData} Container={StyledContainer} />
       ) : (
-        <EmptyStateErorSearch search={search} setSearch={setSearch} />
+        <EmptyStateErorSearch />
       )}
     </>
   );
-};
-
-ExploreClubs.propTypes = {
-  search: PropTypes.string,
-  setSearch: PropTypes.func,
-};
-
-ExploreClubs.defaultProps = {
-  search: '',
-  setSearch: undefined,
 };
 
 const StyledContainer = styled.div`
