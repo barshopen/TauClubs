@@ -2,7 +2,7 @@ import React from 'react';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import PropTypes from 'prop-types';
 
-const EmptyStateSearch = ({ search }) => (
+const EmptyStateErorSearch = ({ search }) => (
   <EmptyState
     style={{ color: 'black' }}
     heading={<EmptyState.Heading>Oops, We didn’t find it</EmptyState.Heading>}
@@ -18,17 +18,17 @@ const EmptyStateSearch = ({ search }) => (
       </>
     }
     illustration={
-      <EmptyState.Illustration name={EmptyState.Illustration.names.magnify} />
+      <EmptyState.Illustration name={EmptyState.Illustration.names.error} />
     }
   />
 );
 
-export default EmptyStateSearch;
+export default EmptyStateErorSearch;
 
-EmptyStateSearch.propTypes = {
+EmptyStateErorSearch.propTypes = {
   search: PropTypes.string,
 };
 
-EmptyStateSearch.defaultProps = {
+EmptyStateErorSearch.defaultProps = {
   search: '',
 };

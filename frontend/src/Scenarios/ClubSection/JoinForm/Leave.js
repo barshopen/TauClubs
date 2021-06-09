@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
+
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
@@ -74,18 +75,23 @@ const Leave = ({ clubName, clubId }) => {
 
   const getStepContent = () => <LeaveDescription />;
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    setIsLoading(true);
+  const handleSubmit = useCallback(
+    async event => {
+      event.preventDefault();
+      setIsLoading(true);
+      setActiveStep(prev => prev + 1);
 
-    leaveClub({ clubId })
-      .then(async () => {
-        setActiveStep(prev => prev + 1);
-        await queryClient.invalidateQueries(['club', clubId]);
-        history.goBack();
-        // refetchMyClubs();
-      })
-      .then(() => setIsLoading(false));
+      await leaveClub({ clubId }).then(() => {
+        refetchMyClubs();
+        setIsLoading(false);
+      });
+    },
+    [setIsLoading, setActiveStep, history]
+  );
+
+  const backToMenu = () => {
+    history.push(`/club/board/${clubId}`);
+    queryClient.invalidateQueries(['club', clubId]);
   };
 
   return (
@@ -111,6 +117,15 @@ const Leave = ({ clubName, clubId }) => {
                 <Typography variant='h5' gutterBottom>
                   Sad to see you leave
                 </Typography>
+                <div className={classes.buttons}>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={backToMenu}
+                    className={classes.button}>
+                    Back to Club Board
+                  </Button>
+                </div>
               </>
             ) : (
               <>

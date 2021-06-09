@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner';
 import PropTypes from 'prop-types';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
-import EmptyStateSearch from './EmptyStateSearch';
+import EmptyStateErorSearch from './EmptyState/EmptyStateErrorSearch';
 
 const width = '100%';
 
@@ -16,6 +16,8 @@ const ExploreClubs = ({ search, setSearch }) => {
   // const loading = true;
   // - fix location of the loader
 
+  console.log({ loadingClubs });
+
   return (
     <>
       {loadingClubs ? (
@@ -23,7 +25,7 @@ const ExploreClubs = ({ search, setSearch }) => {
       ) : clubsData?.length > 0 ? (
         <ClubsView width={width} data={clubsData} Container={StyledContainer} />
       ) : (
-        <EmptyStateSearch search={search} setSearch={setSearch} />
+        <EmptyStateErorSearch search={search} setSearch={setSearch} />
       )}
     </>
   );

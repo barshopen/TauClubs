@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useQueryClient } from 'react-query';
@@ -70,7 +70,7 @@ const JoinUs = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  // const { refetchMyClubs } = useClubs();
+  const { refetchMyClubs } = useClubs();
   const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
     false
   );
@@ -96,18 +96,22 @@ const JoinUs = ({ clubName, clubId }) => {
     }
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    joinClub({ clubId }).then(async () => {
+  const handleSubmit = useCallback(
+    async event => {
+      event.preventDefault();
+      setIsLoading(true);
       setActiveStep(prev => prev + 1);
-      await queryClient.invalidateQueries(['club', clubId]);
 
-      // await refetchMyClubs();
-      history.goBack();
-      setIsLoading(false);
-    });
+      await joinClub({ clubId }).then(() => {
+        refetchMyClubs();
+        setIsLoading(false);
+      });
+    },
+    [setIsLoading, setActiveStep, history]
+  );
+  const backToMenu = () => {
+    history.push(`/club/board/${clubId}`);
+    queryClient.invalidateQueries(['club', clubId]);
   };
 
   const handleNext = () => {
@@ -146,6 +150,15 @@ const JoinUs = ({ clubName, clubId }) => {
                 <Typography variant='subtitle1'>
                   Your application sent to the club manager
                 </Typography>
+                <div className={classes.buttons}>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={backToMenu}
+                    className={classes.button}>
+                    Back to Club Board
+                  </Button>
+                </div>
               </>
             ) : (
               <>
