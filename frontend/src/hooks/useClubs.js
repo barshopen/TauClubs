@@ -1,8 +1,10 @@
 import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
 import { getClubs, getMyClubs } from '../Shared/api';
+import { mainSearch } from '../Shared/atoms';
 
-const fetchClubs = async filterByValue => {
-  const res = await getClubs({ name: filterByValue });
+const fetchClubs = async search => {
+  const res = await getClubs({ name: search });
   return res;
 };
 
@@ -11,12 +13,13 @@ const fetchMyClubs = async () => {
   return res;
 };
 
-const useClubs = filterByValue => {
-  const storeKeyClubs = ['clubs', filterByValue];
+const useClubs = () => {
+  const search = useRecoilValue(mainSearch);
+  const storeKeyClubs = ['clubs', search];
   const storeKeyMyClubs = ['myClubs'];
 
-  const { loading: loadingClubs, data: clubs } = useQuery(storeKeyClubs, () =>
-    fetchClubs(filterByValue)
+  const { isLoading: loadingClubs, data: clubs } = useQuery(storeKeyClubs, () =>
+    fetchClubs(search)
   );
 
   const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs);
