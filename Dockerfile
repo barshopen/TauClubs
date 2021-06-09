@@ -1,7 +1,7 @@
 FROM python:3.9.5
 
 WORKDIR /usr/src/app
-EXPOSE 443/tcp
+EXPOSE 7000/tcp
 
 COPY requirements.txt .
 COPY server ./server

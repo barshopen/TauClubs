@@ -42,7 +42,8 @@ const GridItem = styled.div`
 // TODO relocate
 const data = {
   owner: 'Ben Mitchell',
-  text: 'Bar is well known chess teacher who won a gold medal at the TAU chess 1.',
+  text:
+    'Bar is well known chess teacher who won a gold medal at the TAU chess 1.',
   email: 'Jeramie_Zulauf@gmail.com',
 };
 function Contact() {

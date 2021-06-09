@@ -21,7 +21,7 @@ def test_create_user():
 
 
 def test_user_not_exist():
-    ron = addUser(firstName="ron", lastName="levi", contactMail="ron@gmail.com")
+    # ron = addUser(firstName="ron", lastName="levi", contactMail="ron@gmail.com")
     with pytest.raises(DoesNotExist):
         User.objects.get(firstName="ron")
 

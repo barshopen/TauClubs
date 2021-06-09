@@ -13,7 +13,6 @@ from mongoengine import (
 )
 import json
 from mongoengine.base.fields import ObjectIdField
-from flask import send_file
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import FloatField
 
@@ -36,14 +35,9 @@ class Club(Document):
     contactMail = EmailField(required=True)
 
     def to_dict(self):
-        x = send_file(
-            Club.objects.get(pk=ObjectId("60b7516617273ee384a9fabd")).profileImage,
-            download_name="myfile.png",
-        )
         return {
             "id": str(self.pk),
             "name": self.name,
-            "profileImage": x,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.creationTime.isoformat(),
@@ -136,7 +130,6 @@ class Event(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):
@@ -180,7 +173,6 @@ class Message(Document):
             "likes": self.likes,
             "clubName": self.creatingClub.name,
             "userName": self.creatingUser.full_name(),
-            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):
