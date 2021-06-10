@@ -6,10 +6,12 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { green } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
-import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
+import { attend, interested, uninterested, unattend } from '../../Shared/api';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
@@ -33,15 +35,54 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function GenericFeedMessage({ title, date, children }) {
+export const eventsIcon = (clubId, id, isAttend, isInterested) => {
+  const handleInterested = () =>
+    // eslint-disable-next-line no-nested-ternary
+    isInterested
+      ? uninterested(clubId, id)
+      : !isAttend
+      ? interested(clubId, id)
+      : null;
+
+  const handleAttend = () =>
+    isAttend
+      ? unattend(clubId, id)
+      : (attend(clubId, id), isInterested ? uninterested(clubId, id) : null);
+  return (
+    <CardActions disableSpacing>
+      <Tooltip title='Attend'>
+        <IconButton aria-label='attend' onClick={handleAttend}>
+          {isAttend ? (
+            <EventAvailableIcon style={{ color: 'green' }} />
+          ) : (
+            <EventAvailableIcon />
+          )}
+        </IconButton>
+      </Tooltip>
+      <Tooltip title='Interested'>
+        <IconButton aria-label='interested' onClick={handleInterested}>
+          {isInterested ? (
+            <StarBorderOutlinedIcon style={{ color: 'green' }} />
+          ) : (
+            <StarBorderOutlinedIcon />
+          )}
+        </IconButton>
+      </Tooltip>
+    </CardActions>
+  );
+};
+
+function GenericFeedEvent({
+  id,
+  clubId,
+  title,
+  isAttend,
+  isInterested,
+  date,
+  children,
+}) {
   const classes = useStyles();
 
-  const handleInterested = () => {
-    // send to backend
-  };
-  const handleAttend = () => {
-    // send to backend
-  };
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -62,32 +103,25 @@ function GenericFeedMessage({ title, date, children }) {
           </DateContainerOuter>
         ) : null}
       </CardContent>
-      <CardActions>
-        <Tooltip title='Attend'>
-          <IconButton aria-label='attend' onClick={handleAttend}>
-            <EventAvailableOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Interested'>
-          <IconButton aria-label='interested' onClick={handleInterested}>
-            <StarBorderOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-      </CardActions>
+      {eventsIcon(clubId, id, isAttend, isInterested)}
     </Card>
   );
 }
 
-GenericFeedMessage.propTypes = {
+GenericFeedEvent.propTypes = {
   title: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
   date: PropTypes.string,
+  isAttend: PropTypes.bool.isRequired,
+  isInterested: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-GenericFeedMessage.defaultProps = {
+GenericFeedEvent.defaultProps = {
   children: [],
   date: '',
   title: '',
@@ -103,4 +137,4 @@ const DateContainerOuter = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export default GenericFeedMessage;
+export default GenericFeedEvent;

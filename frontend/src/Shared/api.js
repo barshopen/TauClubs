@@ -9,6 +9,18 @@ export const joinClub = data => post('/db/join_club', data);
 
 export const leaveClub = data => post('/db/leave_club', data);
 
+export const interested = (clubId, eventId) =>
+  getDb(`club/${clubId}/messages/${eventId}/interested`);
+
+export const attend = (clubId, eventId) =>
+  getDb(`club/${clubId}/messages/${eventId}/attend`);
+
+export const uninterested = (clubId, eventId) =>
+  getDb(`club/${clubId}/messages/${eventId}/uninterested`);
+
+export const unattend = (clubId, eventId) =>
+  getDb(`club/${clubId}/messages/${eventId}/unattend`);
+
 export const whoami = () => get(`/auth/whoami`);
 
 export const getMessagesByClub = (clubId = null) =>

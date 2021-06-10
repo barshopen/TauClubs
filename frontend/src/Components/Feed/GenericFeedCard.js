@@ -12,13 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+// import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import { eventsIcon } from '../Generic/GenericFeedEvent';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,6 +68,7 @@ const useStyles = makeStyles(theme => ({
 
 function FeedCardEvent({ feedItem }) {
   const {
+    id,
     clubId,
     title,
     clubName,
@@ -77,6 +77,8 @@ function FeedCardEvent({ feedItem }) {
     startTime,
     location,
     lastUpdateTime,
+    isAttend,
+    isInterested,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -88,12 +90,6 @@ function FeedCardEvent({ feedItem }) {
     setExpanded(!expanded);
   };
 
-  const handleInterested = () =>
-    // send to backendss
-    null;
-  const handleAttend = () =>
-    // send to backend
-    null;
   return (
     <Card className={classes.root} m={75}>
       <CardHeader
@@ -129,16 +125,7 @@ function FeedCardEvent({ feedItem }) {
             </IconButton>
           </NavLink>
         </Tooltip>
-        <Tooltip title='Attend'>
-          <IconButton aria-label='attend' onClick={handleAttend}>
-            <EventAvailableOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Interested'>
-          <IconButton aria-label='interested' onClick={handleInterested}>
-            <StarBorderOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        {eventsIcon(clubId, id, isAttend, isInterested)}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

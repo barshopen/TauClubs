@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
-import FeedCard from './GenericFeedCard';
+import FeedCardEvent from './GenericFeedCard';
 import { getFeedData } from '../../Shared/api';
 
 const Feed = () => {
@@ -16,8 +16,9 @@ const Feed = () => {
       {/* <FeedNavBar setCurrentTab='all' /> */}
       <Container>
         {data?.map(feedItem => (
-          <FeedCard feedItem={feedItem} />
+          <FeedCardEvent feedItem={feedItem} />
         ))}
+        {/* here check if message or event and add the right one */}
       </Container>
     </Container>
   );

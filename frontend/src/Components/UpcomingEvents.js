@@ -9,12 +9,20 @@ function UpcomingEvents({ data }) {
   return (
     <GenericControl header='Upcoming Events'>
       <MessagesContainer>
-        {data.map(({ id, title, date, text }) => (
-          <GenericFeedEvent title={title} date={date} key={id}>
-            <Content>{text}</Content>
-            <Link to='/#'> View Location</Link>
-          </GenericFeedEvent>
-        ))}
+        {data.map(
+          ({ id, clubId, title, isAttend, isInterested, startTime, text }) => (
+            <GenericFeedEvent
+              clubId={clubId}
+              title={title}
+              isAttend={isAttend}
+              isInterested={isInterested}
+              date={startTime}
+              key={id}>
+              <Content>{text}</Content>
+              <Link to='/#'> View Location</Link>
+            </GenericFeedEvent>
+          )
+        )}
       </MessagesContainer>
     </GenericControl>
   );
