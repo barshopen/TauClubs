@@ -3,7 +3,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory, NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';

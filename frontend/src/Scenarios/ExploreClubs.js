@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import BaseLoader from 'react-loader-spinner';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
-import EmptyStateErorSearch from './EmptyState/EmptyStateErrorSearch';
+import EmptyStateErorSearch from './EmptyStateErrorSearch';
 
 const width = '100%';
 

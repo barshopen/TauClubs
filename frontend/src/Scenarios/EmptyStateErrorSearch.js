@@ -1,7 +1,7 @@
 import React from 'react';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import { useRecoilValue } from 'recoil';
-import { mainSearch } from '../../Shared/atoms';
+import { mainSearch } from '../Shared/atoms';
 
 const EmptyStateErorSearch = () => {
   const search = useRecoilValue(mainSearch);
