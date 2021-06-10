@@ -54,11 +54,13 @@ function GenericFeedMessage({ title, date, children }) {
           </DateContainerOuter>
         ) : null}
       </CardContent>
+      {/*
       <CardActions>
         <IconButton aria-label='add to favorites'>
           <FavoriteIcon />
         </IconButton>
       </CardActions>
+      */}
     </Card>
   );
 }

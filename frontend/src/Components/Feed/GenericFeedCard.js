@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function FeedCard({ feedItem }) {
+function FeedCardEvent({ feedItem }) {
   const {
     clubId,
     title,
@@ -161,8 +161,14 @@ function FeedCard({ feedItem }) {
   );
 }
 function FeedCardMessage({ feedItem }) {
-  const { clubId, title, clubName, profileImage, description, lastUpdateTime } =
-    feedItem;
+  const {
+    clubId,
+    title,
+    clubName,
+    profileImage,
+    description,
+    lastUpdateTime,
+  } = feedItem;
   const classes = useStyles();
   const isImg = profileImage !== '';
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
@@ -194,17 +200,19 @@ function FeedCardMessage({ feedItem }) {
             <HomeIcon />
           </IconButton>
         </NavLink>
+        {/*
         <Tooltip title='Like'>
           <IconButton aria-label='add to favorites'>
             <FavoriteIcon />
           </IconButton>
         </Tooltip>
+        */}
       </CardActions>
     </Card>
   );
 }
 
-FeedCard.propTypes = {
+FeedCardEvent.propTypes = {
   feedItem: PropTypes.arrayOf(
     PropTypes.shape({
       clubId: PropTypes.string,
@@ -220,7 +228,7 @@ FeedCard.propTypes = {
   ),
 };
 
-FeedCard.defaultProps = {
+FeedCardEvent.defaultProps = {
   feedItem: [],
 };
 
@@ -242,4 +250,4 @@ FeedCardMessage.defaultProps = {
   feedItem: [],
 };
 
-export default FeedCard;
+export default FeedCardEvent;
