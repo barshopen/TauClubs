@@ -91,35 +91,30 @@ const LatestJoinedUsers = ({ allUsers }) => (
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Club</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell sortDirection='desc'>
-                <Tooltip enterDelay={300} title='Sort'>
-                  <TableSortLabel active direction='desc'>
-                    Application Date
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Application Date</TableCell>
+              {/* <TableCell>Status</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
             {allUsers?.map(({ users, club }) =>
               users.map(user => (
                 <TableRow hover key={user.id}>
+                  <TableCell>
+                    <Chip color='primary' label={club} size='small' />
+                  </TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>
                     {moment(user.joinTime).format('DD/MM/YYYY')}
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Chip
                       color='primary'
                       label={user?.status ? 'pending' : 'member'}
                       size='small'
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip color='primary' label={club} size='small' />
-                  </TableCell>
+                    /> 
+                  </TableCell> */}
                 </TableRow>
               ))
             )}

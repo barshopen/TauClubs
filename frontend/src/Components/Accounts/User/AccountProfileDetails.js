@@ -23,7 +23,6 @@ const states = [
 
 const AccountProfileDetails = props => {
   const [user, setUser] = useRecoilState(currentUser);
-
   const [values, setValues] = useState(user);
 
   const handleChange = event => {
@@ -52,7 +51,7 @@ const AccountProfileDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText='Please specify the first name'
+                helperText='Please specify first name'
                 label='First name'
                 name='firstName'
                 onChange={handleChange}
@@ -72,7 +71,7 @@ const AccountProfileDetails = props => {
                 variant='outlined'
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
                 label='Email Address'
@@ -95,16 +94,7 @@ const AccountProfileDetails = props => {
                 variant='outlined'
               />
             </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label='City'
-                name='city'
-                onChange={handleChange}
-                variant='outlined'
-                autoComplete='shipping address-level2'
-              />
-            </Grid>
+
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth

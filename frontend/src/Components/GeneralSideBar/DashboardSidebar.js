@@ -35,11 +35,6 @@ const items = [
     icon: UserIcon,
     title: 'My Account',
   },
-  {
-    href: '/profile/settings',
-    icon: SettingsIcon,
-    title: 'Settings',
-  },
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
@@ -53,7 +48,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const user = {
-    avatar: current.picture,
+    avatar: current?.picture,
     name: `${current.firstName} ${current.lastName}`,
   };
 
@@ -62,7 +57,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       <Box alignItems='center' display='flex' flexDirection='column' p={2}>
         <Avatar
           component={RouterLink}
-          src={user.picture}
+          src={user.avatar}
           style={{
             cursor: 'pointer',
             width: 64,
