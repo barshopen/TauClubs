@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-
+import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -72,3 +72,11 @@ const TotalUsers = ({ clubs }) => {
 };
 
 export default TotalUsers;
+
+TotalUsers.propTypes = {
+  clubs: PropTypes.node,
+};
+
+TotalUsers.defaultProps = {
+  clubs: {},
+};

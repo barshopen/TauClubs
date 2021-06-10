@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Box, Container, Grid } from '@material-ui/core';
 import TotalMessages from '../components/dashboard/TotalMessages';
 import LatestJoinedUsers from '../components/dashboard/LatestJoinedUsers';
@@ -44,3 +45,11 @@ const Dashboard = ({ data }) => {
 };
 
 export default Dashboard;
+
+Dashboard.propTypes = {
+  data: PropTypes.node,
+};
+
+Dashboard.defaultProps = {
+  data: {},
+};

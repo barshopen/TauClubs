@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -16,7 +17,7 @@ const ClubsActivity = ({ clubs }) => {
 
   const values = {};
 
-  const allUsers = useMemo(
+  useEffect(
     () =>
       Object.values(clubs)
         .map(({ usersByDated }) => usersByDated)
@@ -125,3 +126,11 @@ const ClubsActivity = ({ clubs }) => {
 };
 
 export default ClubsActivity;
+
+ClubsActivity.propTypes = {
+  clubs: PropTypes.node,
+};
+
+ClubsActivity.defaultProps = {
+  clubs: {},
+};

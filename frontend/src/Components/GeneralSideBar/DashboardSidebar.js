@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Avatar, Box, Divider, List, Typography } from '@material-ui/core';
 import {
   BarChart as BarChartIcon,
-  Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   Users as UsersIcon,

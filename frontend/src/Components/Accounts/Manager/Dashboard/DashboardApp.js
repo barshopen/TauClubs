@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
 import DashboardLayout from './components/DashboardLayout';
 import Account from '../../User/Account';
 import UsersList from './pages/UsersList';

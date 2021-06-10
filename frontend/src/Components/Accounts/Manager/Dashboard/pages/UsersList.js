@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Box, Container } from '@material-ui/core';
 import UserListResults from '../components/user/UserListResults';
 
@@ -20,3 +21,11 @@ const UsersList = ({ data }) => {
 };
 
 export default UsersList;
+
+UsersList.propTypes = {
+  data: PropTypes.node,
+};
+
+UsersList.defaultProps = {
+  data: {},
+};

@@ -1,43 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Box, Container, Grid } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import ProductListToolbar from '../components/clubs/ClubsListToolbar';
 import DashboardClubCard from '../components/clubs/DashboardClubCard';
 
-const allUsersClubs = [
-  {
-    id: 'A1',
-    createdAt: '27/03/2019',
-    description:
-      'Dropbox is a file hosting service that offers cloud storage, file synchronization, a personal cloud.',
-    media: '/static/images/products/product_1.png',
-    title: 'Dropbox',
-    totalDownloads: '594',
-  },
-  {
-    id: 'A2',
-    createdAt: '31/03/2019',
-    description:
-      'Medium is an online publishing platform developed by Evan Williams, and launched in August 2012.',
-    media: '/static/images/products/product_2.png',
-    title: 'Medium Corporation',
-    totalDownloads: '625',
-  },
-  {
-    id: 'A2',
-    createdAt: '31/03/2019',
-    description:
-      'Medium is an online publishing platform developed by Evan Williams, and launched in August 2012.',
-    media: '/static/images/products/product_2.png',
-    title: 'Medium Corporation',
-    totalDownloads: '625',
-  },
-];
-
 const Clubs = ({ clubs }) => {
   const PAGE_SIZE = 5;
   const totalPages = Math.floor(Object.keys(clubs).length / PAGE_SIZE) + 1;
-  console.log({ clubs });
 
   return (
     <>
@@ -63,3 +33,11 @@ const Clubs = ({ clubs }) => {
 };
 
 export default Clubs;
+
+Clubs.propTypes = {
+  clubs: PropTypes.node,
+};
+
+Clubs.defaultProps = {
+  clubs: {},
+};
