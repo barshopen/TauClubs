@@ -36,9 +36,7 @@ const App = () => {
   const [user, setUser] = useRecoilState(currentUser);
   const search = useRecoilValue(mainSearch);
 
-  useMutation(whoami, {
-    onSuccess: setUser,
-  });
+  useMutation(whoami, { onSuccess: setUser });
 
   return (
     <>
