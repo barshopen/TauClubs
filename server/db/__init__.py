@@ -5,7 +5,7 @@ from server.db.clubmembership import (
     clubs_by_user_member,
     is_member,
     is_user_member,
-    remove_club_from_user,
+    leave_club,
 )
 from flask import Blueprint, json, request
 from server.db.club import establish_club, get_club, get_clubs
@@ -123,19 +123,14 @@ def join_club_by_id():
     return res, 200
 
 
-@db_app.route("/remove_club", methods=["POST"])
+@db_app.route("/leave_club", methods=["POST"])
 @login_required
 def remove_club_by_id():
-    club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club:
-        return "Not valid club id", 400
-    membership = is_member(user, club)
-    if not membership:
-        return "Not a member in the club", 400
-    remove_club_from_user(membership)
-    return 200
+    club = get_club(request.json.get("clubId"))
+    if not leave_club(user, club):
+        return "Could not complete request", 400
+    return "Success", 200
 
 
 @db_app.route("/messages")

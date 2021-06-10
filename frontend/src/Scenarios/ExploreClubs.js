@@ -1,35 +1,39 @@
+/* eslint-disable no-nested-ternary */
+
 import React from 'react';
 import styled from 'styled-components';
-import Loader from 'react-loader-spinner';
-import PropTypes from 'prop-types';
+import BaseLoader from 'react-loader-spinner';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
+import EmptyStateSearch from './EmptyStateSearch';
 
 const width = '100%';
 
-const ExploreClubs = ({ search }) => {
-  const { loadingClubs, clubs: clubsData } = useClubs(search);
+const Loader = styled(BaseLoader)`
+  margin-top: 25%;
+`;
 
-  // const loading = true;
-  // - fix location of the loader
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const ExploreClubs = () => {
+  const { loadingClubs, clubs: clubsData } = useClubs();
 
   return (
     <>
       {loadingClubs ? (
-        <Loader type='TailSpin' color='#00BFFF' height={150} width={150} />
-      ) : (
+        <Wrapper>
+          <Loader type='TailSpin' color='#00BFFF' height={150} width={150} />
+        </Wrapper>
+      ) : clubsData.length > 0 ? (
         <ClubsView width={width} data={clubsData} Container={StyledContainer} />
+      ) : (
+        <EmptyStateSearch />
       )}
     </>
   );
-};
-
-ExploreClubs.propTypes = {
-  search: PropTypes.string,
-};
-
-ExploreClubs.defaultProps = {
-  search: '',
 };
 
 const StyledContainer = styled.div`

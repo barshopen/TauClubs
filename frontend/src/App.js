@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation } from 'react-query';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import Contact from './Scenarios/Contact';
 import NavBar from './Components/NavBar';
 import ExploreClubs from './Scenarios/ExploreClubs';
 import Feed from './Components/Feed/Feed';
 import ClubSection from './Scenarios/ClubSection/ClubSection';
 import { whoami } from './Shared/api';
-import { currentUser } from './Shared/atoms';
+import { currentUser, mainSearch } from './Shared/atoms';
 import GeneralProfile from './Components/Accounts/GeneralProfile';
 import AppSideBar from './Components/GeneralSideBar/AppSideBar';
 
@@ -31,17 +31,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const fetchCurrentUser = async () => {
-  const res = await whoami();
-  return res;
-};
-
 const App = () => {
   const classes = useStyles();
   const [user, setUser] = useRecoilState(currentUser);
-  const [search, setSearch] = useState('');
+  const search = useRecoilValue(mainSearch);
 
-  useMutation(fetchCurrentUser, {
+  useMutation(whoami, {
     onSuccess: setUser,
   });
 
@@ -49,22 +44,16 @@ const App = () => {
     <>
       <Router>
         <div className={classes.root}>
-          <NavBar search={search} setSearch={setSearch} />
+          <NavBar />
           <Container className={classes.container}>
             <AppSideBar />
             <div className={classes.content}>
               <Switch>
-                {!user && (
-                  <Route
-                    path='/'
-                    exact
-                    component={() => <ExploreClubs search={search} />}
-                  />
-                )}
+                {!user && <Route path='/' exact component={ExploreClubs} />}
                 {user && !search && <Route path='/' exact component={Feed} />}
                 <Route
                   path={search ? '/' : '/explore'}
-                  component={() => <ExploreClubs search={search} />}
+                  component={ExploreClubs}
                 />
                 <Route path='/contact' component={Contact} />
                 <Route path='/club' component={ClubSection} />
