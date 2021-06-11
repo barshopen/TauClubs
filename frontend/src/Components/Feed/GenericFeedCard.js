@@ -92,7 +92,7 @@ function homeIcon(clubId) {
     <Tooltip title='go to club'>
       <NavLink to={`/club/board/${clubId}`}>
         <IconButton aria-label='go to club home page'>
-          <HomeIcon />
+          <HomeIcon style={{ fontSize: 40 }} />
         </IconButton>
       </NavLink>
     </Tooltip>

@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import { attend, interested, uninterested, unattend } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
@@ -57,9 +57,9 @@ export const eventsIcon = (clubId, id, isAttend, isInterested) => {
       <Tooltip title='Attend'>
         <IconButton aria-label='attend' onClick={handleAttend}>
           {isAttend ? (
-            <EventAvailableIcon style={{ color: 'green' }} />
+            <EventAvailableIcon fontSize='large' style={{ color: 'green' }} />
           ) : (
-            <EventAvailableIcon />
+            <EventAvailableIcon fontSize='large' />
           )}
         </IconButton>
       </Tooltip>
@@ -67,9 +67,9 @@ export const eventsIcon = (clubId, id, isAttend, isInterested) => {
         <Tooltip title='Interested'>
           <IconButton aria-label='interested' onClick={handleInterested}>
             {isInterested ? (
-              <StarBorderOutlinedIcon style={{ color: 'green' }} />
+              <StarIcon fontSize='large' style={{ color: 'gold' }} />
             ) : (
-              <StarBorderOutlinedIcon />
+              <StarIcon fontSize='large' />
             )}
           </IconButton>
         </Tooltip>
