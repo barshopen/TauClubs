@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import BaseLoader from 'react-loader-spinner';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
-import EmptyStateSearch from './EmptyStateSearch';
+import EmptyStateErorSearch from './EmptyStateErrorSearch';
 
 const width = '100%';
 
@@ -30,7 +30,7 @@ const ExploreClubs = () => {
       ) : clubsData.length > 0 ? (
         <ClubsView width={width} data={clubsData} Container={StyledContainer} />
       ) : (
-        <EmptyStateSearch />
+        <EmptyStateErorSearch />
       )}
     </>
   );
