@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import ChipsArray from './ChipsArray';
+import ChipsArray from './Generic/ChipsArray';
 
 const useStyles = makeStyles({
   root: {

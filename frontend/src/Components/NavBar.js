@@ -16,8 +16,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
@@ -159,10 +157,7 @@ export default function NavBar() {
   const [search, setSearch] = useRecoilState(mainSearch);
 
   const { clubs: data } = useClubs();
-
   const [user, setUser] = useRecoilState(currentUser);
-  const userMessages = useMemo(() => 4, []);
-  const userNotifications = useMemo(() => 7, []);
 
   const handleLogout = () => {
     logOut();
@@ -251,7 +246,11 @@ export default function NavBar() {
       <MenuItem onClick={handleMenuClose}>
         <NavLink to='/profile'>My account</NavLink>
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
+      </MenuItem>
     </StyledMenu>
   );
 
@@ -264,31 +263,15 @@ export default function NavBar() {
       onClose={handleMobileMenuClose}>
       <MenuItem>
         <MenuItemWithToolTip
-          title='Messages'
-          content={userMessages}
-          icon={<MailIcon />}
-        />
-        <p>Messages</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
-          title='Notifications'
-          content={userNotifications}
-          icon={<NotificationsIcon />}
-        />
-        <p>Notifications</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-        <p>Profile</p>
+        <NavLink to='/profile'>
+          <p>Profile</p>
+        </NavLink>
       </MenuItem>
 
       <MenuItem>
@@ -300,7 +283,9 @@ export default function NavBar() {
           onClick={handleLogout}
           icon={<LogOutIcon />}
         />
-        <p>Log out</p>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
       </MenuItem>
     </StyledMenu>
   );
@@ -354,7 +339,7 @@ export default function NavBar() {
               autoComplete
               autoHighlight
               autoSelect={false}
-              onChange={(event, newValue) => {
+              onChange={(_, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
               options={defaultFilterOptions}
@@ -370,7 +355,7 @@ export default function NavBar() {
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
 
-                setSearch(rest.inputProps.value);
+                setSearch(rest.inputProps.value); // this one gives the error
 
                 return (
                   <InputBase
@@ -390,18 +375,6 @@ export default function NavBar() {
           {user ? (
             <div style={{ flex: 'auto' }}>
               <div className={classes.sectionDesktop}>
-                <MenuItemWithToolTip
-                  title='Messages'
-                  content={userMessages}
-                  icon={<MailIcon />}
-                />
-
-                <MenuItemWithToolTip
-                  title='Notifications'
-                  content={userNotifications}
-                  icon={<NotificationsIcon />}
-                />
-
                 <MenuItemWithToolTip
                   edge='end'
                   aria-label='account of current user'

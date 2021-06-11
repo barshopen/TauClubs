@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { useQueryClient } from 'react-query';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 import { makeStyles } from '@material-ui/core/styles';
@@ -72,7 +74,9 @@ const JoinUs = ({ clubName, clubId }) => {
   const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
     false
   );
+  const queryClient = useQueryClient();
   const setUserData = useSetRecoilState(newUserData);
+  const history = useHistory();
 
   const getStepContent = step => {
     switch (step) {
@@ -92,15 +96,22 @@ const JoinUs = ({ clubName, clubId }) => {
     }
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    joinClub({ clubId }).then(() => {
+  const handleSubmit = useCallback(
+    async event => {
+      event.preventDefault();
+      setIsLoading(true);
       setActiveStep(prev => prev + 1);
-      setIsLoading(false);
-      refetchMyClubs();
-    });
+
+      await joinClub({ clubId }).then(() => {
+        refetchMyClubs();
+        setIsLoading(false);
+      });
+    },
+    [setIsLoading, setActiveStep, history]
+  );
+  const backToMenu = () => {
+    history.push(`/club/board/${clubId}`);
+    queryClient.invalidateQueries(['club', clubId]);
   };
 
   const handleNext = () => {
@@ -139,6 +150,15 @@ const JoinUs = ({ clubName, clubId }) => {
                 <Typography variant='subtitle1'>
                   Your application sent to the club manager
                 </Typography>
+                <div className={classes.buttons}>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={backToMenu}
+                    className={classes.button}>
+                    Back to Club Board
+                  </Button>
+                </div>
               </>
             ) : (
               <>

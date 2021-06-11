@@ -39,15 +39,15 @@ export const getClub = clubId => getDb('club', clubId);
 
 export const getClubs = ({ name, tag }) => {
   if (name && tag) {
-    return getDb(`/clubs?name=${name}&tag=${tag}`);
+    return getDb(`clubs?name=${name}&tag=${tag}`);
   }
   if (name) {
-    return getDb(`/clubs?name=${name}`);
+    return getDb(`clubs?name=${name}`);
   }
   if (tag) {
     return getDb(`/clubs?tag=${tag}`);
   }
-  return getDb(`/clubs`);
+  return getDb(`clubs`);
 };
 
 export const getMyClubs = () => getDb('my_clubs');
