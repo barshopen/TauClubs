@@ -339,7 +339,7 @@ export default function NavBar() {
               autoComplete
               autoHighlight
               autoSelect={false}
-              onChange={(event, newValue) => {
+              onChange={(_, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
               options={defaultFilterOptions}
@@ -355,7 +355,7 @@ export default function NavBar() {
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
 
-                setSearch(rest.inputProps.value);
+                setSearch(rest.inputProps.value); // this one gives the error
 
                 return (
                   <InputBase

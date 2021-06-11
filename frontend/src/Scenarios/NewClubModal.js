@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
+
 import { createClub } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
