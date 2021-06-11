@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import GenericModal from '../Components/Generic/GenericModal';
 import { createClub } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
+  const { refetchMyClubs } = useClubs();
 
   const handleChange = e => {
     setValues({
@@ -48,10 +50,11 @@ function NewClubContent({ setOpen }) {
     });
   };
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     e.preventDefault();
-    createClub(values);
+    await createClub(values);
     setOpen(false);
+    refetchMyClubs();
   };
 
   return (
