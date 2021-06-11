@@ -6,7 +6,6 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { green } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';

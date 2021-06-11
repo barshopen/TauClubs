@@ -66,6 +66,39 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function cardHeader(profileImage, clubName, title, lastUpdateTime) {
+  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
+  return (
+    <CardHeader
+      avatar={<Avatar alt='club image' src={profileImage} />}
+      titleTypographyProps={{ variant: 'h5' }}
+      title={title}
+      subheader={displayLastUpdate.concat(` ${clubName}`)}
+    />
+  );
+}
+function cardImage(profileImage, title) {
+  const classes = useStyles();
+  const isImg = profileImage !== '';
+  return (
+    isImg && (
+      <CardMedia className={classes.media} image={profileImage} title={title} />
+    )
+  );
+}
+
+function homeIcon(clubId) {
+  return (
+    <Tooltip title='go to club'>
+      <NavLink to={`/club/board/${clubId}`}>
+        <IconButton aria-label='go to club home page'>
+          <HomeIcon />
+        </IconButton>
+      </NavLink>
+    </Tooltip>
+  );
+}
+
 function FeedCardEvent({ feedItem }) {
   const {
     id,
@@ -82,9 +115,7 @@ function FeedCardEvent({ feedItem }) {
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const isImg = profileImage !== '';
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
-  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -92,20 +123,8 @@ function FeedCardEvent({ feedItem }) {
 
   return (
     <Card className={classes.root} m={75}>
-      <CardHeader
-        avatar={<Avatar alt='club image' src={profileImage} />}
-        titleTypographyProps={{ variant: 'h5' }}
-        title={title}
-        subheader={displayLastUpdate.concat(` ${clubName}`)}
-      />
-
-      {isImg && (
-        <CardMedia
-          className={classes.media}
-          image={profileImage}
-          title={title}
-        />
-      )}
+      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardImage(profileImage, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {description}
@@ -118,13 +137,7 @@ function FeedCardEvent({ feedItem }) {
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <Tooltip title='go to club'>
-          <NavLink to={`/club/board/${clubId}`}>
-            <IconButton aria-label='go to club home page'>
-              <HomeIcon />
-            </IconButton>
-          </NavLink>
-        </Tooltip>
+        {homeIcon(clubId)}
         {eventsIcon(clubId, id, isAttend, isInterested)}
         <IconButton
           className={clsx(classes.expand, {
@@ -153,40 +166,22 @@ function FeedCardMessage({ feedItem }) {
     title,
     clubName,
     profileImage,
-    description,
+    content,
     lastUpdateTime,
   } = feedItem;
   const classes = useStyles();
-  const isImg = profileImage !== '';
-  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
   return (
     <Card className={classes.root} m={75}>
-      <CardHeader
-        avatar={<Avatar alt='club image' src={profileImage} />}
-        titleTypographyProps={{ variant: 'h5' }}
-        title={title}
-        subheader={displayLastUpdate.concat(` ${clubName}`)}
-      />
-
-      {isImg && (
-        <CardMedia
-          className={classes.media}
-          image={profileImage}
-          title={title}
-        />
-      )}
+      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardImage(profileImage, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
-          {description}
+          {content}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <NavLink to={`/club/board/${clubId}`}>
-          <IconButton aria-label='go to club home page'>
-            <HomeIcon />
-          </IconButton>
-        </NavLink>
+        {homeIcon(clubId)}
         {/*
         <Tooltip title='Like'>
           <IconButton aria-label='add to favorites'>
@@ -197,6 +192,13 @@ function FeedCardMessage({ feedItem }) {
       </CardActions>
     </Card>
   );
+}
+
+function FeedCard({ feedItem }) {
+  if (feedItem?.location === undefined) {
+    return FeedCardMessage({ feedItem });
+  }
+  return FeedCardEvent({ feedItem });
 }
 
 FeedCardEvent.propTypes = {
@@ -237,4 +239,4 @@ FeedCardMessage.defaultProps = {
   feedItem: [],
 };
 
-export default FeedCardEvent;
+export default FeedCard;
