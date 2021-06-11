@@ -25,6 +25,15 @@ def join_club(user_email: str, club_id: str):
         return None
 
 
+def leave_club(user, club):
+    membership = ClubMembership.objects(member=user, club=club)
+    if membership is None:
+        return None
+    else:
+        membership.delete()
+        return "Success"
+
+
 def createRegularMembership(user: User, club: Club):
     return createMembership(user, club, "U")
 

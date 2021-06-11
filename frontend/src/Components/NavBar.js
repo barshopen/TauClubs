@@ -16,8 +16,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
@@ -31,6 +29,7 @@ import {
   showSideBarMobileState,
   currentUser,
   selectedOptionState,
+  mainSearch,
 } from '../Shared/atoms';
 import SearchFor from '../assets/search-icon.png';
 
@@ -148,20 +147,17 @@ MenuItemWithToolTip.defaultProps = {
   content: null,
 };
 
-export default function NavBar({ search, setSearch }) {
-  // hooks
+export default function NavBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
+  const [search, setSearch] = useRecoilState(mainSearch);
 
   const { clubs: data } = useClubs();
-
   const [user, setUser] = useRecoilState(currentUser);
-  const userMessages = useMemo(() => 4, []);
-  const userNotifications = useMemo(() => 7, []);
 
   const handleLogout = () => {
     logOut();
@@ -250,7 +246,11 @@ export default function NavBar({ search, setSearch }) {
       <MenuItem onClick={handleMenuClose}>
         <NavLink to='/profile'>My account</NavLink>
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
+      </MenuItem>
     </StyledMenu>
   );
 
@@ -263,31 +263,15 @@ export default function NavBar({ search, setSearch }) {
       onClose={handleMobileMenuClose}>
       <MenuItem>
         <MenuItemWithToolTip
-          title='Messages'
-          content={userMessages}
-          icon={<MailIcon />}
-        />
-        <p>Messages</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
-          title='Notifications'
-          content={userNotifications}
-          icon={<NotificationsIcon />}
-        />
-        <p>Notifications</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-        <p>Profile</p>
+        <NavLink to='/profile'>
+          <p>Profile</p>
+        </NavLink>
       </MenuItem>
 
       <MenuItem>
@@ -299,7 +283,9 @@ export default function NavBar({ search, setSearch }) {
           onClick={handleLogout}
           icon={<LogOutIcon />}
         />
-        <p>Log out</p>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
       </MenuItem>
     </StyledMenu>
   );
@@ -389,18 +375,6 @@ export default function NavBar({ search, setSearch }) {
           {user ? (
             <div style={{ flex: 'auto' }}>
               <div className={classes.sectionDesktop}>
-                <MenuItemWithToolTip
-                  title='Messages'
-                  content={userMessages}
-                  icon={<MailIcon />}
-                />
-
-                <MenuItemWithToolTip
-                  title='Notifications'
-                  content={userNotifications}
-                  icon={<NotificationsIcon />}
-                />
-
                 <MenuItemWithToolTip
                   edge='end'
                   aria-label='account of current user'

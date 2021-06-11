@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { useQueryClient } from 'react-query';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
+
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -12,10 +12,9 @@ import PropTypes from 'prop-types';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { newUserData } from '../../../Shared/atoms';
-import { Form, Description } from './index';
-import { joinClub } from '../../../Shared/api';
 import useClubs from '../../../hooks/useClubs';
+import { LeaveDescription } from './index';
+import { leaveClub } from '../../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -64,37 +63,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const steps = ['General', 'Description'];
+const steps = ['Information'];
 
-const JoinUs = ({ clubName, clubId }) => {
+const Leave = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const { refetchMyClubs } = useClubs();
-  const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
-    false
-  );
+  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
-  const setUserData = useSetRecoilState(newUserData);
   const history = useHistory();
 
-  const getStepContent = step => {
-    switch (step) {
-      case 0:
-        return (
-          <Form
-            setUserData={setUserData}
-            handleSubmit={handleSubmit}
-            setApprovedUsingPrivateData={setApprovedUsingPrivateData}
-            approvedUsingPrivateData={approvedUsingPrivateData}
-          />
-        );
-      case 1:
-        return <Description />;
-      default:
-        throw new Error('Unknown step');
-    }
-  };
+  const getStepContent = () => <LeaveDescription />;
 
   const handleSubmit = useCallback(
     async event => {
@@ -102,24 +81,17 @@ const JoinUs = ({ clubName, clubId }) => {
       setIsLoading(true);
       setActiveStep(prev => prev + 1);
 
-      await joinClub({ clubId }).then(() => {
+      await leaveClub({ clubId }).then(() => {
         refetchMyClubs();
         setIsLoading(false);
       });
     },
     [setIsLoading, setActiveStep, history]
   );
+
   const backToMenu = () => {
     history.push(`/club/board/${clubId}`);
     queryClient.invalidateQueries(['club', clubId]);
-  };
-
-  const handleNext = () => {
-    setActiveStep(prev => prev + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prev => prev - 1);
   };
 
   return (
@@ -127,28 +99,23 @@ const JoinUs = ({ clubName, clubId }) => {
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component='h1' variant='h4' align='center'>
-            Join To {clubName}
+            Leave {clubName}
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map(label => (
-              <Step key={label}>
-                <StepLabel
-                  StepIconProps={{
-                    classes: { root: classes.stepIcon },
-                  }}>
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
+            <Step key='information'>
+              <StepLabel
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}>
+                information
+              </StepLabel>
+            </Step>
           </Stepper>
           <>
             {activeStep === steps.length ? (
               <>
                 <Typography variant='h5' gutterBottom>
-                  Thank you for applying to join our club!
-                </Typography>
-                <Typography variant='subtitle1'>
-                  Your application sent to the club manager
+                  Sad to see you leave
                 </Typography>
                 <div className={classes.buttons}>
                   <Button
@@ -182,22 +149,12 @@ const JoinUs = ({ clubName, clubId }) => {
                 )}
 
                 <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
                   <Button
                     variant='contained'
                     color='primary'
-                    disabled={activeStep === 0 && !approvedUsingPrivateData}
-                    onClick={
-                      activeStep === steps.length - 1
-                        ? handleSubmit
-                        : handleNext
-                    }
+                    onClick={handleSubmit}
                     className={classes.button}>
-                    {activeStep === steps.length - 1 ? 'Join' : 'Next'}
+                    Quit
                   </Button>
                 </div>
               </>
@@ -209,13 +166,13 @@ const JoinUs = ({ clubName, clubId }) => {
   );
 };
 
-JoinUs.propTypes = {
+Leave.propTypes = {
   clubName: PropTypes.string,
   clubId: PropTypes.string.isRequired,
 };
 
-JoinUs.defaultProps = {
+Leave.defaultProps = {
   clubName: '',
 };
 
-export default JoinUs;
+export default Leave;
