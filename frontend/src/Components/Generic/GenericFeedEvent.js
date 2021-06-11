@@ -11,6 +11,7 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import { attend, interested, uninterested, unattend } from '../../Shared/api';
+import useFeed from '../../hooks/useFeed';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
@@ -35,18 +36,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const eventsIcon = (clubId, id, isAttend, isInterested) => {
+  const { refetchFeed } = useFeed();
   const handleInterested = () =>
     // eslint-disable-next-line no-nested-ternary
     isInterested
-      ? uninterested(clubId, id)
+      ? uninterested(clubId, id).then(() => refetchFeed())
       : !isAttend
-      ? interested(clubId, id)
+      ? interested(clubId, id).then(() => refetchFeed())
       : null;
 
   const handleAttend = () =>
     isAttend
-      ? unattend(clubId, id)
-      : (attend(clubId, id), isInterested ? uninterested(clubId, id) : null);
+      ? unattend(clubId, id).then(() => refetchFeed())
+      : (attend(clubId, id).then(() => refetchFeed()),
+        isInterested
+          ? uninterested(clubId, id).then(() => refetchFeed())
+          : null);
   return (
     <CardActions disableSpacing>
       <Tooltip title='Attend'>
