@@ -69,7 +69,9 @@ const SideBarListItem = ({
       key={text}
       button
       selected={selectedIndex === id}
-      onClick={event => handleListItemClick(event, id)}>
+      onClick={
+        handleListItemClick && (event => handleListItemClick(event, id))
+      }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
     </ListItem>
