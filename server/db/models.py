@@ -138,8 +138,10 @@ class Event(Document):
     membersAttending = ListField(ReferenceField("User"))
 
     def to_dict(self):
+        user = UserAuth.objects.get(id=current_user.get_id()).userauth
         return {
             "id": str(self.pk),
+            "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
             "duration": self.duration,
@@ -149,6 +151,8 @@ class Event(Document):
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
             "profileImage": self.creatingClub.profileImage,
+            "isAttend": user in self.membersAttending,
+            "isInterested": user in self.intrested,
         }
 
     def to_json(self):
@@ -185,6 +189,7 @@ class Message(Document):
     def to_dict(self):
         return {
             "id": str(self.pk),
+            "clubId": str(self.creatingClub.id),
             "title": self.title,
             "content": self.content,
             "creationTime": self.creationTime.isoformat(),

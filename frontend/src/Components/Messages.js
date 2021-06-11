@@ -9,9 +9,9 @@ function Messages({ data }) {
   return (
     <GenericControl header='Messages'>
       <MessagesContainer>
-        {data.map(({ id, title, date, text }) => (
+        {data.map(({ id, title, date, content }) => (
           <GenericFeedMessage title={title} date={date} key={id}>
-            <Content>{text}</Content>
+            <Content>{content}</Content>
           </GenericFeedMessage>
         ))}
       </MessagesContainer>
