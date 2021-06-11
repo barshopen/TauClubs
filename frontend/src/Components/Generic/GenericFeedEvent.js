@@ -63,15 +63,17 @@ export const eventsIcon = (clubId, id, isAttend, isInterested) => {
           )}
         </IconButton>
       </Tooltip>
-      <Tooltip title='Interested'>
-        <IconButton aria-label='interested' onClick={handleInterested}>
-          {isInterested ? (
-            <StarBorderOutlinedIcon style={{ color: 'green' }} />
-          ) : (
-            <StarBorderOutlinedIcon />
-          )}
-        </IconButton>
-      </Tooltip>
+      {!isAttend && (
+        <Tooltip title='Interested'>
+          <IconButton aria-label='interested' onClick={handleInterested}>
+            {isInterested ? (
+              <StarBorderOutlinedIcon style={{ color: 'green' }} />
+            ) : (
+              <StarBorderOutlinedIcon />
+            )}
+          </IconButton>
+        </Tooltip>
+      )}
     </CardActions>
   );
 };

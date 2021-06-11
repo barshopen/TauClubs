@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericFeedEvent from './Generic/GenericFeedEvent';
 
@@ -19,7 +19,7 @@ function UpcomingEvents({ data }) {
               date={startTime}
               key={id}>
               <Content>{text}</Content>
-              <Link to='/#'> View Location</Link>
+              {/* <Link to='/#'> View Location</Link> */}
             </GenericFeedEvent>
           )
         )}
@@ -55,11 +55,13 @@ const Content = styled.div`
   text-align: left;
   overflow-wrap: break-word;
 `;
+
+/*
 const Link = styled(RouterLink)`
   font-size: 1rem;
   text-decoration: none;
   display: block;
   text-align: left;
-`;
+`; */
 
 export default UpcomingEvents;

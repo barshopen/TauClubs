@@ -52,18 +52,11 @@ export const getClubs = ({ name, tag }) => {
 
 export const getMyClubs = () => getDb('my_clubs');
 
-export const getFeedData = (currentTab = 'all') => {
-  if (currentTab === 'messages') {
-    return getMessages();
-  }
-  if (currentTab === 'events') {
-    return getUpcomingEvents();
-  }
-  return Promise.all([
+export const getFeedData = () =>
+  Promise.all([
     getUpcomingEvents(),
     getMessages(),
   ]).then(([upcomingEvents, messages]) => upcomingEvents.concat(messages));
-};
 
 export const logOut = () => get('/auth/logout');
 
