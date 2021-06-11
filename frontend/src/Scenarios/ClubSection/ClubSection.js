@@ -1,12 +1,14 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
-import Contact from './Contact';
 import JoinUs from './JoinForm/JoinUs';
+import Leave from './JoinForm/Leave';
 import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
+import { currentUser } from '../../Shared/atoms';
 
 const NavBarContainer = styled.div`
   border-color: black white;
@@ -17,7 +19,7 @@ const NavBarContainer = styled.div`
 
 const Header = styled.h2`
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
+  font-size: 2rem;
   margin: 25px 0;
   font-weight: normal;
   text-align: center;
@@ -34,10 +36,10 @@ const HeaderPhoto = styled.div`
 const Nav = styled.nav`
   height: 38px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 `;
 
-const NavLink = styled(Link)`
+const NavLinkStyle = css`
   display: inline-grid;
   text-decoration: none;
   font: Roboto;
@@ -51,13 +53,41 @@ const NavLink = styled(Link)`
   }
 `;
 
+const NavLink = styled(Link)`
+  ${NavLinkStyle};
+`;
+const NavLinkJoin = styled(NavLink)`
+  color: green;
+`;
+const NavLinkLeave = styled(NavLink)`
+  color: red;
+`;
+const NavWithoutLink = styled.h1`
+  ${NavLinkStyle};
+  color: blueviolet;
+`;
+
 const ClubSection = () => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
 
   const { clubData } = useClub(clubId);
-  const admin = true;
+
+  const user = useRecoilValue(currentUser);
+
+  let join = null;
+  if (user) {
+    if (clubData?.member) {
+      join = (
+        <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
+      );
+    } else if (clubData?.pending) {
+      join = <NavWithoutLink>Pending</NavWithoutLink>;
+    } else {
+      join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
+    }
+  }
 
   return (
     <SimpleContaConiner style={{ height: '80vh' }}>
@@ -75,8 +105,7 @@ const ClubSection = () => {
               Club Board
             </NavLink>
             <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-            <NavLink to={`/club/contact/${clubId}`}>Contact</NavLink>
-            <NavLink to={`/club/joinus/${clubId}`}>Join</NavLink>
+            {join}
           </Nav>
         </NavBarContainer>
       </HeaderPhoto>
@@ -84,25 +113,38 @@ const ClubSection = () => {
         <Route
           path='/club/board/:clubId'
           component={() => (
-            // <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
-            <ClubBoard currentUserIsClubsAdmin={admin} />
+            <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
           )}
         />
         <Route
           path='/club/about/:clubId'
-          component={() => <AboutUs description={clubData?.description} />}
+          component={() => (
+            <AboutUs
+              description={clubData?.description}
+              contactMail={clubData?.contactMail}
+            />
+          )}
         />
-        <Route
-          path='/club/contact/:clubId'
-          component={() => <Contact clubName={clubData?.name} />}
-        />
-        <Route
-          path='/club/joinus/:clubId'
-          component={() => <JoinUs clubName={clubData?.name} clubId={clubId} />}
-        />
+        {user && !clubData?.pending && !clubData?.member && (
+          <Route
+            path='/club/joinus/:clubId'
+            component={() => (
+              <JoinUs clubName={clubData?.name} clubId={clubId} />
+            )}
+          />
+        )}
+        {user && clubData?.member && (
+          <Route
+            path='/club/leave/:clubId'
+            component={() => (
+              <Leave clubName={clubData?.name} clubId={clubId} />
+            )}
+          />
+        )}
       </Switch>
     </SimpleContaConiner>
   );
 };
 
 export default ClubSection;
+/// need to change after join the status
