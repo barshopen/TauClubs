@@ -64,3 +64,5 @@ export const createNewEvent = ({ payload }) =>
 export const isUserManager = () => get('/isManager');
 
 export const getDashboardData = () => get('dashboard/data');
+
+export const imageClub = clubId => getDb('images', clubId);
