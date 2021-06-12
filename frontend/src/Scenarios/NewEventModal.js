@@ -48,11 +48,13 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
     setOpen(false);
   };
 
+  const minDate = new Date().toLocaleString('en-GB');
+
   return (
     <form
       className={classes.root}
       onSubmit={submitHandler}
-      noValidate
+      validate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
         Create New Event
@@ -63,6 +65,7 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         label='Event title'
         variant='outlined'
         onChange={handleChange}
+        required
       />
       <TextField
         name='event_description'
@@ -70,8 +73,16 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         multiline
         variant='outlined'
         onChange={handleChange}
-        rows={4}
+        rows={5}
         rowsMax={10}
+        required
+      />
+      <TextField
+        name='event_location'
+        label='Event Location'
+        variant='outlined'
+        onChange={handleChange}
+        required
       />
       <TextField
         name='event_startDateTime'
@@ -79,12 +90,27 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         type='datetime-local'
         variant='outlined'
         format='MM/dd/yyyy'
+        disablePast
         defaultValue={moment().format()}
         onChange={handleChange}
         className={classes.textField}
+        inputProps={{
+          min: moment().format('YYYY-MM-DD[T]HH:mm'),
+        }}
         InputLabelProps={{
           shrink: true,
         }}
+        required
+      />
+      <TextField
+        name='event_duration'
+        label='Event Duration'
+        variant='outlined'
+        type='time'
+        defaultValue='02:00'
+        step='3000'
+        onChange={handleChange}
+        required
       />
       {/* 
       <DateTimePicker

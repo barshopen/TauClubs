@@ -45,7 +45,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
     <form
       className={classes.root}
       onSubmit={submitHandler}
-      noValidate
+      validate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
         Publish New Message
@@ -56,6 +56,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
         label='Message Title'
         variant='outlined'
         onChange={handleChange}
+        required
       />
       <TextField
         name='message_content'
@@ -63,8 +64,9 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
         multiline
         variant='outlined'
         onChange={handleChange}
-        rows={4}
+        rows={5}
         rowsMax={10}
+        required
       />
 
       <div className={classes.buttons}>
