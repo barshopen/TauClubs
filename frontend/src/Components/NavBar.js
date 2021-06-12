@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,7 +13,6 @@ import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -38,19 +37,17 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     backgroundColor: 'black',
-    font: 'Roboto',
     zIndex: theme.zIndex.drawer + 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
-    display: 'none',
-    fontFamilt: 'inherit',
-    fontSize: '1rem',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
+    display: 'block',
+    color: 'white',
+    fontFamily: 'Domine, serif',
+    fontSize: '1.1rem',
+    [theme.breakpoints.down('xs')]: { maxWidth: '1ch' },
   },
   search: {
     position: 'relative',
@@ -64,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
+      width: '20%',
     },
   },
   searchIcon: {
@@ -169,6 +166,7 @@ export default function NavBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
+  const history = useHistory();
 
   // funcs
   const showSideBarMobileToggleHandler = () => {
@@ -310,24 +308,11 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <MenuItemWithToolTip
-            edge='start'
-            className={classes.menuButton}
-            aria-label='open drawer'
-            title='Home'
-            icon={
-              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
-                <HomeIcon
-                  onClick={() => setSelectedOptionState('')}
-                  fontSize='small'
-                />
-              </NavLink>
-            }
-          />
-
-          <Typography className={classes.title} variant='h6' noWrap>
-            TauClubs
-          </Typography>
+          <Button disableRipple onClick={() => history.push('/')}>
+            <Typography className={classes.title} variant='h6' noWrap>
+              TauClubs
+            </Typography>
+          </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
