@@ -76,15 +76,4 @@ const ExploreClubs = () => {
   );
 };
 
-const StyledContainer = styled.div`
-  display: grid;
-  width: '100%';
-  padding: 0.1em;
-  margin: 1%;
-  // grid-template-columns: 1fr 1fr 1fr;
-  // grid-template-columns: 3fr;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
-  grid-gap: 1%;
-  align-items: center;
-`;
 export default ExploreClubs;

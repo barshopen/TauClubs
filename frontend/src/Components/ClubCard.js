@@ -13,13 +13,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('xl')]: {
       marginLeft: '1%',
       marginRight: '5%',
-      maxWidth: '100%',
-      marginTop: '0%',
-      marginBottom: '0%',
+      marginBottom: '7%',
     },
     [theme.breakpoints.down('lg')]: {
-      marginLeft: '1%',
-      maxWidth: '100%',
       marginBottom: '0%',
     },
     [theme.breakpoints.down('md')]: {

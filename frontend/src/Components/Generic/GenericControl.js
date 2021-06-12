@@ -10,7 +10,9 @@ function GenericControl({ header, children, width, Container }) {
   return (
     <>
       <MainHeader width={width}>{header}</MainHeader>
-      <Container1 as={Container}>{children}</Container1>
+      <Container1 width={width} as={Container}>
+        {children}
+      </Container1>
     </>
   );
 }

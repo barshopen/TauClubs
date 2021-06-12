@@ -48,8 +48,6 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
     setOpen(false);
   };
 
-  const minDate = new Date().toLocaleString('en-GB');
-
   return (
     <form
       className={classes.root}
