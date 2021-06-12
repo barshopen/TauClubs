@@ -5,14 +5,17 @@ import { isUserManager } from '../../Shared/api';
 
 const GeneralProfile = () => {
   const [isManager, setIsManager] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     isUserManager().then(res => {
       setIsManager(res);
+      setLoading(false);
     });
   }, []);
 
   const { manager } = isManager;
 
-  return manager ? <ManagerAccount /> : <UserAccount />;
+  return !loading && (manager ? <ManagerAccount /> : <UserAccount />);
 };
 export default GeneralProfile;
