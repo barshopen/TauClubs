@@ -9,13 +9,15 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+// import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { eventsIcon } from '../Generic/GenericFeedEvent';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,8 +66,43 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function FeedCard({ feedItem }) {
+function cardHeader(profileImage, clubName, title, lastUpdateTime) {
+  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
+  return (
+    <CardHeader
+      avatar={<Avatar alt='club image' src={profileImage} />}
+      titleTypographyProps={{ variant: 'h5' }}
+      title={title}
+      subheader={displayLastUpdate.concat(` ${clubName}`)}
+    />
+  );
+}
+function cardImage(profileImage, title) {
+  const classes = useStyles();
+  const isImg = profileImage !== '';
+  return (
+    isImg && (
+      <CardMedia className={classes.media} image={profileImage} title={title} />
+    )
+  );
+}
+
+function homeIcon(clubId) {
+  return (
+    <Tooltip title='go to club'>
+      <NavLink to={`/club/board/${clubId}`}>
+        <IconButton aria-label='go to club home page'>
+          <HomeIcon style={{ fontSize: 40 }} />
+        </IconButton>
+      </NavLink>
+    </Tooltip>
+  );
+}
+
+function FeedCardEvent({ feedItem }) {
   const {
+    id,
+    clubId,
     title,
     clubName,
     profileImage,
@@ -73,32 +110,21 @@ function FeedCard({ feedItem }) {
     startTime,
     location,
     lastUpdateTime,
+    isAttend,
+    isInterested,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const isImg = profileImage !== '';
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
-  const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   return (
     <Card className={classes.root} m={75}>
-      <CardHeader
-        avatar={<Avatar alt='club image' src={profileImage} />}
-        titleTypographyProps={{ variant: 'h5' }}
-        title={title}
-        subheader={displayLastUpdate.concat(` ${clubName}`)}
-      />
-
-      {isImg && (
-        <CardMedia
-          className={classes.media}
-          image={profileImage}
-          title={title}
-        />
-      )}
+      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardImage(profileImage, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {description}
@@ -111,14 +137,8 @@ function FeedCard({ feedItem }) {
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <NavLink to='/clubs'>
-          <IconButton aria-label='go to club home page'>
-            <HomeIcon />
-          </IconButton>
-        </NavLink>
-        <IconButton aria-label='add to favorites'>
-          <FavoriteIcon />
-        </IconButton>
+        {homeIcon(clubId)}
+        {eventsIcon(clubId, id, isAttend, isInterested)}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -140,10 +160,51 @@ function FeedCard({ feedItem }) {
     </Card>
   );
 }
+function FeedCardMessage({ feedItem }) {
+  const {
+    clubId,
+    title,
+    clubName,
+    profileImage,
+    content,
+    lastUpdateTime,
+  } = feedItem;
+  const classes = useStyles();
 
-FeedCard.propTypes = {
+  return (
+    <Card className={classes.root} m={75}>
+      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardImage(profileImage, title)}
+      <CardContent>
+        <Typography paragraph variant='h6' color='initial' component='p'>
+          {content}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        {homeIcon(clubId)}
+        {/*
+        <Tooltip title='Like'>
+          <IconButton aria-label='add to favorites'>
+            <FavoriteIcon />
+          </IconButton>
+        </Tooltip>
+        */}
+      </CardActions>
+    </Card>
+  );
+}
+
+function FeedCard({ feedItem }) {
+  if (feedItem?.location === undefined) {
+    return FeedCardMessage({ feedItem });
+  }
+  return FeedCardEvent({ feedItem });
+}
+
+FeedCardEvent.propTypes = {
   feedItem: PropTypes.arrayOf(
     PropTypes.shape({
+      clubId: PropTypes.string,
       title: PropTypes.string,
       clubName: PropTypes.string,
       date: PropTypes.string,
@@ -156,7 +217,25 @@ FeedCard.propTypes = {
   ),
 };
 
-FeedCard.defaultProps = {
+FeedCardEvent.defaultProps = {
+  feedItem: [],
+};
+
+FeedCardMessage.propTypes = {
+  feedItem: PropTypes.arrayOf(
+    PropTypes.shape({
+      clubId: PropTypes.string,
+      title: PropTypes.string,
+      clubName: PropTypes.string,
+      profileImage: PropTypes.string,
+      description: PropTypes.string,
+      lastUpdateTime: PropTypes.string,
+      // duration: PropTypes.string,
+    })
+  ),
+};
+
+FeedCardMessage.defaultProps = {
   feedItem: [],
 };
 

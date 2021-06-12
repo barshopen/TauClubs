@@ -62,16 +62,28 @@ def updateEventContent(
 def addAttending(event, user):
     event.membersAttending.append(user)
     now = currentTime()
-    event.update(
-        lastUpdateTime=now, membersAttending=event.membersAttending.append(user)
-    )
+    event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
+    return event
+
+
+def undoAttending(event, user):
+    event.membersAttending.remove(user)
+    now = currentTime()
+    event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def addIntrested(event, user):
     event.intrested.append(user)
     now = currentTime()
-    event.update(lastUpdateTime=now, intrested=event.intrested.append(user))
+    event.update(lastUpdateTime=now, intrested=event.intrested)
+    return event
+
+
+def undoIntrested(event, user):
+    event.intrested.remove(user)
+    now = currentTime()
+    event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
 
