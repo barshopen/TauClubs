@@ -4,6 +4,7 @@ import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
+import { makeStyles } from '@material-ui/core';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import JoinUs from './JoinForm/JoinUs';
@@ -18,6 +19,13 @@ const NavBarContainer = styled.div`
   padding: 5px;
   margin: 15px 0;
 `;
+const useStyles = makeStyles({
+  headerPhoto: {
+    minWidth: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+});
 
 const Nav = styled.nav`
   height: 38px;
@@ -54,6 +62,7 @@ const NavWithoutLink = styled.h1`
 `;
 
 const ClubSection = () => {
+  const classes = useStyles();
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
@@ -80,7 +89,12 @@ const ClubSection = () => {
       <Typography variant='h5'>{clubData?.name}</Typography>
 
       {clubData?.profileImage ? (
-        <img src={`/${clubData.profileImage}`} height={200} alt='wallpaper' />
+        <img
+          className={classes.headerPhoto}
+          src={`/${clubData.profileImage}`}
+          height={200}
+          alt='wallpaper'
+        />
       ) : (
         <EmptyState
           style={{ color: 'black', height: 200 }}
