@@ -3,12 +3,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import BaseLoader from 'react-loader-spinner';
-import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import { GridListTile, Typography } from '@material-ui/core';
-import GridList from '@material-ui/core/GridList';
 import ClubsView from '../Components/ClubsView';
 import useClubs from '../hooks/useClubs';
 import EmptyStateErorSearch from './EmptyStateErrorSearch';
