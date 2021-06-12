@@ -28,6 +28,8 @@ from server.db.event import (
     events_by_user,
     get_events_by_club,
     get_events_for_all_clubs_by_user,
+    undoAttending,
+    undoIntrested,
     updateEventContent,
     addAttending,
     addIntrested,
@@ -352,6 +354,17 @@ def event_attending(club_id, event_id):
 
 
 @login_required
+@db_app.route("/club/<club_id>/messages/<event_id>/unattend")
+def event_not_attending(club_id, event_id):
+    event = validate_user_event_permession(club_id, event_id)
+    if not event:
+        return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    undoAttending(event, user)
+    return event.to_json()
+
+
+@login_required
 @db_app.route("/club/<club_id>/messages/<event_id>/interested")
 def event_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
@@ -359,6 +372,17 @@ def event_interesting(club_id, event_id):
         return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
     addIntrested(event, user)
+    return event.to_json()
+
+
+@login_required
+@db_app.route("/club/<club_id>/messages/<event_id>/uninterested")
+def event_not_interesting(club_id, event_id):
+    event = validate_user_event_permession(club_id, event_id)
+    if not event:
+        return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    undoIntrested(event, user)
     return event.to_json()
 
 

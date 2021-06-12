@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,11 +13,8 @@ import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
@@ -40,19 +37,14 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     backgroundColor: 'black',
-    font: 'Roboto',
     zIndex: theme.zIndex.drawer + 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
-    display: 'none',
-    fontFamilt: 'inherit',
-    fontSize: '1rem',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
+    display: 'block',
+    color: 'white',
+    fontFamily: 'Domine, serif',
+    fontSize: '1.1rem',
+    [theme.breakpoints.down('xs')]: { maxWidth: '1ch' },
   },
   search: {
     position: 'relative',
@@ -66,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
+      width: '20%',
     },
   },
   searchIcon: {
@@ -159,10 +151,7 @@ export default function NavBar() {
   const [search, setSearch] = useRecoilState(mainSearch);
 
   const { clubs: data } = useClubs();
-
   const [user, setUser] = useRecoilState(currentUser);
-  const userMessages = useMemo(() => 4, []);
-  const userNotifications = useMemo(() => 7, []);
 
   const handleLogout = () => {
     logOut();
@@ -174,6 +163,7 @@ export default function NavBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
+  const history = useHistory();
 
   // funcs
   const showSideBarMobileToggleHandler = () => {
@@ -253,7 +243,11 @@ export default function NavBar() {
           My account
         </NavLink>
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
+      </MenuItem>
     </StyledMenu>
   );
 
@@ -266,31 +260,13 @@ export default function NavBar() {
       onClose={handleMobileMenuClose}>
       <MenuItem>
         <MenuItemWithToolTip
-          title='Messages'
-          content={userMessages}
-          icon={<MailIcon />}
-        />
-        <p>Messages</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
-          title='Notifications'
-          content={userNotifications}
-          icon={<NotificationsIcon />}
-        />
-        <p>Notifications</p>
-      </MenuItem>
-
-      <MenuItem>
-        <MenuItemWithToolTip
           aria-label='account of current user'
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
           title='Profile'
           icon={<AccountCircleIcon />}
         />
-        <NavLink exact to='/profile'>
+        <NavLink to='/profile'>
           <p>Profile</p>
         </NavLink>
       </MenuItem>
@@ -304,7 +280,9 @@ export default function NavBar() {
           onClick={handleLogout}
           icon={<LogOutIcon />}
         />
-        <p>Log out</p>
+        <NavLink to='/'>
+          <p>Log out</p>
+        </NavLink>
       </MenuItem>
     </StyledMenu>
   );
@@ -329,24 +307,11 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <MenuItemWithToolTip
-            edge='start'
-            className={classes.menuButton}
-            aria-label='open drawer'
-            title='Home'
-            icon={
-              <NavLink onClick={() => setSelectedOptionState('')} to='/'>
-                <HomeIcon
-                  onClick={() => setSelectedOptionState('')}
-                  fontSize='small'
-                />
-              </NavLink>
-            }
-          />
-
-          <Typography className={classes.title} variant='h6' noWrap>
-            TauClubs
-          </Typography>
+          <Button disableRipple onClick={() => history.push('/')}>
+            <Typography className={classes.title} variant='h6' noWrap>
+              TauClubs
+            </Typography>
+          </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -358,7 +323,7 @@ export default function NavBar() {
               autoComplete
               autoHighlight
               autoSelect={false}
-              onChange={(event, newValue) => {
+              onChange={(_, newValue) => {
                 setSelectedOptionState(newValue?.id || '');
               }}
               options={defaultFilterOptions}
@@ -374,7 +339,7 @@ export default function NavBar() {
               renderInput={params => {
                 const { InputLabelProps, InputProps, ...rest } = params;
 
-                setSearch(rest.inputProps.value);
+                setSearch(rest.inputProps.value); // this one gives the error
 
                 return (
                   <InputBase
@@ -394,18 +359,6 @@ export default function NavBar() {
           {user ? (
             <div style={{ flex: 'auto' }}>
               <div className={classes.sectionDesktop}>
-                <MenuItemWithToolTip
-                  title='Messages'
-                  content={userMessages}
-                  icon={<MailIcon />}
-                />
-
-                <MenuItemWithToolTip
-                  title='Notifications'
-                  content={userNotifications}
-                  icon={<NotificationsIcon />}
-                />
-
                 <MenuItemWithToolTip
                   edge='end'
                   aria-label='account of current user'

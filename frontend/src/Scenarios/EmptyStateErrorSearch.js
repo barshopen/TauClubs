@@ -3,7 +3,7 @@ import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import { useRecoilValue } from 'recoil';
 import { mainSearch } from '../Shared/atoms';
 
-const EmptyStateSearch = () => {
+const EmptyStateErorSearch = () => {
   const search = useRecoilValue(mainSearch);
   return (
     <EmptyState
@@ -13,7 +13,7 @@ const EmptyStateSearch = () => {
         <>
           <EmptyState.Caption style={{ color: 'black' }}>
             We have searched hard for a club with the name <b>{search}</b> but
-            no results :/
+            to no results :/
           </EmptyState.Caption>
           <EmptyState.Caption style={{ color: 'black' }}>
             Try something else...
@@ -21,10 +21,10 @@ const EmptyStateSearch = () => {
         </>
       }
       illustration={
-        <EmptyState.Illustration name={EmptyState.Illustration.names.magnify} />
+        <EmptyState.Illustration name={EmptyState.Illustration.names.error} />
       }
     />
   );
 };
 
-export default EmptyStateSearch;
+export default EmptyStateErorSearch;

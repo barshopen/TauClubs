@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Container from '@material-ui/core/Container';
 import FeedCard from './GenericFeedCard';
-import { getFeedData } from '../../Shared/api';
+import useFeed from '../../hooks/useFeed';
 
 const Feed = () => {
-  const [data, setData] = useState();
-  useEffect(() => {
-    getFeedData().then(d => {
-      setData(d);
-    });
-  }, []);
+  const { feed } = useFeed();
 
   return (
     <Container>
       {/* <FeedNavBar setCurrentTab='all' /> */}
       <Container>
-        {data?.map(feedItem => (
-          <FeedCard feedItem={feedItem} />
+        {feed?.map(feedItem => (
+          <FeedCard key={feedItem.id} feedItem={feedItem} />
         ))}
       </Container>
     </Container>

@@ -43,17 +43,23 @@ mongodb = MongoEngine()
 app.config["MONGODB_SETTINGS"] = {"host": URL_HOST}
 mongodb.init_app(app)
 
+if FLAG_EXPECTED_VALUE != FLAG_ACTUAL_VALUE:
 
-@disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
-@app.errorhandler(404)
-def not_found(e):
-    print(e)
-    if request.path.startswith("/api/"):
-        return "Resource not found", 404
-    return "Not found", 404
+    @app.errorhandler(404)
+    def not_found(e):
+        print(e)
+        if request.path.startswith("/api/"):
+            return "Resource not found", 404
+        return "Not found", 404
+
+    @app.route("/")
+    @disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
+    def index():
+        return app.send_static_file("index.html")
 
 
-@app.route("/")
-@disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
-def index():
-    return app.send_static_file("index.html")
+@app.route("/isManager")
+@login_required
+def is_user_manager():
+    user = get_userauth_user_by_id(current_user.get_id())
+    return json.dumps(is_manager(user))
