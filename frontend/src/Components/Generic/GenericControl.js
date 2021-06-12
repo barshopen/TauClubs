@@ -10,9 +10,7 @@ function GenericControl({ header, children, width, Container }) {
   return (
     <>
       <MainHeader width={width}>{header}</MainHeader>
-      <Container1 width={width} as={Container}>
-        {children}
-      </Container1>
+      <Container1 as={Container}>{children}</Container1>
     </>
   );
 }
@@ -38,7 +36,8 @@ const MainHeader = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 1rem;
-  margin: 25px 0;
+  margin-top: 2%;
+  margin-bottom: 2%;
   font-weight: normal;
   width: ${props => props.width};
 `;
