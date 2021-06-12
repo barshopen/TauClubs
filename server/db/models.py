@@ -54,7 +54,7 @@ class Club(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
-            "membersCount": 12,
+            "membersCount": ClubMembership.objects(club=self).count(),
             "admin": admin,
             "member": member,
             "pending": pending,
