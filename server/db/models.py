@@ -4,10 +4,10 @@ from mongoengine import (
     StringField,
     ReferenceField,
     EmailField,
-    URLField,
     DateTimeField,
     ListField,
     IntField,
+    ImageField,
 )
 import json
 from mongoengine.base.fields import ObjectIdField
@@ -27,7 +27,7 @@ def names_of_tags(listTags):
 class Club(Document):
     meta = {"collection": "clubs"}
     name = StringField(max_length=50, required=True)
-    profileImage = URLField()
+    profileImage = ImageField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
     creationTime = DateTimeField(required=True)
@@ -48,7 +48,6 @@ class Club(Document):
         return {
             "id": str(self.pk),
             "name": self.name,
-            "profileImage": self.profileImage,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.creationTime.isoformat(),
@@ -68,7 +67,7 @@ class User(Document):
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
-    picture = URLField()
+    picture = ImageField(collection_name="images")
     joinTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
@@ -133,13 +132,15 @@ class Event(Document):
     creatingClub = ReferenceField("Club", max_length=200, required=True)
     creationTime = DateTimeField(required=True, validation=None)
     lastUpdateTime = DateTimeField(required=True, validation=None)
-    profileImage = URLField()
+    profileImage = ImageField()
     intrested = ListField(ReferenceField("User"))
     membersAttending = ListField(ReferenceField("User"))
 
     def to_dict(self):
+        user = UserAuth.objects.get(id=current_user.get_id()).userauth
         return {
             "id": str(self.pk),
+            "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
             "duration": self.duration,
@@ -148,7 +149,8 @@ class Event(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "profileImage": self.creatingClub.profileImage,
+            "isAttend": user in self.membersAttending,
+            "isInterested": user in self.intrested,
         }
 
     def to_json(self):
@@ -185,6 +187,7 @@ class Message(Document):
     def to_dict(self):
         return {
             "id": str(self.pk),
+            "clubId": str(self.creatingClub.id),
             "title": self.title,
             "content": self.content,
             "creationTime": self.creationTime.isoformat(),
@@ -192,7 +195,6 @@ class Message(Document):
             "likes": self.likes,
             "clubName": self.creatingClub.name,
             "userName": self.creatingUser.full_name(),
-            "profileImage": self.creatingClub.profileImage,
         }
 
     def to_json(self):

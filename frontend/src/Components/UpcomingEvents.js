@@ -1,20 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
-import GenericFeedMessage from './Generic/GenericFeedMessage';
+import GenericFeedEvent from './Generic/GenericFeedEvent';
 
 function UpcomingEvents({ data }) {
   return (
     <GenericControl header='Upcoming Events'>
       <MessagesContainer>
-        {data.map(({ id, title, date, text }) => (
-          <GenericFeedMessage title={title} date={date} key={id}>
-            <Content>{text}</Content>
-            <Link to='/#'> View Location</Link>
-          </GenericFeedMessage>
-        ))}
+        {data.map(
+          ({ id, clubId, title, isAttend, isInterested, startTime, text }) => (
+            <GenericFeedEvent
+              clubId={clubId}
+              title={title}
+              isAttend={isAttend}
+              isInterested={isInterested}
+              date={startTime}
+              key={id}>
+              <Content>{text}</Content>
+              {/* <Link to='/#'> View Location</Link> */}
+            </GenericFeedEvent>
+          )
+        )}
       </MessagesContainer>
     </GenericControl>
   );
@@ -47,11 +55,13 @@ const Content = styled.div`
   text-align: left;
   overflow-wrap: break-word;
 `;
+
+/*
 const Link = styled(RouterLink)`
   font-size: 1rem;
   text-decoration: none;
   display: block;
   text-align: left;
-`;
+`; */
 
 export default UpcomingEvents;

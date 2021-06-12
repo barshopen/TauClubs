@@ -5,7 +5,7 @@ from server.db.clubmembership import (
     leave_club,
 )
 from flask import Blueprint, json, request
-from server.db.club import establish_club, get_club, get_clubs
+from server.db.club import establish_club, get_club, get_clubs, get_image_by_club
 import datetime
 
 
@@ -25,6 +25,8 @@ from server.db.event import (
     events_by_user,
     get_events_by_club,
     get_events_for_all_clubs_by_user,
+    undoAttending,
+    undoIntrested,
     updateEventContent,
     addAttending,
     addIntrested,
@@ -36,7 +38,7 @@ from server.db.clubmembership import get_user_clubs, join_club
 from server.db.tag import delete_tag_to_club, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
-
+from flask import send_file
 
 STATIC_FOLDER_NAME = "mock-api"
 
@@ -64,12 +66,12 @@ def filter_by_id(data, data_id):
 @login_required
 def club_creation():
     user = get_userauth_user_by_id(current_user.get_id())
-    email = user.contactMail
     result = establish_club(
-        email,
-        name=request.json.get("club_name"),
-        contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description"),
+        image=request.files["image"],
+        foundingUserEmail=user.contactMail,
+        name=request.form["club_name"],
+        contact_mail=request.form["contact_mail"],
+        description=request.form["description"],
     )
     if not result:
         return "Failed", 400
@@ -341,6 +343,17 @@ def event_attending(club_id, event_id):
 
 
 @login_required
+@db_app.route("/club/<club_id>/messages/<event_id>/unattend")
+def event_not_attending(club_id, event_id):
+    event = validate_user_event_permession(club_id, event_id)
+    if not event:
+        return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    undoAttending(event, user)
+    return event.to_json()
+
+
+@login_required
 @db_app.route("/club/<club_id>/messages/<event_id>/interested")
 def event_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
@@ -348,6 +361,17 @@ def event_interesting(club_id, event_id):
         return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
     addIntrested(event, user)
+    return event.to_json()
+
+
+@login_required
+@db_app.route("/club/<club_id>/messages/<event_id>/uninterested")
+def event_not_interesting(club_id, event_id):
+    event = validate_user_event_permession(club_id, event_id)
+    if not event:
+        return "Failed", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    undoIntrested(event, user)
     return event.to_json()
 
 
@@ -366,6 +390,16 @@ def remove_tag(club_id, tag_id):
     delete_tag_to_club(club_id, tag_id)
     club = get_club(club_id)
     return club.to_json()
+
+
+@db_app.route("/images/<club_id>")
+def get_image_club(club_id):
+    club = get_club(club_id)
+    image = club.profileImage
+    return send_file(
+        image,
+        download_name="club.jpg",
+    )
 
 
 ######################################################
