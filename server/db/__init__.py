@@ -82,9 +82,10 @@ def club_creation():
     return result, 200
 
 
-@db_app.route("/club/add_image/<club_id>", methods=["POST"])
+@db_app.route("/club/add_image", methods=["POST"])
 @login_required
-def add_image(club_id):
+def add_image():
+    club_id = request.form["clubId"]
     club = get_club(club_id)
     if not club_id:
         return "invalid club", 400
@@ -197,7 +198,6 @@ def event_creation():
         ),
         location=request.json.get("location"),
         club=get_club(club_id),
-        profileImage=request.json.get("profileImage"),
     )
     if not result:
         return "Failed", 400
@@ -310,7 +310,6 @@ def event_update(club_id, event_id):
     title = request.json.get("title")
     description = request.json.get("description")
     duration = request.json.get("duration")
-    profileImage = request.json.get("profileImage")
     startTime = request.json.get("startTime")
     location = request.json.get("location")
     event = updateEventContent(
@@ -318,7 +317,6 @@ def event_update(club_id, event_id):
         title=title,
         description=description,
         duration=duration,
-        profileImage=profileImage,
         startTime=startTime,
         location=location,
     )
