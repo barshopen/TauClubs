@@ -10,8 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
+import EditIcon from '@material-ui/icons/Edit';
 import { attend, interested, uninterested, unattend } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
+import UpdateEventModal from './UpdateEventModal';
+import useClubFeed from '../../hooks/useClubFeed';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
@@ -35,6 +38,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const IconBu = ({ onClick }) => (
+  <IconButton color='inherit' aria-label='edit' onClick={onClick}>
+    <Tooltip title='Edit'>
+      <EditIcon />
+    </Tooltip>
+  </IconButton>
+);
+
+IconBu.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
 export const eventsIcon = (clubId, id, isAttend, isInterested) => {
   const { refetchFeed } = useFeed();
   const handleInterested = () =>
@@ -53,7 +68,7 @@ export const eventsIcon = (clubId, id, isAttend, isInterested) => {
           ? uninterested(clubId, id).then(() => refetchFeed())
           : null);
   return (
-    <CardActions disableSpacing>
+    <CardActions style={{ display: 'flex' }}>
       <Tooltip title='Attend'>
         <IconButton aria-label='attend' onClick={handleAttend}>
           {isAttend ? (
@@ -88,6 +103,7 @@ function GenericFeedEvent({
   children,
 }) {
   const classes = useStyles();
+  const { editEvent } = useClubFeed({ clubId });
 
   return (
     <Card className={classes.root}>
@@ -100,6 +116,7 @@ function GenericFeedEvent({
         <Typography variant='h5' component='h2'>
           {title}
         </Typography>
+
         <Typography variant='body2' component='p'>
           {children}
         </Typography>
@@ -109,7 +126,9 @@ function GenericFeedEvent({
           </DateContainerOuter>
         ) : null}
       </CardContent>
+
       {eventsIcon(clubId, id, isAttend, isInterested)}
+      <UpdateEventModal ClickableTrigger={IconBu} editEvent={editEvent} />
     </Card>
   );
 }

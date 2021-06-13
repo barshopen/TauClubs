@@ -21,7 +21,6 @@ def createEvent(
         lastUpdateTime=currentTime(),
         creatingClub=club,
         location=location,
-        profileImage=profileImage,
     )
     newEvent.save()
     club.update(lastUpdateTime=currentTime())

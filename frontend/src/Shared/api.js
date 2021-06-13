@@ -66,6 +66,8 @@ export const logOut = () => get('/auth/logout');
 export const createNewMessgae = ({ payload }) =>
   post(`/db/club/create_message`, payload);
 
+export const updateEvent = ({ payload }) => post(`/club/event/update`, payload);
+
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
 
