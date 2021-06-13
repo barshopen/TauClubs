@@ -12,6 +12,7 @@ import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
 
 import { createClub } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
+  const { refetchMyClubs } = useClubs();
 
   const handleChange = e => {
     setValues({
@@ -50,7 +52,7 @@ function NewClubContent({ setOpen }) {
     });
   };
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     e.preventDefault();
     const data = new FormData();
     data.append('club_name', values.club_name);
@@ -62,8 +64,9 @@ function NewClubContent({ setOpen }) {
       data.append('image', 'None');
     }
 
-    createClub(data);
+    await createClub(data);
     setOpen(false);
+    refetchMyClubs();
   };
 
   const handleDrop = pictureFiles => {

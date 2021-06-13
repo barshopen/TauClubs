@@ -31,6 +31,13 @@ const NavBarContainer = styled.div`
   padding: 5px;
   margin: 15px 0;
 `;
+const useStyles = makeStyles({
+  headerPhoto: {
+    minWidth: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+});
 
 const Nav = styled.nav`
   height: 38px;
@@ -67,6 +74,7 @@ const NavWithoutLink = styled.h1`
 `;
 
 const ClubSection = () => {
+  const classes = useStyles();
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');

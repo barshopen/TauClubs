@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -57,9 +57,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SideBarListItem = ({ text, children, to, admin }) => (
+
+const SideBarListItem = ({
+  text,
+  id,
+  children,
+  to,
+  admin
+  selectedIndex,
+  handleListItemClick,
+}) => (
+
   <NavLink to={to}>
-    <ListItem button key={text}>
+    <ListItem
+      key={text}
+      button
+      selected={selectedIndex === id}
+      onClick={
+        handleListItemClick && (event => handleListItemClick(event, id))
+      }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
       {admin && <Chip label='Manager' variant='outlined' color='secondary' />}
@@ -72,11 +88,19 @@ SideBarListItem.propTypes = {
   children: PropTypes.element.isRequired,
   to: PropTypes.string,
   admin: PropTypes.bool,
+  id: PropTypes.string,
+  selectedIndex: PropTypes.number,
+  handleListItemClick: PropTypes.func,
 };
 
 SideBarListItem.defaultProps = {
   to: '/#',
+
   admin: false,
+  id: '',
+  selectedIndex: 0,
+  handleListItemClick: undefined,
+
 };
 
 const Copyright = ({ className }) => (
@@ -95,6 +119,11 @@ Copyright.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
+  const [selectedIndex, setSelectedIndex] = useState('');
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
 
   const { myClubs } = useClubs();
   const user = useRecoilValue(currentUser);
@@ -147,6 +176,9 @@ export default function AppSideBar() {
           {myClubs?.map(d => (
             <SideBarListItem
               key={d.id}
+              id={d.id}
+              selectedIndex={selectedIndex}
+              handleListItemClick={handleListItemClick}
               text={d.name}
               to={`/club/board/${d.id}`}
               admin={d.admin}>
