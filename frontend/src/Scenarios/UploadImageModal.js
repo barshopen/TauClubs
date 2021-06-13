@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
 import { addImage } from '../Shared/api';
+import useClubs from '../hooks/useClubs';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -36,19 +37,25 @@ const useStyles = makeStyles(theme => ({
 function UploadImageContent({ clubId, setOpen }) {
   const classes = useStyles();
   const [picture, setPicture] = useState(null);
+  const { refetchMyClubs } = useClubs();
 
   const submitHandler = e => {
     e.preventDefault();
     const data = new FormData();
+    data.append('clubId', clubId);
+    if (picture === null) {
+      /// error
+      return;
+    }
     data.append('image', picture);
-    addImage(clubId, data);
+    addImage(data);
     setOpen(false);
+    refetchMyClubs();
   };
 
   const handleDrop = pictureFiles => {
     setPicture(pictureFiles[0]);
   };
-
   return (
     <form
       className={classes.root}
@@ -86,16 +93,17 @@ export default function UploadImageModal({ clubId, ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={UploadImageContent(clubId)}
+      Content={UploadImageContent}
+      clubId={clubId}
     />
   );
 }
 UploadImageModal.propTypes = {
-  clubId: PropTypes.string.isRequired,
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 UploadImageModal.defaultProps = {};
