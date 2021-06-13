@@ -57,17 +57,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 const SideBarListItem = ({
   text,
   id,
   children,
   to,
-  admin
+  admin,
   selectedIndex,
   handleListItemClick,
 }) => (
-
   <NavLink to={to}>
     <ListItem
       key={text}
@@ -100,7 +98,6 @@ SideBarListItem.defaultProps = {
   id: '',
   selectedIndex: 0,
   handleListItemClick: undefined,
-
 };
 
 const Copyright = ({ className }) => (
