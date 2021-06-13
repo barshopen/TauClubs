@@ -1,6 +1,6 @@
 import datetime
 from mongoengine import (
-    Document,
+    DynamicDocument,
     StringField,
     ReferenceField,
     EmailField,
@@ -24,7 +24,7 @@ def names_of_tags(listTags):
     return re
 
 
-class Club(Document):
+class Club(DynamicDocument):
     meta = {"collection": "clubs"}
     name = StringField(max_length=50, required=True)
     profileImage = ImageField()
@@ -67,7 +67,7 @@ class Club(Document):
         return json.dumps(self.to_dict())
 
 
-class User(Document):
+class User(DynamicDocument):
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
@@ -93,7 +93,7 @@ class User(Document):
         return json.dumps(self.to_dict())
 
 
-class UserAuth(UserMixin, Document):
+class UserAuth(UserMixin, DynamicDocument):
     email = EmailField(required=True, unique=True)
     userauth = ReferenceField(User)
 
@@ -101,7 +101,7 @@ class UserAuth(UserMixin, Document):
 ROLES = {"A": "Admin", "U": "User", "P": "Pending"}
 
 
-class ClubMembership(Document):
+class ClubMembership(DynamicDocument):
     club = ReferenceField("Club", unique_with="member")
     clubName = StringField(max_length=50, required=True)
     member = ReferenceField("User")
@@ -126,7 +126,7 @@ class ClubMembership(Document):
         return json.dumps(self.to_dict())
 
 
-class Event(Document):
+class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
@@ -161,7 +161,7 @@ class Event(Document):
         return json.dumps(self.to_dict())
 
 
-class Tag(Document):
+class Tag(DynamicDocument):
     name = StringField(max_length=200, required=True)
     color = IntField(required=True)
     clubsWithTag = ListField(ObjectIdField(), required=True)  # list of clubs
@@ -178,7 +178,7 @@ class Tag(Document):
         return json.dumps(self.to_dict())
 
 
-class Message(Document):
+class Message(DynamicDocument):
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)
     creationTime = DateTimeField(required=True)
