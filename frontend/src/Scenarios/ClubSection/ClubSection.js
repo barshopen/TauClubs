@@ -77,9 +77,9 @@ const ClubSection = () => {
     admin,
     pending,
     name,
-    profileImage,
     description,
     contactMail,
+    profileImage,
   } = clubData || {};
   const user = useRecoilValue(currentUser);
 
@@ -99,17 +99,17 @@ const ClubSection = () => {
   return (
     <SimpleContaConiner>
       <Typography variant='h5'>{name}</Typography>
-
-      <UploadImageModal
-        ClickableTrigger={({ onClick }) =>
-          profileImage ? (
-            <img
-              className={classes.headerPhoto}
-              src={`/${profileImage}`}
-              height={200}
-              alt='wallpaper'
-            />
-          ) : (
+      {profileImage ? (
+        <img
+          className={classes.headerPhoto}
+          src={`${window.origin}/db/images/${clubId}`}
+          height={200}
+          alt='wallpaper'
+        />
+      ) : (
+        <UploadImageModal
+          clubId={clubId}
+          ClickableTrigger={({ onClick }) => (
             <EmptyState
               className={classes.emptyImage}
               onClick={onClick}
@@ -121,9 +121,9 @@ const ClubSection = () => {
               illustration={<EmptyState.Illustration name='image' />}
               size='small'
             />
-          )
-        }
-      />
+          )}
+        />
+      )}
 
       <NavBarContainer>
         <Nav>

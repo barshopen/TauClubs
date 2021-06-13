@@ -56,13 +56,17 @@ function NewClubContent({ setOpen }) {
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
-    data.append('image', values.image);
+    if (values.image) {
+      data.append('image', values.image);
+    } else {
+      data.append('image', 'None');
+    }
+
     createClub(data);
     setOpen(false);
   };
 
   const handleDrop = pictureFiles => {
-    // setPicture(URL.createObjectURL(pictureFiles[0]));
     setValues({
       ...values,
       image: pictureFiles[0],

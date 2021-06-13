@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import ClubCard from './ClubCard';
-import { imageClub } from '../Shared/api';
 
 const green = '#00d989';
 
 function ClubsView({ header, data, width, Container }) {
   return (
     <GenericControl header={header} width={width} Container={Container}>
-      {data.map(({ id, name, tags, membersCount }) => (
+      {data.map(({ id, name, tags, membersCount, profileImage }) => (
         <Link key={id} to={`/club/board/${id}`}>
           <ClubCard
             title={name}
-            img={imageClub(id)}
+            img={
+              profileImage
+                ? `${window.origin}/db/images/${id}`
+                : '/images/taulogo.png'
+            }
             tags={tags}
             count={membersCount}
             color={green}

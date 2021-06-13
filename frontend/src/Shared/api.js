@@ -5,6 +5,9 @@ export const getDb = (subroute, id) =>
 
 export const createClub = data => postClub('/db/create_club', data);
 
+export const addImage = (clubId, data) =>
+  postClub(`db/club/add_image/${clubId}`, data);
+
 export const joinClub = data => post('/db/join_club', data);
 
 export const leaveClub = data => post('/db/leave_club', data);
@@ -69,5 +72,3 @@ export const createNewEvent = ({ payload }) =>
 export const isUserManager = () => get('/isManager');
 
 export const getDashboardData = () => get('dashboard/data');
-
-export const imageClub = clubId => getDb('images', clubId);

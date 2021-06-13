@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
+import { addImage } from '../Shared/api';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function UploadImageContent({ setOpen }) {
+function UploadImageContent({ clubId, setOpen }) {
   const classes = useStyles();
   const [picture, setPicture] = useState(null);
 
@@ -40,6 +41,7 @@ function UploadImageContent({ setOpen }) {
     e.preventDefault();
     const data = new FormData();
     data.append('image', picture);
+    addImage(clubId, data);
     setOpen(false);
   };
 
@@ -63,6 +65,7 @@ function UploadImageContent({ setOpen }) {
         singleImage
         buttonText='Pick a profile image'
         onChange={handleDrop}
+        isRequired
         imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
         maxFileSize={5242880}
       />
@@ -76,17 +79,19 @@ function UploadImageContent({ setOpen }) {
 }
 UploadImageContent.propTypes = {
   setOpen: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function UploadImageModal({ ClickableTrigger }) {
+export default function UploadImageModal({ clubId, ClickableTrigger }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={UploadImageContent}
+      Content={UploadImageContent(clubId)}
     />
   );
 }
 UploadImageModal.propTypes = {
+  clubId: PropTypes.string.isRequired,
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,

@@ -16,6 +16,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Chip from '@material-ui/core/Chip';
 import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
@@ -56,11 +57,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SideBarListItem = ({ text, children, to }) => (
+const SideBarListItem = ({ text, children, to, admin }) => (
   <NavLink to={to}>
     <ListItem button key={text}>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
+      {admin && <Chip label='Manager' variant='outlined' color='secondary' />}
     </ListItem>
   </NavLink>
 );
@@ -69,10 +71,12 @@ SideBarListItem.propTypes = {
   text: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
   to: PropTypes.string,
+  admin: PropTypes.bool,
 };
 
 SideBarListItem.defaultProps = {
   to: '/#',
+  admin: false,
 };
 
 const Copyright = ({ className }) => (
@@ -144,8 +148,9 @@ export default function AppSideBar() {
             <SideBarListItem
               key={d.id}
               text={d.name}
-              to={`/club/board/${d.id}`}>
-              <Avatar alt={d.name} src={`/${d.profileImage}`} />
+              to={`/club/board/${d.id}`}
+              admin={d.admin}>
+              <Avatar alt={d.name} src={`${window.origin}/db/images/${d.id}`} />
             </SideBarListItem>
           ))}
         </List>

@@ -27,11 +27,11 @@ def create_club(
 
 
 def establish_club(
-    image,
     foundingUserEmail: str,
     name: str,
     contact_mail: str,
     description: str = "",
+    image=None,
     tags=None,
 ):
     newclub = create_club(image, name, contact_mail, description, tags)
@@ -64,3 +64,8 @@ def get_image_by_club(image_id):
     for i in list(Club.objects.filter()):
         print(i.profileImage.id)
     return Club.objects.filter(__raw__={"profileImage.id": image_id})
+
+
+def add_image_to_club(image, club: Club):
+    club.profileImage.put(image)
+    club.save()

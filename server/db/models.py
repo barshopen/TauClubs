@@ -34,6 +34,9 @@ class Club(Document):
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
 
+    def hasPicture(self):
+        return self.profileImage.__dict__["grid_id"] is not None
+
     def to_dict(self):
         admin = False
         member = False
@@ -57,6 +60,7 @@ class Club(Document):
             "admin": admin,
             "member": member,
             "pending": pending,
+            "profileImage": self.hasPicture(),
         }
 
     def to_json(self):
@@ -132,7 +136,6 @@ class Event(Document):
     creatingClub = ReferenceField("Club", max_length=200, required=True)
     creationTime = DateTimeField(required=True, validation=None)
     lastUpdateTime = DateTimeField(required=True, validation=None)
-    profileImage = ImageField()
     intrested = ListField(ReferenceField("User"))
     membersAttending = ListField(ReferenceField("User"))
 
@@ -151,6 +154,7 @@ class Event(Document):
             "clubName": self.creatingClub.name,
             "isAttend": user in self.membersAttending,
             "isInterested": user in self.intrested,
+            "profileImage": self.creatingClub.hasPicture(),
         }
 
     def to_json(self):
@@ -195,6 +199,7 @@ class Message(Document):
             "likes": self.likes,
             "clubName": self.creatingClub.name,
             "userName": self.creatingUser.full_name(),
+            "profileImage": self.creatingClub.hasPicture(),
         }
 
     def to_json(self):
