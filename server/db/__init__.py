@@ -5,7 +5,7 @@ from server.db.clubmembership import (
     leave_club,
 )
 from flask import Blueprint, json, request
-from server.db.club import establish_club, get_club, get_clubs, get_image_by_club
+from server.db.club import add_image_to_club, establish_club, get_club, get_clubs
 import datetime
 
 
@@ -66,8 +66,12 @@ def filter_by_id(data, data_id):
 @login_required
 def club_creation():
     user = get_userauth_user_by_id(current_user.get_id())
+    if request.form.get("image") == "None":
+        image = None
+    else:
+        image = request.files["image"]
     result = establish_club(
-        image=request.files["image"],
+        image=image,
         foundingUserEmail=user.contactMail,
         name=request.form["club_name"],
         contact_mail=request.form["contact_mail"],
@@ -76,6 +80,23 @@ def club_creation():
     if not result:
         return "Failed", 400
     return result, 200
+
+
+@db_app.route("/club/add_image/<club_id>", methods=["POST"])
+@login_required
+def add_image(club_id):
+    club = get_club(club_id)
+    if not club_id:
+        return "invalid club", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
+        return "Failed", 400
+    try:
+        image = request.files["image"]
+        add_image_to_club(image, club)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @db_app.route("/clubs")
@@ -182,10 +203,6 @@ def event_creation():
         return "Failed", 400
 
     return result, 200
-
-
-##################################################
-# from here it is not supported yet at the front end so haven't checked
 
 
 @db_app.route("/club/<club_id>/messages/get_messages")
@@ -375,6 +392,16 @@ def event_not_interesting(club_id, event_id):
     return event.to_json()
 
 
+@db_app.route("/images/<club_id>")
+def get_image_club(club_id):
+    club = get_club(club_id)
+    image = club.profileImage
+    return send_file(image, download_name="club.jpg", max_age=20000000)
+
+
+###########################################################################
+
+
 @db_app.route("/club/<club_id>/tags")
 def tags(club_id):
     club = get_club(club_id)
@@ -390,20 +417,6 @@ def remove_tag(club_id, tag_id):
     delete_tag_to_club(club_id, tag_id)
     club = get_club(club_id)
     return club.to_json()
-
-
-@db_app.route("/images/<club_id>")
-def get_image_club(club_id):
-    club = get_club(club_id)
-    image = club.profileImage
-    return send_file(
-        image,
-        download_name="club.jpg",
-    )
-
-
-######################################################
-# how do we us it?
 
 
 @db_app.route("/users")
