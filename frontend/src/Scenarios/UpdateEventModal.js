@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 //   LocalizationProvider,
 //   // AdapterDateFns,
 // } from '@material-ui/lab';
-import GenericModal from './GenericModal';
+import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -30,10 +30,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function editEventContent({ setOpen, onChange: editEvent }) {
+function editEventContent({ clubId, setOpen, onChange: editEvent }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
     event_startDateTime: moment().format(),
+    eventId: clubId,
   });
 
   const handleChange = e =>
@@ -44,6 +45,7 @@ function editEventContent({ setOpen, onChange: editEvent }) {
 
   const submitHandler = e => {
     e.preventDefault();
+
     editEvent({ data: formValues });
     setOpen(false);
   };
@@ -107,17 +109,22 @@ function editEventContent({ setOpen, onChange: editEvent }) {
 }
 
 editEventContent.propTypes = {
-  title: PropTypes.string.isRequired,
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function UpdateEventModal({ ClickableTrigger, editEvent }) {
+export default function UpdateEventModal({
+  clubId,
+  ClickableTrigger,
+  editEvent,
+}) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={editEventContent}
       onChange={editEvent}
+      clubId={clubId}
     />
   );
 }
@@ -129,4 +136,5 @@ UpdateEventModal.propTypes = {
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
   editEvent: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };

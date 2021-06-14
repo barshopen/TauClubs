@@ -311,31 +311,39 @@ def get_event(club_id, event_id):
 
 @login_required
 @db_app.route("/club/event/update", methods=["POST"])
-def event_update(club_id, event_id):
+def event_update():
     club_id = request.json.get("clubId")
     if not club_id:
         return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
-    event_id = request.json.get("eventId")
+    try:
+        event_id = request.json.get("data")["eventId"]
+    except Exception:
+        return "Not valid event", 400
     event = getEvent(event_id)
-    title = request.json.get("event_title")
-    description = request.json.get("event_description")
-    duration = request.json.get("event_duration")
-    startTime = (
-        datetime.datetime.strptime(
+    try:
+        title = request.json.get("data")["event_title"]
+    except Exception:
+        title = None
+    try:
+        description = request.json.get("data")["event_description"]
+    except Exception:
+        description = None
+    # duration = request.json.get("data")["event_duration"]
+    try:
+        startTime = datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
-        ),
-    )
-    location = request.json.get("event_location")  # need to update it
+        )
+    except Exception:
+        startTime = None
+    # location = request.json.get("data")["event_location"]  # need to update it
     event = updateEventContent(
         event,
         title=title,
         description=description,
-        duration=duration,
         startTime=startTime,
-        location=location,
     )
     return event.to_json(), 200
 

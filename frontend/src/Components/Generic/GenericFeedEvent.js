@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import { attend, interested, uninterested, unattend } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
-import UpdateEventModal from './UpdateEventModal';
+import UpdateEventModal from '../../Scenarios/UpdateEventModal';
 import useClubFeed from '../../hooks/useClubFeed';
 
 function formatDate(dateString) {
@@ -128,7 +128,11 @@ function GenericFeedEvent({
       </CardContent>
 
       {eventsIcon(clubId, id, isAttend, isInterested)}
-      <UpdateEventModal ClickableTrigger={IconBu} editEvent={editEvent} />
+      <UpdateEventModal
+        ClickableTrigger={IconBu}
+        editEvent={editEvent}
+        clubId={id}
+      />
     </Card>
   );
 }
