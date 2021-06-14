@@ -95,18 +95,21 @@ const ClubSection = () => {
       join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
     }
   }
-
+  const img = profileImage
+    ? `${window.origin}/db/images/${clubId}`
+    : '/images/taulogo.png';
   return (
     <SimpleContaConiner>
       <Typography variant='h5'>{name}</Typography>
-      {profileImage ? (
+      {!admin && (
         <img
           className={classes.headerPhoto}
-          src={`${window.origin}/db/images/${clubId}`}
+          src={img}
           height={200}
           alt='wallpaper'
         />
-      ) : (
+      )}
+      {admin && !profileImage && (
         <UploadImageModal
           clubId={clubId}
           ClickableTrigger={({ onClick }) => (
@@ -124,7 +127,6 @@ const ClubSection = () => {
           )}
         />
       )}
-
       <NavBarContainer>
         <Nav>
           <NavLink to={`/club/board/${clubId}`} start='2'>
