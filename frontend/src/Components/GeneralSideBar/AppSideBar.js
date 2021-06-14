@@ -76,7 +76,14 @@ const SideBarListItem = ({
       }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
-      {admin && <Chip label='Manager' variant='outlined' color='secondary' />}
+      {admin && (
+        <Chip
+          size='small'
+          label='Manager'
+          variant='outlined'
+          color='secondary'
+        />
+      )}
     </ListItem>
   </NavLink>
 );
@@ -116,7 +123,7 @@ Copyright.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -129,11 +136,13 @@ export default function AppSideBar() {
       text: 'Feed',
       route: '/',
       icon: LibraryBooksIcon,
+      id: 0,
     },
     {
       text: 'Explore',
       route: !user ? '/' : '/explore',
       icon: ExploreIcon,
+      id: 1,
     },
   ];
 
@@ -158,6 +167,9 @@ export default function AppSideBar() {
             return (
               <SideBarListItem
                 text={listItem.text}
+                id={listItem.id}
+                selectedIndex={selectedIndex}
+                handleListItemClick={handleListItemClick}
                 key={listItem.text}
                 to={listItem.route}>
                 <listItem.icon />
