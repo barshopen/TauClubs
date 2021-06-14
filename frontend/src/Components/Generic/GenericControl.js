@@ -38,7 +38,8 @@ const MainHeader = styled.h2`
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 1rem;
-  margin: 25px 0;
+  margin-top: 2%;
+  margin-bottom: 2%;
   font-weight: normal;
   width: ${props => props.width};
 `;

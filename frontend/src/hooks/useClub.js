@@ -15,21 +15,26 @@ const useClub = clubId => {
   const storeKey = ['club', clubId];
   const [clubData, dispatch] = useReducer(reducer, {});
 
-  const { loading: loadingClub } = useQuery(storeKey, () => fetchClub(clubId), {
-    staleTime: 60000,
-    refetchOnMount: false,
-    onSuccess: data => {
-      for (const [key, value] of Object.entries(data)) {
-        if (data[key] !== clubData[key]) {
-          dispatch({ [key]: value });
+  const { loading: loadingClub, refetch } = useQuery(
+    storeKey,
+    () => fetchClub(clubId),
+    {
+      staleTime: 60000,
+      refetchOnMount: false,
+      onSuccess: data => {
+        for (const [key, value] of Object.entries(data)) {
+          if (data[key] !== clubData[key]) {
+            dispatch({ [key]: value });
+          }
         }
-      }
-    },
-  });
+      },
+    }
+  );
 
   return {
     loadingClub,
     clubData,
+    refetchUseClub: refetch,
   };
 };
 

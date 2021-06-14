@@ -1,6 +1,9 @@
 from os import path
+from server.db.user import get_user, update
 from server.db.clubmembership import (
+    approve,
     clubs_by_user_member,
+    is_member,
     is_user_member,
     leave_club,
 )
@@ -82,9 +85,10 @@ def club_creation():
     return result, 200
 
 
-@db_app.route("/club/add_image/<club_id>", methods=["POST"])
+@db_app.route("/club/add_image", methods=["POST"])
 @login_required
-def add_image(club_id):
+def add_image():
+    club_id = request.form["clubId"]
     club = get_club(club_id)
     if not club_id:
         return "invalid club", 400
@@ -132,6 +136,11 @@ def join_club_by_id():
     club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
     cur_user_email = user.contactMail
+    club = get_club(club_id)
+    if not club:
+        return "Not valid club id", 400
+    if not is_member(user, club):
+        return "Already member", 200
     res = join_club(cur_user_email, club_id).to_json()
     if not res:
         return "Could not complete request", 400
@@ -191,11 +200,12 @@ def event_creation():
     result = createEvent(
         title=request.json.get("data")["event_title"],
         description=request.json.get("data")["event_description"],
-        duration=request.json.get("duration"),
+        # duration=request.json.get("data")["event_duration"],
+        duration=5,
         startTime=datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         ),
-        location=request.json.get("location"),
+        location=request.json.get("data")["event_location"],
         club=get_club(club_id),
     )
     if not result:
@@ -209,6 +219,8 @@ def messages_by_club(club_id):
     if not club_id:
         return "Failed", 400
     club = get_club(club_id)
+    if not club:
+        return "Failed", 400
     return get_messages_by_club(club)
 
 
@@ -217,6 +229,8 @@ def events_by_club(club_id):
     if not club_id:
         return "Failed", 400
     club = get_club(club_id)
+    if not club:
+        return "Failed", 400
     return get_events_by_club(club)
 
 
@@ -233,7 +247,6 @@ def message_update(club_id):
     club_id = request.json.get("clubId")
     if not club_id:
         return "Failed", 400
-
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
@@ -419,6 +432,59 @@ def remove_tag(club_id, tag_id):
     delete_tag_to_club(club_id, tag_id)
     club = get_club(club_id)
     return club.to_json()
+
+
+@login_required
+@db_app.route("/approve_user", methods=["POST"])
+def approve_user():
+    club_id = request.json.get("clubId")
+    user_id = request.json.get("userId")
+    if not club_id or user_id:
+        return "Failed", 400
+    manager = get_userauth_user_by_id(current_user.get_id())
+    club = get_club(club_id)
+    if not club or not validatePermession(manager, club_id):
+        return "Restrict", 400
+    user = get_user(user_id)
+    approve(club, user, "U")
+    return 200
+
+
+@login_required
+@db_app.route("/approve_manager", methods=["POST"])
+def approve_manager():
+    club_id = request.json.get("clubId")
+    user_id = request.json.get("userId")
+    if not club_id or user_id:
+        return "Failed", 400
+    manager = get_userauth_user_by_id(current_user.get_id())
+    club = get_club(club_id)
+    if not club or not validatePermession(manager, club_id):
+        return "Restrict", 400
+    user = get_user(user_id)
+    approve(club, user, "A")
+    return 200
+
+
+@login_required
+@db_app.route("/updateuser", methods=["POST"])
+def update_user_data():
+    user = get_userauth_user_by_id(current_user.get_id())
+    try:
+        update(
+            user,
+            request.json.get("firstName"),
+            request.json.get("lastName"),
+            request.json.get("phone"),
+            request.json.get("country"),
+        )
+        return "Success", 200
+    except Exception:
+        return "failed", 400
+
+
+######################################################
+# how do we us it?
 
 
 @db_app.route("/users")

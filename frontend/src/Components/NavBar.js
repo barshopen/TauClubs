@@ -239,7 +239,9 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>
-        <NavLink to='/profile'>My account</NavLink>
+        <NavLink exact to='/profile'>
+          My account
+        </NavLink>
       </MenuItem>
       <MenuItem onClick={handleLogout}>
         <NavLink to='/'>

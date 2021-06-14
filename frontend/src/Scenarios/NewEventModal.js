@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+
 // import {
 //   DateTimePicker,
 //   LocalizationProvider,
@@ -52,7 +53,7 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
     <form
       className={classes.root}
       onSubmit={submitHandler}
-      noValidate
+      validate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
         Create New Event
@@ -63,6 +64,7 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         label='Event title'
         variant='outlined'
         onChange={handleChange}
+        required
       />
       <TextField
         name='event_description'
@@ -70,8 +72,16 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         multiline
         variant='outlined'
         onChange={handleChange}
-        rows={4}
+        rows={5}
         rowsMax={10}
+        required
+      />
+      <TextField
+        name='event_location'
+        label='Event Location'
+        variant='outlined'
+        onChange={handleChange}
+        required
       />
       <TextField
         name='event_startDateTime'
@@ -79,20 +89,29 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         type='datetime-local'
         variant='outlined'
         format='MM/dd/yyyy'
-        defaultValue={moment().format()}
+        disablePast
+        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
         className={classes.textField}
+        inputProps={{
+          min: moment().format('YYYY-MM-DD[T]HH:mm'),
+        }}
         InputLabelProps={{
           shrink: true,
         }}
+        required
       />
-      {/* 
-      <DateTimePicker
-        renderInput={props => <TextField {...props} />}
-        label='DateTimePicker'
-        name='event_startDateTime'
+      <TextField
+        name='event_duration'
+        label='Event Duration'
+        variant='outlined'
+        type='time'
+        ampm={false}
+        defaultValue='02:00'
+        step='3000'
         onChange={handleChange}
-      /> */}
+        required
+      />
 
       <div className={classes.buttons}>
         <Button type='submit' variant='contained' color='primary'>
