@@ -47,6 +47,6 @@ ClubsView.propTypes = {
 ClubsView.defaultProps = {
   data: [],
   header: '',
-  width: '',
+  width: '100%',
 };
 export default ClubsView;
