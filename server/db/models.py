@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField
+from mongoengine.fields import FloatField, URLField
 from flask_login import UserMixin, current_user
 
 
@@ -73,7 +73,7 @@ class User(DynamicDocument):
     contactMail = EmailField(required=True, unique=True, primary=True)
     country = StringField()
     phone = StringField()
-    picture = ImageField(collection_name="images")
+    picture = URLField()
     joinTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
@@ -218,6 +218,8 @@ def validatePermession(user, club_id):
 
 
 def months_ago(today, months):  # until 12 months
+    if months == -1:
+        return today
     if today.month > months:
         return datetime.datetime(today.year, today.month - months, 1)
     if today.month == months:
@@ -226,7 +228,7 @@ def months_ago(today, months):  # until 12 months
 
 
 def get_name_for_month(i):
-    if i == 0:
+    if i == -1:
         return "currentMonth"
     return "lastMonth"
 
@@ -234,9 +236,9 @@ def get_name_for_month(i):
 def dict_two_months(clubs, func):
     today = datetime.datetime.today()
     dict = {}
-    for i in range(2):
+    for i in range(-1, 1):
         before = months_ago(today, i)
         after = months_ago(today, i + 1)
-        dict[get_name_for_month(i)] = {'month':before.strftime("%B")}
-        dict[get_name_for_month(i)]['total']=len(func(before, after, clubs))
+        dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
+        dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
     return dict

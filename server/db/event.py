@@ -137,8 +137,8 @@ def events_by_user(user):
 
 
 def events_between_dates(before, after, clubs):
-    before_Q = Q(creationTime__lt=before, creatingClub__in=clubs)  # bigger
-    after_Q = Q(creationTime__gt=after, creatingClub__in=clubs)
+    before_Q = Q(creationTime__lte=before, creatingClub__in=clubs)  # bigger
+    after_Q = Q(creationTime__gte=after, creatingClub__in=clubs)
     return list(
         map(
             lambda message: message.to_dict(),

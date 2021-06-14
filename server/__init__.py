@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request,json
+from flask import Flask, request, json
 import dotenv
 from server.db import db_app
 from server.db.manager_data import dashboard_app

@@ -115,18 +115,26 @@ def clubs_by_user_member(user):
 
 
 def users_for_club_between_dates(club, before, after):  # change to request time
-    before_Q = Q(approveTime__lt=before, club=club)  # bigger
-    after_Q = Q(approveTime__gt=after, club=club)
+    before_Q = Q(approveTime__lte=before, club=club)  # bigger
+    after_Q = Q(approveTime__gte=after, club=club)
     return ClubMembership.objects.filter(after_Q & before_Q).count()
+
+
+def month_to_num(today_month, month_ago):
+    if today_month >= month_ago:
+        return today_month - month_ago
+    return today_month - month_ago + 12 + 1
 
 
 def users_for_club_six_months(club):
     today = datetime.datetime.today()
     dict = {}
-    for i in range(6):
+    for i in range(-1, 5):
         before = months_ago(today, i)
         after = months_ago(today, i + 1)
-        dict[today.month - i] = users_for_club_between_dates(club, before, after)
+        dict[month_to_num(today.month, i + 1)] = users_for_club_between_dates(
+            club, before, after
+        )
     return dict
 
 
