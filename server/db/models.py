@@ -1,13 +1,13 @@
 import datetime
 from mongoengine import (
-    Document,
+    DynamicDocument,
     StringField,
     ReferenceField,
     EmailField,
-    URLField,
     DateTimeField,
     ListField,
     IntField,
+    ImageField,
 )
 import json
 from mongoengine.base.fields import ObjectIdField
@@ -24,15 +24,18 @@ def names_of_tags(listTags):
     return re
 
 
-class Club(Document):
+class Club(DynamicDocument):
     meta = {"collection": "clubs"}
     name = StringField(max_length=50, required=True)
-    profileImage = URLField()
+    profileImage = ImageField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
     creationTime = DateTimeField(required=True)
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
+
+    def hasPicture(self):
+        return self.profileImage.__dict__["grid_id"] is not None
 
     def to_dict(self):
         admin = False
@@ -48,7 +51,6 @@ class Club(Document):
         return {
             "id": str(self.pk),
             "name": self.name,
-            "profileImage": self.profileImage,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.creationTime.isoformat(),
@@ -58,17 +60,18 @@ class Club(Document):
             "admin": admin,
             "member": member,
             "pending": pending,
+            "profileImage": self.hasPicture(),
         }
 
     def to_json(self):
         return json.dumps(self.to_dict())
 
 
-class User(Document):
+class User(DynamicDocument):
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
-    picture = URLField()
+    picture = ImageField(collection_name="images")
     joinTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
@@ -90,7 +93,7 @@ class User(Document):
         return json.dumps(self.to_dict())
 
 
-class UserAuth(UserMixin, Document):
+class UserAuth(UserMixin, DynamicDocument):
     email = EmailField(required=True, unique=True)
     userauth = ReferenceField(User)
 
@@ -98,7 +101,7 @@ class UserAuth(UserMixin, Document):
 ROLES = {"A": "Admin", "U": "User", "P": "Pending"}
 
 
-class ClubMembership(Document):
+class ClubMembership(DynamicDocument):
     club = ReferenceField("Club", unique_with="member")
     clubName = StringField(max_length=50, required=True)
     member = ReferenceField("User")
@@ -123,7 +126,7 @@ class ClubMembership(Document):
         return json.dumps(self.to_dict())
 
 
-class Event(Document):
+class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
@@ -133,7 +136,6 @@ class Event(Document):
     creatingClub = ReferenceField("Club", max_length=200, required=True)
     creationTime = DateTimeField(required=True, validation=None)
     lastUpdateTime = DateTimeField(required=True, validation=None)
-    profileImage = URLField()
     intrested = ListField(ReferenceField("User"))
     membersAttending = ListField(ReferenceField("User"))
 
@@ -150,16 +152,16 @@ class Event(Document):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "profileImage": self.creatingClub.profileImage,
             "isAttend": user in self.membersAttending,
             "isInterested": user in self.intrested,
+            "profileImage": self.creatingClub.hasPicture(),
         }
 
     def to_json(self):
         return json.dumps(self.to_dict())
 
 
-class Tag(Document):
+class Tag(DynamicDocument):
     name = StringField(max_length=200, required=True)
     color = IntField(required=True)
     clubsWithTag = ListField(ObjectIdField(), required=True)  # list of clubs
@@ -176,7 +178,7 @@ class Tag(Document):
         return json.dumps(self.to_dict())
 
 
-class Message(Document):
+class Message(DynamicDocument):
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)
     creationTime = DateTimeField(required=True)
@@ -197,7 +199,7 @@ class Message(Document):
             "likes": self.likes,
             "clubName": self.creatingClub.name,
             "userName": self.creatingUser.full_name(),
-            "profileImage": self.creatingClub.profileImage,
+            "profileImage": self.creatingClub.hasPicture(),
         }
 
     def to_json(self):

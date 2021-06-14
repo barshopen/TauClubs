@@ -21,10 +21,14 @@ const useClubFeed = ({ clubId }) => {
   const storeKeyEvents = ['events', clubId];
   const queryClient = useQueryClient();
 
-  const {
-    loading: loadingMessages,
-    data: messagesData,
-  } = useQuery(storeKeyMessages, () => fetchMessages(clubId));
+  const { loading: loadingMessages, data: messagesData } = useQuery(
+    storeKeyMessages,
+    () => fetchMessages(clubId),
+    {
+      staleTime: 60000,
+      refetchOnMount: false,
+    }
+  );
 
   const {
     loading: loadingEvents,

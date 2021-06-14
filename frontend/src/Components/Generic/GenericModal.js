@@ -26,6 +26,7 @@ export default function GenericModal({
   Content,
   maxWidth,
   onChange,
+  clubId,
 }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -63,7 +64,12 @@ export default function GenericModal({
               />
             </Box>
 
-            <Content open={open} setOpen={setOpen} onChange={onChange} />
+            <Content
+              open={open}
+              setOpen={setOpen}
+              onChange={onChange}
+              clubId={clubId}
+            />
           </Container>
         </Fade>
       </Modal>
@@ -84,9 +90,11 @@ GenericModal.propTypes = {
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
   maxWidth: PropTypes.oneOf(['lg', 'md', 'sm', 'xl', 'xs', false]),
+  clubId: PropTypes.string,
 };
 
 GenericModal.defaultProps = {
   maxWidth: 'sm',
   onChange: undefined,
+  clubId: '',
 };
