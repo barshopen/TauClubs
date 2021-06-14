@@ -77,13 +77,23 @@ function cardHeader(profileImage, clubName, title, lastUpdateTime) {
     />
   );
 }
-function cardImage(profileImage, title) {
+function cardImage(profileImage, id, title) {
   const classes = useStyles();
-  const isImg = profileImage !== '';
+  if (profileImage) {
+    return (
+      <CardMedia
+        className={classes.media}
+        image={`${window.origin}/db/images/${id}`}
+        title={title}
+      />
+    );
+  }
   return (
-    isImg && (
-      <CardMedia className={classes.media} image={profileImage} title={title} />
-    )
+    <CardMedia
+      className={classes.media}
+      image='/images/taulogo.png'
+      title={title}
+    />
   );
 }
 
@@ -105,13 +115,13 @@ function FeedCardEvent({ feedItem }) {
     clubId,
     title,
     clubName,
-    profileImage,
     description,
     startTime,
     location,
     lastUpdateTime,
     isAttend,
     isInterested,
+    profileImage,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -120,11 +130,10 @@ function FeedCardEvent({ feedItem }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
   return (
     <Card className={classes.root} m={75}>
       {cardHeader(profileImage, clubName, title, lastUpdateTime)}
-      {cardImage(profileImage, title)}
+      {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {description}
@@ -165,16 +174,15 @@ function FeedCardMessage({ feedItem }) {
     clubId,
     title,
     clubName,
-    profileImage,
     content,
     lastUpdateTime,
+    profileImage,
   } = feedItem;
   const classes = useStyles();
-
   return (
     <Card className={classes.root} m={75}>
       {cardHeader(profileImage, clubName, title, lastUpdateTime)}
-      {cardImage(profileImage, title)}
+      {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {content}

@@ -12,6 +12,12 @@ const post = (route, params) =>
     body: JSON.stringify(params),
   });
 
+const postClub = (route, params) =>
+  fetch(route, {
+    method: 'POST',
+    body: params,
+  });
+
 const update = null;
 
-export { get, post, update };
+export { get, post, postClub, update };

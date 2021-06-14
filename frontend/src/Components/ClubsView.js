@@ -13,7 +13,11 @@ function ClubsView({ header, data, width, Container }) {
         <Link key={id} to={`/club/board/${id}`}>
           <ClubCard
             title={name}
-            img={profileImage}
+            img={
+              profileImage
+                ? `${window.origin}/db/images/${id}`
+                : '/images/taulogo.png'
+            }
             tags={tags}
             count={membersCount}
             color={green}

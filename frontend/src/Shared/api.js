@@ -1,9 +1,9 @@
-import { get, post } from './HTTP';
+import { get, post, postClub } from './HTTP';
 
 export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
-export const createClub = data => post('/db/create_club', data);
+export const createClub = data => postClub('/db/create_club', data);
 
 export const joinClub = data => post('/db/join_club', data);
 
@@ -65,6 +65,8 @@ export const createNewMessgae = ({ payload }) =>
 
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
+
+export const addImage = data => postClub(`/db/club/add_image`, data);
 
 export const isUserManager = () => get('/isManager');
 

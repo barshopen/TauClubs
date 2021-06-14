@@ -7,6 +7,7 @@ from .clubmembership import createAdminMembership
 
 
 def create_club(
+    image,
     club_name: str,
     contact_mail: str,
     description: str = "",
@@ -16,6 +17,7 @@ def create_club(
     club = Club(
         contactMail=contact_mail,
         name=club_name,
+        profileImage=image,
         description=description,
         tags=tags,
         creationTime=now,
@@ -29,9 +31,10 @@ def establish_club(
     name: str,
     contact_mail: str,
     description: str = "",
+    image=None,
     tags=None,
 ):
-    newclub = create_club(name, contact_mail, description, tags)
+    newclub = create_club(image, name, contact_mail, description, tags)
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 
@@ -55,3 +58,14 @@ def get_club(id: str):
 
 def members_count(club: Club):
     return Club.objects.get(pk=ObjectId(id)).count()
+
+
+def get_image_by_club(image_id):
+    for i in list(Club.objects.filter()):
+        print(i.profileImage.id)
+    return Club.objects.filter(__raw__={"profileImage.id": image_id})
+
+
+def add_image_to_club(image, club: Club):
+    club.profileImage.put(image)
+    club.save()
