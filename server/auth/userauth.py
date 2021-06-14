@@ -26,6 +26,6 @@ def getUserInfo(id):
         "email": user.contactMail,
         "firstName": user.firstName,
         "lastName": user.lastName,
-        "picture": user.picture,
+        # "picture": user.picture,
     }
     return dict

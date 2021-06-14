@@ -19,7 +19,6 @@ const ClubCard = props => {
   const { title, tags, count, img, color } = props;
 
   const classes = useStyles();
-
   return (
     <Card className={classes.root}>
       <CardActionArea>
@@ -27,6 +26,7 @@ const ClubCard = props => {
           component='img'
           alt='Contemplative Reptile'
           height='140'
+          style={{ flex: 1, width: '105%' }}
           image={img}
           title='Contemplative Reptile'
         />

@@ -9,9 +9,7 @@ def currentTime():
     return now
 
 
-def createEvent(
-    title, duration, club, startTime, location=None, description=None, profileImage=None
-):
+def createEvent(title, duration, club, startTime, location=None, description=None):
     newEvent = Event(
         title=title,
         description=description,
@@ -21,7 +19,6 @@ def createEvent(
         lastUpdateTime=currentTime(),
         creatingClub=club,
         location=location,
-        profileImage=profileImage,
     )
     newEvent.save()
     club.update(lastUpdateTime=currentTime())
@@ -35,7 +32,6 @@ def updateEventContent(
     title=None,
     description=None,
     duration=None,
-    profileImage=None,
 ):
     if title:
         event.title = title
@@ -43,8 +39,6 @@ def updateEventContent(
         event.description
     if duration:
         event.duration = duration
-    if profileImage:
-        event.profileImage = profileImage
     if startTime:
         event.startTime = startTime
     if location:
