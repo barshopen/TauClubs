@@ -66,8 +66,10 @@ export const createNewMessgae = ({ payload }) =>
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
 
+export const isUserManager = () => get('/dashboard/isManager');
+
 export const addImage = data => postClub(`/db/club/add_image`, data);
 
-export const isUserManager = () => get('/isManager');
+export const getDashboardData = () => get('/dashboard/data');
 
-export const getDashboardData = () => get('dashboard/data');
+export const updateUserData = data => post('/db/updateuser', data);

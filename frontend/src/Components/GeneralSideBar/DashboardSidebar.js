@@ -4,19 +4,14 @@ import PropTypes from 'prop-types';
 import { Avatar, Box, Divider, List, Typography } from '@material-ui/core';
 import {
   BarChart as BarChartIcon,
-  Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   Users as UsersIcon,
 } from 'react-feather';
+import { useRecoilValue } from 'recoil';
 import NavItem from '../Accounts/Manager/Dashboard/components/NavItem';
 import SideBar from './SideBar';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-
-  name: 'Katarina Smith',
-};
+import { currentUser } from '../../Shared/atoms';
 
 const items = [
   {
@@ -39,21 +34,22 @@ const items = [
     icon: UserIcon,
     title: 'My Account',
   },
-  {
-    href: '/profile/settings',
-    icon: SettingsIcon,
-    title: 'Settings',
-  },
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
+  const current = useRecoilValue(currentUser);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
   }, [location.pathname]);
+
+  const user = {
+    avatar: current?.picture,
+    name: `${current.firstName} ${current.lastName}`,
+  };
 
   const content = (
     <Box>

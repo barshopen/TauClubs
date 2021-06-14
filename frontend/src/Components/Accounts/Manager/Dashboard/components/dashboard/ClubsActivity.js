@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useMemo, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Bar } from 'react-chartjs-2';
 import {
   Box,
@@ -10,23 +12,45 @@ import {
   colors,
 } from '@material-ui/core';
 
-const ClubsActivity = props => {
+const ClubsActivity = ({ clubs }) => {
   const theme = useTheme();
+
+  const values = {};
+
+  useEffect(
+    () =>
+      Object.values(clubs)
+        .map(({ usersByDated }) => usersByDated)
+        .forEach(item =>
+          Object.entries(item).forEach(([key, value]) => {
+            values[key] = (values[key] ?? 0) + value;
+          })
+        ),
+    []
+  );
+
+  const labels = useMemo(() => {
+    const monthArray = [];
+
+    for (let i = 0; i < 6; i += 1) {
+      const monthName = moment()
+        .subtract(i, 'month')
+        .startOf('month')
+        .format('MMMM');
+      monthArray.push(monthName);
+    }
+    return monthArray.reverse();
+  }, []);
 
   const data = {
     datasets: [
       {
         backgroundColor: colors.indigo[500],
-        data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This week',
-      },
-      {
-        backgroundColor: colors.grey[200],
-        data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last week',
+        data: Object.values(values).map(value => value),
+        label: 'Users joined',
       },
     ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug'],
+    labels,
   };
 
   const options = {
@@ -39,8 +63,8 @@ const ClubsActivity = props => {
     scales: {
       xAxes: [
         {
-          barThickness: 7,
-          maxBarThickness: 7,
+          barThickness: 20,
+          maxBarThickness: 20,
           barPercentage: 0.5,
           categoryPercentage: 0.5,
           ticks: {
@@ -85,8 +109,8 @@ const ClubsActivity = props => {
   };
 
   return (
-    <Card {...props}>
-      <CardHeader title='Last Clubs Active' />
+    <Card>
+      <CardHeader title='Clubs Users Activity' />
       <Divider />
       <CardContent>
         <Box
@@ -102,3 +126,11 @@ const ClubsActivity = props => {
 };
 
 export default ClubsActivity;
+
+ClubsActivity.propTypes = {
+  clubs: PropTypes.node,
+};
+
+ClubsActivity.defaultProps = {
+  clubs: {},
+};

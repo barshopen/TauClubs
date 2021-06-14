@@ -9,6 +9,10 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core';
+import { useRecoilState } from 'recoil';
+import { useMutation } from 'react-query';
+import { currentUser } from '../../../Shared/atoms';
+import { whoami, updateUserData } from '../../../Shared/api';
 
 const states = [
   {
@@ -18,20 +22,23 @@ const states = [
 ];
 
 const AccountProfileDetails = props => {
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA',
-  });
+  const [user, setUser] = useRecoilState(currentUser);
+  const [values, setValues] = useState(user);
 
   const handleChange = event => {
     setValues({
       ...values,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const { mutate: changeUserData } = useMutation(whoami, {
+    onSuccess: setUser,
+  });
+
+  const submitHandler = async () => {
+    await updateUserData(values);
+    changeUserData();
   };
 
   return (
@@ -44,7 +51,7 @@ const AccountProfileDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText='Please specify the first name'
+                helperText='Please specify first name'
                 label='First name'
                 name='firstName'
                 onChange={handleChange}
@@ -64,13 +71,14 @@ const AccountProfileDetails = props => {
                 variant='outlined'
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
                 label='Email Address'
                 name='email'
                 onChange={handleChange}
                 required
+                disabled
                 value={values.email}
                 variant='outlined'
               />
@@ -86,16 +94,7 @@ const AccountProfileDetails = props => {
                 variant='outlined'
               />
             </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label='City'
-                name='city'
-                onChange={handleChange}
-                variant='outlined'
-                autoComplete='shipping address-level2'
-              />
-            </Grid>
+
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -117,7 +116,7 @@ const AccountProfileDetails = props => {
         </CardContent>
         <Divider />
         <Box display='flex' justifyContent='flex-end' p={2}>
-          <Button color='primary' variant='contained'>
+          <Button color='primary' variant='contained' onClick={submitHandler}>
             Save details
           </Button>
         </Box>
