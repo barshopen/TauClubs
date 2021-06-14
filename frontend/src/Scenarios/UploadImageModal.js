@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import GenericModal from '../Components/Generic/GenericModal';
 import { addImage } from '../Shared/api';
-import useClubs from '../hooks/useClubs';
+import useClub from '../hooks/useClub';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 function UploadImageContent({ clubId, setOpen }) {
   const classes = useStyles();
   const [picture, setPicture] = useState(null);
-  const { refetchMyClubs } = useClubs();
+  const { refetchUseClub } = useClub();
 
   const submitHandler = e => {
     e.preventDefault();
@@ -48,9 +48,8 @@ function UploadImageContent({ clubId, setOpen }) {
       return;
     }
     data.append('image', picture);
-    addImage(data);
+    addImage(data).then(() => refetchUseClub());
     setOpen(false);
-    refetchMyClubs();
   };
 
   const handleDrop = pictureFiles => {

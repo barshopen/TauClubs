@@ -165,4 +165,3 @@ const ClubSection = () => {
 };
 
 export default ClubSection;
-/// need to change after join the status
