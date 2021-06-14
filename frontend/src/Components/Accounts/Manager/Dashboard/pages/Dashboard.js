@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Box, Container, Grid } from '@material-ui/core';
 import TotalMessages from '../components/dashboard/TotalMessages';
 import LatestJoinedUsers from '../components/dashboard/LatestJoinedUsers';
@@ -7,12 +8,14 @@ import TotalClubs from '../components/dashboard/TotalClubs';
 import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
-const Dashboard = () => {
-  const { clubs, events, messages } = {
-    clubs: {},
-    events: {},
-    messages: {},
-  };
+const Dashboard = ({ data }) => {
+  const { clubs, events, messages } = data || {};
+
+  const allUsers = Object.values(clubs).map(({ users, club }) => ({
+    users,
+    club: club.name,
+  }));
+
   return (
     <Box backgroundColor='background.default' minHeight='100%' py={3}>
       <Container maxWidth={false}>
@@ -27,13 +30,13 @@ const Dashboard = () => {
             <TotalEvents events={events} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalUsers total={clubs} />
+            <TotalUsers clubs={clubs} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <ClubsActivity />
+            <ClubsActivity clubs={clubs} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <LatestJoinedUsers style={{ width: '100%' }} />
+            <LatestJoinedUsers allUsers={allUsers} style={{ width: '100%' }} />
           </Grid>
         </Grid>
       </Container>
@@ -42,3 +45,11 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+Dashboard.propTypes = {
+  data: PropTypes.node,
+};
+
+Dashboard.defaultProps = {
+  data: {},
+};

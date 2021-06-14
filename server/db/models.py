@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField
+from mongoengine.fields import FloatField, URLField
 from flask_login import UserMixin, current_user
 
 
@@ -30,7 +30,7 @@ class Club(DynamicDocument):
     profileImage = ImageField()
     description = StringField(max_length=4296, required=True)
     tags = ListField(ObjectIdField())
-    creationTime = DateTimeField(required=True)
+    creationTime = DateTimeField()
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
 
@@ -53,7 +53,7 @@ class Club(DynamicDocument):
             "name": self.name,
             "description": self.description,
             "name_of_tags": names_of_tags(self.tags),
-            "creationTime": self.creationTime.isoformat(),
+            "creationTime": self.id.generation_time.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
             "membersCount": ClubMembership.objects(club=self).count(),
@@ -71,7 +71,9 @@ class User(DynamicDocument):
     firstName = StringField(max_length=35, required=True)
     lastName = StringField(max_length=35, required=True)
     contactMail = EmailField(required=True, unique=True, primary=True)
-    picture = ImageField(collection_name="images")
+    country = StringField()
+    phone = StringField()
+    picture = URLField()
     joinTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
@@ -86,7 +88,7 @@ class User(DynamicDocument):
             "name": self.full_name(),
             "contactMail": self.contactMail,
             "picture": self.picture,
-            # "joinTime": self.joinTime.isoformat(),
+            "joinTime": self.id.generation_time.isoformat(),
         }
 
     def to_json(self):
@@ -107,12 +109,10 @@ class ClubMembership(DynamicDocument):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    joinTime = (
+    RequestTime = (
         DateTimeField()
     )  # chaneg to required, havent change it because nedd to change the db
-    approveTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    approveTime = DateTimeField()
 
     def to_dict(self):
         return {
@@ -218,8 +218,27 @@ def validatePermession(user, club_id):
 
 
 def months_ago(today, months):  # until 12 months
+    if months == -1:
+        return today
     if today.month > months:
         return datetime.datetime(today.year, today.month - months, 1)
     if today.month == months:
         return datetime.datetime(today.year, 12, 1)
     return datetime.datetime(today.year - 1, 12 + today.month - months, 1)
+
+
+def get_name_for_month(i):
+    if i == -1:
+        return "currentMonth"
+    return "lastMonth"
+
+
+def dict_two_months(clubs, func):
+    today = datetime.datetime.today()
+    dict = {}
+    for i in range(-1, 1):
+        before = months_ago(today, i)
+        after = months_ago(today, i + 1)
+        dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
+        dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
+    return dict

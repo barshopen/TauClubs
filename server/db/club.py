@@ -1,6 +1,7 @@
 import datetime
 from bson.objectid import ObjectId
 import json
+from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
 from .clubmembership import createAdminMembership
@@ -53,7 +54,10 @@ def get_clubs(name: str, tag: str):
 
 
 def get_club(id: str):
-    return Club.objects.get(pk=ObjectId(id))
+    try:
+        return Club.objects.get(pk=ObjectId(id))
+    except DoesNotExist:
+        return None
 
 
 def members_count(club: Club):
