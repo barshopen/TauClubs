@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+
 // import {
 //   DateTimePicker,
 //   LocalizationProvider,
@@ -89,7 +90,7 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         variant='outlined'
         format='MM/dd/yyyy'
         disablePast
-        defaultValue={moment().format()}
+        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
         className={classes.textField}
         inputProps={{
@@ -105,18 +106,12 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         label='Event Duration'
         variant='outlined'
         type='time'
+        ampm={false}
         defaultValue='02:00'
         step='3000'
         onChange={handleChange}
         required
       />
-      {/* 
-      <DateTimePicker
-        renderInput={props => <TextField {...props} />}
-        label='DateTimePicker'
-        name='event_startDateTime'
-        onChange={handleChange}
-      /> */}
 
       <div className={classes.buttons}>
         <Button type='submit' variant='contained' color='primary'>
