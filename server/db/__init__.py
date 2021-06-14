@@ -192,7 +192,8 @@ def event_creation():
     result = createEvent(
         title=request.json.get("data")["event_title"],
         description=request.json.get("data")["event_description"],
-        duration=request.json.get("data")["event_duration"],
+        # duration=request.json.get("data")["event_duration"],
+        duration=5,
         startTime=datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         ),
