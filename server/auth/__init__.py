@@ -12,6 +12,7 @@ from mongoengine.errors import DoesNotExist
 from server.auth.userauth import create_user_auth, getUserInfo
 from server.db.models import UserAuth
 from server.auth import google_token
+from flask import send_file
 
 
 auth_app = Blueprint("auth_app", __name__, url_prefix="/auth")
@@ -79,3 +80,14 @@ def sendUserData():
 def logout():
     logout_user()
     return redirect("http://localhost:3000")
+
+
+@auth_app.route("/user/image")
+@login_required
+def user_image():
+    user = UserAuth.objects(current_user.get_id()).user
+    image = user.picture
+    return send_file(
+        image,
+        download_name=user.firstName + "." + image.format,
+    )

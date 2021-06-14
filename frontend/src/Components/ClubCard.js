@@ -42,7 +42,6 @@ const ClubCard = props => {
   const { title, tags, count, img, color } = props;
 
   const classes = useStyles();
-
   return (
     <Card className={classes.root}>
       <CardActionArea>

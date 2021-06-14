@@ -16,6 +16,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Chip from '@material-ui/core/Chip';
 import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
@@ -61,6 +62,7 @@ const SideBarListItem = ({
   id,
   children,
   to,
+  admin,
   selectedIndex,
   handleListItemClick,
 }) => (
@@ -74,6 +76,7 @@ const SideBarListItem = ({
       }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
+      {admin && <Chip label='Manager' variant='outlined' color='secondary' />}
     </ListItem>
   </NavLink>
 );
@@ -82,6 +85,7 @@ SideBarListItem.propTypes = {
   text: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
   to: PropTypes.string,
+  admin: PropTypes.bool,
   id: PropTypes.string,
   selectedIndex: PropTypes.number,
   handleListItemClick: PropTypes.func,
@@ -89,6 +93,8 @@ SideBarListItem.propTypes = {
 
 SideBarListItem.defaultProps = {
   to: '/#',
+
+  admin: false,
   id: '',
   selectedIndex: 0,
   handleListItemClick: undefined,
@@ -171,14 +177,15 @@ export default function AppSideBar() {
               selectedIndex={selectedIndex}
               handleListItemClick={handleListItemClick}
               text={d.name}
-              to={`/club/board/${d.id}`}>
-              <Avatar alt={d.name} src={`/${d.profileImage}`} />
+              to={`/club/board/${d.id}`}
+              admin={d.admin}>
+              <Avatar alt={d.name} src={`${window.origin}/db/images/${d.id}`} />
             </SideBarListItem>
           ))}
         </List>
       )}
       <Box className={classes.footer}>
-        <Box m={2} p={2} position='absolute' bottom='0'>
+        <Box m={2} p={2} position='fixed' bottom='0'>
           <Typography align='center' variant='body2'>
             For more information
           </Typography>
