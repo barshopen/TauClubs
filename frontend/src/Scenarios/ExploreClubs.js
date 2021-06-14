@@ -24,18 +24,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
   ClubsCardContainer: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     padding: '0.1rem',
-    marginLeft: '-9%',
     gridGap: '2%',
-    alignItems: 'left',
     [theme.breakpoints.down('md')]: {
       marginLeft: '0%',
     },

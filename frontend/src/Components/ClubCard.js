@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   media: {
-    height: '18rem',
+    height: '16rem',
   },
 }));
 
