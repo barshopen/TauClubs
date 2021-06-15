@@ -23,8 +23,7 @@ from server.db.message import (
     createMessage,
     get_messages_for_all_clubs_by_user,
     unlike,
-    updateMessageContent,
-    updateMessageTitle,
+    updateMessage,
     delete_message,
     get_message,
     get_messages_by_club,
@@ -254,22 +253,25 @@ def message(club_id, message_id):
 
 
 @login_required
-@db_app.route("/club/messages/update", methods=["POST"])
-def message_update(club_id):
+@db_app.route("/club/message/update", methods=["POST"])
+def message_update():
     club_id = request.json.get("clubId")
     if not club_id:
         return "Failed", 400
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
-    message_id = request.json.get("messageId")
+    message_id = request.json.get("data")["messageId"]
     message = get_message(id=message_id)
-    title = request.json.get("message_title")
-    content = request.json.get("message_description")
-    if title:
-        updateMessageTitle(message, title)
-    if content:
-        updateMessageContent(message, content)
+    try:
+        title = request.json.get("data")["message_title"]
+    except Exception:
+        title = None
+    try:
+        content = request.json.get("data")["message_content"]
+    except Exception:
+        content = None
+    message = updateMessage(message, title, content)
     return message.to_dict()
 
 

@@ -8,6 +8,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import EditIcon from '@material-ui/icons/Edit';
+import useClubFeed from '../../hooks/useClubFeed';
+import UpdatMessageModal from '../../Scenarios/UpdateMessageModal';
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-GB');
@@ -30,10 +35,21 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 12,
   },
 }));
+const IconBu = ({ onClick }) => (
+  <IconButton color='inherit' aria-label='edit' onClick={onClick}>
+    <Tooltip title='Edit'>
+      <EditIcon />
+    </Tooltip>
+  </IconButton>
+);
 
-function GenericFeedMessage({ title, date, children }) {
+IconBu.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
+function GenericFeedMessage({ clubId, id, title, date, children }) {
   const classes = useStyles();
-
+  const { editMessage } = useClubFeed({ clubId });
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -54,6 +70,11 @@ function GenericFeedMessage({ title, date, children }) {
           </DateContainerOuter>
         ) : null}
       </CardContent>
+      <UpdatMessageModal
+        ClickableTrigger={IconBu}
+        editMessage={editMessage}
+        clubId={id}
+      />
       {/*
       <CardActions>
         <IconButton aria-label='add to favorites'>
@@ -67,6 +88,8 @@ function GenericFeedMessage({ title, date, children }) {
 
 GenericFeedMessage.propTypes = {
   title: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  clubId: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

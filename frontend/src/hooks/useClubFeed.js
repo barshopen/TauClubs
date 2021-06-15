@@ -5,6 +5,7 @@ import {
   createNewMessgae,
   createNewEvent,
   updateEvent,
+  updateMessage,
 } from '../Shared/api';
 
 const fetchMessages = async clubId => {
@@ -62,6 +63,15 @@ const useClubFeed = ({ clubId }) => {
       },
     }
   );
+
+  const { mutate: editMessage } = useMutation(
+    ({ data }) => updateMessage({ payload: { clubId, data } }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(storeKeyEvents);
+      },
+    }
+  );
   return {
     loadingMessages,
     messagesData,
@@ -70,6 +80,7 @@ const useClubFeed = ({ clubId }) => {
     addMessage,
     addEvent,
     editEvent,
+    editMessage,
   };
 };
 
