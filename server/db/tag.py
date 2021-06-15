@@ -62,4 +62,4 @@ def add_tags(club_id, club, tags):
 
 
 def tags_for_club(club):
-    return json.dumps(names_of_tags(club.tags))
+    return json.dumps(club.tags)
