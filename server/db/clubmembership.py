@@ -160,8 +160,9 @@ def dict_users_and_update_by_club(clubs):
 def is_member(user, club):
     try:
         membership = ClubMembership.objects(club=club, member=user)
-        return membership
-    except DoesNotExist:
+        print(membership.role)
+        return True
+    except Exception:
         return False
 
 

@@ -139,7 +139,7 @@ def join_club_by_id():
     club = get_club(club_id)
     if not club:
         return "Not valid club id", 400
-    if not is_member(user, club):
+    if is_member(user, club):
         return "Already member", 200
     res = join_club(cur_user_email, club_id).to_json()
     if not res:
