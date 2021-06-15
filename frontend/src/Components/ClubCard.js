@@ -11,6 +11,7 @@ import ChipsArray from './Generic/ChipsArray';
 const useStyles = makeStyles(theme => ({
   root: {
     [theme.breakpoints.down('xl')]: {
+      height: '100%',
       marginLeft: '1%',
       marginRight: '5%',
       marginBottom: '7%',
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
       marginBottom: '0%',
     },
     [theme.breakpoints.down('xs')]: {
+      height: '120%',
       marginLeft: '0%',
       maxWidth: '105%',
       marginBottom: '-20%',
@@ -35,6 +37,12 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: '16rem',
+  },
+  tagsAndName: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+    padding: '0.05rem',
+    gridGap: '2%',
   },
 }));
 
@@ -64,9 +72,9 @@ const ClubCard = props => {
               {`  ${count} Members `}
             </Typography>
           </Typography>
+          {tags && <ChipsArray tags={tags} color={color} />}
         </CardContent>
       </CardActionArea>
-      {tags && <ChipsArray tags={tags} color={color} />}
     </Card>
   );
 };
