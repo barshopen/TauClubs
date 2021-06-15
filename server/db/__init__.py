@@ -44,7 +44,7 @@ from server.db.event import (
 )
 from server.db.models import validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
-from server.db.tag import delete_tag_to_club, tags_for_club
+from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
 from flask import send_file
@@ -431,14 +431,19 @@ def tags(club_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/tags/<tag_id>")
-def remove_tag(club_id, tag_id):
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    delete_tag_to_club(club_id, tag_id)
-    club = get_club(club_id)
-    return club.to_json()
+@db_app.route("/club/addtags", methods=["POST"])
+def remove_tag(club_id):
+    try:
+        club_id = request.json.get("clubId")
+        club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Restrict", 400
+        tags = request.json.get("tags")
+        club = add_tags(club_id, club, tags)
+        return club.to_json()
+    except Exception:
+        return "Failed", 200
 
 
 @login_required

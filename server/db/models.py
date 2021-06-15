@@ -29,7 +29,7 @@ class Club(DynamicDocument):
     name = StringField(max_length=50, required=True)
     profileImage = ImageField()
     description = StringField(max_length=4296, required=True)
-    tags = ListField(ObjectIdField())
+    tags = ListField(StringField())
     creationTime = DateTimeField()
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
@@ -163,15 +163,13 @@ class Event(DynamicDocument):
 
 class Tag(DynamicDocument):
     name = StringField(max_length=200, required=True)
-    color = IntField(required=True)
-    clubsWithTag = ListField(ObjectIdField(), required=True)  # list of clubs
+    color = IntField()
+    clubsWithTag = ListField(ObjectIdField())  # list of clubs
     meta = {"collection": "tags"}
 
     def to_dict(self):
         return {
-            "id": str(self.pk),
             "name": self.name,
-            "color": self.color,
         }
 
     def to_json(self):
