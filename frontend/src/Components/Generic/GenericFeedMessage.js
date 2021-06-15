@@ -15,8 +15,11 @@ import EventIcon from '@material-ui/icons/Event';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { attend, interested, uninterested, unattend } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
+import DeleteConfirmationModal from '../../Scenarios/DeleteConfirmationModal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,7 +79,7 @@ export const eventsIcon = (clubId, id, isAttend, isInterested) => {
   );
 };
 
-function GenericFeedMessage({ feedItem }) {
+function GenericFeedMessage({ feedItem, isAdmin }) {
   const {
     title,
     clubName,
@@ -134,12 +137,21 @@ function GenericFeedMessage({ feedItem }) {
             feedItem.isAttend,
             feedItem.isInterested
           )}
+        {isAdmin && (
+          <>
+            <IconButton>
+              <EditIcon fontSize='large' />
+            </IconButton>
+            <DeleteConfirmationModal />
+          </>
+        )}
       </CardActions>
     </Card>
   );
 }
 
 GenericFeedMessage.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
   feedItem: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

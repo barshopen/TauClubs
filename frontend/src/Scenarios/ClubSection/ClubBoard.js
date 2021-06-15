@@ -10,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import Messages from '../../Components/Messages';
-import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
 import useClubFeed from '../../hooks/useClubFeed';
@@ -49,7 +48,6 @@ IconBu.defaultProps = {
 };
 
 const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
-  const classes = useStyles();
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
@@ -96,7 +94,10 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
           />
         ) : (
           <>
-            <Messages data={messagesData?.concat(upcomingEvents)} />
+            <Messages
+              data={messagesData?.concat(upcomingEvents)}
+              isAdmin={currentUserIsClubsAdmin}
+            />
           </>
         )}
       </Container>

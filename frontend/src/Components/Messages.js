@@ -5,17 +5,18 @@ import Container from '@material-ui/core/Container';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 // slice(0, 5) - backend sort from newest to oldest
-function Messages({ data }) {
+function Messages({ data, isAdmin }) {
   return (
     <Container>
       {data.map(feedItem => (
-        <GenericFeedMessage feedItem={feedItem} />
+        <GenericFeedMessage feedItem={feedItem} isAdmin={isAdmin} />
       ))}
     </Container>
   );
 }
 
 Messages.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
