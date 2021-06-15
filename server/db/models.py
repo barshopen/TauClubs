@@ -57,6 +57,7 @@ class Club(DynamicDocument):
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
             "membersCount": ClubMembership.objects(club=self).count(),
+            "tags": self.tags,
             "admin": admin,
             "member": member,
             "pending": pending,

@@ -91,6 +91,7 @@ def club_creation():
         name=request.form["club_name"],
         contact_mail=request.form["contact_mail"],
         description=request.form["description"],
+        tags=request.form["tags"],
     )
     if not result:
         return "Failed", 400

@@ -1,7 +1,7 @@
 import json
 from bson.objectid import ObjectId
 from mongoengine.queryset.visitor import Q
-from server.db.models import Tag, Club, names_of_tags
+from server.db.models import Tag, Club
 
 
 def get_clubs_with_tag(tag_id):
