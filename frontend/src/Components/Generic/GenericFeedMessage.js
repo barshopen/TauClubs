@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -15,17 +14,20 @@ import EventIcon from '@material-ui/icons/Event';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import UpdatMessageModal from '../../Scenarios/UpdateMessageModal';
-import useClubFeed from '../../hooks/useClubFeed';
-import { attend, interested, uninterested, unattend } from '../../Shared/api';
-import useFeed from '../../hooks/useFeed';
+import UpdateEventModal from '../../Scenarios/UpdateEventModal';
 import DeleteConfirmationModal from '../../Scenarios/DeleteConfirmationModal';
-
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('en-GB');
-}
+import useClubFeed from '../../hooks/useClubFeed';
+import {
+  attend,
+  interested,
+  uninterested,
+  unattend,
+  deleteEvent,
+  deleteMessage,
+} from '../../Shared/api';
+import useFeed from '../../hooks/useFeed';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 const IconBu = ({ onClick }) => (
   <IconButton color='inherit' aria-label='edit' onClick={onClick}>
     <Tooltip title='Edit'>
-      <EditIcon />
+      <EditIcon fontSize='large' />
     </Tooltip>
   </IconButton>
 );
@@ -110,9 +112,16 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     isInterested,
     content,
   } = feedItem;
-  const { editMessage } = useClubFeed({ clubId });
+  const { editMessage, editEvent } = useClubFeed({ clubId });
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  function deleteHandler(eventId) {
+    if (location) {
+      deleteEvent({ payload: { clubId, eventId } });
+    } else {
+      deleteMessage({ payload: { clubId, eventId } });
+    }
+  }
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -148,12 +157,11 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
       <CardActions disableSpacing>
         {location && eventsIcon(clubId, id, isAttend, isInterested)}
         {isAdmin && location && (
-          <>
-            <IconButton>
-              <EditIcon fontSize='large' />
-            </IconButton>
-            <DeleteConfirmationModal />
-          </>
+          <UpdateEventModal
+            ClickableTrigger={IconBu}
+            editEvent={editEvent}
+            clubId={id}
+          />
         )}
         {isAdmin && !location && (
           <UpdatMessageModal
@@ -161,6 +169,9 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
             editMessage={editMessage}
             clubId={id}
           />
+        )}
+        {isAdmin && (
+          <DeleteConfirmationModal id={id} deleteHandler={deleteHandler} />
         )}
       </CardActions>
     </Card>

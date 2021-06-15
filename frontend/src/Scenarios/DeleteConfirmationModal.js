@@ -33,8 +33,13 @@ ClickableTrigger.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-function NewEventContent() {
+function NewEventContent({ clubId, setOpen, onChange: deleteHandler }) {
   const classes = useStyles();
+  const submitHandler = e => {
+    e.preventDefault();
+    deleteHandler(clubId);
+    setOpen(false);
+  };
   return (
     <div className={classes.root}>
       <Typography variant='h5' align='center'>
@@ -44,18 +49,30 @@ function NewEventContent() {
         color='primary'
         aria-label='outlined primary button group'
         fullWidth>
-        <Button>Delete</Button>
-        <Button>Cancel</Button>
+        <Button onClick={submitHandler}>Delete</Button>
+        <Button onClick={() => setOpen(false)}>Cancel </Button>
       </ButtonGroup>
     </div>
   );
 }
 
-export default function DeleteConfirmationModal() {
+NewEventContent.propTypes = {
+  clubId: PropTypes.string.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+export default function DeleteConfirmationModal({ id, deleteHandler }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewEventContent}
+      onChange={deleteHandler}
+      clubId={id}
     />
   );
 }
+DeleteConfirmationModal.propTypes = {
+  id: PropTypes.string.isRequired,
+  deleteHandler: PropTypes.func.isRequired,
+};

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
-// slice(0, 5) - backend sort from newest to oldest
 function Messages({ data, isAdmin }) {
   return (
     <Container>

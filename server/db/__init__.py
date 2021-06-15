@@ -285,7 +285,7 @@ def message_delete():
         user = get_userauth_user_by_id(current_user.get_id())
         if not validatePermession(user, club_id):
             return "Restrict", 400
-        message_id = request.json.get("data")["messageId"]
+        message_id = request.json.get("eventId")
         delete_message(message_id)
         return "SUCCESS", 200
     except Exception:
@@ -328,8 +328,8 @@ def get_event(club_id, event_id):
     return getEvent(id=event_id).to_json()
 
 
-@login_required
 @db_app.route("/club/event/update", methods=["POST"])
+@login_required
 def event_update():
     club_id = request.json.get("clubId")
     if not club_id:
@@ -367,19 +367,19 @@ def event_update():
     return event.to_json(), 200
 
 
+@db_app.route("/club/event/delete", methods=["POST"])
 @login_required
-@db_app.route("/club/event/delete")
 def event_delete():
     try:
         club_id = request.json.get("clubId")
         if not club_id:
             return "Failed", 400
-        event_id = request.json.get("data")["eventId"]
+        event_id = request.json.get("eventId")
         user = get_userauth_user_by_id(current_user.get_id())
         if not validatePermession(user, club_id):
             return "Restrict", 400
         deleteEvent(event_id)
-        return "Sucess", 200
+        return "Success", 200
     except Exception:
         return "Failed", 400
 
