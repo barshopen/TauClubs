@@ -1,4 +1,5 @@
 import datetime
+from server.db.tag import add_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
@@ -13,7 +14,7 @@ def create_club(
     contact_mail: str,
     description: str = "",
     tags=[],
-) -> Club:
+):
     now = datetime.datetime.utcnow()
     club = Club(
         contactMail=contact_mail,
@@ -24,7 +25,9 @@ def create_club(
         creationTime=now,
         lastUpdateTime=now,
     )
-    return club.save(force_insert=True)
+    club.save(force_insert=True)
+    add_tags(club.id, club, tags)
+    return club
 
 
 def establish_club(
