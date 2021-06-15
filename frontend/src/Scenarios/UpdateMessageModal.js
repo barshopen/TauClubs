@@ -25,9 +25,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function EditMessageContnet({ clubId, setOpen, onChange: editMessage }) {
+  const { id, title, content } = clubId;
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
-    messageId: clubId,
+    messageId: id,
   });
 
   const handleChange = e => {
@@ -56,6 +57,7 @@ function EditMessageContnet({ clubId, setOpen, onChange: editMessage }) {
       <TextField
         name='message_title'
         label='Message Title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
         required
@@ -63,6 +65,7 @@ function EditMessageContnet({ clubId, setOpen, onChange: editMessage }) {
       <TextField
         name='message_content'
         label='Message Content'
+        defaultValue={content}
         multiline
         variant='outlined'
         onChange={handleChange}

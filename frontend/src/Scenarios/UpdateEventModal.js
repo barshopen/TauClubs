@@ -31,10 +31,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function editEventContent({ clubId, setOpen, onChange: editEvent }) {
+  const { id, title, description } = clubId;
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
     event_startDateTime: moment().format(),
-    eventId: clubId,
+    eventId: id,
   });
 
   const handleChange = e =>
@@ -63,12 +64,14 @@ function editEventContent({ clubId, setOpen, onChange: editEvent }) {
       <TextField
         name='event_title'
         label='Event title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
       />
       <TextField
         name='event_description'
         label='Event Description'
+        defaultValue={description}
         multiline
         variant='outlined'
         onChange={handleChange}

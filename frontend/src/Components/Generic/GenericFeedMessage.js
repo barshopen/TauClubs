@@ -160,14 +160,14 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
           <UpdateEventModal
             ClickableTrigger={IconBu}
             editEvent={editEvent}
-            clubId={id}
+            clubId={{ id, title, description }}
           />
         )}
         {isAdmin && !location && (
           <UpdatMessageModal
             ClickableTrigger={IconBu}
             editMessage={editMessage}
-            clubId={id}
+            clubId={{ id, title, content }}
           />
         )}
         {isAdmin && (

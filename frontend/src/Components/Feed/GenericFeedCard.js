@@ -18,7 +18,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import { eventsIcon } from '../Generic/GenericFeedEvent';
+import { eventsIcon } from '../Generic/GenericFeedMessage';
 import ClubsView from '../ClubsView';
 import useFeedGeneral from '../../hooks/useFeedGeneral';
 
