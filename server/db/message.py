@@ -31,6 +31,17 @@ def updateMessageTitle(message: Message, title):
     message.update(title=title, lastUpdateTime=currentTime())
 
 
+def updateMessage(message: Message, title, content):
+    if title:
+        message.title = title
+    if content:
+        message.content = content
+    message.update(
+        title=message.title, content=message.content, lastUpdateTime=currentTime()
+    )
+    return message
+
+
 def get_message(id: str):
     return Message.objects.get(id=id)
 

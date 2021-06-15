@@ -4,12 +4,12 @@ import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import JoinUs from './JoinForm/JoinUs';
 import Leave from './JoinForm/Leave';
-import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
 import { currentUser } from '../../Shared/atoms';
 import UploadImageModal from '../UploadImageModal';
@@ -28,14 +28,15 @@ const useStyles = makeStyles({
 const NavBarContainer = styled.div`
   border-color: black white;
   border-style: solid;
-  padding: 5px;
-  margin: 15px 0;
+  padding: 2%;
+  margin: 2%;
 `;
 
 const Nav = styled.nav`
-  height: 38px;
+  height: auto;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  padding: '0.1rem';
 `;
 
 const NavLinkStyle = css`
@@ -99,8 +100,10 @@ const ClubSection = () => {
     ? `${window.origin}/db/images/${clubId}`
     : '/images/taulogo.png';
   return (
-    <SimpleContaConiner>
-      <Typography variant='h5'>{name}</Typography>
+    <Container>
+      <Box textAlign='center' p={2}>
+        <Typography variant='h4'>{name}</Typography>
+      </Box>
       {!admin && (
         <img
           className={classes.headerPhoto}
@@ -129,9 +132,7 @@ const ClubSection = () => {
       )}
       <NavBarContainer>
         <Nav>
-          <NavLink to={`/club/board/${clubId}`} start='2'>
-            Club Board
-          </NavLink>
+          <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
           {join}
         </Nav>
@@ -160,7 +161,7 @@ const ClubSection = () => {
           />
         )}
       </Switch>
-    </SimpleContaConiner>
+    </Container>
   );
 };
 

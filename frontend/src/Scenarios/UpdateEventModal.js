@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-
 // import {
 //   DateTimePicker,
 //   LocalizationProvider,
@@ -31,10 +30,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewEventContent({ setOpen, onChange: addEvent }) {
+function editEventContent({ clubId, setOpen, onChange: editEvent }) {
+  const { id, title, description } = clubId;
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
     event_startDateTime: moment().format(),
+    eventId: id,
   });
 
   const handleChange = e =>
@@ -45,7 +46,8 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
 
   const submitHandler = e => {
     e.preventDefault();
-    addEvent({ data: formValues });
+
+    editEvent({ data: formValues });
     setOpen(false);
   };
 
@@ -53,35 +55,28 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
     <form
       className={classes.root}
       onSubmit={submitHandler}
-      validate
+      noValidate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
-        Create New Event
+        Edit Event
       </Typography>
 
       <TextField
         name='event_title'
         label='Event title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
-        required
       />
       <TextField
         name='event_description'
         label='Event Description'
+        defaultValue={description}
         multiline
         variant='outlined'
         onChange={handleChange}
-        rows={5}
+        rows={4}
         rowsMax={10}
-        required
-      />
-      <TextField
-        name='event_location'
-        label='Event Location'
-        variant='outlined'
-        onChange={handleChange}
-        required
       />
       <TextField
         name='event_startDateTime'
@@ -89,33 +84,24 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         type='datetime-local'
         variant='outlined'
         format='MM/dd/yyyy'
-        disablePast
-        defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+        defaultValue={moment().format()}
         onChange={handleChange}
         className={classes.textField}
-        inputProps={{
-          min: moment().format('YYYY-MM-DD[T]HH:mm'),
-        }}
         InputLabelProps={{
           shrink: true,
         }}
-        required
       />
-      <TextField
-        name='event_duration'
-        label='Event Duration'
-        variant='outlined'
-        type='time'
-        ampm={false}
-        defaultValue='02:00'
-        step='3000'
+      {/* 
+      <DateTimePicker
+        renderInput={props => <TextField {...props} />}
+        label='DateTimePicker'
+        name='event_startDateTime'
         onChange={handleChange}
-        required
-      />
+      /> */}
 
       <div className={classes.buttons}>
         <Button type='submit' variant='contained' color='primary'>
-          Publish
+          Edit
         </Button>
         <Button variant='contained' onClick={() => setOpen(false)}>
           Cancel
@@ -125,26 +111,33 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
   );
 }
 
-NewEventContent.propTypes = {
+editEventContent.propTypes = {
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function NewEventModal({ ClickableTrigger, addEvent }) {
+export default function UpdateEventModal({
+  clubId,
+  ClickableTrigger,
+  editEvent,
+}) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={NewEventContent}
-      onChange={addEvent}
+      Content={editEventContent}
+      onChange={editEvent}
+      clubId={clubId}
     />
   );
 }
 
-NewEventModal.propTypes = {
+UpdateEventModal.propTypes = {
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
-  addEvent: PropTypes.func.isRequired,
+  editEvent: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };

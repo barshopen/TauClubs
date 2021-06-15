@@ -197,8 +197,8 @@ export default function AppSideBar() {
           ))}
         </List>
       )}
-      <Box className={classes.footer}>
-        <Box m={2} p={2} position={pos} bottom='0'>
+      <Box className={classes.footer} position={pos} bottom='0'>
+        <Box m={2} p={2}>
           <Typography align='center' variant='body2'>
             For more information
           </Typography>
