@@ -7,43 +7,35 @@ import Container from '@material-ui/core/Container';
 import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
 import useClubFeed from '../../hooks/useClubFeed';
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-  })
-);
-
 const IconBu = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
     <MessageIcon />
   </IconButton>
 );
+IconBu.propTypes = {
+  ariaLabel: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+};
+IconBu.defaultProps = {
+  ariaLabel: '',
+};
 
 const AddEventIcon = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
     <EventIcon />
   </IconButton>
 );
-
-IconBu.propTypes = {
+AddEventIcon.propTypes = {
   ariaLabel: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
-IconBu.defaultProps = {
+AddEventIcon.defaultProps = {
   ariaLabel: '',
 };
 
