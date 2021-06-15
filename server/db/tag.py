@@ -1,5 +1,5 @@
 import json
-from bson import objectid
+from bson.objectid import ObjectId
 from mongoengine.queryset.visitor import Q
 from server.db.models import Tag, Club, names_of_tags
 
@@ -37,20 +37,9 @@ def delete_tag_to_club(club_id, tag_id):
     Club.update(tags=club.tags)
 
 
-def add_tags(club_id, club, tags):
-    for tagname in tags:
-        club = exist_tag_and_add(tagname, objectid(club_id))
-        if club is None:
-            tag = Tag(name=tagname, clubsWithTag=[objectid(club_id)])
-            tag.save()
-            club.tags.append(tagname)
-            club.save()
-        return club
-
-
 def exist_tag_and_add(tag_name, club, club_id_object):
     try:
-        tag = Tag.oblects.get(name=tag_name)
+        tag = Tag.objects.get(name=tag_name)
         if club_id_object not in tag.clubsWithTag:
             tag.clubsWithTag.append(club_id_object)
             tag.save()
@@ -59,6 +48,17 @@ def exist_tag_and_add(tag_name, club, club_id_object):
         return club
     except Exception:
         return None
+
+
+def add_tags(club_id, club, tags):
+    for tagname in tags:
+        NewClub = exist_tag_and_add(tagname, club, ObjectId(club_id))
+        if NewClub is None:
+            tag = Tag(name=tagname, clubsWithTag=[ObjectId(club_id)])
+            tag.save()
+            club.tags.append(tagname)
+            club.save()
+        return club
 
 
 def tags_for_club(club):

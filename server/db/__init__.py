@@ -432,7 +432,7 @@ def tags(club_id):
 
 @login_required
 @db_app.route("/club/addtags", methods=["POST"])
-def remove_tag(club_id):
+def add_tag(club_id):
     try:
         club_id = request.json.get("clubId")
         club = get_club(club_id)
