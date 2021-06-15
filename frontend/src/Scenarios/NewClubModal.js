@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
+import Select from 'react-select';
 import GenericModal from '../Components/Generic/GenericModal';
 
 import { createClub } from '../Shared/api';
@@ -43,7 +44,12 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ setOpen }) {
   const classes = useStyles();
   const [values, setValues] = useState({});
+  const [tags, setTags] = useState([]);
   const { refetchMyClubs } = useClubs();
+
+  const handleTags = selectedOptions => {
+    setTags(selectedOptions);
+  };
 
   const handleChange = e => {
     setValues({
@@ -54,16 +60,17 @@ function NewClubContent({ setOpen }) {
 
   const submitHandler = async e => {
     e.preventDefault();
+    const tagsArray = tags.map(({ label }) => label);
     const data = new FormData();
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
+    data.append('tags', tagsArray);
     if (values.image) {
       data.append('image', values.image);
     } else {
       data.append('image', 'None');
     }
-
     await createClub(data);
     setOpen(false);
     refetchMyClubs();
@@ -75,6 +82,26 @@ function NewClubContent({ setOpen }) {
       image: pictureFiles[0],
     });
   };
+
+  const options = [
+    { value: 'sports', label: 'Sports' },
+    { value: 'Dancing', label: 'Dancing' },
+    { value: 'Social', label: 'Social' },
+    { value: 'Math', label: 'Math' },
+    { value: 'Outdoors', label: 'Outdoors' },
+    { value: 'Music', label: 'Music' },
+    { value: 'Science', label: 'Science' },
+    { value: 'Politics', label: 'Politics' },
+    { value: 'meditation', label: 'Meditation' },
+    { value: 'Food', label: 'Food' },
+    { value: 'Cooking', label: 'Cooking' },
+    { value: 'architecture', label: 'Architecture' },
+    { value: 'history', label: 'History' },
+    { value: 'Literature', label: 'Literature' },
+    { value: 'poetry', label: 'Poetry' },
+    { value: 'Gaming', label: 'Gaming' },
+    { value: 'volunteering', label: 'Volunteering' },
+  ];
 
   return (
     <form
@@ -113,6 +140,15 @@ function NewClubContent({ setOpen }) {
         required
         onChange={handleChange}
       />
+      <Box p={1}>
+        <Select
+          name='tags'
+          backgroundColor='black'
+          onChange={handleTags}
+          isMulti
+          options={tags.length === 5 ? [] : options}
+        />
+      </Box>
       <ImageUploader
         withIcon
         withPreview
