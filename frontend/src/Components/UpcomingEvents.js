@@ -17,7 +17,8 @@ function UpcomingEvents({ data }) {
               isAttend={isAttend}
               isInterested={isInterested}
               date={startTime}
-              key={id}>
+              key={id}
+              id={id}>
               <Content>{text}</Content>
               {/* <Link to='/#'> View Location</Link> */}
             </GenericFeedEvent>
