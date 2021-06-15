@@ -52,7 +52,6 @@ class Club(DynamicDocument):
             "id": str(self.pk),
             "name": self.name,
             "description": self.description,
-            "name_of_tags": names_of_tags(self.tags),
             "creationTime": self.id.generation_time.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,

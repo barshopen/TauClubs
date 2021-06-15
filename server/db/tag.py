@@ -58,7 +58,7 @@ def add_tags(club_id, club, tags):
             tag.save()
             club.tags.append(tagname)
             club.save()
-        return club
+    return club
 
 
 def tags_for_club(club):

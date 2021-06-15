@@ -21,7 +21,6 @@ def create_club(
         name=club_name,
         profileImage=image,
         description=description,
-        tags=tags,
         creationTime=now,
         lastUpdateTime=now,
     )
