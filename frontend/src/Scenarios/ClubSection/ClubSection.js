@@ -104,7 +104,7 @@ const ClubSection = () => {
       <Box textAlign='center' p={2}>
         <Typography variant='h4'>{name}</Typography>
       </Box>
-      {!admin && (
+      {(!admin || (admin && profileImage)) && (
         <img
           className={classes.headerPhoto}
           src={img}
@@ -130,6 +130,7 @@ const ClubSection = () => {
           )}
         />
       )}
+
       <NavBarContainer>
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
