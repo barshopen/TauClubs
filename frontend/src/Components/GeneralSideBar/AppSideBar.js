@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { GiQueenCrown } from 'react-icons/gi';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
@@ -16,7 +17,6 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import Chip from '@material-ui/core/Chip';
 import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
@@ -76,14 +76,7 @@ const SideBarListItem = ({
       }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
-      {admin && (
-        <Chip
-          size='small'
-          label='Manager'
-          variant='outlined'
-          color='secondary'
-        />
-      )}
+      {admin && <GiQueenCrown />}
     </ListItem>
   </NavLink>
 );
