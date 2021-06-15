@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Bar } from 'react-chartjs-2';
@@ -14,20 +14,21 @@ import {
 
 const ClubsActivity = ({ clubs }) => {
   const theme = useTheme();
+  const [values, setValues] = useState({});
 
-  const values = {};
+  useEffect(() => {
+    const tempValues = {};
 
-  useEffect(
-    () =>
-      Object.values(clubs)
-        .map(({ usersByDated }) => usersByDated)
-        .forEach(item =>
-          Object.entries(item).forEach(([key, value]) => {
-            values[key] = (values[key] ?? 0) + value;
-          })
-        ),
-    []
-  );
+    Object.values(clubs)
+      .map(({ usersByDated }) => usersByDated)
+      .forEach(item =>
+        Object.entries(item).forEach(([key, value]) => {
+          tempValues[key] = (tempValues[key] ?? 0) + value;
+        })
+      );
+
+    setValues(tempValues);
+  }, []);
 
   const labels = useMemo(() => {
     const monthArray = [];
