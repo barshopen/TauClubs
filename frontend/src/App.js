@@ -1,5 +1,4 @@
-import React from 'react';
-import { useMutation } from 'react-query';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -36,7 +35,9 @@ const App = () => {
   const [user, setUser] = useRecoilState(currentUser);
   const search = useRecoilValue(mainSearch);
 
-  useMutation(whoami, { onSuccess: setUser });
+  useEffect(() => {
+    whoami().then(d => (d.id === -1 ? setUser(null) : setUser(d)));
+  }, []);
 
   return (
     <>
