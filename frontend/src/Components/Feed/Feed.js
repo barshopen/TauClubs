@@ -8,7 +8,6 @@ const Feed = () => {
 
   return (
     <Container>
-      {/* <FeedNavBar setCurrentTab='all' /> */}
       <Container>
         {feed?.map(feedItem => (
           <FeedCard key={feedItem.id} feedItem={feedItem} />

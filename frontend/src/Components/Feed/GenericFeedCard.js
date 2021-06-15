@@ -191,16 +191,7 @@ function FeedCardMessage({ feedItem }) {
           {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        {homeIcon(clubId)}
-        {/*
-        <Tooltip title='Like'>
-          <IconButton aria-label='add to favorites'>
-            <FavoriteIcon />
-          </IconButton>
-        </Tooltip>
-        */}
-      </CardActions>
+      <CardActions disableSpacing>{homeIcon(clubId)}</CardActions>
     </Card>
   );
 }
