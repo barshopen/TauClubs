@@ -30,6 +30,8 @@ export const getMessages = () => getDb('messages');
 
 export const getUpcomingEvents = () => getDb('upcoming_events');
 
+export const getAll = () => getDb('default_clubs');
+
 export const getUpcomingEventsByClub = (clubId = null) =>
   getDb(`club/${clubId}/events/get_events`);
 

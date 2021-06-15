@@ -47,8 +47,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const user = {
-    avatar: current?.picture,
-    name: `${current.firstName} ${current.lastName}`,
+    avatar: current?.picture || '',
+    name: `${current?.firstName} ${current?.lastName}`,
   };
 
   const content = (

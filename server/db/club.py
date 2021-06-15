@@ -70,6 +70,17 @@ def get_image_by_club(image_id):
     return Club.objects.filter(__raw__={"profileImage.id": image_id})
 
 
+def example_club():
+    return json.dumps(
+        list(
+            map(
+                lambda club: club.to_dict(),
+                Club.objects[:3],
+            )
+        )
+    )
+
+
 def add_image_to_club(image, club: Club):
     club.profileImage.put(image)
     club.save()
