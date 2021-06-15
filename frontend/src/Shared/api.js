@@ -71,6 +71,12 @@ export const updateEvent = ({ payload }) =>
 export const updateMessage = ({ payload }) =>
   post(`/db/club/message/update`, payload);
 
+export const deleteMessage = ({ payload }) =>
+  post(`/db/club/message/delete`, payload);
+
+export const deleteEvent = ({ payload }) =>
+  post(`/db/club/event/delete`, payload);
+
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
 
