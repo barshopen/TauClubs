@@ -13,6 +13,7 @@ const Feed = () => {
         {feed?.map(feedItem => (
           <FeedCard key={feedItem.id} feedItem={feedItem} />
         ))}
+        {feed?.length === 0 && <FeedCard />}
       </Container>
     </Container>
   );

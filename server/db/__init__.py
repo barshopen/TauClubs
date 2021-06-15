@@ -8,7 +8,13 @@ from server.db.clubmembership import (
     leave_club,
 )
 from flask import Blueprint, json, request
-from server.db.club import add_image_to_club, establish_club, get_club, get_clubs
+from server.db.club import (
+    add_image_to_club,
+    establish_club,
+    example_club,
+    get_club,
+    get_clubs,
+)
 import datetime
 
 
@@ -63,6 +69,12 @@ def filter_by_id(data, data_id):
         d = json.dumps([x for x in data if x["id"] == data_id][0])
         return d
     return json.dumps(data)
+
+
+@db_app.route("/default_clubs")
+@login_required
+def all_clubs():
+    return example_club()
 
 
 @db_app.route("/create_club", methods=["POST"])
@@ -159,7 +171,7 @@ def remove_club_by_id():
 
 @db_app.route("/messages")
 @login_required
-def all_messages():
+def all_messages_for_user():
     user = get_userauth_user_by_id(current_user.get_id())
     clubs = clubs_by_user_member(user)
     return json.dumps(get_messages_for_all_clubs_by_user(clubs))
