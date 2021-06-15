@@ -1,21 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import GenericControl from './Generic/GenericControl';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 // slice(0, 5) - backend sort from newest to oldest
 function Messages({ data }) {
   return (
-    <GenericControl header='Messages'>
-      <MessagesContainer>
-        {data.map(({ id, title, date, content }) => (
-          <GenericFeedMessage title={title} date={date} key={id}>
-            <Content>{content}</Content>
-          </GenericFeedMessage>
-        ))}
-      </MessagesContainer>
-    </GenericControl>
+    <MessagesContainer>
+      {data.map(feedItem => (
+        <GenericFeedMessage feedItem={feedItem} />
+      ))}
+    </MessagesContainer>
   );
 }
 
@@ -39,11 +34,6 @@ const MessagesContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 15px;
-`;
-
-const Content = styled.div`
-  font-size: 1rem;
-  text-align: left;
 `;
 
 export default Messages;

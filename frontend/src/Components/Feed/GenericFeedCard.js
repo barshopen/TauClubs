@@ -12,7 +12,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-// import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
@@ -162,7 +161,7 @@ function FeedCardEvent({ feedItem }) {
         <CardContent>
           <Typography paragraph>more details:</Typography>
           <Typography paragraph variant='h6' color='initial'>
-            This events is the best one yet.
+            {description}
           </Typography>
         </CardContent>
       </Collapse>

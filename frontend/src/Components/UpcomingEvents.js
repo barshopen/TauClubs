@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-// import { Link as RouterLink } from 'react-router-dom';
 import GenericControl from './Generic/GenericControl';
 import GenericFeedEvent from './Generic/GenericFeedEvent';
 

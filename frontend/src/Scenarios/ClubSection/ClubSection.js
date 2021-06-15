@@ -4,12 +4,12 @@ import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import JoinUs from './JoinForm/JoinUs';
 import Leave from './JoinForm/Leave';
-import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
 import { currentUser } from '../../Shared/atoms';
 import UploadImageModal from '../UploadImageModal';
@@ -99,8 +99,10 @@ const ClubSection = () => {
     ? `${window.origin}/db/images/${clubId}`
     : '/images/taulogo.png';
   return (
-    <SimpleContaConiner>
-      <Typography variant='h5'>{name}</Typography>
+    <Container>
+      <Box textAlign='center' p={2}>
+        <Typography variant='h4'>{name}</Typography>
+      </Box>
       {!admin && (
         <img
           className={classes.headerPhoto}
@@ -160,7 +162,7 @@ const ClubSection = () => {
           />
         )}
       </Switch>
-    </SimpleContaConiner>
+    </Container>
   );
 };
 

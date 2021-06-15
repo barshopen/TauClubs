@@ -90,7 +90,7 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         variant='outlined'
         format='MM/dd/yyyy'
         disablePast
-        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
+        defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
         onChange={handleChange}
         className={classes.textField}
         inputProps={{
