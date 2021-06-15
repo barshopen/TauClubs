@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 // slice(0, 5) - backend sort from newest to oldest
 function Messages({ data }) {
   return (
-    <MessagesContainer>
+    <Container>
       {data.map(feedItem => (
         <GenericFeedMessage feedItem={feedItem} />
       ))}
-    </MessagesContainer>
+    </Container>
   );
 }
 

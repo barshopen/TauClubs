@@ -28,14 +28,15 @@ const useStyles = makeStyles({
 const NavBarContainer = styled.div`
   border-color: black white;
   border-style: solid;
-  padding: 5px;
-  margin: 15px 0;
+  padding: 2%;
+  margin: 2%;
 `;
 
 const Nav = styled.nav`
-  height: 38px;
+  height: auto;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  padding: '0.1rem';
 `;
 
 const NavLinkStyle = css`
@@ -131,9 +132,7 @@ const ClubSection = () => {
       )}
       <NavBarContainer>
         <Nav>
-          <NavLink to={`/club/board/${clubId}`} start='2'>
-            Club Board
-          </NavLink>
+          <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
           {join}
         </Nav>

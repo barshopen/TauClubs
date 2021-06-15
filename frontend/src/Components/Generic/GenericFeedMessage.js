@@ -19,7 +19,18 @@ import { attend, interested, uninterested, unattend } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
 
 const useStyles = makeStyles(theme => ({
-  root: { marginBottom: '2%', padding: '1%' },
+  root: {
+    marginBottom: '2%',
+    padding: '1%',
+    minWidth: '100%',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '-20%',
+      marginRight: '-20%',
+      maxWidth: '140%',
+      marginTop: '5%',
+      marginBottom: '5%',
+    },
+  },
 }));
 
 export const eventsIcon = (clubId, id, isAttend, isInterested) => {
