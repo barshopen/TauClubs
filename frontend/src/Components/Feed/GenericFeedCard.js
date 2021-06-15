@@ -17,7 +17,11 @@ import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
 import { eventsIcon } from '../Generic/GenericFeedEvent';
+import ClubsView from '../ClubsView';
+import useFeedGeneral from '../../hooks/useFeedGeneral';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -203,6 +207,33 @@ function FeedCardMessage({ feedItem }) {
 }
 
 function FeedCard({ feedItem }) {
+  const { feedAll } = useFeedGeneral();
+
+  const classes = useStyles();
+  if (feedItem === undefined) {
+    return (
+      <Container>
+        <Typography className={classes.root} align='center'>
+          <Typography variant='h4' color='primary' paragraph='true'>
+            No messages and events for you...
+          </Typography>
+
+          <Link component='a' variant='h6' href='/explore'>
+            Click here to explore and join clubs
+          </Link>
+        </Typography>
+        <ClubsView
+          data={feedAll}
+          width='200%'
+          Container={({ children }) => (
+            <Container className={classes.ClubsCardContainer}>
+              {children}
+            </Container>
+          )}
+        />
+      </Container>
+    );
+  }
   if (feedItem?.location === undefined) {
     return FeedCardMessage({ feedItem });
   }

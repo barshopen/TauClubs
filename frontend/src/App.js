@@ -13,7 +13,6 @@ import { whoami } from './Shared/api';
 import { currentUser, mainSearch } from './Shared/atoms';
 import GeneralProfile from './Components/Accounts/GeneralProfile';
 import AppSideBar from './Components/GeneralSideBar/AppSideBar';
-import useFeed from './hooks/useFeed';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,7 +35,6 @@ const App = () => {
   const classes = useStyles();
   const [user, setUser] = useRecoilState(currentUser);
   const search = useRecoilValue(mainSearch);
-  const { feed } = useFeed();
 
   useMutation(whoami, { onSuccess: setUser });
 
@@ -49,9 +47,7 @@ const App = () => {
             <AppSideBar />
             <div className={classes.content}>
               <Switch>
-                {(!user || feed.length === 0) && (
-                  <Route path='/' exact component={ExploreClubs} />
-                )}
+                {!user && <Route path='/' exact component={ExploreClubs} />}
                 {user && !search && <Route path='/' exact component={Feed} />}
                 <Route
                   path={search ? '/' : '/explore'}
