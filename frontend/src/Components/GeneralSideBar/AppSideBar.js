@@ -17,6 +17,8 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Chip from '@material-ui/core/Chip';
+import { Icon } from '@material-ui/core';
+import { GiQueenCrown } from 'react-icons/gi';
 import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
@@ -76,14 +78,7 @@ const SideBarListItem = ({
       }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
-      {admin && (
-        <Chip
-          size='small'
-          label='Manager'
-          variant='outlined'
-          color='secondary'
-        />
-      )}
+      {admin && <GiQueenCrown />}
     </ListItem>
   </NavLink>
 );
