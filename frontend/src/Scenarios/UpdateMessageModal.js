@@ -24,9 +24,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewMessageContnet({ setOpen, onChange: addMessage }) {
+function EditMessageContnet({ clubId, setOpen, onChange: editMessage }) {
+  const { id, title, content } = clubId;
   const classes = useStyles();
-  const [formValues, setFormValues] = useState({});
+  const [formValues, setFormValues] = useState({
+    messageId: id,
+  });
 
   const handleChange = e => {
     setFormValues(prev => ({
@@ -37,7 +40,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
 
   const submitHandler = async e => {
     e.preventDefault();
-    addMessage({ data: formValues });
+    editMessage({ data: formValues });
     setOpen(false);
   };
 
@@ -54,6 +57,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
       <TextField
         name='message_title'
         label='Message Title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
         required
@@ -61,6 +65,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
       <TextField
         name='message_content'
         label='Message Content'
+        defaultValue={content}
         multiline
         variant='outlined'
         onChange={handleChange}
@@ -71,7 +76,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
 
       <div className={classes.buttons}>
         <Button type='submit' variant='contained' color='primary'>
-          Publish
+          Edit
         </Button>
         <Button variant='contained' onClick={() => setOpen(false)}>
           Cancel
@@ -81,26 +86,33 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
   );
 }
 
-NewMessageContnet.propTypes = {
+EditMessageContnet.propTypes = {
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function NewMessageModal({ ClickableTrigger, addMessage }) {
+export default function EditMessageModal({
+  clubId,
+  ClickableTrigger,
+  editMessage,
+}) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
-      Content={NewMessageContnet}
-      onChange={addMessage}
+      Content={EditMessageContnet}
+      onChange={editMessage}
+      clubId={clubId}
     />
   );
 }
 
-NewMessageModal.propTypes = {
+EditMessageModal.propTypes = {
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
-  addMessage: PropTypes.func.isRequired,
+  editMessage: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };

@@ -22,7 +22,10 @@ const useClubs = () => {
     fetchClubs(search)
   );
 
-  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs);
+  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs, {
+    staleTime: 60000,
+    refetchOnMount: false,
+  });
 
   return {
     loadingClubs,

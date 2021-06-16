@@ -9,10 +9,11 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
-import { indigo, red } from '@material-ui/core/colors';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { indigo, red, green } from '@material-ui/core/colors';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,9 +21,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TotalEvents = ({ eventCurrentMonth, eventLastMonth }) => {
+const TotalEvents = ({ events: { currentMonth, lastMonth } }) => {
   const classes = useStyles();
-  const precentage = (eventCurrentMonth / eventLastMonth) * 100;
+  const precentage =
+    lastMonth?.total === 0
+      ? 100
+      : (currentMonth?.total / (lastMonth?.total || 1)) * 100;
+
+  const isAmountHeigher = currentMonth?.total > lastMonth?.total;
 
   return (
     <Card style={{ height: '100%', position: 'relative' }}>
@@ -33,17 +39,15 @@ const TotalEvents = ({ eventCurrentMonth, eventLastMonth }) => {
               TOTAL EVENTS
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {eventCurrentMonth}
+              {currentMonth?.total}
             </Typography>
           </Grid>
           <Grid item>
             <Avatar
               style={{
                 backgroundColor: indigo[600],
-                height: 56,
-                width: 56,
               }}>
-              <AttachMoneyIcon />
+              <DateRangeIcon />
             </Avatar>
           </Grid>
         </Grid>
@@ -52,14 +56,18 @@ const TotalEvents = ({ eventCurrentMonth, eventLastMonth }) => {
           bottom='25px'
           display='flex'
           alignItems='center'>
-          <ArrowDownwardIcon style={{ color: red[900] }} />
+          {isAmountHeigher ? (
+            <ArrowUpwardIcon style={{ color: green[900] }} />
+          ) : (
+            <ArrowDownwardIcon style={{ color: red[900] }} />
+          )}
           <Typography
             style={{
-              color: red[900],
+              color: isAmountHeigher ? green[900] : red[900],
               mr: 1,
             }}
             variant='body2'>
-            {precentage}
+            {precentage}%
           </Typography>
           <Typography
             color='textSecondary'

@@ -1,5 +1,5 @@
 import json
-from server.db.models import Event, months_ago
+from server.db.models import Event, dict_two_months
 import datetime
 from mongoengine.queryset.visitor import Q
 
@@ -9,9 +9,7 @@ def currentTime():
     return now
 
 
-def createEvent(
-    title, duration, club, startTime, location=None, description=None, profileImage=None
-):
+def createEvent(title, duration, club, startTime, location=None, description=None):
     newEvent = Event(
         title=title,
         description=description,
@@ -21,7 +19,6 @@ def createEvent(
         lastUpdateTime=currentTime(),
         creatingClub=club,
         location=location,
-        profileImage=profileImage,
     )
     newEvent.save()
     club.update(lastUpdateTime=currentTime())
@@ -35,16 +32,13 @@ def updateEventContent(
     title=None,
     description=None,
     duration=None,
-    profileImage=None,
 ):
     if title:
         event.title = title
     if description:
-        event.description
+        event.description = description
     if duration:
         event.duration = duration
-    if profileImage:
-        event.profileImage = profileImage
     if startTime:
         event.startTime = startTime
     if location:
@@ -53,8 +47,7 @@ def updateEventContent(
     event.update(
         lastUpdateTime=now,
         title=event.title,
-        description=event.duration,
-        profileImage=event.profileImage,
+        description=event.description,
     )
     return event
 
@@ -62,16 +55,28 @@ def updateEventContent(
 def addAttending(event, user):
     event.membersAttending.append(user)
     now = currentTime()
-    event.update(
-        lastUpdateTime=now, membersAttending=event.membersAttending.append(user)
-    )
+    event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
+    return event
+
+
+def undoAttending(event, user):
+    event.membersAttending.remove(user)
+    now = currentTime()
+    event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def addIntrested(event, user):
     event.intrested.append(user)
     now = currentTime()
-    event.update(lastUpdateTime=now, intrested=event.intrested.append(user))
+    event.update(lastUpdateTime=now, intrested=event.intrested)
+    return event
+
+
+def undoIntrested(event, user):
+    event.intrested.remove(user)
+    now = currentTime()
+    event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
 
@@ -131,8 +136,8 @@ def events_by_user(user):
 
 
 def events_between_dates(before, after, clubs):
-    before_Q = Q(creationTime__lt=before, creatingClub__in=clubs)  # bigger
-    after_Q = Q(creationTime__gt=after, creatingClub__in=clubs)
+    before_Q = Q(creationTime__lte=before, creatingClub__in=clubs)  # bigger
+    after_Q = Q(creationTime__gte=after, creatingClub__in=clubs)
     return list(
         map(
             lambda message: message.to_dict(),
@@ -142,12 +147,4 @@ def events_between_dates(before, after, clubs):
 
 
 def dict_two_months_events(clubs):
-    today = datetime.datetime.today()
-    dict = {}
-    before = today
-    after = months_ago(today, 1)
-    dict["event_current_month"] = len(events_between_dates(before, after, clubs))
-    before = after
-    after = months_ago(today, 2)
-    dict["event_last_month"] = len(events_between_dates(before, after, clubs))
-    return dict
+    return dict_two_months(clubs, events_between_dates)
