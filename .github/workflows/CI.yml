@@ -89,4 +89,17 @@ jobs:
         docker build --file Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+    - name: Log in to GitHub Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: docker.pkg.github.com
+        username: ${{ github.actor }}
+        password: ${{ secrets.ALLOW_WRITE_PACKAGES }}
 
+    - name: Build container image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: |
+          docker.pkg.github.com/${{ github.repository }}/octo-image:${{ github.sha }}
+          docker.pkg.github.com/${{ github.repository }}/octo-image:${{ github.ref }}
