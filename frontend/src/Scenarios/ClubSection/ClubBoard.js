@@ -85,12 +85,15 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
             width={50}
           />
         ) : (
-          <>
-            <Messages
-              data={messagesData?.concat(upcomingEvents)}
-              isAdmin={currentUserIsClubsAdmin}
-            />
-          </>
+          messagesData &&
+          upcomingEvents && (
+            <>
+              <Messages
+                data={messagesData?.concat(upcomingEvents)}
+                isAdmin={currentUserIsClubsAdmin}
+              />
+            </>
+          )
         )}
       </Container>
     </Container>
