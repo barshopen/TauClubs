@@ -62,8 +62,11 @@ function ModalContent() {
         onSuccess={loginSuccess}
         onFailure={loginFailure}
         cookiePolicy='single_host_origin'
-        redirectUri='postmessage'
+        isSignedIn
+        //  uxMode='redirect'
+        // redirectUri={`${window.location.href}auth/login`}
         scope='openid'
+        hostedDomain='mail.tau.ac.il'
       />
     </div>
   );
