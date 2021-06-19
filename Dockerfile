@@ -5,7 +5,7 @@ EXPOSE 443/tcp
 
 COPY requirements.txt .
 COPY server ./server
-COPY ./.env .
+COPY .env .
 
 
 RUN pip install --no-cache-dir -r requirements.txt
