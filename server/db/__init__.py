@@ -1,11 +1,20 @@
 from os import path
+from server.db.user import get_user, update
 from server.db.clubmembership import (
+    approve,
     clubs_by_user_member,
+    is_member,
     is_user_member,
     leave_club,
 )
 from flask import Blueprint, json, request
-from server.db.club import establish_club, get_club, get_clubs
+from server.db.club import (
+    add_image_to_club,
+    establish_club,
+    example_club,
+    get_club,
+    get_clubs,
+)
 import datetime
 
 
@@ -14,8 +23,7 @@ from server.db.message import (
     createMessage,
     get_messages_for_all_clubs_by_user,
     unlike,
-    updateMessageContent,
-    updateMessageTitle,
+    updateMessage,
     delete_message,
     get_message,
     get_messages_by_club,
@@ -35,10 +43,10 @@ from server.db.event import (
 )
 from server.db.models import validatePermession
 from server.db.clubmembership import get_user_clubs, join_club
-from server.db.tag import delete_tag_to_club, tags_for_club
+from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
-
+from flask import send_file
 
 STATIC_FOLDER_NAME = "mock-api"
 
@@ -62,20 +70,49 @@ def filter_by_id(data, data_id):
     return json.dumps(data)
 
 
+@db_app.route("/default_clubs")
+@login_required
+def all_clubs():
+    return example_club()
+
+
 @db_app.route("/create_club", methods=["POST"])
 @login_required
 def club_creation():
     user = get_userauth_user_by_id(current_user.get_id())
-    email = user.contactMail
+    if request.form.get("image") == "None":
+        image = None
+    else:
+        image = request.files["image"]
     result = establish_club(
-        email,
-        name=request.json.get("club_name"),
-        contact_mail=request.json.get("contact_mail"),
-        description=request.json.get("description"),
+        image=image,
+        foundingUserEmail=user.contactMail,
+        name=request.form["club_name"],
+        contact_mail=request.form["contact_mail"],
+        description=request.form["description"],
+        tags=request.form["tags"].split(","),
     )
     if not result:
         return "Failed", 400
     return result, 200
+
+
+@db_app.route("/club/add_image", methods=["POST"])
+@login_required
+def add_image():
+    club_id = request.form["clubId"]
+    club = get_club(club_id)
+    if not club_id:
+        return "invalid club", 400
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
+        return "Failed", 400
+    try:
+        image = request.files["image"]
+        add_image_to_club(image, club)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @db_app.route("/clubs")
@@ -111,6 +148,11 @@ def join_club_by_id():
     club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
     cur_user_email = user.contactMail
+    club = get_club(club_id)
+    if not club:
+        return "Not valid club id", 400
+    if is_member(user, club):
+        return "Already member", 200
     res = join_club(cur_user_email, club_id).to_json()
     if not res:
         return "Could not complete request", 400
@@ -129,7 +171,7 @@ def remove_club_by_id():
 
 @db_app.route("/messages")
 @login_required
-def all_messages():
+def all_messages_for_user():
     user = get_userauth_user_by_id(current_user.get_id())
     clubs = clubs_by_user_member(user)
     return json.dumps(get_messages_for_all_clubs_by_user(clubs))
@@ -170,13 +212,13 @@ def event_creation():
     result = createEvent(
         title=request.json.get("data")["event_title"],
         description=request.json.get("data")["event_description"],
-        duration=request.json.get("duration"),
+        # duration=request.json.get("data")["event_duration"],
+        duration=5,
         startTime=datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         ),
-        location=request.json.get("location"),
+        location=request.json.get("data")["event_location"],
         club=get_club(club_id),
-        profileImage=request.json.get("profileImage"),
     )
     if not result:
         return "Failed", 400
@@ -184,15 +226,13 @@ def event_creation():
     return result, 200
 
 
-##################################################
-# from here it is not supported yet at the front end so haven't checked
-
-
 @db_app.route("/club/<club_id>/messages/get_messages")
 def messages_by_club(club_id):
     if not club_id:
         return "Failed", 400
     club = get_club(club_id)
+    if not club:
+        return "Failed", 400
     return get_messages_by_club(club)
 
 
@@ -201,6 +241,8 @@ def events_by_club(club_id):
     if not club_id:
         return "Failed", 400
     club = get_club(club_id)
+    if not club:
+        return "Failed", 400
     return get_events_by_club(club)
 
 
@@ -212,34 +254,43 @@ def message(club_id, message_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/update")
-def message_update(club_id, message_id):
+@db_app.route("/club/message/update", methods=["POST"])
+def message_update():
+    club_id = request.json.get("clubId")
     if not club_id:
         return "Failed", 400
-
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
+    message_id = request.json.get("data")["messageId"]
     message = get_message(id=message_id)
-    title = request.json.get("title")
-    content = request.json.get("content")
-    if title:
-        updateMessageTitle(message, title)
-    if content:
-        updateMessageContent(message, content)
+    try:
+        title = request.json.get("data")["message_title"]
+    except Exception:
+        title = None
+    try:
+        content = request.json.get("data")["message_content"]
+    except Exception:
+        content = None
+    message = updateMessage(message, title, content)
     return message.to_dict()
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/delete")
-def message_delete(club_id, message_id):
-    if not club_id:
+@db_app.route("/club/message/delete", methods=["POST"])
+def message_delete():
+    try:
+        club_id = request.json.get("clubId")
+        if not club_id:
+            return "Failed", 400
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Restrict", 400
+        message_id = request.json.get("eventId")
+        delete_message(message_id)
+        return "SUCCESS", 200
+    except Exception:
         return "Failed", 400
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-
-    delete_message(message_id)
 
 
 @login_required
@@ -278,46 +329,60 @@ def get_event(club_id, event_id):
     return getEvent(id=event_id).to_json()
 
 
+@db_app.route("/club/event/update", methods=["POST"])
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/update")
-def event_update(club_id, event_id):
+def event_update():
+    club_id = request.json.get("clubId")
     if not club_id:
         return "Failed", 400
-
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
-
+    try:
+        event_id = request.json.get("data")["eventId"]
+    except Exception:
+        return "Not valid event", 400
     event = getEvent(event_id)
-
-    title = request.json.get("title")
-    description = request.json.get("description")
-    duration = request.json.get("duration")
-    profileImage = request.json.get("profileImage")
-    startTime = request.json.get("startTime")
-    location = request.json.get("location")
+    try:
+        title = request.json.get("data")["event_title"]
+    except Exception:
+        title = None
+    try:
+        description = request.json.get("data")["event_description"]
+    except Exception:
+        description = None
+    # duration = request.json.get("data")["event_duration"]
+    try:
+        startTime = datetime.datetime.strptime(
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
+        )
+    except Exception:
+        startTime = None
+    # location = request.json.get("data")["event_location"]  # need to update it
     event = updateEventContent(
         event,
         title=title,
         description=description,
-        duration=duration,
-        profileImage=profileImage,
         startTime=startTime,
-        location=location,
     )
     return event.to_json(), 200
 
 
+@db_app.route("/club/event/delete", methods=["POST"])
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/delete")
-def event_delete(club_id, event_id):
-    if not club_id:
+def event_delete():
+    try:
+        club_id = request.json.get("clubId")
+        if not club_id:
+            return "Failed", 400
+        event_id = request.json.get("eventId")
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Restrict", 400
+        deleteEvent(event_id)
+        return "Success", 200
+    except Exception:
         return "Failed", 400
-
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    deleteEvent(event_id)
 
 
 def validate_user_event_permession(club_id, event_id):
@@ -375,6 +440,16 @@ def event_not_interesting(club_id, event_id):
     return event.to_json()
 
 
+@db_app.route("/images/<club_id>")
+def get_image_club(club_id):
+    club = get_club(club_id)
+    image = club.profileImage
+    return send_file(image, download_name="club.jpg", max_age=20000000)
+
+
+###########################################################################
+
+
 @db_app.route("/club/<club_id>/tags")
 def tags(club_id):
     club = get_club(club_id)
@@ -382,14 +457,68 @@ def tags(club_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/tags/<tag_id>")
-def remove_tag(club_id, tag_id):
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    delete_tag_to_club(club_id, tag_id)
+@db_app.route("/club/addtags", methods=["POST"])
+def add_tag(club_id):
+    try:
+        club_id = request.json.get("clubId")
+        club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Restrict", 400
+        tags = request.json.get("tags")
+        club = add_tags(club_id, club, tags)
+        return club.to_json()
+    except Exception:
+        return "Failed", 200
+
+
+@login_required
+@db_app.route("/approve_user", methods=["POST"])
+def approve_user():
+    club_id = request.json.get("clubId")
+    user_id = request.json.get("userId")
+    if not club_id or user_id:
+        return "Failed", 400
+    manager = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
-    return club.to_json()
+    if not club or not validatePermession(manager, club_id):
+        return "Restrict", 400
+    user = get_user(user_id)
+    approve(club, user, "U")
+    return 200
+
+
+@login_required
+@db_app.route("/approve_manager", methods=["POST"])
+def approve_manager():
+    club_id = request.json.get("clubId")
+    user_id = request.json.get("userId")
+    if not club_id or user_id:
+        return "Failed", 400
+    manager = get_userauth_user_by_id(current_user.get_id())
+    club = get_club(club_id)
+    if not club or not validatePermession(manager, club_id):
+        return "Restrict", 400
+    user = get_user(user_id)
+    approve(club, user, "A")
+    return 200
+
+
+@login_required
+@db_app.route("/updateuser", methods=["POST"])
+def update_user_data():
+    user = get_userauth_user_by_id(current_user.get_id())
+    try:
+        update(
+            user,
+            request.json.get("firstName"),
+            request.json.get("lastName"),
+            request.json.get("phone"),
+            request.json.get("country"),
+        )
+        return "Success", 200
+    except Exception:
+        return "failed", 400
 
 
 ######################################################

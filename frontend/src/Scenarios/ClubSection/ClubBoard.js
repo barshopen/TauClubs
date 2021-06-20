@@ -1,45 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
-import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
+import Container from '@material-ui/core/Container';
+import EventIcon from '@material-ui/icons/Event';
+import MessageIcon from '@material-ui/icons/Message';
+import Grid from '@material-ui/core/Grid';
+import { Box } from '@material-ui/core';
 import Messages from '../../Components/Messages';
-import UpcomingEvents from '../../Components/UpcomingEvents';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
 import useClubFeed from '../../hooks/useClubFeed';
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 10fr 1fr 20fr 1fr;
-  width: 100%;
-  grid-gap: 10px;
-`;
-
-const IconContainer = styled.div`
-  & div {
-    /* TODO change this. find a better way to do it. */
-    position: relative;
-    top: 30px;
-    right: 90px;
-    cursor: pointer;
-  }
-  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-`;
-
 const IconBu = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <AddIcon />
+    <MessageIcon />
   </IconButton>
 );
-
 IconBu.propTypes = {
   ariaLabel: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
 IconBu.defaultProps = {
+  ariaLabel: '',
+};
+
+const AddEventIcon = ({ ariaLabel, onClick }) => (
+  <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
+    <EventIcon />
+  </IconButton>
+);
+AddEventIcon.propTypes = {
+  ariaLabel: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+};
+AddEventIcon.defaultProps = {
   ariaLabel: '',
 };
 
@@ -58,43 +54,49 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
   } = useClubFeed({ clubId });
 
   return (
-    <>
+    <Container>
       <Container>
-        <div>
-          {loadingMessages ? (
-            <Loader
-              type='TailSpin'
-              color='#00BFFF'
-              height={50}
-              alignItems='center'
-              width={50}
-            />
-          ) : (
-            <Messages data={messagesData} />
-          )}
-        </div>
-        <IconContainer show={currentUserIsClubsAdmin}>
-          <NewMessageModal ClickableTrigger={IconBu} addMessage={addMessage} />
-        </IconContainer>
-
-        <div>
-          {loadingEvents ? (
-            <Loader
-              type='TailSpin'
-              color='#00BFFF'
-              height={50}
-              alignItems='center'
-              width={50}
-            />
-          ) : (
-            <UpcomingEvents data={upcomingEvents} />
-          )}
-        </div>
-        <IconContainer show={currentUserIsClubsAdmin}>
-          <NewEventModal ClickableTrigger={IconBu} addEvent={addEvent} />
-        </IconContainer>
+        {currentUserIsClubsAdmin && (
+          <>
+            <Grid container justify='center' spacing={2}>
+              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                <NewMessageModal
+                  ClickableTrigger={IconBu}
+                  addMessage={addMessage}
+                />
+              </Box>
+              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                <NewEventModal
+                  ClickableTrigger={AddEventIcon}
+                  addEvent={addEvent}
+                />
+              </Box>
+            </Grid>
+          </>
+        )}
       </Container>
-    </>
+      <Container>
+        {loadingMessages || loadingEvents ? (
+          <Loader
+            type='TailSpin'
+            color='#00BFFF'
+            height={50}
+            alignItems='center'
+            width={50}
+          />
+        ) : (
+          messagesData &&
+          upcomingEvents && (
+            <>
+              <Messages
+                data={messagesData?.concat(upcomingEvents)}
+                isAdmin={currentUserIsClubsAdmin}
+              />
+            </>
+          )
+        )}
+      </Container>
+    </Container>
   );
 };
 

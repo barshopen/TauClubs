@@ -1,6 +1,6 @@
 import datetime
 import json
-from server.db.models import Message, months_ago
+from server.db.models import Message, dict_two_months
 from mongoengine.queryset.visitor import Q
 
 
@@ -29,6 +29,17 @@ def updateMessageContent(message: Message, content):
 
 def updateMessageTitle(message: Message, title):
     message.update(title=title, lastUpdateTime=currentTime())
+
+
+def updateMessage(message: Message, title, content):
+    if title:
+        message.title = title
+    if content:
+        message.content = content
+    message.update(
+        title=message.title, content=message.content, lastUpdateTime=currentTime()
+    )
+    return message
 
 
 def get_message(id: str):
@@ -89,8 +100,8 @@ def unlike(message_id, user):
 
 
 def messages_between_dates(before, after, clubs):
-    before_Q = Q(creationTime__lt=before, creatingClub__in=clubs)  # bigger
-    after_Q = Q(creationTime__gt=after, creatingClub__in=clubs)
+    before_Q = Q(creationTime__lte=before, creatingClub__in=clubs)  # bigger
+    after_Q = Q(creationTime__gte=after, creatingClub__in=clubs)
     return list(
         map(
             lambda message: message.to_dict(),
@@ -99,11 +110,5 @@ def messages_between_dates(before, after, clubs):
     )
 
 
-def dict_six_months_messages(clubs):
-    today = datetime.datetime.today()
-    dict = {}
-    for i in range(6):
-        before = months_ago(today, i)
-        after = months_ago(today, i - 1)
-        dict[today.month - i] = messages_between_dates(before, after, clubs)
-    return dict
+def dict_two_months_messages(clubs):
+    return dict_two_months(clubs, messages_between_dates)

@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { GiQueenCrown } from 'react-icons/gi';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
@@ -61,6 +62,7 @@ const SideBarListItem = ({
   id,
   children,
   to,
+  admin,
   selectedIndex,
   handleListItemClick,
 }) => (
@@ -74,6 +76,7 @@ const SideBarListItem = ({
       }>
       <ListItemIcon>{children}</ListItemIcon>
       <ListItemText primary={text} />
+      {admin && <GiQueenCrown />}
     </ListItem>
   </NavLink>
 );
@@ -82,6 +85,7 @@ SideBarListItem.propTypes = {
   text: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
   to: PropTypes.string,
+  admin: PropTypes.bool,
   id: PropTypes.string,
   selectedIndex: PropTypes.number,
   handleListItemClick: PropTypes.func,
@@ -89,6 +93,8 @@ SideBarListItem.propTypes = {
 
 SideBarListItem.defaultProps = {
   to: '/#',
+
+  admin: false,
   id: '',
   selectedIndex: 0,
   handleListItemClick: undefined,
@@ -110,7 +116,7 @@ Copyright.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -123,11 +129,13 @@ export default function AppSideBar() {
       text: 'Feed',
       route: '/',
       icon: LibraryBooksIcon,
+      id: 0,
     },
     {
       text: 'Explore',
       route: !user ? '/' : '/explore',
       icon: ExploreIcon,
+      id: 1,
     },
   ];
 
@@ -138,6 +146,7 @@ export default function AppSideBar() {
     setShowSideBarMobile(!showSideBarMobile);
   };
 
+  const pos = user ? 'absolute' : 'fixed';
   const content = (
     <div>
       <Toolbar />
@@ -151,6 +160,9 @@ export default function AppSideBar() {
             return (
               <SideBarListItem
                 text={listItem.text}
+                id={listItem.id}
+                selectedIndex={selectedIndex}
+                handleListItemClick={handleListItemClick}
                 key={listItem.text}
                 to={listItem.route}>
                 <listItem.icon />
@@ -171,14 +183,15 @@ export default function AppSideBar() {
               selectedIndex={selectedIndex}
               handleListItemClick={handleListItemClick}
               text={d.name}
-              to={`/club/board/${d.id}`}>
-              <Avatar alt={d.name} src={`/${d.profileImage}`} />
+              to={`/club/board/${d.id}`}
+              admin={d.admin}>
+              <Avatar alt={d.name} src={`${window.origin}/db/images/${d.id}`} />
             </SideBarListItem>
           ))}
         </List>
       )}
-      <Box className={classes.footer}>
-        <Box m={2} p={2} position='absolute' bottom='0'>
+      <Box className={classes.footer} position={pos} bottom='0'>
+        <Box m={2} p={2}>
           <Typography align='center' variant='body2'>
             For more information
           </Typography>

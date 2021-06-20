@@ -14,6 +14,10 @@ const useStyles = makeStyles(theme => ({
   chip: props => ({
     margin: theme.spacing(0.5),
     backgroundColor: props.color,
+    fontWeight: '600',
+    fontSize: '0.7rem',
+    fontVariant: 'small-caps',
+    textTransform: 'uppercase',
   }),
 }));
 

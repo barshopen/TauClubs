@@ -4,33 +4,39 @@ import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
 import ClubBoard from './ClubBoard';
 import JoinUs from './JoinForm/JoinUs';
 import Leave from './JoinForm/Leave';
-import SimpleContaConiner from '../../Components/Generic/SimpleContaConiner';
 import useClub from '../../hooks/useClub';
 import { currentUser } from '../../Shared/atoms';
+import UploadImageModal from '../UploadImageModal';
 
-const NavBarContainer = styled.div`
-  border-color: black white;
-  border-style: solid;
-  padding: 5px;
-  margin: 15px 0;
-`;
 const useStyles = makeStyles({
   headerPhoto: {
     minWidth: '100%',
     objectFit: 'cover',
     display: 'block',
   },
+  emptyImage: {
+    color: 'black',
+    '&:hover': { color: 'red', cursor: 'pointer' },
+  },
 });
+const NavBarContainer = styled.div`
+  border-color: black white;
+  border-style: solid;
+  padding: 2%;
+  margin: 2%;
+`;
 
 const Nav = styled.nav`
-  height: 38px;
+  height: auto;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  padding: '0.1rem';
 `;
 
 const NavLinkStyle = css`
@@ -62,57 +68,72 @@ const NavWithoutLink = styled.h1`
 `;
 
 const ClubSection = () => {
-  const classes = useStyles();
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
-
+  const classes = useStyles();
   const { clubData } = useClub(clubId);
-
+  const {
+    member,
+    admin,
+    pending,
+    name,
+    description,
+    contactMail,
+    profileImage,
+  } = clubData || {};
   const user = useRecoilValue(currentUser);
 
   let join = null;
   if (user) {
-    if (clubData?.member) {
+    if (member) {
       join = (
         <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
       );
-    } else if (clubData?.pending) {
+    } else if (pending) {
       join = <NavWithoutLink>Pending</NavWithoutLink>;
     } else {
       join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
     }
   }
-
+  const img = profileImage
+    ? `${window.origin}/db/images/${clubId}`
+    : '/images/taulogo.png';
   return (
-    <SimpleContaConiner>
-      <Typography variant='h5'>{clubData?.name}</Typography>
-
-      {clubData?.profileImage ? (
+    <Container>
+      <Box textAlign='center' p={2}>
+        <Typography variant='h4'>{name}</Typography>
+      </Box>
+      {(!admin || (admin && profileImage)) && (
         <img
           className={classes.headerPhoto}
-          src={`/${clubData.profileImage}`}
+          src={img}
           height={200}
           alt='wallpaper'
         />
-      ) : (
-        <EmptyState
-          style={{ color: 'black', height: 200 }}
-          heading={
-            <EmptyState.Heading style={{ fontSize: 14 }}>
-              No image yet! Click here to add an image
-            </EmptyState.Heading>
-          }
-          illustration={<EmptyState.Illustration name='image' />}
-          size='small'
+      )}
+      {admin && !profileImage && (
+        <UploadImageModal
+          clubId={clubId}
+          ClickableTrigger={({ onClick }) => (
+            <EmptyState
+              className={classes.emptyImage}
+              onClick={onClick}
+              heading={
+                <EmptyState.Heading style={{ fontSize: 14 }}>
+                  No image yet! Click here to add an image
+                </EmptyState.Heading>
+              }
+              illustration={<EmptyState.Illustration name='image' />}
+              size='small'
+            />
+          )}
         />
       )}
 
       <NavBarContainer>
         <Nav>
-          <NavLink to={`/club/board/${clubId}`} start='2'>
-            Club Board
-          </NavLink>
+          <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
           {join}
         </Nav>
@@ -120,39 +141,29 @@ const ClubSection = () => {
       <Switch>
         <Route
           path='/club/board/:clubId'
-          component={() => (
-            <ClubBoard currentUserIsClubsAdmin={clubData?.admin} />
-          )}
+          component={() => <ClubBoard currentUserIsClubsAdmin={admin} />}
         />
         <Route
           path='/club/about/:clubId'
           component={() => (
-            <AboutUs
-              description={clubData?.description}
-              contactMail={clubData?.contactMail}
-            />
+            <AboutUs description={description} contactMail={contactMail} />
           )}
         />
-        {user && !clubData?.pending && !clubData?.member && (
+        {user && !pending && !member && (
           <Route
             path='/club/joinus/:clubId'
-            component={() => (
-              <JoinUs clubName={clubData?.name} clubId={clubId} />
-            )}
+            component={() => <JoinUs clubName={name} clubId={clubId} />}
           />
         )}
-        {user && clubData?.member && (
+        {user && member && (
           <Route
             path='/club/leave/:clubId'
-            component={() => (
-              <Leave clubName={clubData?.name} clubId={clubId} />
-            )}
+            component={() => <Leave clubName={name} clubId={clubId} />}
           />
         )}
       </Switch>
-    </SimpleContaConiner>
+    </Container>
   );
 };
 
 export default ClubSection;
-/// need to change after join the status

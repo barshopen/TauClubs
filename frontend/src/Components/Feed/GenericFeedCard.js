@@ -12,12 +12,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-// import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { eventsIcon } from '../Generic/GenericFeedEvent';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import { eventsIcon } from '../Generic/GenericFeedMessage';
+import ClubsView from '../ClubsView';
+import useFeedGeneral from '../../hooks/useFeedGeneral';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,13 +80,23 @@ function cardHeader(profileImage, clubName, title, lastUpdateTime) {
     />
   );
 }
-function cardImage(profileImage, title) {
+function cardImage(profileImage, id, title) {
   const classes = useStyles();
-  const isImg = profileImage !== '';
+  if (profileImage) {
+    return (
+      <CardMedia
+        className={classes.media}
+        image={`${window.origin}/db/images/${id}`}
+        title={title}
+      />
+    );
+  }
   return (
-    isImg && (
-      <CardMedia className={classes.media} image={profileImage} title={title} />
-    )
+    <CardMedia
+      className={classes.media}
+      image='/images/taulogo.png'
+      title={title}
+    />
   );
 }
 
@@ -105,13 +118,13 @@ function FeedCardEvent({ feedItem }) {
     clubId,
     title,
     clubName,
-    profileImage,
     description,
     startTime,
     location,
     lastUpdateTime,
     isAttend,
     isInterested,
+    profileImage,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -120,11 +133,10 @@ function FeedCardEvent({ feedItem }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
   return (
     <Card className={classes.root} m={75}>
       {cardHeader(profileImage, clubName, title, lastUpdateTime)}
-      {cardImage(profileImage, title)}
+      {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {description}
@@ -153,7 +165,7 @@ function FeedCardEvent({ feedItem }) {
         <CardContent>
           <Typography paragraph>more details:</Typography>
           <Typography paragraph variant='h6' color='initial'>
-            This events is the best one yet.
+            {description}
           </Typography>
         </CardContent>
       </Collapse>
@@ -165,36 +177,53 @@ function FeedCardMessage({ feedItem }) {
     clubId,
     title,
     clubName,
-    profileImage,
     content,
     lastUpdateTime,
+    profileImage,
   } = feedItem;
   const classes = useStyles();
-
   return (
     <Card className={classes.root} m={75}>
       {cardHeader(profileImage, clubName, title, lastUpdateTime)}
-      {cardImage(profileImage, title)}
+      {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
           {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        {homeIcon(clubId)}
-        {/*
-        <Tooltip title='Like'>
-          <IconButton aria-label='add to favorites'>
-            <FavoriteIcon />
-          </IconButton>
-        </Tooltip>
-        */}
-      </CardActions>
+      <CardActions disableSpacing>{homeIcon(clubId)}</CardActions>
     </Card>
   );
 }
 
 function FeedCard({ feedItem }) {
+  const { feedAll } = useFeedGeneral();
+
+  const classes = useStyles();
+  if (feedItem === undefined) {
+    return (
+      <Container>
+        <Typography className={classes.root} align='center'>
+          <Typography variant='h4' color='primary' paragraph='true'>
+            No messages and events for you...
+          </Typography>
+
+          <Link component='a' variant='h6' href='/explore'>
+            Click here to explore and join clubs
+          </Link>
+        </Typography>
+        <ClubsView
+          data={feedAll}
+          width='200%'
+          Container={({ children }) => (
+            <Container className={classes.ClubsCardContainer}>
+              {children}
+            </Container>
+          )}
+        />
+      </Container>
+    );
+  }
   if (feedItem?.location === undefined) {
     return FeedCardMessage({ feedItem });
   }
