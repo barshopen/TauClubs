@@ -10,6 +10,7 @@ from server.db.clubmembership import (
 from flask import Blueprint, json, request
 from server.db.club import (
     add_image_to_club,
+    delete_club,
     establish_club,
     example_club,
     get_club,
@@ -97,13 +98,28 @@ def club_creation():
     return result, 200
 
 
+@db_app.route("/club/delete", methods=["POST"])
+@login_required
+def deleteClub():
+    try:
+        club_id = request.json.get("clubId")
+        if not club_id:
+            return "invalid club", 400
+        club = get_club(club_id)
+        delete_club(club)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
+
+
 @db_app.route("/club/add_image", methods=["POST"])
 @login_required
 def add_image():
     club_id = request.form["clubId"]
-    club = get_club(club_id)
+
     if not club_id:
         return "invalid club", 400
+    club = get_club(club_id)
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Failed", 400

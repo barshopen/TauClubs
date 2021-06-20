@@ -9,6 +9,14 @@ def currentTime():
     return now
 
 
+def delete_events(club):
+    events = Event.objects.filter(creatingClub=club)
+    for event in events:
+        event.delete()
+        event.switch_collection("old_events")
+        event.save(force_insert=True)
+
+
 def createEvent(title, duration, club, startTime, location=None, description=None):
     newEvent = Event(
         title=title,

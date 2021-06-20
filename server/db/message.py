@@ -83,6 +83,14 @@ def delete_message(id: str):
     message.delete()
 
 
+def delete_messages(club):
+    messages = Message.objects.filter(creatingClub=club)
+    for message in messages:
+        message.delete()
+        message.switch_collection("old_messages")
+        message.save(force_insert=True)
+
+
 def add_like(message_id, user):
     message = Message.objects.get(id=message_id)
     if user.id not in message.likes:

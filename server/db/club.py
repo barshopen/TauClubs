@@ -1,11 +1,13 @@
 import datetime
+from server.db.event import delete_events
+from server.db.message import delete_messages
 from server.db.tag import add_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
-from .clubmembership import createAdminMembership
+from .clubmembership import createAdminMembership, delete_membership
 
 
 def create_club(
@@ -60,6 +62,16 @@ def get_club(id: str):
         return Club.objects.get(pk=ObjectId(id))
     except DoesNotExist:
         return None
+
+
+def delete_club(club):
+    delete_messages(club)
+    delete_events(club)
+    delete_membership(club)
+    # delete_tags(club)
+    club.delete()
+    club.switch_collection("old_clubs")
+    club.save(force_insert=True)
 
 
 def members_count(club: Club):

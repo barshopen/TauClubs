@@ -35,6 +35,14 @@ def leave_club(user, club):
         return "Success"
 
 
+def delete_membership(club):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        membership.delete()
+        membership.switch_collection("old_memberships")
+        membership.save(force_insert=True)
+
+
 def createRegularMembership(user: User, club: Club):
     return createMembership(user, club, "U")
 

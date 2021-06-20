@@ -12,9 +12,16 @@ import {
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import { deleteClub } from '../../../../../../Shared/api';
+import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
+
+function deleteHandler(clubId) {
+  deleteClub({ payload: { clubId } });
+}
 
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
+
   return (
     <Card
       style={{
@@ -26,17 +33,21 @@ const DashboardClubCard = ({ club }) => {
         <Box
           style={{
             display: 'flex',
-            justifyContent: 'center',
-
+            justifyContent: 'space-between',
             pb: 3,
           }}>
           <Avatar
             alt='club'
-            src={clubData.profileImage}
+            // src={`${window.origin}/db/images/${clubData?.id}`}
             variant='square'
             style={{ marginBottom: '10px' }}
           />
+          <DeleteConfirmationModal
+            id={clubData?.id}
+            deleteHandler={deleteHandler}
+          />
         </Box>
+
         <Typography
           align='center'
           color='textPrimary'
