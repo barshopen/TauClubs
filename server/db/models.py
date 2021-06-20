@@ -91,6 +91,11 @@ class User(DynamicDocument):
             "joinTime": self.id.generation_time.isoformat(),
         }
 
+    def to_dict_with_role(self, role):
+        d = self.to_dict()
+        d["status"] = ROLES[role]
+        return d
+
     def to_json(self):
         return json.dumps(self.to_dict())
 
