@@ -27,7 +27,7 @@ def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
     club = Club.objects.get(pk=club_id)
     try:
-        return createRegularMembership(user, club)
+        return createPendingMembership(user, club)
     except NotUniqueError:
         return None
 
@@ -47,13 +47,33 @@ def delete_membership(club):
         removeMembership(membership)
 
 
-def createRegularMembership(user: User, club: Club):
-    return createMembership(user, club, "U")
+def approve_membership(membership, role):
+    membership.update(role=role, approveTime=datetime.datetime.utcnow())
+    return membership
 
 
-def createAdminMembership(user_email: str, club: Club):
+def regularMembership(user, club):
+    membership = ClubMembership.objects(member=user, club=club)
+    membership = approve_membership(membership, "U")
+    return membership
+
+
+def createAdminMembership(user_email: str, club: Club):  # change
     user = User.objects.get(contactMail=user_email)
     return createMembership(user, club, "A")
+
+
+def createPendingMembership(user: User, club: Club):
+    membership = ClubMembership(
+        club=club,
+        clubName=club.name,
+        member=user,
+        memberName=f"{user.firstName} {user.lastName}",
+        role="P",
+        requestTime=datetime.datetime.utcnow(),
+    )
+    membership.save()
+    return membership
 
 
 def members_count(clubName: str):
@@ -82,10 +102,6 @@ def get_user_clubs(user):
 def listOfClubsPerUser(user):
     clubs = ClubMembership.objects(member=user)
     return clubs.to_json()  # need to decide hoe do we want to get it
-
-
-def joinClubAsUser(user: User, club: Club):
-    createRegularMembership(user, club)
 
 
 def is_user_member(user, club):
@@ -180,8 +196,3 @@ def is_member(user, club):
 
 def remove_club_from_user(membership):
     membership.delete()
-
-
-def approve(club, user, answer):
-    membership = ClubMembership.objects(member=user, club=club)
-    membership.update(role=answer)

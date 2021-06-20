@@ -1,11 +1,11 @@
 from os import path
 from server.db.user import get_user, update
 from server.db.clubmembership import (
-    approve,
     clubs_by_user_member,
     is_member,
     is_user_member,
     leave_club,
+    regularMembership,
 )
 from flask import Blueprint, json, request
 from server.db.club import (
@@ -500,7 +500,7 @@ def approve_user():
     if not club or not validatePermession(manager, club_id):
         return "Restrict", 400
     user = get_user(user_id)
-    approve(club, user, "U")
+    regularMembership(user, club)
     return 200
 
 
@@ -516,7 +516,7 @@ def approve_manager():
     if not club or not validatePermession(manager, club_id):
         return "Restrict", 400
     user = get_user(user_id)
-    approve(club, user, "A")
+    # approve(club, user, "A")
     return 200
 
 

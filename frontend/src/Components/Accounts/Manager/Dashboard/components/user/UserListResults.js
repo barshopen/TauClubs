@@ -12,6 +12,7 @@ import {
   TablePagination,
   TableRow,
 } from '@material-ui/core';
+import { approveUserToClub } from '../../../../../../Shared/api';
 
 const UserListResults = ({ users: allUsers }) => {
   const [limit, setLimit] = useState(10);
@@ -72,8 +73,8 @@ const UserListResults = ({ users: allUsers }) => {
                 <TableCell>Email</TableCell>
                 <TableCell>Phone</TableCell>
                 <TableCell>Registration date</TableCell>
-                {/* <TableCell>Status</TableCell>
-                <TableCell>Approve</TableCell> */}
+                <TableCell>Status</TableCell>
+                <TableCell>Approve</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -97,7 +98,7 @@ const UserListResults = ({ users: allUsers }) => {
                       {moment(user?.joinTime).format('DD/MM/YYYY')}
                     </TableCell>
 
-                    {/* <TableCell>
+                    <TableCell>
                       <Chip
                         color='primary'
                         label={user?.status || 'member'}
@@ -111,7 +112,7 @@ const UserListResults = ({ users: allUsers }) => {
                         onChange={event => handleSelectOne(event, user?.id)}
                         value='true'
                       />
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 ))
               )}
