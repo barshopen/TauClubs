@@ -2,6 +2,7 @@ from os import path
 from server.db.user import get_user, update
 from server.db.clubmembership import (
     clubs_by_user_member,
+    createAdminMembership,
     is_member,
     is_user_member,
     leave_club,
@@ -310,28 +311,6 @@ def message_delete():
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/like")
-def like_message(club_id, message_id):
-    club = get_club(club_id)
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not is_user_member(user, club):
-        return "Failed", 400
-    result = add_like(message_id, user)
-    return result, 200
-
-
-@login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/unlike")
-def unlike_message(club_id, message_id):
-    club = get_club(club_id)
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not is_user_member(user, club):
-        return "Failed", 400
-    result = unlike(message_id, user)
-    return result, 200
-
-
-@login_required
 @db_app.route("/my_events")
 def my_events():
     user = get_userauth_user_by_id(current_user.get_id())
@@ -463,9 +442,6 @@ def get_image_club(club_id):
     return send_file(image, download_name="club.jpg", max_age=20000000)
 
 
-###########################################################################
-
-
 @db_app.route("/club/<club_id>/tags")
 def tags(club_id):
     club = get_club(club_id)
@@ -508,15 +484,14 @@ def approve_user():
 @db_app.route("/approve_manager", methods=["POST"])
 def approve_manager():
     club_id = request.json.get("clubId")
-    user_id = request.json.get("userId")
-    if not club_id or user_id:
+    user_email = request.json.get("userMail")
+    if not club_id or user_email:
         return "Failed", 400
     manager = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
     if not club or not validatePermession(manager, club_id):
         return "Restrict", 400
-    user = get_user(user_id)
-    # approve(club, user, "A")
+    createAdminMembership(user_email, club)
     return 200
 
 
@@ -539,6 +514,26 @@ def update_user_data():
 
 ######################################################
 # how do we us it?
+@login_required
+@db_app.route("/club/<club_id>/messages/<message_id>/like")
+def like_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = add_like(message_id, user)
+    return result, 200
+
+
+@login_required
+@db_app.route("/club/<club_id>/messages/<message_id>/unlike")
+def unlike_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = unlike(message_id, user)
+    return result, 200
 
 
 @db_app.route("/users")

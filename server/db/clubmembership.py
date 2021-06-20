@@ -60,7 +60,13 @@ def regularMembership(user, club):
 
 def createAdminMembership(user_email: str, club: Club):  # change
     user = User.objects.get(contactMail=user_email)
-    return createMembership(user, club, "A")
+    # check if is member or pending, if yes change it otherwise create
+    try:
+        membership = ClubMembership.objects(member=user, club=club).first()
+        approve_membership(membership, "A")
+        return membership
+    except Exception:
+        return createMembership(user, club, "A")
 
 
 def createPendingMembership(user: User, club: Club):
