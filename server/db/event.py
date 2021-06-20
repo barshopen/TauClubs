@@ -9,14 +9,6 @@ def currentTime():
     return now
 
 
-def delete_events(club):
-    events = Event.objects.filter(creatingClub=club)
-    for event in events:
-        event.delete()
-        event.switch_collection("old_events")
-        event.save(force_insert=True)
-
-
 def createEvent(title, duration, club, startTime, location=None, description=None):
     newEvent = Event(
         title=title,
@@ -88,9 +80,21 @@ def undoIntrested(event, user):
     return event
 
 
+def removeEvent(event):
+    event.delete()
+    event.switch_collection("old_events")
+    event.save(force_insert=True)
+
+
 def deleteEvent(event_id):
     event = Event.objects.get(id=event_id)
-    event.delete()
+    removeEvent(event)
+
+
+def delete_events(club):
+    events = Event.objects.filter(creatingClub=club)
+    for event in events:
+        removeEvent(event)
 
 
 def getEvent(event_id):
