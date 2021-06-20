@@ -481,6 +481,22 @@ def approve_user():
 
 
 @login_required
+@db_app.route("/remove_user", methods=["POST"])
+def remove_user():
+    club_id = request.json.get("clubId")
+    user_id = request.json.get("userId")
+    if not club_id or user_id:
+        return "Failed", 400
+    manager = get_userauth_user_by_id(current_user.get_id())
+    club = get_club(club_id)
+    if not club or not validatePermession(manager, club_id):
+        return "Restrict", 400
+    user = get_user(user_id)
+    leave_club(user, club)
+    return 200
+
+
+@login_required
 @db_app.route("/approve_manager", methods=["POST"])
 def approve_manager():
     club_id = request.json.get("clubId")
