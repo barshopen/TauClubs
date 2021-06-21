@@ -155,7 +155,7 @@ def deleteClub():
         club = get_club(club_id)
         users = users_for_club(club)
         delete_club(club)
-        send_delete_club(users, club.name)
+        # send_delete_club(users, club.name)
         return "Success", 200
     except Exception:
         return "Failed", 400
@@ -525,7 +525,7 @@ def approve_user():
         return "Restrict", 400
     user = get_user(user_id)
     regularMembership(user, club)
-    send_mail_approve([user.to_dict()], club.name)
+    # send_mail_approve([user.to_dict()], club.name)
     return 200
 
 
@@ -543,7 +543,7 @@ def remove_user():
     club = get_club(club_id)
     user = get_user(user_id)
     leave_club(user, club)
-    send_mail_delete_by_manager([user.to_dict()], club.name)
+    # send_mail_delete_by_manager([user.to_dict()], club.name)
     return 200
 
 
@@ -560,7 +560,7 @@ def approve_manager():
         return "Restrict", 400
     user = get_user(userId)
     createAdminMembership(user.contactMail, club)
-    send_mail_approve_manager([user.to_dict()], club.name)
+    # send_mail_approve_manager([user.to_dict()], club.name)
     return 200
 
 
