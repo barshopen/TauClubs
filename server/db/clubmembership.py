@@ -33,7 +33,7 @@ def join_club(user_email: str, club_id: str):
 
 
 def leave_club(user, club):
-    membership = ClubMembership.objects(member=user, club=club)
+    membership = ClubMembership.objects.get(member=user, club=club)
     if membership is None:
         return None
     else:
