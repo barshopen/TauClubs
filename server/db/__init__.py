@@ -1,4 +1,6 @@
 from os import path
+import os
+from server.db.mailMessages import approve_user_message, remove_by_admin
 from server.db.user import get_user, update
 from server.db.clubmembership import (
     clubs_by_user_member,
@@ -7,6 +9,7 @@ from server.db.clubmembership import (
     is_user_member,
     leave_club,
     regularMembership,
+    users_for_club,
 )
 from flask import Blueprint, json, request
 from server.db.club import (
@@ -49,6 +52,7 @@ from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
 from flask import send_file
+from flask_mail import Mail, Message
 
 STATIC_FOLDER_NAME = "mock-api"
 
@@ -57,6 +61,48 @@ db_app = Blueprint(
     __name__,
     url_prefix="/db",
 )
+
+mail = Mail()
+
+
+def mail_init(app):
+    mail.init_app(app)
+
+
+def send_message_text(recipients, subject, body):
+    msg = Message(
+        subject=subject,
+        sender=os.getenv("EMAIL_USER"),
+        recipients=recipients,
+        body=body,
+    )
+    mail.send(msg)
+
+
+def send_mail_approve(receivers, club_name):
+    for receive in receivers:
+        head, text = approve_user_message(receive["name"], club_name)
+        send_message_text([receive["contactMail"]], head, text)
+
+
+def send_mail_delete_by_manager(receivers, club_name):
+    for receive in receivers:
+        head, text = remove_by_admin(receive["name"], club_name)
+        send_message_text([receive["contactMail"]], head, text)
+
+
+def send_mail_approve_manager(receivers, club_name):
+    for receive in receivers:
+        head, text = approve_manager(receive["name"], club_name)
+        send_message_text([receive["contactMail"]], head, text)
+
+
+def send_delete_club(receivers, club_name):
+    head, text = delete_club(club_name)
+    mails = []
+    for receive in receivers:
+        mails.append(receive["contactMail"])
+    send_message_text(mails, head, text)
 
 
 def get_json_data(filename):
@@ -107,7 +153,9 @@ def deleteClub():
         if not club_id:
             return "invalid club", 400
         club = get_club(club_id)
+        users = users_for_club(club)
         delete_club(club)
+        send_delete_club(users, club.name)
         return "Success", 200
     except Exception:
         return "Failed", 400
@@ -477,6 +525,7 @@ def approve_user():
         return "Restrict", 400
     user = get_user(user_id)
     regularMembership(user, club)
+    send_mail_approve([user.to_dict()], club.name)
     return 200
 
 
@@ -491,8 +540,10 @@ def remove_user():
     club = get_club(club_id)
     if not club or not validatePermession(manager, club_id):
         return "Restrict", 400
+    club = get_club(club_id)
     user = get_user(user_id)
     leave_club(user, club)
+    send_mail_delete_by_manager([user.to_dict()], club.name)
     return 200
 
 
@@ -500,14 +551,16 @@ def remove_user():
 @db_app.route("/approve_manager", methods=["POST"])
 def approve_manager():
     club_id = request.json.get("clubId")
-    user_email = request.json.get("userMail")
-    if not club_id or user_email:
+    userId = request.json.get("userId")
+    if not club_id or userId:
         return "Failed", 400
     manager = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
     if not club or not validatePermession(manager, club_id):
         return "Restrict", 400
-    createAdminMembership(user_email, club)
+    user = get_user(userId)
+    createAdminMembership(user.contactMail, club)
+    send_mail_approve_manager([user.to_dict()], club.name)
     return 200
 
 
