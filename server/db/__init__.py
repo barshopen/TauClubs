@@ -1,6 +1,11 @@
 from os import path
 import os
-from server.db.mailMessages import approve_user_message, remove_by_admin
+from server.db.mailMessages import (
+    approve_manager_message,
+    approve_user_message,
+    delete_club_message,
+    remove_by_admin,
+)
 from server.db.user import get_user, update
 from server.db.clubmembership import (
     clubs_by_user_member,
@@ -76,6 +81,9 @@ def send_message_text(recipients, subject, body):
         recipients=recipients,
         body=body,
     )
+    path = os.path.join(os.getcwd(), "frontend", "public", "images", "logo.jpeg")
+    f = open(path, "rb")
+    msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
     mail.send(msg)
 
 
@@ -93,12 +101,12 @@ def send_mail_delete_by_manager(receivers, club_name):
 
 def send_mail_approve_manager(receivers, club_name):
     for receive in receivers:
-        head, text = approve_manager(receive["name"], club_name)
+        head, text = approve_manager_message(receive["name"], club_name)
         send_message_text([receive["contactMail"]], head, text)
 
 
 def send_delete_club(receivers, club_name):
-    head, text = delete_club(club_name)
+    head, text = delete_club_message(club_name)
     mails = []
     for receive in receivers:
         mails.append(receive["contactMail"])
@@ -154,8 +162,8 @@ def deleteClub():
             return "invalid club", 400
         club = get_club(club_id)
         users = users_for_club(club)
-        delete_club(club)
-        # send_delete_club(users, club.name)
+        # delete_club(club)
+        send_delete_club(users, club.name)
         return "Success", 200
     except Exception:
         return "Failed", 400
