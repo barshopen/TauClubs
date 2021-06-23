@@ -15,8 +15,8 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import UpdatMessageModal from '../../Scenarios/UpdateMessageModal';
-import UpdateEventModal from '../../Scenarios/UpdateEventModal';
+import NewMessageModal from '../../Scenarios/NewMessageModal';
+import NewEventModal from '../../Scenarios/NewEventModal';
 import DeleteConfirmationModal from '../../Scenarios/DeleteConfirmationModal';
 import useClubFeed from '../../hooks/useClubFeed';
 import {
@@ -157,17 +157,23 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
       <CardActions disableSpacing>
         {location && eventsIcon(clubId, id, isAttend, isInterested)}
         {isAdmin && location && (
-          <UpdateEventModal
+          <NewEventModal
             ClickableTrigger={IconBu}
-            editEvent={editEvent}
-            clubId={{ id, title, description }}
+            handler={editEvent}
+            clubId={{
+              id,
+              title,
+              description,
+              location,
+              titleStatus: 'Edit Event',
+            }}
           />
         )}
         {isAdmin && !location && (
-          <UpdatMessageModal
+          <NewMessageModal
             ClickableTrigger={IconBu}
-            editMessage={editMessage}
-            clubId={{ id, title, content }}
+            handler={editMessage}
+            clubId={{ id, title, content, titleStatus: 'Edit Message' }}
           />
         )}
         {isAdmin && (

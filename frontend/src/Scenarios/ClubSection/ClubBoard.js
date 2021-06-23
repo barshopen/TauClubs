@@ -62,13 +62,26 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
               <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
                 <NewMessageModal
                   ClickableTrigger={IconBu}
-                  addMessage={addMessage}
+                  handler={addMessage}
+                  clubId={{
+                    id: '',
+                    title: 'Message Title',
+                    content: 'Message Content',
+                    titleStatus: 'Create New Message',
+                  }}
                 />
               </Box>
               <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
                 <NewEventModal
                   ClickableTrigger={AddEventIcon}
-                  addEvent={addEvent}
+                  handler={addEvent}
+                  clubId={{
+                    id: '',
+                    title: 'Event Title',
+                    description: 'Event Description',
+                    location: 'Event Loaction',
+                    titleStatus: 'Create New Event',
+                  }}
                 />
               </Box>
             </Grid>
