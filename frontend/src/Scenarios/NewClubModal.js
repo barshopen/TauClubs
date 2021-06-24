@@ -2,17 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { Box, makeStyles } from '@material-ui/core';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AddIcon from '@material-ui/icons/Add';
+
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import Select from 'react-select';
 import GenericModal from '../Components/Generic/GenericModal';
-
-import { createClub } from '../Shared/api';
 import useClubs from '../hooks/useClubs';
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +36,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewClubContent({ setOpen }) {
+function NewClubContent({ clubId, setOpen, onChange: handler }) {
+  const { name, description, contact, title } = clubId;
   const classes = useStyles();
   const [values, setValues] = useState({});
   const [tags, setTags] = useState([]);
@@ -71,7 +67,7 @@ function NewClubContent({ setOpen }) {
     } else {
       data.append('image', 'None');
     }
-    await createClub(data);
+    await handler(data);
     setOpen(false);
     refetchMyClubs();
   };
@@ -110,34 +106,31 @@ function NewClubContent({ setOpen }) {
       autoComplete='on'
       onSubmit={submitHandler}>
       <Typography variant='h6' className={classes.header}>
-        Create New Club
+        {title}
       </Typography>
 
       <TextField
         name='club_name'
-        label='Club Name'
-        placeholder='Enter club name'
+        label={name}
         variant='outlined'
-        required
+        required={title === 'Create New Club'}
         onChange={handleChange}
       />
       <TextField
         name='contact_mail'
-        label='Contact Email'
-        placeholder='Enter Contact Mail'
+        label={contact}
         variant='outlined'
-        required
+        required={title === 'Create New Club'}
         onChange={handleChange}
       />
       <TextField
         name='description'
-        label='Club Description'
-        placeholder='Enter club description'
+        label={description}
         multiline
         variant='outlined'
         rows={4}
         rowsMax={10}
-        required
+        required={title === 'Create New Club'}
         onChange={handleChange}
       />
       <Box p={1}>
@@ -147,6 +140,7 @@ function NewClubContent({ setOpen }) {
           onChange={handleTags}
           isMulti
           options={tags.length === 5 ? [] : options}
+          value='sharon'
         />
       </Box>
       <ImageUploader
@@ -167,30 +161,27 @@ function NewClubContent({ setOpen }) {
   );
 }
 NewClubContent.propTypes = {
+  clubId: PropTypes.string.isRequired,
   setOpen: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-function ClickableTrigger({ onClick }) {
-  const text = 'Add New Club';
-  return (
-    <ListItem button key={text} onClick={onClick}>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItem>
-  );
-}
-
-ClickableTrigger.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
-
-export default function NewClubModal() {
+export default function NewClubModal({ clubId, ClickableTrigger, handler }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewClubContent}
+      onChange={handler}
+      clubId={clubId}
     />
   );
 }
+NewClubModal.propTypes = {
+  ClickableTrigger: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.string,
+    PropTypes.shape({ render: PropTypes.func.isRequired }),
+  ]).isRequired,
+  handler: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
+};

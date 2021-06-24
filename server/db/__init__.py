@@ -11,6 +11,7 @@ from flask import Blueprint, json, request
 from server.db.club import (
     add_image_to_club,
     delete_club,
+    edit_club,
     establish_club,
     example_club,
     get_club,
@@ -107,6 +108,31 @@ def deleteClub():
             return "invalid club", 400
         club = get_club(club_id)
         delete_club(club)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
+
+
+@db_app.route("/club/edit", methods=["POST"])
+@login_required
+def editClub():  # write
+    try:
+        club_id = request.json.get("clubId")
+        if not club_id:
+            return "invalid club", 400
+        club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if request.form.get("image") == "None":
+            image = None
+        else:
+            image = request.files["image"]
+        image = (image,)
+        foundingUserEmail = (user.contactMail,)
+        name = (request.form["club_name"],)
+        contact_mail = (request.form["contact_mail"],)
+        description = (request.form["description"],)
+        tags = (request.form["tags"].split(","),)
+        edit_club(club)
         return "Success", 200
     except Exception:
         return "Failed", 400

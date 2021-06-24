@@ -12,16 +12,33 @@ import {
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import { deleteClub } from '../../../../../../Shared/api';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import { deleteClub, editClub } from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
+import NewClubModal from '../../../../../../Scenarios/NewClubModal';
 
 function deleteHandler(clubId) {
   deleteClub({ payload: { clubId } });
 }
 
+function ClickableTrigger({ onClick }) {
+  return (
+    <IconButton onClick={onClick}>
+      <EditIcon fontSize='large' />
+    </IconButton>
+  );
+}
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
-
+  function EditClub(data) {
+    editClub({ payload: { clubId: clubData?.id, data } });
+  }
   return (
     <Card
       style={{
@@ -36,12 +53,23 @@ const DashboardClubCard = ({ club }) => {
             justifyContent: 'space-between',
             pb: 3,
           }}>
+          <NewClubModal
+            ClickableTrigger={ClickableTrigger}
+            handler={EditClub}
+            clubId={{
+              name: clubData?.name,
+              description: clubData?.description,
+              contact: clubData?.contactMail,
+              title: 'Edit Club',
+            }}
+          />
           <Avatar
             alt='club'
             // src={`${window.origin}/db/images/${clubData?.id}`}
             variant='square'
             style={{ marginBottom: '10px' }}
           />
+
           <DeleteConfirmationModal
             id={clubData?.id}
             deleteHandler={deleteHandler}

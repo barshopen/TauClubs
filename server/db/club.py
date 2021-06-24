@@ -44,6 +44,10 @@ def establish_club(
     return membership.clubName
 
 
+def edit_club(club, data):  # write
+    pass
+
+
 def get_clubs(name: str, tag: str):
     name_Q = Q(name__icontains=name) if name else Q()
     tags_Q = Q(tags=tag) if tag else Q()
