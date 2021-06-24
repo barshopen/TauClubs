@@ -37,7 +37,8 @@ ClickableTrigger.propTypes = {
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
   function EditClub(data) {
-    editClub({ payload: { clubId: clubData?.id, data } });
+    data.append('clubId', clubData?.id);
+    editClub(data);
   }
   return (
     <Card

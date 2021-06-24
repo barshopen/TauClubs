@@ -57,6 +57,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
   const submitHandler = async e => {
     e.preventDefault();
     const tagsArray = tags.map(({ label }) => label);
+
     const data = new FormData();
     data.append('club_name', values.club_name);
     data.append('description', values.description);

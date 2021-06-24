@@ -7,7 +7,7 @@ import json
 from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
-from .clubmembership import createAdminMembership, delete_membership
+from .clubmembership import change_club_name, createAdminMembership, delete_membership
 
 
 def create_club(
@@ -44,8 +44,17 @@ def establish_club(
     return membership.clubName
 
 
-def edit_club(club, data):  # write
-    pass
+def edit_club(club, name, contact_mail, description):  # write
+    if name == "undefined":
+        name = club.name
+    else:
+        change_club_name(club, name)
+    if contact_mail == "undefined":
+        contact_mail = club.contactMail
+    if description == "undefined":
+        description = club.description
+    club.update(name=name, contactMail=contact_mail, description=description)
+    club.save()
 
 
 def get_clubs(name: str, tag: str):

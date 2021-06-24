@@ -4,7 +4,7 @@ export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
 export const createClub = data => postClub('/db/create_club', data);
-
+export const editClub = data => postClub(`/db/club/edit`, data);
 export const joinClub = data => post('/db/join_club', data);
 
 export const leaveClub = data => post('/db/leave_club', data);
@@ -78,8 +78,6 @@ export const deleteEvent = ({ payload }) =>
   post(`/db/club/event/delete`, payload);
 
 export const deleteClub = ({ payload }) => post(`/db/club/delete`, payload);
-
-export const editClub = ({ payload }) => post(`/db/club/edit`, payload);
 
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);

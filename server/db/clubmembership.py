@@ -182,6 +182,13 @@ def remove_club_from_user(membership):
     membership.delete()
 
 
+def change_club_name(club, club_name):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        membership.update(clubName=club_name)
+        membership.save()
+
+
 def approve(club, user, answer):
     membership = ClubMembership.objects(member=user, club=club)
     membership.update(role=answer)

@@ -107,6 +107,9 @@ def deleteClub():
         if not club_id:
             return "invalid club", 400
         club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Failed", 400
         delete_club(club)
         return "Success", 200
     except Exception:
@@ -117,22 +120,17 @@ def deleteClub():
 @login_required
 def editClub():  # write
     try:
-        club_id = request.json.get("clubId")
+        club_id = request.form["clubId"]
         if not club_id:
             return "invalid club", 400
         club = get_club(club_id)
         user = get_userauth_user_by_id(current_user.get_id())
-        if request.form.get("image") == "None":
-            image = None
-        else:
-            image = request.files["image"]
-        image = (image,)
-        foundingUserEmail = (user.contactMail,)
-        name = (request.form["club_name"],)
-        contact_mail = (request.form["contact_mail"],)
-        description = (request.form["description"],)
-        tags = (request.form["tags"].split(","),)
-        edit_club(club)
+        if not validatePermession(user, club_id):
+            return "Failed", 400
+        name = request.form["club_name"]
+        contact_mail = request.form["contact_mail"]
+        description = request.form["description"]
+        edit_club(club, name, contact_mail, description)
         return "Success", 200
     except Exception:
         return "Failed", 400
