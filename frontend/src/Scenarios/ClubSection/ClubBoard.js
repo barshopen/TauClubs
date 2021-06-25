@@ -8,6 +8,7 @@ import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
 import { Box } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
@@ -59,18 +60,22 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
         {currentUserIsClubsAdmin && (
           <>
             <Grid container justify='center' spacing={2}>
-              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                <NewMessageModal
-                  ClickableTrigger={IconBu}
-                  addMessage={addMessage}
-                />
-              </Box>
-              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                <NewEventModal
-                  ClickableTrigger={AddEventIcon}
-                  addEvent={addEvent}
-                />
-              </Box>
+              <Tooltip title='New Message' placement='top'>
+                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                  <NewMessageModal
+                    ClickableTrigger={IconBu}
+                    addMessage={addMessage}
+                  />
+                </Box>
+              </Tooltip>
+              <Tooltip title='New Event' placement='top'>
+                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                  <NewEventModal
+                    ClickableTrigger={AddEventIcon}
+                    addEvent={addEvent}
+                  />
+                </Box>
+              </Tooltip>
             </Grid>
           </>
         )}
