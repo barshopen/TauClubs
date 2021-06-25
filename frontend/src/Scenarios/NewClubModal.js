@@ -37,10 +37,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewClubContent({ clubId, setOpen, onChange: handler }) {
-  const { name, description, contact, title } = clubId;
+  const { id, name, description, contact, title, isImage, existTag } = clubId;
+  let present = isImage;
   const classes = useStyles();
   const [values, setValues] = useState({});
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(existTag);
   const { refetchMyClubs } = useClubs();
 
   const handleTags = selectedOptions => {
@@ -74,10 +75,18 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
   };
 
   const handleDrop = pictureFiles => {
+    present = false;
     setValues({
       ...values,
       image: pictureFiles[0],
     });
+  };
+  const tagsfunc = tagsList => {
+    const arr = [];
+    for (let i = 0; i < tagsList.length; i += 1) {
+      arr.push({ value: tagsList[i], label: tagsList[i] });
+    }
+    return arr;
   };
 
   const options = [
@@ -141,7 +150,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
           onChange={handleTags}
           isMulti
           options={tags.length === 5 ? [] : options}
-          value='sharon'
+          defaultValue={tagsfunc(tags)}
         />
       </Box>
       <ImageUploader
@@ -149,6 +158,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
         withPreview
         singleImage
         buttonText='Pick a profile image'
+        defaultImages={present && [`${window.origin}/db/images/${id}`]}
         onChange={handleDrop}
         imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
         maxFileSize={5242880}

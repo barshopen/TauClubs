@@ -130,7 +130,12 @@ def editClub():  # write
         name = request.form["club_name"]
         contact_mail = request.form["contact_mail"]
         description = request.form["description"]
-        edit_club(club, name, contact_mail, description)
+        tags = request.form["tags"]
+        try:
+            image = request.files["image"]
+        except Exception:
+            image = "None"
+        edit_club(club, name, contact_mail, description, image, tags)
         return "Success", 200
     except Exception:
         return "Failed", 400

@@ -58,10 +58,13 @@ const DashboardClubCard = ({ club }) => {
             ClickableTrigger={ClickableTrigger}
             handler={EditClub}
             clubId={{
+              id: clubData?.id,
               name: clubData?.name,
               description: clubData?.description,
               contact: clubData?.contactMail,
               title: 'Edit Club',
+              isImage: clubData?.profileImage,
+              existTag: clubData?.tags,
             }}
           />
           <Avatar

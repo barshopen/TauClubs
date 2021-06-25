@@ -197,6 +197,7 @@ export default function AppSideBar() {
               description: 'Club Description',
               contact: 'Club Contact Email',
               title: 'Create New Club',
+              existTag: [],
             }}
           />
         )}

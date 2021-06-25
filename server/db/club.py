@@ -10,6 +10,10 @@ from .models import Club
 from .clubmembership import change_club_name, createAdminMembership, delete_membership
 
 
+def current_time():
+    return datetime.datetime.utcnow()
+
+
 def create_club(
     image,
     club_name: str,
@@ -24,7 +28,7 @@ def create_club(
         profileImage=image,
         description=description,
         creationTime=now,
-        lastUpdateTime=now,
+        lastUpdateTime=current_time(),
     )
     club.save(force_insert=True)
     add_tags(club.id, club, tags)
@@ -44,7 +48,7 @@ def establish_club(
     return membership.clubName
 
 
-def edit_club(club, name, contact_mail, description):  # write
+def edit_club(club, name, contact_mail, description, image, tags):  # write
     if name == "undefined":
         name = club.name
     else:
@@ -53,7 +57,16 @@ def edit_club(club, name, contact_mail, description):  # write
         contact_mail = club.contactMail
     if description == "undefined":
         description = club.description
-    club.update(name=name, contactMail=contact_mail, description=description)
+    if image != "None":
+        club.profileImage.replace(image)
+    if tags != "":
+        add_tags(club.id, club, tags.split(","))
+    club.update(
+        name=name,
+        contactMail=contact_mail,
+        description=description,
+        lastUpdateTime=current_time(),
+    )
     club.save()
 
 
@@ -110,4 +123,5 @@ def example_club():
 
 def add_image_to_club(image, club: Club):
     club.profileImage.put(image)
+    club.update(lastUpdateTime=current_time())
     club.save()
