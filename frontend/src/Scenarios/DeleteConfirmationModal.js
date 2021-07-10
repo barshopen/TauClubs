@@ -6,6 +6,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Tooltip from '@material-ui/core/Tooltip';
 import GenericModal from '../Components/Generic/GenericModal';
 
 const useStyles = makeStyles(theme =>
@@ -24,7 +25,9 @@ const useStyles = makeStyles(theme =>
 function ClickableTrigger({ onClick }) {
   return (
     <IconButton onClick={onClick}>
-      <DeleteIcon fontSize='large' />
+      <Tooltip title=' Delete'>
+        <DeleteIcon fontSize='large' />
+      </Tooltip>
     </IconButton>
   );
 }

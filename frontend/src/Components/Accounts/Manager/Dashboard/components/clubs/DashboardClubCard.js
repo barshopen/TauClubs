@@ -14,6 +14,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 import { deleteClub, editClub } from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
 import NewClubModal from '../../../../../../Scenarios/NewClubModal';
@@ -25,7 +26,9 @@ function deleteHandler(clubId) {
 function ClickableTrigger({ onClick }) {
   return (
     <IconButton onClick={onClick}>
-      <EditIcon fontSize='large' />
+      <Tooltip title='Edit'>
+        <EditIcon fontSize='large' />
+      </Tooltip>
     </IconButton>
   );
 }
@@ -36,7 +39,8 @@ ClickableTrigger.propTypes = {
 
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
-  function EditClub(data) {
+  function editClubHandler(data) {
+    console.log('EditClub{}');
     data.append('clubId', clubData?.id);
     editClub(data);
   }
@@ -56,7 +60,7 @@ const DashboardClubCard = ({ club }) => {
           }}>
           <NewClubModal
             ClickableTrigger={ClickableTrigger}
-            handler={EditClub}
+            handler={editClubHandler}
             clubId={{
               id: clubData?.id,
               name: clubData?.name,
@@ -69,9 +73,9 @@ const DashboardClubCard = ({ club }) => {
           />
           <Avatar
             alt='club'
-            // src={`${window.origin}/db/images/${clubData?.id}`}
-            variant='square'
-            style={{ marginBottom: '10px' }}
+            src={`${window.origin}/db/images/${clubData?.id}`}
+            variant='circle'
+            style={{ height: '70px', width: '70px', marginBottom: '10px' }}
           />
 
           <DeleteConfirmationModal
@@ -110,7 +114,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Updated {moment(clubData.creationTime).format('DD/MM/YYYY')}
+              Last Updated {moment(clubData.creationTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid
