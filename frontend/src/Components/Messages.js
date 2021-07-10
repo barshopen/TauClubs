@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import GenericFeedMessage from './Generic/GenericFeedMessage';
 
-function Messages({ data, isAdmin }) {
-  return (
-    <Container>
-      {data.map(feedItem => (
-        <GenericFeedMessage feedItem={feedItem} isAdmin={isAdmin} />
-      ))}
-    </Container>
-  );
-}
+const Messages = ({ data, isAdmin }) => (
+  <Container>
+    {data.map(feedItem => (
+      <GenericFeedMessage feedItem={feedItem} isAdmin={isAdmin} />
+    ))}
+  </Container>
+);
 
 Messages.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
