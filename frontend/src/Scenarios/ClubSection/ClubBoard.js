@@ -8,6 +8,7 @@ import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
 import { Box } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
@@ -15,7 +16,9 @@ import useClubFeed from '../../hooks/useClubFeed';
 
 const IconBu = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <MessageIcon />
+    <Tooltip title='Add Message'>
+      <MessageIcon />
+    </Tooltip>
   </IconButton>
 );
 IconBu.propTypes = {
@@ -28,7 +31,9 @@ IconBu.defaultProps = {
 
 const AddEventIcon = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <EventIcon />
+    <Tooltip title='Add Event'>
+      <EventIcon />
+    </Tooltip>
   </IconButton>
 );
 AddEventIcon.propTypes = {

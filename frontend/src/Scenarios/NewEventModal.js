@@ -104,7 +104,7 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
       />
       <TextField
         name='event_duration'
-        label='Event Duration'
+        label='Event Duration(hours)'
         variant='outlined'
         type='number'
         placeholder={1}
