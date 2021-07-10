@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
+import BaseLoader from 'react-loader-spinner';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
@@ -30,6 +31,12 @@ const NavBarContainer = styled.div`
   border-style: solid;
   padding: 2%;
   margin: 2%;
+`;
+
+const Loader = styled(BaseLoader)`
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
 `;
 
 const Nav = styled.nav`
@@ -72,7 +79,8 @@ const ClubSection = () => {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
   const classes = useStyles();
-  const { clubData } = useClub(clubId);
+  const { loadingClub, clubData } = useClub(clubId);
+
   const {
     member,
     admin,
@@ -82,6 +90,7 @@ const ClubSection = () => {
     contactMail,
     profileImage,
   } = clubData || {};
+
   const user = useRecoilValue(currentUser);
 
   let join = null;
@@ -99,6 +108,11 @@ const ClubSection = () => {
   const img = profileImage
     ? `${window.origin}/db/images/${clubId}`
     : '/images/taulogo.png';
+
+  if (loadingClub) {
+    return <Loader type='TailSpin' color='#00BFFF' height={100} width={100} />;
+  }
+
   return (
     <Container>
       <Box textAlign='center' p={2}>

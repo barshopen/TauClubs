@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
-import Loader from 'react-loader-spinner';
+import BaseLoader from 'react-loader-spinner';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import EventIcon from '@material-ui/icons/Event';
@@ -12,6 +13,12 @@ import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
 import useClubFeed from '../../hooks/useClubFeed';
+
+const Loader = styled(BaseLoader)`
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+`;
 
 const IconBu = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
@@ -77,13 +84,7 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
       </Container>
       <Container>
         {loadingMessages || loadingEvents ? (
-          <Loader
-            type='TailSpin'
-            color='#00BFFF'
-            height={50}
-            alignItems='center'
-            width={50}
-          />
+          <Loader type='TailSpin' color='#00BFFF' height={80} width={80} />
         ) : (
           messagesData &&
           upcomingEvents && (

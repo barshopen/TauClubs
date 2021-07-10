@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { useReducer } from 'react';
+// import { useReducer } from 'react';
 import { getClub } from '../Shared/api';
 
 const fetchClub = async clubId => {
@@ -7,28 +7,34 @@ const fetchClub = async clubId => {
   return res;
 };
 
-function reducer(state, stateUpdate) {
-  return { ...state, ...stateUpdate };
-}
+// function reducer(state, stateUpdate) {
+//   return { ...state, ...stateUpdate };
+// }
 
 const useClub = clubId => {
   const storeKey = ['club', clubId];
-  const [clubData, dispatch] = useReducer(reducer, {});
+  // const [clubData, dispatch] = useReducer(reducer, {});
 
-  const { loading: loadingClub, refetch } = useQuery(
+  // const { loading: loadingClub, refetch } = useQuery(
+  //   storeKey,
+  //   () => fetchClub(clubId),
+  //   {
+  //     staleTime: 60000,
+  //     refetchOnMount: false,
+  //     onSuccess: data => {
+  //       for (const [key, value] of Object.entries(data)) {
+  //         if (data[key] !== clubData[key]) {
+  //           dispatch({ [key]: value });
+  //         }
+  //       }
+  //     },
+  //   }
+  // );
+
+  const { isLoading: loadingClub, refetch, data: clubData } = useQuery(
     storeKey,
     () => fetchClub(clubId),
-    {
-      staleTime: 60000,
-      refetchOnMount: false,
-      onSuccess: data => {
-        for (const [key, value] of Object.entries(data)) {
-          if (data[key] !== clubData[key]) {
-            dispatch({ [key]: value });
-          }
-        }
-      },
-    }
+    { staleTime: 60000, refetchOnMount: false }
   );
 
   return {
