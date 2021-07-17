@@ -5,7 +5,8 @@ from mongoengine.queryset.visitor import Q
 
 
 def currentTime():
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+    print(now)
     return now
 
 

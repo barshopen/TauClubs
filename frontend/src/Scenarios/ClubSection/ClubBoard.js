@@ -9,6 +9,7 @@ import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
 import { Box } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
@@ -22,7 +23,9 @@ const Loader = styled(BaseLoader)`
 
 const IconBu = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <MessageIcon />
+    <Tooltip title='Add Message'>
+      <MessageIcon />
+    </Tooltip>
   </IconButton>
 );
 IconBu.propTypes = {
@@ -35,7 +38,9 @@ IconBu.defaultProps = {
 
 const AddEventIcon = ({ ariaLabel, onClick }) => (
   <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <EventIcon />
+    <Tooltip title='Add Event'>
+      <EventIcon />
+    </Tooltip>
   </IconButton>
 );
 AddEventIcon.propTypes = {
@@ -69,13 +74,26 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
               <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
                 <NewMessageModal
                   ClickableTrigger={IconBu}
-                  addMessage={addMessage}
+                  handler={addMessage}
+                  clubId={{
+                    id: '',
+                    title: 'Message Title',
+                    content: 'Message Content',
+                    titleStatus: 'Create New Message',
+                  }}
                 />
               </Box>
               <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
                 <NewEventModal
                   ClickableTrigger={AddEventIcon}
-                  addEvent={addEvent}
+                  handler={addEvent}
+                  clubId={{
+                    id: '',
+                    title: 'Event Title',
+                    description: 'Event Description',
+                    location: 'Event Loaction',
+                    titleStatus: 'Create New Event',
+                  }}
                 />
               </Box>
             </Grid>
