@@ -127,7 +127,7 @@ def clubs():
         containes foodies OR have a 'Math' tag
     """
     clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+    return get_clubs(search=clubs_params.get("search"))
 
 
 @db_app.route("/club/<club_id>")
