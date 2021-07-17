@@ -24,9 +24,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewMessageContnet({ setOpen, onChange: addMessage }) {
+function NewMessageContnet({ clubId, setOpen, onChange: handler }) {
+  const { id, title, content, titleStatus } = clubId;
   const classes = useStyles();
-  const [formValues, setFormValues] = useState({});
+  const [formValues, setFormValues] = useState({
+    messageId: id,
+  });
 
   const handleChange = e => {
     setFormValues(prev => ({
@@ -37,7 +40,7 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
 
   const submitHandler = async e => {
     e.preventDefault();
-    addMessage({ data: formValues });
+    handler({ data: formValues });
     setOpen(false);
   };
 
@@ -48,25 +51,25 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
       validate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
-        Publish New Message
+        {titleStatus}
       </Typography>
 
       <TextField
         name='message_title'
-        label='Message Title'
+        label={title}
         variant='outlined'
         onChange={handleChange}
-        required
+        required={titleStatus === 'Create New Message'}
       />
       <TextField
         name='message_content'
-        label='Message Content'
+        label={content}
         multiline
         variant='outlined'
         onChange={handleChange}
         rows={5}
         rowsMax={10}
-        required
+        required={titleStatus === 'Create New Message'}
       />
 
       <div className={classes.buttons}>
@@ -84,14 +87,16 @@ function NewMessageContnet({ setOpen, onChange: addMessage }) {
 NewMessageContnet.propTypes = {
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function NewMessageModal({ ClickableTrigger, addMessage }) {
+export default function NewMessageModal({ clubId, ClickableTrigger, handler }) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewMessageContnet}
-      onChange={addMessage}
+      onChange={handler}
+      clubId={clubId}
     />
   );
 }
@@ -102,5 +107,6 @@ NewMessageModal.propTypes = {
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
-  addMessage: PropTypes.func.isRequired,
+  handler: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };

@@ -31,10 +31,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewEventContent({ setOpen, onChange: addEvent }) {
+function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
+  const { id, title, description, location, titleStatus } = clubId;
+
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
-    event_startDateTime: moment().format(),
+    event_startDateTime: moment().format('YYYY-MM-DD[T]HH:mm'),
+    eventId: id,
   });
 
   const handleChange = e =>
@@ -56,41 +59,39 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
       validate
       autoComplete='off'>
       <Typography variant='h6' className={classes.header}>
-        Create New Event
+        {titleStatus}
       </Typography>
 
       <TextField
         name='event_title'
-        label='Event title'
+        label={title}
         variant='outlined'
         onChange={handleChange}
-        required
+        required={titleStatus === 'Create New Event'}
       />
       <TextField
         name='event_description'
-        label='Event Description'
+        label={description}
         multiline
         variant='outlined'
         onChange={handleChange}
         rows={5}
         rowsMax={10}
-        required
+        required={titleStatus === 'Create New Event'}
       />
       <TextField
         name='event_location'
-        label='Event Location'
+        label={location}
         variant='outlined'
         onChange={handleChange}
-        required
+        required={titleStatus === 'Create New Event'}
       />
       <TextField
         name='event_startDateTime'
         label='Start Date'
         type='datetime-local'
         variant='outlined'
-        format='MM/dd/yyyy'
-        disablePast
-        defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
         className={classes.textField}
         inputProps={{
@@ -99,18 +100,20 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
         InputLabelProps={{
           shrink: true,
         }}
-        required
+        required={titleStatus === 'Create New Event'}
       />
       <TextField
         name='event_duration'
-        label='Event Duration'
+        label='Event Duration(hours)'
         variant='outlined'
-        type='time'
-        ampm={false}
-        defaultValue='02:00'
-        step='3000'
+        type='number'
+        placeholder={1}
+        inputProps={{
+          min: '0',
+          step: '0.25',
+        }}
         onChange={handleChange}
-        required
+        required={titleStatus === 'Create New Event'}
       />
 
       <div className={classes.buttons}>
@@ -128,23 +131,26 @@ function NewEventContent({ setOpen, onChange: addEvent }) {
 NewEventContent.propTypes = {
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  clubId: PropTypes.string.isRequired,
 };
 
-export default function NewEventModal({ ClickableTrigger, addEvent }) {
+export default function NewEventModal({ ClickableTrigger, handler, clubId }) {
   return (
     <GenericModal
+      clubId={clubId}
       ClickableTrigger={ClickableTrigger}
       Content={NewEventContent}
-      onChange={addEvent}
+      onChange={handler}
     />
   );
 }
 
 NewEventModal.propTypes = {
+  clubId: PropTypes.string.isRequired,
   ClickableTrigger: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
-  addEvent: PropTypes.func.isRequired,
+  handler: PropTypes.func.isRequired,
 };

@@ -15,7 +15,7 @@ def create_club(
     description: str = "",
     tags=[],
 ):
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
     club = Club(
         contactMail=contact_mail,
         name=club_name,
