@@ -222,6 +222,9 @@ def event_creation():
         startTime=datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         ).replace(tzinfo=datetime.timezone.utc),
+        endTime=datetime.datetime.strptime(
+            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc),
         location=request.json.get("data")["event_location"],
         club=get_club(club_id),
     )
@@ -361,14 +364,19 @@ def event_update():
         startTime = datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
         )
+        endTime = datetime.datetime.strptime(
+            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        )
     except Exception:
         startTime = None
+        endTime = None
     # location = request.json.get("data")["event_location"]  # need to update it
     event = updateEventContent(
         event,
         title=title,
         description=description,
         startTime=startTime,
+        endTime=endTime,
     )
     return event.to_json(), 200
 

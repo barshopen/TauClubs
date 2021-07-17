@@ -132,6 +132,7 @@ class Event(DynamicDocument):
     description = StringField(required=True)
     duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
+    endTime = DateTimeField(required=True)
     location = StringField()
     creatingClub = ReferenceField("Club", max_length=200, required=True)
     creationTime = DateTimeField(required=True, validation=None)
@@ -148,6 +149,7 @@ class Event(DynamicDocument):
             "description": self.description,
             "duration": self.duration,
             "startTime": self.startTime.isoformat(),
+            "endTime": self.endTime.isoformat(),
             "location": self.location,
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
