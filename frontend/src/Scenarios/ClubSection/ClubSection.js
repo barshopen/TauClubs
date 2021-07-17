@@ -135,7 +135,8 @@ const ClubSection = () => {
         <Nav>
           <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
           <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-          {join}
+
+          {admin ? <NavLink to='/profile/clubs'>Manage</NavLink> : join}
         </Nav>
       </NavBarContainer>
       <Switch>
