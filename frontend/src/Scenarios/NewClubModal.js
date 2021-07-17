@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { Box, makeStyles } from '@material-ui/core';
-
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ImageUploader from 'react-images-upload';
 import Select from 'react-select';
 import GenericModal from '../Components/Generic/GenericModal';
-import useClubs from '../hooks/useClubs';
+import useConfetti from '../hooks/useConfetti';
+
+const options = [
+  { value: 'sports', label: 'Sports' },
+  { value: 'Dancing', label: 'Dancing' },
+  { value: 'Social', label: 'Social' },
+  { value: 'Math', label: 'Math' },
+  { value: 'Outdoors', label: 'Outdoors' },
+  { value: 'Music', label: 'Music' },
+  { value: 'Science', label: 'Science' },
+  { value: 'Politics', label: 'Politics' },
+  { value: 'meditation', label: 'Meditation' },
+  { value: 'Food', label: 'Food' },
+  { value: 'Cooking', label: 'Cooking' },
+  { value: 'architecture', label: 'Architecture' },
+  { value: 'history', label: 'History' },
+  { value: 'Literature', label: 'Literature' },
+  { value: 'poetry', label: 'Poetry' },
+  { value: 'Gaming', label: 'Gaming' },
+  { value: 'volunteering', label: 'Volunteering' },
+];
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -36,13 +55,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NewClubContent({ clubId, setOpen, onChange: handler }) {
+function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
   const { id, name, description, contact, title, isImage, existTag } = clubId;
-  let present = isImage;
   const classes = useStyles();
   const [values, setValues] = useState({});
   const [tags, setTags] = useState(existTag);
-  const { refetchMyClubs } = useClubs();
+  const [done, setDone] = useState(false);
+
+  const { Confetti } = useConfetti();
+
+  const [currentImage, setCurrentImage] = useState(isImage);
+
+  const image = useMemo(() => [`${window.origin}/db/images/${id}`], [id]);
 
   const handleTags = selectedOptions => {
     setTags(selectedOptions);
@@ -57,8 +81,8 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
 
   const submitHandler = async e => {
     e.preventDefault();
-    const tagsArray = tags.map(({ label }) => label);
 
+    const tagsArray = tags.map(({ label }) => label);
     const data = new FormData();
     data.append('club_name', values.club_name);
     data.append('description', values.description);
@@ -69,13 +93,14 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
     } else {
       data.append('image', 'None');
     }
+    setDone(true);
     await handler(data);
     setOpen(false);
-    refetchMyClubs();
+    refetch?.();
   };
 
   const handleDrop = pictureFiles => {
-    present = false;
+    setCurrentImage(false);
     setValues({
       ...values,
       image: pictureFiles[0],
@@ -89,101 +114,91 @@ function NewClubContent({ clubId, setOpen, onChange: handler }) {
     return arr;
   };
 
-  const options = [
-    { value: 'sports', label: 'Sports' },
-    { value: 'Dancing', label: 'Dancing' },
-    { value: 'Social', label: 'Social' },
-    { value: 'Math', label: 'Math' },
-    { value: 'Outdoors', label: 'Outdoors' },
-    { value: 'Music', label: 'Music' },
-    { value: 'Science', label: 'Science' },
-    { value: 'Politics', label: 'Politics' },
-    { value: 'meditation', label: 'Meditation' },
-    { value: 'Food', label: 'Food' },
-    { value: 'Cooking', label: 'Cooking' },
-    { value: 'architecture', label: 'Architecture' },
-    { value: 'history', label: 'History' },
-    { value: 'Literature', label: 'Literature' },
-    { value: 'poetry', label: 'Poetry' },
-    { value: 'Gaming', label: 'Gaming' },
-    { value: 'volunteering', label: 'Volunteering' },
-  ];
-
   return (
-    <form
-      className={classes.root}
-      Validate
-      autoComplete='on'
-      onSubmit={submitHandler}>
-      <Typography variant='h6' className={classes.header}>
-        {title}
-      </Typography>
+    <div>
+      <form
+        className={classes.root}
+        Validate
+        autoComplete='on'
+        onSubmit={submitHandler}>
+        <Typography variant='h6' className={classes.header}>
+          {title}
+        </Typography>
 
-      <TextField
-        name='club_name'
-        label={name}
-        variant='outlined'
-        required={title === 'Create New Club'}
-        onChange={handleChange}
-      />
-      <TextField
-        name='contact_mail'
-        label={contact}
-        variant='outlined'
-        required={title === 'Create New Club'}
-        onChange={handleChange}
-      />
-      <TextField
-        name='description'
-        label={description}
-        multiline
-        variant='outlined'
-        rows={4}
-        rowsMax={10}
-        required={title === 'Create New Club'}
-        onChange={handleChange}
-      />
-      <Box p={1}>
-        <Select
-          name='tags'
-          backgroundColor='black'
-          onChange={handleTags}
-          isMulti
-          options={tags.length === 5 ? [] : options}
-          defaultValue={tagsfunc(tags)}
+        <TextField
+          name='club_name'
+          label={name}
+          variant='outlined'
+          required={title === 'Create New Club'}
+          onChange={handleChange}
         />
-      </Box>
-      <ImageUploader
-        withIcon
-        withPreview
-        singleImage
-        buttonText='Pick a profile image'
-        defaultImages={present && [`${window.origin}/db/images/${id}`]}
-        onChange={handleDrop}
-        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-        maxFileSize={5242880}
-      />
-      <div className={classes.buttons}>
-        <Button variant='contained' color='primary' type='submit'>
-          Publish
-        </Button>
-      </div>
-    </form>
+        <TextField
+          name='contact_mail'
+          label={contact}
+          variant='outlined'
+          required={title === 'Create New Club'}
+          onChange={handleChange}
+        />
+        <TextField
+          name='description'
+          label={description}
+          multiline
+          variant='outlined'
+          rows={4}
+          rowsMax={10}
+          required={title === 'Create New Club'}
+          onChange={handleChange}
+        />
+        <Box p={1}>
+          <Select
+            name='tags'
+            backgroundColor='black'
+            onChange={handleTags}
+            isMulti
+            options={tags.length === 5 ? [] : options}
+            defaultValue={tagsfunc(tags)}
+          />
+        </Box>
+        <ImageUploader
+          withIcon
+          withPreview
+          singleImage
+          buttonText='Pick a profile image'
+          defaultImages={currentImage ? image : undefined}
+          onChange={handleDrop}
+          imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+          maxFileSize={5242880}
+        />
+        <div className={classes.buttons}>
+          <Button variant='contained' color='primary' type='submit'>
+            Publish
+          </Button>
+        </div>
+      </form>
+      {done && <Confetti />}
+    </div>
   );
 }
 NewClubContent.propTypes = {
   clubId: PropTypes.string.isRequired,
   setOpen: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  refetch: PropTypes.func.isRequired,
 };
 
-export default function NewClubModal({ clubId, ClickableTrigger, handler }) {
+export default function NewClubModal({
+  clubId,
+  ClickableTrigger,
+  handler,
+  refetch,
+}) {
   return (
     <GenericModal
       ClickableTrigger={ClickableTrigger}
       Content={NewClubContent}
       onChange={handler}
       clubId={clubId}
+      refetch={refetch}
     />
   );
 }
@@ -194,5 +209,6 @@ NewClubModal.propTypes = {
     PropTypes.shape({ render: PropTypes.func.isRequired }),
   ]).isRequired,
   handler: PropTypes.func.isRequired,
+  refetch: PropTypes.func.isRequired,
   clubId: PropTypes.string.isRequired,
 };

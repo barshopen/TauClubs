@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import {
   Avatar,
   Box,
@@ -18,10 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { deleteClub, editClub } from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
 import NewClubModal from '../../../../../../Scenarios/NewClubModal';
-
-function deleteHandler(clubId) {
-  deleteClub({ payload: { clubId } });
-}
+import useClub from '../../../../../../hooks/useClub';
 
 function ClickableTrigger({ onClick }) {
   return (
@@ -39,11 +37,24 @@ ClickableTrigger.propTypes = {
 
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
-  function editClubHandler(data) {
-    console.log('EditClub{}');
-    data.append('clubId', clubData?.id);
-    editClub(data);
+
+  const { editClub: edit } = useClub(clubData.id);
+  const queryClient = useQueryClient();
+
+  const refetchDashboard = () => {
+    queryClient.invalidateQueries(['dashboardData']);
+  };
+
+  function deleteHandler(clubId) {
+    deleteClub({ payload: { clubId } });
+    refetchDashboard();
   }
+
+  function editClubHandler(data) {
+    data.append('clubId', clubData?.id);
+    edit(data);
+  }
+
   return (
     <Card
       style={{

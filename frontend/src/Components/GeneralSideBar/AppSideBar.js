@@ -139,8 +139,9 @@ export default function AppSideBar() {
     setSelectedIndex(index);
   };
 
-  const { myClubs } = useClubs();
+  const { refetchMyClubs, myClubs } = useClubs();
   const user = useRecoilValue(currentUser);
+
   const SideBardListItems = [
     {
       text: 'Feed',
@@ -191,6 +192,7 @@ export default function AppSideBar() {
         {user && (
           <NewClubModal
             ClickableTrigger={ClickableTrigger}
+            refetch={refetchMyClubs}
             handler={createClub}
             clubId={{
               name: 'Club Name',
@@ -198,6 +200,7 @@ export default function AppSideBar() {
               contact: 'Club Contact Email',
               title: 'Create New Club',
               existTag: [],
+              isImage: false,
             }}
           />
         )}

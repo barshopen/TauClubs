@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import AppsIcon from '@material-ui/icons/Apps';
 
 const TotalClubs = ({ clubs }) => (
   <Card style={{ height: '100%', position: 'relative', paddingBottom: '50px' }}>
@@ -23,7 +23,7 @@ const TotalClubs = ({ clubs }) => (
               position: 'absolute',
               right: '15px',
             }}>
-            <PeopleIcon />
+            <AppsIcon />
           </Avatar>
         </Grid>
       </Grid>
