@@ -36,58 +36,38 @@ function NewEventContent() {
   return (
     <div className={classes.root}>
       <Typography variant='h2' align='center' gutterBottom>
-        About Tau Clubs
+        About TauClubs
       </Typography>
-      <Typography variant='subtitle1' gutterBottom align='center'>
-        This site was created for you! here you can...
-      </Typography>
-      <Typography variant='h4' disply='inline' align='center'>
+      <Typography variant='h4' align='center'>
         Explore
       </Typography>
-      <Typography
-        variant='subtitle1'
-        disply='inline'
-        gutterBottom
-        align='center'>
+      <Typography variant='subtitle1' gutterBottom align='center'>
         Find clubs and groups that you like to join
       </Typography>
-      <Typography variant='h4' disply='inline' align='center'>
+      <Typography variant='h4' align='center'>
         Participate
       </Typography>
-      <Typography
-        variant='subtitle1'
-        disply='inline'
-        gutterBottom
-        align='center'>
+      <Typography variant='subtitle1' gutterBottom align='center'>
         Get updates on meetups and other activities
       </Typography>
-      <Typography variant='h4' disply='inline' align='center'>
+      <Typography variant='h4' align='center'>
         Create
       </Typography>
-      <Typography
-        variant='subtitle1'
-        disply='inline'
-        gutterBottom
-        align='center'>
-        Create your own club! find other students who share the same interests
+      <Typography variant='subtitle1' gutterBottom align='center'>
+        Create your own club!
       </Typography>
-      <Box marginTop='0px'>
-        <Typography variant='h4' align='center' gutterBottom>
-          Created By
-        </Typography>
+
+      <Box marginTop='20px'>
         <Typography
-          variant='subtitle1'
           disply='inline'
+          style={{ fontSize: '0.8rem' }}
           gutterBottom
           align='center'>
-          Avital Haiman || Bar Shopen || Daniel Peretz || Sharon Zolty
+          Created by: Avital Haiman, Bar Shopen, Daniel Peretz, Sharon Zolty
         </Typography>
       </Box>
 
       <Box p={1}>
-        <Typography variant='h5' disply='inline' align='center' gutterBottom>
-          Get In Touch!
-        </Typography>
         <Box display='flex' justifyContent='center'>
           <Button
             variant='outlined'
@@ -95,7 +75,7 @@ function NewEventContent() {
             font='Roboto Condensed'
             startIcon={<SendIcon />}
             href='mailto:tauclubs2021@gmail.com?body=hey!'>
-            Send us a mail to tauclubs2021@gmail.com
+            Mail us
           </Button>
         </Box>
       </Box>
