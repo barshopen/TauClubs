@@ -42,9 +42,9 @@ def establish_club(
     return membership.clubName
 
 
-def get_clubs(name: str, tag: str):
-    name_Q = Q(name__icontains=name) if name else Q()
-    tags_Q = Q(tags=tag) if tag else Q()
+def get_clubs(search: str):
+    name_Q = Q(name__icontains=search) if search else Q()
+    tags_Q = Q(tags=search) if search else Q()
     return json.dumps(
         list(
             map(
