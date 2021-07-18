@@ -209,11 +209,6 @@ def event_creation():
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Restrict", 400
-    print(
-        datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
-        )
-    )
     result = createEvent(
         title=request.json.get("data")["event_title"],
         description=request.json.get("data")["event_description"],
