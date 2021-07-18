@@ -74,7 +74,8 @@ function NewEventContent() {
             color='primary'
             font='Roboto Condensed'
             startIcon={<SendIcon />}
-            href='mailto:tauclubs2021@gmail.com?body=hey!'>
+            href='https://mail.google.com/mail/?view=cm&fs=1&to=tauclubs2021@gmail.com'
+            target='_blank'>
             Mail us
           </Button>
         </Box>
