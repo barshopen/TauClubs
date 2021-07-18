@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-// import FavoriteIcon from '@material-ui/icons/Favorite';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import CardContent from '@material-ui/core/CardContent';
@@ -15,8 +14,8 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import UpdatMessageModal from '../../Scenarios/UpdateMessageModal';
-import UpdateEventModal from '../../Scenarios/UpdateEventModal';
+import NewMessageModal from '../../Scenarios/NewMessageModal';
+import NewEventModal from '../../Scenarios/NewEventModal';
 import DeleteConfirmationModal from '../../Scenarios/DeleteConfirmationModal';
 import useClubFeed from '../../hooks/useClubFeed';
 import {
@@ -55,15 +54,20 @@ IconBu.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export const eventsIcon = (clubId, id, isAttend, isInterested) => {
-  const { refetchFeed } = useFeed();
+export const eventsIcon = ({
+  refetchFeed,
+  clubId,
+  id,
+  isAttend,
+  isInterested,
+}) => {
   const handleInterested = () =>
     // eslint-disable-next-line no-nested-ternary
     isInterested
       ? uninterested(clubId, id).then(() => refetchFeed())
-      : !isAttend
-      ? interested(clubId, id).then(() => refetchFeed())
-      : null;
+      : isAttend
+      ? null
+      : interested(clubId, id).then(() => refetchFeed());
 
   const handleAttend = () =>
     isAttend
@@ -111,10 +115,15 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     isAttend,
     isInterested,
     content,
+    duration,
   } = feedItem;
+
+  const { refetchFeed } = useFeed();
+
   const { editMessage, editEvent } = useClubFeed({ clubId });
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+
   function deleteHandler(eventId) {
     if (location) {
       deleteEvent({ payload: { clubId, eventId } });
@@ -149,27 +158,40 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography>Starts at: {displayStartTime}</Typography>
+            <Typography style={{ marginBottom: '10px' }}>
+              Starts at: {displayStartTime}
+            </Typography>
+            <Typography
+              style={{
+                marginBottom: '10px',
+              }}>{`Duration: ${duration} hours`}</Typography>
             <Typography>Location: {location}</Typography>
           </>
         )}
       </CardContent>
       <CardActions disableSpacing>
-        {location && eventsIcon(clubId, id, isAttend, isInterested)}
-        {isAdmin && location && (
-          <UpdateEventModal
-            ClickableTrigger={IconBu}
-            editEvent={editEvent}
-            clubId={{ id, title, description }}
-          />
-        )}
-        {isAdmin && !location && (
-          <UpdatMessageModal
-            ClickableTrigger={IconBu}
-            editMessage={editMessage}
-            clubId={{ id, title, content }}
-          />
-        )}
+        {location &&
+          eventsIcon({ refetchFeed, clubId, id, isAttend, isInterested })}
+        {isAdmin &&
+          (location ? (
+            <NewEventModal
+              ClickableTrigger={IconBu}
+              handler={editEvent}
+              clubId={{
+                id,
+                title,
+                description,
+                location,
+                titleStatus: 'Edit Event',
+              }}
+            />
+          ) : (
+            <NewMessageModal
+              ClickableTrigger={IconBu}
+              handler={editMessage}
+              clubId={{ id, title, content, titleStatus: 'Edit Message' }}
+            />
+          ))}
         {isAdmin && (
           <DeleteConfirmationModal id={id} deleteHandler={deleteHandler} />
         )}
@@ -192,7 +214,7 @@ GenericFeedMessage.propTypes = {
       lastUpdateTime: PropTypes.string,
       isAttend: PropTypes.string,
       isInterested: PropTypes.string,
-      // duration: PropTypes.string,
+      duration: PropTypes.string,
     })
   ),
 };
