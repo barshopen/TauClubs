@@ -155,6 +155,8 @@ class Event(DynamicDocument):
             "isAttend": user in self.membersAttending,
             "isInterested": user in self.intrested,
             "profileImage": self.creatingClub.hasPicture(),
+            "numAttending": len(self.membersAttending),
+            "numInterest": len(self.intrested),
         }
 
     def to_json(self):

@@ -125,6 +125,8 @@ function FeedCardEvent({ feedItem }) {
     isAttend,
     isInterested,
     profileImage,
+    numAttending,
+    numInterest,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -163,6 +165,9 @@ function FeedCardEvent({ feedItem }) {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
+          <Typography>Attending: {numAttending}</Typography>
+          <Typography>Intrested: {numInterest}</Typography>
+          <br />
           <Typography paragraph>more details:</Typography>
           <Typography paragraph variant='h6' color='initial'>
             {description}
