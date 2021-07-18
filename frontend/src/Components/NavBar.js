@@ -260,10 +260,15 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Button disableRipple onClick={() => history.push('/')}>
-            <Typography className={classes.title} variant='h6' noWrap>
-              TauClubs
-            </Typography>
+          <Button
+            disableRipple
+            onClick={() => history.push('/')}
+            style={{ width: 10, height: 10, size: 'small' }}>
+            <img
+              alt='logo'
+              className={classes.logo}
+              src='/images/tauclubslogo.jpeg'
+            />
           </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
