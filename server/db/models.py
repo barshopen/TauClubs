@@ -140,7 +140,15 @@ class Event(DynamicDocument):
     membersAttending = ListField(ReferenceField("User"))
 
     def to_dict(self):
-        user = UserAuth.objects.get(id=current_user.get_id()).userauth
+        isAttend = False
+        isInterested = False
+        if current_user.is_authenticated:
+            user = UserAuth.objects.get(id=current_user.get_id()).userauth
+            if user in self.membersAttending:
+                isAttend = True
+            if user in self.intrested:
+                isInterested = True
+
         return {
             "id": str(self.pk),
             "clubId": str(self.creatingClub.id),
@@ -152,8 +160,8 @@ class Event(DynamicDocument):
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "isAttend": user in self.membersAttending,
-            "isInterested": user in self.intrested,
+            "isAttend": isAttend,
+            "isInterested": isInterested,
             "profileImage": self.creatingClub.hasPicture(),
         }
 
