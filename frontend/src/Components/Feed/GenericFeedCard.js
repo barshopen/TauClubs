@@ -120,6 +120,7 @@ function FeedCardEvent({ feedItem }) {
     clubName,
     description,
     startTime,
+    endTime,
     location,
     lastUpdateTime,
     isAttend,
@@ -129,6 +130,7 @@ function FeedCardEvent({ feedItem }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -144,6 +146,7 @@ function FeedCardEvent({ feedItem }) {
         {location && (
           <>
             <Typography>Starts at: {displayStartTime}</Typography>
+            <Typography>Ends at: {displayEndTime}</Typography>
             <Typography>Location: {location}</Typography>
           </>
         )}
@@ -241,6 +244,7 @@ FeedCardEvent.propTypes = {
       description: PropTypes.string,
       location: PropTypes.string,
       startTime: PropTypes.string,
+      endTime: PropTypes.string,
       // duration: PropTypes.string,
     })
   ),

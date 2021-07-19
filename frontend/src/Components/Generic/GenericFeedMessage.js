@@ -110,6 +110,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     title,
     description,
     startTime,
+    endTime,
     location,
     lastUpdateTime,
     isAttend,
@@ -123,6 +124,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
   const { editMessage, editEvent } = useClubFeed({ clubId });
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
 
   function deleteHandler(eventId) {
     if (location) {
@@ -159,7 +161,10 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
         {location && (
           <>
             <Typography style={{ marginBottom: '10px' }}>
-              Starts at: {displayStartTime}
+              Starts: {displayStartTime}
+            </Typography>
+            <Typography style={{ marginBottom: '10px' }}>
+              End: {displayEndTime}
             </Typography>
             <Typography
               style={{
