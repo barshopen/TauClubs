@@ -117,6 +117,8 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     isInterested,
     content,
     duration,
+    numAttending,
+    numInterest,
   } = feedItem;
 
   const { refetchFeed } = useFeed();
@@ -170,7 +172,19 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
               style={{
                 marginBottom: '10px',
               }}>{`Duration: ${duration} hours`}</Typography>
-            <Typography>Location: {location}</Typography>
+            <Typography
+              style={{
+                marginBottom: '10px',
+              }}>
+              Location: {location}
+            </Typography>
+            <Typography
+              style={{
+                marginBottom: '10px',
+              }}>
+              Attending: {numAttending}
+            </Typography>
+            <Typography>Intrested: {numInterest}</Typography>
           </>
         )}
       </CardContent>
