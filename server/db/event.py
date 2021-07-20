@@ -3,14 +3,11 @@ from server.db.models import Event, current_time, dict_two_months
 from mongoengine.queryset.visitor import Q
 
 
-def createEvent(
-    title, duration, club, startTime, endTime, location=None, description=None
-):
+def createEvent(title, club, startTime, endTime, location=None, description=None):
     newEvent = Event(
         title=title,
         description=description,
         creationTime=current_time(),
-        duration=duration,
         startTime=startTime,
         endTime=endTime,
         lastUpdateTime=current_time(),
@@ -29,14 +26,11 @@ def updateEventContent(
     location=None,
     title=None,
     description=None,
-    duration=None,
 ):
     if title:
         event.title = title
     if description:
         event.description = description
-    if duration:
-        event.duration = duration
     if startTime:
         event.startTime = startTime
     if endTime:

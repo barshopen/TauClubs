@@ -132,7 +132,6 @@ class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
     endTime = DateTimeField(required=True)
     location = StringField()
@@ -157,7 +156,7 @@ class Event(DynamicDocument):
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            "duration": self.duration,
+            "duration": (self.endTime.isoformat() - self.startTime.isoformat()),
             "startTime": self.startTime.isoformat(),
             "endTime": self.endTime.isoformat(),
             "location": self.location,
