@@ -1,4 +1,5 @@
 import datetime
+
 from .models import ClubMembership, User, Club, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
@@ -6,12 +7,17 @@ from mongoengine.queryset.visitor import Q
 
 
 def createMembership(user, club, role):
+    approveTime = None
+    if role == "A":
+        approveTime = current_time()
     membership = ClubMembership(
         club=club,
         clubName=club.name,
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
+        RequestTime=current_time(),
+        approveTime=approveTime,
     )
     membership.save()
     return membership
@@ -24,6 +30,17 @@ def join_club(user_email: str, club_id: str):
         return createRegularMembership(user, club)
     except NotUniqueError:
         return None
+
+
+def nowR():
+    memberships = ClubMembership.objects()
+    for mrm in memberships:
+        if mrm.role != "P":
+            mrm.update(RequestTime=current_time(), approveTime=current_time())
+            mrm.save()
+        else:
+            mrm.update(RequestTime=current_time())
+            mrm.save()
 
 
 def leave_club(user, club):
@@ -126,6 +143,10 @@ def month_to_num(today_month, month_ago):
     return today_month - month_ago + 12 + 1
 
 
+def current_time():
+    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+
+
 def users_for_club_six_months(club):
     today = datetime.datetime.today()
     dict = {}
@@ -172,4 +193,6 @@ def remove_club_from_user(membership):
 
 def approve(club, user, answer):
     membership = ClubMembership.objects(member=user, club=club)
-    membership.update(role=answer)
+    membership.update(role=answer, approveTime=current_time())
+    # If user was approved as user and now he is approved as manager
+    # the approve time changes

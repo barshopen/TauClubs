@@ -109,8 +109,8 @@ class ClubMembership(DynamicDocument):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    RequestTime = (
-        DateTimeField()
+    RequestTime = DateTimeField(
+        required=True
     )  # chaneg to required, havent change it because nedd to change the db
     approveTime = DateTimeField()
 
@@ -120,6 +120,8 @@ class ClubMembership(DynamicDocument):
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
+            "requestTime": self.RequestTime,
+            "approveTime": self.approveTime,
         }
 
     def to_json(self):

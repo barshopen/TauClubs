@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, json
 import dotenv
-from server.db import db_app
+from server.db import db_app, now
 from server.db.manager_data import dashboard_app
 from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
@@ -46,6 +46,7 @@ URL_HOST = (
 mongodb = MongoEngine()
 app.config["MONGODB_SETTINGS"] = {"host": URL_HOST}
 mongodb.init_app(app)
+now()
 
 if FLAG_EXPECTED_VALUE != FLAG_ACTUAL_VALUE:
 
