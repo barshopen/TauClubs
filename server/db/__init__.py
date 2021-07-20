@@ -6,7 +6,6 @@ from server.db.clubmembership import (
     is_member,
     is_user_member,
     leave_club,
-    nowR,
 )
 from flask import Blueprint, json, request
 from server.db.club import (
@@ -479,10 +478,6 @@ def add_tag(club_id):
         return club.to_json()
     except Exception:
         return "Failed", 200
-
-
-def now():
-    nowR()
 
 
 @login_required

@@ -32,17 +32,6 @@ def join_club(user_email: str, club_id: str):
         return None
 
 
-def nowR():
-    memberships = ClubMembership.objects()
-    for mrm in memberships:
-        if mrm.role != "P":
-            mrm.update(RequestTime=current_time(), approveTime=current_time())
-            mrm.save()
-        else:
-            mrm.update(RequestTime=current_time())
-            mrm.save()
-
-
 def leave_club(user, club):
     membership = ClubMembership.objects(member=user, club=club)
     if membership is None:
