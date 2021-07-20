@@ -254,3 +254,7 @@ def dict_two_months(clubs, func):
         dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
         dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
     return dict
+
+
+def current_time():
+    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)

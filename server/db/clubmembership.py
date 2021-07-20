@@ -1,6 +1,6 @@
 import datetime
 
-from .models import ClubMembership, User, Club, months_ago
+from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
 from mongoengine.queryset.visitor import Q
@@ -130,10 +130,6 @@ def month_to_num(today_month, month_ago):
     if today_month >= month_ago:
         return today_month - month_ago
     return today_month - month_ago + 12 + 1
-
-
-def current_time():
-    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
 
 
 def users_for_club_six_months(club):

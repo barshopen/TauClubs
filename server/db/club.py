@@ -1,10 +1,9 @@
-import datetime
 from server.db.tag import add_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
-from .models import Club
+from .models import Club, current_time
 from .clubmembership import createAdminMembership
 
 
@@ -15,7 +14,7 @@ def create_club(
     description: str = "",
     tags=[],
 ):
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+    now = current_time()
     club = Club(
         contactMail=contact_mail,
         name=club_name,
