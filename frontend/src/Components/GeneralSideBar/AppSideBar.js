@@ -75,7 +75,14 @@ const SideBarListItem = ({
         handleListItemClick && (event => handleListItemClick(event, id))
       }>
       <ListItemIcon>{children}</ListItemIcon>
-      <ListItemText primary={text} />
+      <ListItemText
+        primary={text}
+        style={{
+          whiteSpace: 'break-spaces',
+          wordBreak: 'break-word',
+          marginRight: '20px',
+        }}
+      />
       {admin && <GiQueenCrown />}
     </ListItem>
   </NavLink>
