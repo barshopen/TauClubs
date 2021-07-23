@@ -1,9 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useCallback } from 'react';
 import ReactCanvasConfetti from 'react-canvas-confetti';
-
-function randomInRange(min, max) {
-  return Math.random() * (max - min) + min;
-}
 
 const canvasStyles = {
   position: 'fixed',
@@ -17,9 +14,7 @@ const canvasStyles = {
 const useConfetti = () => {
   const [animationInstance, setAnimationInstance] = useState(null);
 
-  const getInstance = instance => {
-    setAnimationInstance(instance);
-  };
+  const getInstance = instance => setAnimationInstance(instance);
 
   const Confetti = useCallback(
     () => (

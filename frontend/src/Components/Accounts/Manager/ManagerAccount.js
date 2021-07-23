@@ -14,7 +14,7 @@ const Loader = styled(BaseLoader)`
 const ManagerAccount = () => {
   const storeKey = ['dashboardData'];
   const { data, isLoading } = useQuery(storeKey, getDashboardData, {
-    staleTime: Infinity,
+    staleTime: 0,
   });
 
   return isLoading ? (

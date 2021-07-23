@@ -41,20 +41,18 @@ const DashboardClubCard = ({ club }) => {
   const { editClub: edit } = useClub(clubData.id);
   const queryClient = useQueryClient();
 
-  const refetchDashboard = () => {
+  const refetchDashboard = () =>
     queryClient.invalidateQueries(['dashboardData']);
-  };
 
-  function deleteHandler(clubId) {
+  const deleteHandler = clubId => {
     deleteClub({ payload: { clubId } });
     refetchDashboard();
-  }
+  };
 
-  function editClubHandler(data) {
+  const editClubHandler = data => {
     data.append('clubId', clubData?.id);
     edit(data);
-    refetchDashboard();
-  }
+  };
 
   return (
     <Card
@@ -73,6 +71,7 @@ const DashboardClubCard = ({ club }) => {
           <NewClubModal
             ClickableTrigger={ClickableTrigger}
             handler={editClubHandler}
+            refetch={refetchDashboard}
             clubId={{
               id: clubData?.id,
               name: clubData?.name,
