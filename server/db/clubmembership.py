@@ -175,7 +175,9 @@ def users_for_club_six_months(club):
 def users_for_club(club):
     return list(
         map(
-            lambda membership: membership.member.to_dict_with_role(membership.role),
+            lambda membership: membership.member.to_dict_with_membership(
+                membership.to_dict()
+            ),
             ClubMembership.objects.filter(club=club),
         )
     )

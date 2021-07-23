@@ -525,7 +525,7 @@ def add_tag(club_id):
 def approve_user():
     club_id = request.json.get("clubId")
     user_id = request.json.get("userId")
-    if not club_id or user_id:
+    if not club_id or not user_id:
         return "Failed", 400
     manager = get_userauth_user_by_id(current_user.get_id())
     club = get_club(club_id)
@@ -534,7 +534,7 @@ def approve_user():
     user = get_user(user_id)
     regularMembership(user, club)
     # send_mail_approve([user.to_dict()], club.name)
-    return 200
+    return "success", 200
 
 
 @login_required

@@ -91,9 +91,11 @@ class User(DynamicDocument):
             "joinTime": self.id.generation_time.isoformat(),
         }
 
-    def to_dict_with_role(self, role):
+    def to_dict_with_membership(self, membership_dict):
         d = self.to_dict()
-        d["status"] = ROLES[role]
+        d["status"] = ROLES[membership_dict["role"]]
+        d["requestTime"] = membership_dict["requestTime"]
+        d["approveTime"] = membership_dict["approveTime"]
         return d
 
     def to_json(self):
@@ -118,12 +120,18 @@ class ClubMembership(DynamicDocument):
     approveTime = DateTimeField()
 
     def to_dict(self):
+        approve = None
+        try:
+            approve = self.approveTime
+        except Exception:
+            print(approve)
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
             "requestTime": self.requestTime,
+            "approveTime": approve,
         }
 
     def to_json(self):
