@@ -35,7 +35,6 @@ def updateEventContent(
     location=None,
     title=None,
     description=None,
-    duration=None,
 ):
     if title:
         event.title = title

@@ -36,7 +36,6 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
 
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
-    event_startDateTime: moment().format('YYYY-MM-DD[T]HH:mm'),
     eventId: id,
   });
 
