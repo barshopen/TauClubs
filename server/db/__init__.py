@@ -403,22 +403,28 @@ def event_update():
         description = None
     # duration = request.json.get("data")["event_duration"]
     try:
-        startTime = datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
+        startTime = (
+            datetime.datetime.strptime(
+                request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
+            ).replace(tzinfo=datetime.timezone.utc),
         )
-        endTime = datetime.datetime.strptime(
-            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        endTime = (
+            datetime.datetime.strptime(
+                request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+            ).replace(tzinfo=datetime.timezone.utc),
         )
+        location = (request.json.get("data")["event_location"],)
     except Exception:
         startTime = None
         endTime = None
-    # location = request.json.get("data")["event_location"]  # need to update it
+        location = None
     event = updateEventContent(
         event,
         title=title,
         description=description,
         startTime=startTime,
         endTime=endTime,
+        location=location,
     )
     return event.to_json(), 200
 

@@ -41,8 +41,6 @@ def updateEventContent(
         event.title = title
     if description:
         event.description = description
-    if duration:
-        event.duration = duration
     if startTime:
         event.startTime = startTime
     if endTime:
@@ -54,6 +52,9 @@ def updateEventContent(
         lastUpdateTime=now,
         title=event.title,
         description=event.description,
+        startTime=event.startTime,
+        endTime=event.endTime,
+        location=event.location,
     )
     return event
 
