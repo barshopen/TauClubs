@@ -46,7 +46,6 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
   const [formValues, setFormValues] = useState({
     eventId: id,
   });
-  console.log(startTime);
   const handleChange = e =>
     setFormValues(prev => ({
       ...prev,
