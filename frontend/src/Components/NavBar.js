@@ -260,16 +260,27 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Button
-            disableRipple
-            onClick={() => history.push('/')}
-            style={{ width: 10, height: 10, size: 'small' }}>
-            <img
-              alt='logo'
-              className={classes.logo}
-              src='/images/tauclubslogo.jpeg'
-            />
-          </Button>
+          <div className={classes.sectionDesktop}>
+            <Button disableRipple onClick={() => history.push('/')}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '46px', height: '42px' }}
+              />
+            </Button>
+          </div>
+          <div className={classes.sectionMobile}>
+            <Button disableRipple onClick={() => history.push('/')}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '35px', height: '35px' }}
+              />
+            </Button>
+          </div>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
