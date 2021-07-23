@@ -163,28 +163,21 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
         {location && (
           <>
             <Typography style={{ marginBottom: '10px' }}>
-              Starts: {displayStartTime}
+              {`Timing: ${displayStartTime} - ${displayEndTime} (Total: ${duration} hours)`}
             </Typography>
-            <Typography style={{ marginBottom: '10px' }}>
-              End: {displayEndTime}
-            </Typography>
-            <Typography
-              style={{
-                marginBottom: '10px',
-              }}>{`Duration: ${duration} hours`}</Typography>
             <Typography
               style={{
                 marginBottom: '10px',
               }}>
               Location: {location}
             </Typography>
+
             <Typography
               style={{
                 marginBottom: '10px',
               }}>
-              Attending: {numAttending}
+              {`Responses : ${numAttending} Attending / ${numInterest} Intrested `}
             </Typography>
-            <Typography>Intrested: {numInterest}</Typography>
           </>
         )}
       </CardContent>

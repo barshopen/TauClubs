@@ -128,6 +128,7 @@ function FeedCardEvent({ feedItem }) {
     profileImage,
     numAttending,
     numInterest,
+    duration,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -147,8 +148,9 @@ function FeedCardEvent({ feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography>Starts at: {displayStartTime}</Typography>
-            <Typography>Ends at: {displayEndTime}</Typography>
+            <Typography style={{ marginBottom: '10px' }}>
+              {`Timing: ${displayStartTime} - ${displayEndTime} (Total: ${duration} hours)`}
+            </Typography>
             <Typography>Location: {location}</Typography>
           </>
         )}
