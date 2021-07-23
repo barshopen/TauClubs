@@ -136,6 +136,8 @@ def editClub():  # write
         except Exception:
             image = "None"
         edit_club(club, name, contact_mail, description, image, tags)
+        if image != "None":
+            send_file(image, download_name="club.jpg", max_age=20000000)
         return "Success", 200
     except Exception:
         return "Failed", 400
