@@ -16,7 +16,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
-import { deleteClub, editClub } from '../../../../../../Shared/api';
+import { deleteClub } from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
 import NewClubModal from '../../../../../../Scenarios/NewClubModal';
 import useClub from '../../../../../../hooks/useClub';
@@ -53,6 +53,7 @@ const DashboardClubCard = ({ club }) => {
   function editClubHandler(data) {
     data.append('clubId', clubData?.id);
     edit(data);
+    refetchDashboard();
   }
 
   return (
@@ -125,7 +126,8 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Last Updated {moment(clubData.creationTime).format('DD/MM/YYYY')}
+              Last Updated{' '}
+              {moment(clubData.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid
