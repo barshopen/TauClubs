@@ -9720,10 +9720,10 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-react-canvas-confetti@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-canvas-confetti/-/react-canvas-confetti-1.2.0.tgz#89ed0dc5635d640323ff5cd43934add0974453f2"
-  integrity sha512-idkiQMtG1AzywPHvZSdyn0BbpgofXDIfWBYyCQRZVBqZUZlKa3tUMfe477LqNtnXZvft0yAu+fXsRpkxKx1IfQ==
+react-canvas-confetti@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-canvas-confetti/-/react-canvas-confetti-1.2.1.tgz#22ac64cbc478cf57cb5f61c130322e359b35389d"
+  integrity sha512-onNjQNkhQjrB2JVCeRpJW7o8VlBNJvo3Eht9zlQlofNLVvvOd1+PzBLU5Ev8n5sFBkTbKJmIUVG0eZnkAl5cpg==
   dependencies:
     "@types/canvas-confetti" "1.4.0"
     canvas-confetti "1.4.0"
