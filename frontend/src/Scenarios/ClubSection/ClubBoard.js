@@ -108,7 +108,14 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
           upcomingEvents && (
             <>
               <Messages
-                data={messagesData?.concat(upcomingEvents)}
+                data={messagesData
+                  ?.concat(upcomingEvents)
+                  .sort(
+                    (a, b) =>
+                      new Date(...a.lastUpdateTime.split('/').reverse()) -
+                      new Date(...b.lastUpdateTime.split('/').reverse())
+                  )
+                  .reverse()}
                 isAdmin={currentUserIsClubsAdmin}
               />
             </>

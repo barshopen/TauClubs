@@ -103,16 +103,19 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
         required={titleStatus === 'Create New Event'}
       />
       <TextField
-        name='event_duration'
-        label='Event Duration(hours)'
+        name='event_endDateTime'
+        label='End Date'
+        type='datetime-local'
         variant='outlined'
-        type='number'
-        placeholder={1}
-        inputProps={{
-          min: '0',
-          step: '0.25',
-        }}
+        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
+        className={classes.textField}
+        inputProps={{
+          min: moment().format('YYYY-MM-DD[T]HH:mm'),
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
         required={titleStatus === 'Create New Event'}
       />
 
