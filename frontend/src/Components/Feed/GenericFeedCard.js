@@ -149,9 +149,12 @@ function FeedCardEvent({ feedItem }) {
         {location && (
           <>
             <Typography style={{ marginBottom: '10px' }}>
-              {`Timing: ${displayStartTime} - ${displayEndTime} (Total: ${duration} hours)`}
+              <strong>Timing:</strong>
+              {` ${displayStartTime} - ${displayEndTime} (Total: ${duration} hours)`}
             </Typography>
-            <Typography>Location: {location}</Typography>
+            <Typography>
+              <strong>Location:</strong> {location}
+            </Typography>
           </>
         )}
       </CardContent>
@@ -170,8 +173,9 @@ function FeedCardEvent({ feedItem }) {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
-          <Typography>Attending: {numAttending}</Typography>
-          <Typography>Intrested: {numInterest}</Typography>
+          <strong>Responses:</strong>
+          {` ${numAttending} Attending / ${numInterest} Intrested `}
+
           <br />
           <Typography paragraph>more details:</Typography>
           <Typography paragraph variant='h6' color='initial'>
