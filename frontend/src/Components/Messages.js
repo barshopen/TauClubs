@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
@@ -5,8 +6,8 @@ import GenericFeedMessage from './Generic/GenericFeedMessage';
 
 const Messages = ({ data, isAdmin }) => (
   <Container>
-    {data.map(feedItem => (
-      <GenericFeedMessage feedItem={feedItem} isAdmin={isAdmin} />
+    {data.map((feedItem, index) => (
+      <GenericFeedMessage key={index} feedItem={feedItem} isAdmin={isAdmin} />
     ))}
   </Container>
 );
