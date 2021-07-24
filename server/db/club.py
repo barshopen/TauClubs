@@ -7,7 +7,11 @@ import json
 from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
-from .clubmembership import createAdminMembership, delete_membership
+from .clubmembership import change_club_name, createAdminMembership, delete_membership
+
+
+def current_time():
+    return datetime.datetime.utcnow()
 
 
 def create_club(
@@ -17,14 +21,14 @@ def create_club(
     description: str = "",
     tags=[],
 ):
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
     club = Club(
         contactMail=contact_mail,
         name=club_name,
         profileImage=image,
         description=description,
         creationTime=now,
-        lastUpdateTime=now,
+        lastUpdateTime=current_time(),
     )
     club.save(force_insert=True)
     add_tags(club.id, club, tags)
@@ -42,6 +46,28 @@ def establish_club(
     newclub = create_club(image, name, contact_mail, description, tags)
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
+
+
+def edit_club(club, name, contact_mail, description, image, tags):  # write
+    if name == "undefined":
+        name = club.name
+    else:
+        change_club_name(club, name)
+    if contact_mail == "undefined":
+        contact_mail = club.contactMail
+    if description == "undefined":
+        description = club.description
+    if image != "None":
+        club.profileImage.replace(image)
+    if tags != "":
+        add_tags(club.id, club, tags.split(","))
+    club.update(
+        name=name,
+        contactMail=contact_mail,
+        description=description,
+        lastUpdateTime=current_time(),
+    )
+    club.save()
 
 
 def get_clubs(name: str, tag: str):
@@ -97,4 +123,5 @@ def example_club():
 
 def add_image_to_club(image, club: Club):
     club.profileImage.put(image)
+    club.update(lastUpdateTime=current_time())
     club.save()

@@ -120,15 +120,19 @@ function FeedCardEvent({ feedItem }) {
     clubName,
     description,
     startTime,
+    endTime,
     location,
     lastUpdateTime,
     isAttend,
     isInterested,
     profileImage,
+    numAttending,
+    numInterest,
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -144,6 +148,7 @@ function FeedCardEvent({ feedItem }) {
         {location && (
           <>
             <Typography>Starts at: {displayStartTime}</Typography>
+            <Typography>Ends at: {displayEndTime}</Typography>
             <Typography>Location: {location}</Typography>
           </>
         )}
@@ -163,6 +168,9 @@ function FeedCardEvent({ feedItem }) {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
+          <Typography>Attending: {numAttending}</Typography>
+          <Typography>Intrested: {numInterest}</Typography>
+          <br />
           <Typography paragraph>more details:</Typography>
           <Typography paragraph variant='h6' color='initial'>
             {description}
@@ -241,6 +249,7 @@ FeedCardEvent.propTypes = {
       description: PropTypes.string,
       location: PropTypes.string,
       startTime: PropTypes.string,
+      endTime: PropTypes.string,
       // duration: PropTypes.string,
     })
   ),

@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import {
   Avatar,
   Box,
@@ -12,15 +13,46 @@ import {
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 import { deleteClub } from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
+import NewClubModal from '../../../../../../Scenarios/NewClubModal';
+import useClub from '../../../../../../hooks/useClub';
 
-function deleteHandler(clubId) {
-  deleteClub({ payload: { clubId } });
+function ClickableTrigger({ onClick }) {
+  return (
+    <IconButton onClick={onClick}>
+      <Tooltip title='Edit'>
+        <EditIcon fontSize='large' />
+      </Tooltip>
+    </IconButton>
+  );
 }
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
+
+  const { editClub: edit } = useClub(clubData.id);
+  const queryClient = useQueryClient();
+
+  const refetchDashboard = () =>
+    queryClient.invalidateQueries(['dashboardData']);
+
+  const deleteHandler = clubId => {
+    deleteClub({ payload: { clubId } });
+    refetchDashboard();
+  };
+
+  const editClubHandler = data => {
+    data.append('clubId', clubData?.id);
+    edit(data);
+  };
 
   return (
     <Card
@@ -36,11 +68,30 @@ const DashboardClubCard = ({ club }) => {
             justifyContent: 'space-between',
             pb: 3,
           }}>
+          <NewClubModal
+            ClickableTrigger={ClickableTrigger}
+            handler={editClubHandler}
+            refetch={refetchDashboard}
+            clubId={{
+              id: clubData?.id,
+              name: clubData?.name,
+              description: clubData?.description,
+              contact: clubData?.contactMail,
+              title: 'Edit Club',
+              isImage: clubData?.profileImage,
+              existTag: clubData?.tags,
+            }}
+          />
           <Avatar
             alt='club'
-            // src={`${window.origin}/db/images/${clubData?.id}`}
-            variant='square'
-            style={{ marginBottom: '10px' }}
+            src={`${window.origin}/db/images/${clubData?.id}`}
+            variant='circle'
+            style={{ height: '70px', width: '70px', marginBottom: '10px' }}
+          />
+
+          <DeleteConfirmationModal
+            id={clubData?.id}
+            deleteHandler={deleteHandler}
           />
           <DeleteConfirmationModal
             id={clubData?.id}
@@ -78,7 +129,8 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Updated {moment(clubData.creationTime).format('DD/MM/YYYY')}
+              Last Updated{' '}
+              {moment(clubData.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid

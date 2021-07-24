@@ -5,17 +5,20 @@ from mongoengine.queryset.visitor import Q
 
 
 def currentTime():
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
     return now
 
 
-def createEvent(title, duration, club, startTime, location=None, description=None):
+def createEvent(
+    title, duration, club, startTime, endTime, location=None, description=None
+):
     newEvent = Event(
         title=title,
         description=description,
         creationTime=currentTime(),
         duration=duration,
         startTime=startTime,
+        endTime=endTime,
         lastUpdateTime=currentTime(),
         creatingClub=club,
         location=location,
@@ -28,19 +31,19 @@ def createEvent(title, duration, club, startTime, location=None, description=Non
 def updateEventContent(
     event,
     startTime=None,
+    endTime=None,
     location=None,
     title=None,
     description=None,
-    duration=None,
 ):
     if title:
         event.title = title
     if description:
         event.description = description
-    if duration:
-        event.duration = duration
     if startTime:
         event.startTime = startTime
+    if endTime:
+        event.endTime = endTime
     if location:
         event.location = location
     now = currentTime()
@@ -48,6 +51,9 @@ def updateEventContent(
         lastUpdateTime=now,
         title=event.title,
         description=event.description,
+        startTime=event.startTime,
+        endTime=event.endTime,
+        location=event.location,
     )
     return event
 

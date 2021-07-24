@@ -53,6 +53,9 @@ def delete_membership(club):
         removeMembership(membership)
 
 
+def createRegularMembership(user: User, club: Club):
+    return createMembership(user, club, "U")
+
 def approve_membership(membership, role):
     membership.update(role=role, approveTime=datetime.datetime.utcnow())
     return membership
@@ -218,3 +221,10 @@ def is_member(user, club):
 
 def remove_club_from_user(membership):
     membership.delete()
+
+
+def change_club_name(club, club_name):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        membership.update(clubName=club_name)
+        membership.save()
