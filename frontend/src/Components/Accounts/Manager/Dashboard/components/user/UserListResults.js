@@ -17,12 +17,13 @@ import {
 import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { DataGrid, GridRowsProp } from '@material-ui/data-grid';
 import { approveUserToClub } from '../../../../../../Shared/api';
 import { currentUser } from '../../../../../../Shared/atoms';
 
 const UserListResults = ({ users: allUsers }) => {
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
 
@@ -63,100 +64,57 @@ const UserListResults = ({ users: allUsers }) => {
   // eslint-disable-next-line prettier/prettier
   const dictColorByStatus = { "Admin": 'default', "User": 'primary', "Pending": 'secondary' };
   const currentAdmin = useRecoilValue(currentUser);
+  const newUsers = allUsers.map(({ users, club: { id, name } }) =>
+    users.map(user => {
+      user.date =
+        user.status === 'Pending' ? user?.approveTime : user?.requestTime;
+      user.clubName = name;
+      return user;
+    })
+  );
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Member Name',
+      width: 200,
+    },
+    {
+      field: 'clubName',
+      headerName: 'Club Name',
+      width: 200,
+    },
+    {
+      field: 'contactMail',
+      headerName: 'Email',
+      width: 220,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 150,
+    },
+    {
+      field: 'date',
+      headerName: 'Approve/ Request Time',
+      renderCell: date => moment(date.formattedValue).format('DD/MM/YYYY'),
+      width: 230,
+      description: 'Approve date for memebers, Request date for pending users',
+    },
+  ];
 
+  const rows = newUsers.flat();
   return (
-    <Card>
-      <PerfectScrollbar>
-        <Box minWidth={300}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <IconButton aria-label='filter list'>
-                  <FilterListIcon />
-                </IconButton>
-                <IconButton aria-label='delete'>
-                  <DeleteIcon />
-                </IconButton>
-              </TableRow>
-              <TableRow>
-                <TableCell padding='checkbox'>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>Clubs</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Request/Approve date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Approve</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allUsers?.slice(0, limit).map(({ users, club: { id, name } }) =>
-                users
-                  .filter(user => user?.contactMail !== currentAdmin.email)
-                  .map(user => (
-                    <TableRow hover key={`${user.id}-${id}`}>
-                      <TableCell padding='checkbox'>
-                        <Checkbox />
-                      </TableCell>
-                      <TableCell>{name}</TableCell>
-                      <TableCell>
-                        <Box alignItems='center' display='flex'>
-                          {user.name}
-                        </Box>
-                      </TableCell>
-                      <TableCell>{user.contactMail}</TableCell>
-
-                      <TableCell>{user?.phone || ''}</TableCell>
-                      <TableCell>
-                        {user.status === 'Pending' &&
-                          moment(user?.requestTime).format('DD/MM/YYYY')}
-                        {user.status !== 'Pending' &&
-                          moment(user?.approveTime).format('DD/MM/YYYY')}
-                      </TableCell>
-
-                      <TableCell>
-                        <Chip
-                          color={dictColorByStatus[user.status]}
-                          label={user?.status}
-                          size='small'
-                        />
-                      </TableCell>
-
-                      <TableCell padding='checkbox'>
-                        <Checkbox
-                          checked={
-                            user?.status !== 'Pending' ||
-                            selectedCustomerIds.indexOf(`${user.id}-${id}`) !==
-                              -1
-                          }
-                          onChange={() => {
-                            handleSelectOne(`${user.id}-${id}`);
-                            approveUserToClub({
-                              userId: user.id,
-                              clubId: id,
-                            });
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
-              )}
-            </TableBody>
-          </Table>
-        </Box>
-      </PerfectScrollbar>
-      <TablePagination
-        component='div'
-        count={allUsers.length}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
+    <div style={{ height: 800, width: '110%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoPageSize
+        checkboxSelection
+        disableSelectionOnClick
+        isRowSelectable={params => params.row.status !== 'Admin'}
+        loading
       />
-    </Card>
+    </div>
   );
 };
 
