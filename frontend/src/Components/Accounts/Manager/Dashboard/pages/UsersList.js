@@ -6,7 +6,7 @@ import UserListResults from '../components/user/UserListResults';
 const UsersList = ({ data }) => {
   const allUsers = Object.values(data).map(({ users, club }) => ({
     users,
-    club: club.name,
+    club,
   }));
 
   return (
