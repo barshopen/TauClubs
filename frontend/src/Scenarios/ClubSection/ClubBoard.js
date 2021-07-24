@@ -71,34 +71,34 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
         {currentUserIsClubsAdmin && (
           <>
             <Grid container justify='center' spacing={2}>
-            <Tooltip title='New Message' placement='top'>
-              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                <NewMessageModal
-                  ClickableTrigger={IconBu}
-                  handler={addMessage}
-                  clubId={{
-                    id: '',
-                    title: 'Message Title',
-                    content: 'Message Content',
-                    titleStatus: 'Create New Message',
-                  }}
-                />
-              </Box>
+              <Tooltip title='New Message' placement='top'>
+                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                  <NewMessageModal
+                    ClickableTrigger={IconBu}
+                    handler={addMessage}
+                    clubId={{
+                      id: '',
+                      title: 'Message Title',
+                      content: 'Message Content',
+                      titleStatus: 'Create New Message',
+                    }}
+                  />
+                </Box>
               </Tooltip>
               <Tooltip title='New Event' placement='top'>
-              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                <NewEventModal
-                  ClickableTrigger={AddEventIcon}
-                  handler={addEvent}
-                  clubId={{
-                    id: '',
-                    title: 'Event Title',
-                    description: 'Event Description',
-                    location: 'Event Loaction',
-                    titleStatus: 'Create New Event',
-                  }}
-                />
-              </Box>
+                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                  <NewEventModal
+                    ClickableTrigger={AddEventIcon}
+                    handler={addEvent}
+                    clubId={{
+                      id: '',
+                      title: 'Event Title',
+                      description: 'Event Description',
+                      location: 'Event Loaction',
+                      titleStatus: 'Create New Event',
+                    }}
+                  />
+                </Box>
               </Tooltip>
             </Grid>
           </>
