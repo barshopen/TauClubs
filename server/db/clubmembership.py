@@ -55,27 +55,25 @@ def leave_club(membership):
 
 def delete_membership(club):
     memberships = ClubMembership.objects.filter(club=club)
+    list_of_memberships = []
     for membership in memberships:
+        list_of_memberships.append(membership.member.to_dict())
         removeMembership(membership)
+    return list_of_memberships
 
 
 def approve_membership(membership, role):
-    membership.update(role=role, approveTime=datetime.datetime.utcnow())
-    return membership
-
-
-def regularMembership(user, club):
-    membership = ClubMembership.objects(member=user, club=club)
-    membership = approve_membership(membership, "U")
+    membership.update(role=role, approveTime=current_time())
     return membership
 
 
 def genericApproveMembership(membership):
     if membership.role == "U":
-        membership.update(role="A")  # add approve time
+        membership.update(role="A", approveTime=current_time())
     else:
-        membership.update(role="U")  # add approve time
+        membership.update(role="U", approveTime=current_time())
     membership.save()
+    return membership
 
 
 def createAdminMembership(user_email: str, club: Club):  # change
@@ -96,7 +94,7 @@ def createPendingMembership(user: User, club: Club):
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role="P",
-        requestTime=datetime.datetime.utcnow(),
+        requestTime=current_time().isoformat(),
     )
     membership.save()
     return membership

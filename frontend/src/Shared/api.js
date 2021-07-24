@@ -16,10 +16,10 @@ export const attend = (clubId, eventId) =>
   getDb(`club/${clubId}/messages/${eventId}/attend`);
 
 export const uninterested = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/uninterested`);
+  getDb(`club/${clubId}/events/${eventId}/uninterested`);
 
 export const unattend = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/unattend`);
+  getDb(`club/${clubId}/events/${eventId}/unattend`);
 
 export const whoami = () => get(`/auth/whoami`);
 

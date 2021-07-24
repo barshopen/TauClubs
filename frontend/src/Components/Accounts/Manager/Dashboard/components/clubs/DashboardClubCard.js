@@ -93,10 +93,6 @@ const DashboardClubCard = ({ club }) => {
             id={clubData?.id}
             deleteHandler={deleteHandler}
           />
-          <DeleteConfirmationModal
-            id={clubData?.id}
-            deleteHandler={deleteHandler}
-          />
         </Box>
 
         <Typography
