@@ -1,113 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { DataGrid } from '@material-ui/data-grid';
+import AddIcon from '@material-ui/icons/Add';
 import {
-  Box,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+  approveUserUsers,
+  unapproveUserUsers,
+} from '../../../../../../Shared/api';
 
-const UserListResults = ({ users: allUsers }) => (
-  // const handleSelectOne = (event, id) => {
-  //   const selectedIndex = selectedCustomerIds.indexOf(id);
-  //   let newSelectedCustomerIds = [];
+function sendApprove(memberships) {
+  if (memberships.length > 0) {
+    approveUserUsers(memberships);
+  }
+}
+function sendUnApprove(memberships) {
+  if (memberships.length > 0) {
+    unapproveUserUsers(memberships);
+  }
+}
+const UserListResults = ({ users: allUsers }) => {
+  const [rowsChoose, setRows] = useState([]);
+  const newUsers = allUsers.map(({ users, club: { name } }) =>
+    users.map(user => {
+      user.date =
+        user.status === 'Pending' ? user?.approveTime : user?.requestTime;
+      user.clubName = name;
+      return user;
+    })
+  );
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Member Name',
+      width: 200,
+    },
+    {
+      field: 'clubName',
+      headerName: 'Club Name',
+      width: 200,
+    },
+    {
+      field: 'contactMail',
+      headerName: 'Email',
+      width: 220,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 150,
+    },
+    {
+      field: 'date',
+      headerName: 'Approve/ Request Time',
+      renderCell: date => moment(date.formattedValue).format('DD/MM/YYYY'),
+      width: 230,
+      description: 'Approve date for memebers, Request date for pending users',
+    },
+  ];
 
-  //   if (selectedIndex === -1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds,
-  //       id
-  //     );
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(1)
-  //     );
-  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, -1)
-  //     );
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, selectedIndex),
-  //       selectedCustomerIds.slice(selectedIndex + 1)
-  //     );
-  //   }
+  const rows = newUsers.flat();
+  return (
+    <div style={{ height: 700, width: '110%' }}>
+      <IconButton aria-label='add' onClick={() => sendApprove(rowsChoose)}>
+        <AddIcon />
+      </IconButton>
+      <IconButton aria-label='delete' onClick={() => sendUnApprove(rowsChoose)}>
+        <DeleteIcon />
+      </IconButton>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoPageSize
+        checkboxSelection
+        onSelectionModelChange={e => setRows(e)}
+        disableSelectionOnClick
+        isRowSelectable={params => params.row.status !== 'Admin'}
+      />
+    </div>
+  );
+};
 
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
-  // const getInitials = (name = '') =>
-  //   name
-  //     .replace(/\s+/, ' ')
-  //     .split(' ')
-  //     .slice(0, 2)
-  //     .map(v => v && v[0].toUpperCase())
-  //     .join('');
-
-  <Card>
-    <PerfectScrollbar>
-      <Box minWidth={300}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Clubs</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Registration date</TableCell>
-              {/* <TableCell>Status</TableCell>
-                <TableCell>Approve</TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allUsers?.map(({ users, club }) =>
-              users.map(user => (
-                <TableRow
-                  hover
-                  key={user.id}
-                  // selected={selectedCustomerIds.indexOf(user.id) !== -1}
-                >
-                  <TableCell>{club}</TableCell>
-                  <TableCell>
-                    <Box alignItems='center' display='flex'>
-                      {user.name}
-                    </Box>
-                  </TableCell>
-                  <TableCell>{user.contactMail}</TableCell>
-
-                  <TableCell>{user?.phone || ''}</TableCell>
-                  <TableCell>
-                    {moment(user?.joinTime).format('DD/MM/YYYY')}
-                  </TableCell>
-
-                  {/* <TableCell>
-                      <Chip
-                        color='primary'
-                        label={user?.status || 'member'}
-                        size='small'
-                      />
-                    </TableCell>
-
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={user?.status === 'Member'}
-                        onChange={event => handleSelectOne(event, user?.id)}
-                        value='true'
-                      />
-                    </TableCell> */}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </Box>
-    </PerfectScrollbar>
-  </Card>
-);
 UserListResults.propTypes = {
   users: PropTypes.node.isRequired,
 };

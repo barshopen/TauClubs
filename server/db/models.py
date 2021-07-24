@@ -91,6 +91,14 @@ class User(DynamicDocument):
             "joinTime": self.id.generation_time.isoformat(),
         }
 
+    def to_dict_with_membership(self, membership_dict):
+        d = self.to_dict()
+        d["status"] = ROLES[membership_dict["role"]]
+        d["requestTime"] = membership_dict["requestTime"]
+        d["approveTime"] = membership_dict["approveTime"]
+        d["id"] = membership_dict["id"]
+        return d
+
     def to_json(self):
         return json.dumps(self.to_dict())
 
@@ -113,13 +121,18 @@ class ClubMembership(DynamicDocument):
     approveTime = DateTimeField()
 
     def to_dict(self):
+        approve = None
+        try:
+            approve = self.approveTime
+        except Exception:
+            print(approve)
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
             "requestTime": self.requestTime,
-            "approveTime": self.approveTime,
+            "approveTime": approve,
         }
 
     def to_json(self):
@@ -154,7 +167,6 @@ class Event(DynamicDocument):
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            # "duration": (self.endTime - self.startTime),
             "startTime": self.startTime.isoformat(),
             "endTime": self.endTime.isoformat(),
             "location": self.location,
@@ -218,6 +230,13 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
+        validatePermessionByClub(user, club)
+    except DoesNotExist:
+        return False  # invalid membership
+
+
+def validatePermessionByClub(user, club):
+    try:
         membership = ClubMembership.objects(club=club, member=user).first()
         if not membership or membership.role != "A":
             return False  # error only admin can create message
