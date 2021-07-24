@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField, URLField
+from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
 
 
@@ -109,9 +109,7 @@ class ClubMembership(DynamicDocument):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    RequestTime = DateTimeField(
-        required=True
-    )  # chaneg to required, havent change it because nedd to change the db
+    requestTime = DateTimeField(required=True)
     approveTime = DateTimeField()
 
     def to_dict(self):
@@ -120,7 +118,7 @@ class ClubMembership(DynamicDocument):
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
-            "requestTime": self.RequestTime,
+            "requestTime": self.requestTime,
             "approveTime": self.approveTime,
         }
 
