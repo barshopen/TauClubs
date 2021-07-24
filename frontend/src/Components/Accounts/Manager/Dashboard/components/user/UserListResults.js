@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -9,14 +9,10 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
 } from '@material-ui/core';
 
-const UserListResults = ({ users: allUsers }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
+const UserListResults = ({ users: allUsers }) => (
   // const handleSelectOne = (event, id) => {
   //   const selectedIndex = selectedCustomerIds.indexOf(id);
   //   let newSelectedCustomerIds = [];
@@ -44,14 +40,6 @@ const UserListResults = ({ users: allUsers }) => {
   //   setSelectedCustomerIds(newSelectedCustomerIds);
   // };
 
-  const handleLimitChange = event => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
   // const getInitials = (name = '') =>
   //   name
   //     .replace(/\s+/, ' ')
@@ -60,44 +48,43 @@ const UserListResults = ({ users: allUsers }) => {
   //     .map(v => v && v[0].toUpperCase())
   //     .join('');
 
-  return (
-    <Card>
-      <PerfectScrollbar>
-        <Box minWidth={300}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Clubs</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Registration date</TableCell>
-                {/* <TableCell>Status</TableCell>
+  <Card>
+    <PerfectScrollbar>
+      <Box minWidth={300}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Clubs</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Registration date</TableCell>
+              {/* <TableCell>Status</TableCell>
                 <TableCell>Approve</TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allUsers?.slice(0, limit).map(({ users, club }) =>
-                users.map(user => (
-                  <TableRow
-                    hover
-                    key={user.id}
-                    // selected={selectedCustomerIds.indexOf(user.id) !== -1}
-                  >
-                    <TableCell>{club}</TableCell>
-                    <TableCell>
-                      <Box alignItems='center' display='flex'>
-                        {user.name}
-                      </Box>
-                    </TableCell>
-                    <TableCell>{user.contactMail}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allUsers?.map(({ users, club }) =>
+              users.map(user => (
+                <TableRow
+                  hover
+                  key={user.id}
+                  // selected={selectedCustomerIds.indexOf(user.id) !== -1}
+                >
+                  <TableCell>{club}</TableCell>
+                  <TableCell>
+                    <Box alignItems='center' display='flex'>
+                      {user.name}
+                    </Box>
+                  </TableCell>
+                  <TableCell>{user.contactMail}</TableCell>
 
-                    <TableCell>{user?.phone || ''}</TableCell>
-                    <TableCell>
-                      {moment(user?.joinTime).format('DD/MM/YYYY')}
-                    </TableCell>
+                  <TableCell>{user?.phone || ''}</TableCell>
+                  <TableCell>
+                    {moment(user?.joinTime).format('DD/MM/YYYY')}
+                  </TableCell>
 
-                    {/* <TableCell>
+                  {/* <TableCell>
                       <Chip
                         color='primary'
                         label={user?.status || 'member'}
@@ -112,26 +99,15 @@ const UserListResults = ({ users: allUsers }) => {
                         value='true'
                       />
                     </TableCell> */}
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </Box>
-      </PerfectScrollbar>
-      <TablePagination
-        component='div'
-        count={allUsers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
-    </Card>
-  );
-};
-
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </Box>
+    </PerfectScrollbar>
+  </Card>
+);
 UserListResults.propTypes = {
   users: PropTypes.node.isRequired,
 };

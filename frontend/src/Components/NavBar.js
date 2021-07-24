@@ -6,7 +6,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -260,11 +259,27 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Button disableRipple onClick={() => history.push('/')}>
-            <Typography className={classes.title} variant='h6' noWrap>
-              TauClubs
-            </Typography>
-          </Button>
+          <div className={classes.sectionDesktop}>
+            <Button disableRipple onClick={() => history.push('/')}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '46px', height: '42px' }}
+              />
+            </Button>
+          </div>
+          <div className={classes.sectionMobile}>
+            <Button disableRipple onClick={() => history.push('/')}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '35px', height: '35px' }}
+              />
+            </Button>
+          </div>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />

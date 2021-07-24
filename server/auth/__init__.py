@@ -79,8 +79,7 @@ def sendUserData():
 @login_required
 def logout():
     logout_user()
-    #  return 'Logout',400
-    return redirect("http://localhost:3000")
+    return "Logout", 200
 
 
 @auth_app.route("/user/image")

@@ -197,6 +197,8 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
                 description,
                 location,
                 titleStatus: 'Edit Event',
+                startTime,
+                endTime,
               }}
             />
           ) : (
