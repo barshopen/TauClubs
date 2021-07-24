@@ -5,6 +5,12 @@ from flask import jsonify
 from mongoengine.queryset.visitor import Q
 
 
+def removeMembership(membership):
+    membership.delete()
+    membership.switch_collection("old_memberships")
+    membership.save(force_insert=True)
+
+
 def createMembership(user, club, role):
     membership = ClubMembership(
         club=club,
@@ -31,8 +37,14 @@ def leave_club(user, club):
     if membership is None:
         return None
     else:
-        membership.delete()
+        removeMembership(membership)
         return "Success"
+
+
+def delete_membership(club):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        removeMembership(membership)
 
 
 def createRegularMembership(user: User, club: Club):
@@ -168,6 +180,13 @@ def is_member(user, club):
 
 def remove_club_from_user(membership):
     membership.delete()
+
+
+def change_club_name(club, club_name):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        membership.update(clubName=club_name)
+        membership.save()
 
 
 def approve(club, user, answer):

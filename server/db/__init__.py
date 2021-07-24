@@ -10,6 +10,8 @@ from server.db.clubmembership import (
 from flask import Blueprint, json, request
 from server.db.club import (
     add_image_to_club,
+    delete_club,
+    edit_club,
     establish_club,
     example_club,
     get_club,
@@ -97,13 +99,58 @@ def club_creation():
     return result, 200
 
 
+@db_app.route("/club/delete", methods=["POST"])
+@login_required
+def deleteClub():
+    try:
+        club_id = request.json.get("clubId")
+        if not club_id:
+            return "invalid club", 400
+        club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Failed", 400
+        delete_club(club)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
+
+
+@db_app.route("/club/edit", methods=["POST"])
+@login_required
+def editClub():  # write
+    try:
+        club_id = request.form["clubId"]
+        if not club_id:
+            return "invalid club", 400
+        club = get_club(club_id)
+        user = get_userauth_user_by_id(current_user.get_id())
+        if not validatePermession(user, club_id):
+            return "Failed", 400
+        name = request.form["club_name"]
+        contact_mail = request.form["contact_mail"]
+        description = request.form["description"]
+        tags = request.form["tags"]
+        try:
+            image = request.files["image"]
+        except Exception:
+            image = "None"
+        edit_club(club, name, contact_mail, description, image, tags)
+        if image != "None":
+            send_file(image, download_name="club.jpg", max_age=20000000)
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
+
+
 @db_app.route("/club/add_image", methods=["POST"])
 @login_required
 def add_image():
     club_id = request.form["clubId"]
-    club = get_club(club_id)
+
     if not club_id:
         return "invalid club", 400
+    club = get_club(club_id)
     user = get_userauth_user_by_id(current_user.get_id())
     if not validatePermession(user, club_id):
         return "Failed", 400
@@ -358,20 +405,26 @@ def event_update():
     try:
         startTime = datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
-        )
-        endTime = datetime.datetime.strptime(
-            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
-        )
+        ).replace(tzinfo=datetime.timezone.utc)
     except Exception:
         startTime = None
+    try:
+        endTime = datetime.datetime.strptime(
+            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc)
+    except Exception:
         endTime = None
-    # location = request.json.get("data")["event_location"]  # need to update it
+    try:
+        location = request.json.get("data")["event_location"]
+    except Exception:
+        location = None
     event = updateEventContent(
         event,
         title=title,
         description=description,
         startTime=startTime,
         endTime=endTime,
+        location=location,
     )
     return event.to_json(), 200
 

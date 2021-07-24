@@ -17,11 +17,13 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import AddIcon from '@material-ui/icons/Add';
 import useClubs from '../../hooks/useClubs';
 import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
+import { createClub } from '../../Shared/api';
 
 const drawerWidth = 240;
 
@@ -120,6 +122,21 @@ const Copyright = ({ className }) => (
 Copyright.propTypes = {
   className: PropTypes.string.isRequired,
 };
+function ClickableTrigger({ onClick }) {
+  const text = 'Add New Club';
+  return (
+    <ListItem button key={text} onClick={onClick}>
+      <ListItemIcon>
+        <AddIcon />
+      </ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItem>
+  );
+}
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default function AppSideBar() {
   const classes = useStyles();
@@ -129,8 +146,9 @@ export default function AppSideBar() {
     setSelectedIndex(index);
   };
 
-  const { myClubs } = useClubs();
+  const { refetchMyClubs, myClubs } = useClubs();
   const user = useRecoilValue(currentUser);
+
   const SideBardListItems = [
     {
       text: 'Feed',
@@ -178,7 +196,21 @@ export default function AppSideBar() {
           }
           return null;
         })}
-        {user && <NewClubModal />}
+        {user && (
+          <NewClubModal
+            ClickableTrigger={ClickableTrigger}
+            refetch={refetchMyClubs}
+            handler={createClub}
+            clubId={{
+              name: 'Club Name',
+              description: 'Club Description',
+              contact: 'Club Contact Email',
+              title: 'Create New Club',
+              existTag: [],
+              isImage: false,
+            }}
+          />
+        )}
       </List>
       <Divider />
       {user && (

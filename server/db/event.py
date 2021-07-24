@@ -35,14 +35,11 @@ def updateEventContent(
     location=None,
     title=None,
     description=None,
-    duration=None,
 ):
     if title:
         event.title = title
     if description:
         event.description = description
-    if duration:
-        event.duration = duration
     if startTime:
         event.startTime = startTime
     if endTime:
@@ -54,6 +51,9 @@ def updateEventContent(
         lastUpdateTime=now,
         title=event.title,
         description=event.description,
+        startTime=event.startTime,
+        endTime=event.endTime,
+        location=event.location,
     )
     return event
 
@@ -86,9 +86,21 @@ def undoIntrested(event, user):
     return event
 
 
+def removeEvent(event):
+    event.delete()
+    event.switch_collection("old_events")
+    event.save(force_insert=True)
+
+
 def deleteEvent(event_id):
     event = Event.objects.get(id=event_id)
-    event.delete()
+    removeEvent(event)
+
+
+def delete_events(club):
+    events = Event.objects.filter(creatingClub=club)
+    for event in events:
+        removeEvent(event)
 
 
 def getEvent(event_id):
