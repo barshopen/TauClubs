@@ -154,7 +154,7 @@ class Event(DynamicDocument):
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            "duration": (self.endTime.isoformat() - self.startTime.isoformat()),
+            # "duration": (self.endTime - self.startTime),
             "startTime": self.startTime.isoformat(),
             "endTime": self.endTime.isoformat(),
             "location": self.location,

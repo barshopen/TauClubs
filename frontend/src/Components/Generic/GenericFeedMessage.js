@@ -116,7 +116,6 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     isAttend,
     isInterested,
     content,
-    duration,
     numAttending,
     numInterest,
   } = feedItem;
@@ -164,7 +163,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
           <>
             <Typography style={{ marginBottom: '10px' }}>
               <strong>Timing:</strong>
-              {` ${displayStartTime} - ${displayEndTime} (Total: ${duration} hours)`}
+              {` ${displayStartTime} - ${displayEndTime}`}
             </Typography>
             <Typography
               style={{
