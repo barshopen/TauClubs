@@ -80,6 +80,8 @@ export const deleteEvent = ({ payload }) =>
 export const deleteClub = ({ payload }) => post(`/db/club/delete`, payload);
 
 export const approveUserToClub = payload => post(`/db/approve_user`, payload);
+export const approveUserUsers = payload => post(`/db/approve`, payload);
+export const unapproveUserUsers = payload => post(`/db/unapprove`, payload);
 
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
