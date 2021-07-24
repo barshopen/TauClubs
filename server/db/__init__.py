@@ -10,6 +10,8 @@ from server.db.user import get_user, update
 from server.db.clubmembership import (
     clubs_by_user_member,
     createAdminMembership,
+    genericApproveMembership,
+    get_membership,
     is_member,
     is_user_member,
     leave_club,
@@ -19,7 +21,6 @@ from server.db.clubmembership import (
 from flask import Blueprint, json, request
 from server.db.club import (
     add_image_to_club,
-    delete_club,
     establish_club,
     example_club,
     get_club,
@@ -51,7 +52,7 @@ from server.db.event import (
     getEvent,
     deleteEvent,
 )
-from server.db.models import validatePermession
+from server.db.models import validatePermession, validatePermessionByClub
 from server.db.clubmembership import get_user_clubs, join_club
 from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
@@ -518,6 +519,50 @@ def add_tag(club_id):
         return club.to_json()
     except Exception:
         return "Failed", 200
+
+
+@login_required
+@db_app.route("/approve", methods=["POST"])
+def approve_users():
+    manager = get_userauth_user_by_id(current_user.get_id())
+    try:
+        memberships = request.json
+        for membership_id in memberships:
+            membership = get_membership(membership_id)
+            club = membership.club
+            if (
+                not club
+                or not validatePermessionByClub(manager, club)
+                or membership is None
+            ):
+                return "Restrict", 400
+            genericApproveMembership(membership)
+            # send_mail_approve([user.to_dict()], club.name)
+            return "Success", 200
+    except Exception:
+        return "Failed", 400
+
+
+@login_required
+@db_app.route("/unapprove", methods=["POST"])
+def unapprove_users():
+    manager = get_userauth_user_by_id(current_user.get_id())
+    try:
+        memberships = request.json
+        for membership_id in memberships:
+            membership = get_membership(membership_id)
+            club = membership.club
+            if (
+                not club
+                or not validatePermessionByClub(manager, club)
+                or membership is None
+            ):
+                return "Restrict", 400
+            leave_club(membership)
+            # send_mail_delete_by_manager([user.to_dict()], club.name)
+            return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @login_required

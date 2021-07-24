@@ -228,6 +228,13 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
+        validatePermessionByClub(user, club)
+    except DoesNotExist:
+        return False  # invalid membership
+
+
+def validatePermessionByClub(user, club):
+    try:
         membership = ClubMembership.objects(club=club, member=user).first()
         if not membership or membership.role != "A":
             return False  # error only admin can create message

@@ -11,6 +11,13 @@ def removeMembership(membership):
     membership.save(force_insert=True)
 
 
+def get_membership(id: str):
+    try:
+        return ClubMembership.objects.get(id=id)
+    except DoesNotExist:
+        return None
+
+
 def createMembership(user, club, role):
     membership = ClubMembership(
         club=club,
@@ -32,8 +39,7 @@ def join_club(user_email: str, club_id: str):
         return None
 
 
-def leave_club(user, club):
-    membership = ClubMembership.objects.get(member=user, club=club)
+def leave_club(membership):
     if membership is None:
         return None
     else:
@@ -56,6 +62,14 @@ def regularMembership(user, club):
     membership = ClubMembership.objects(member=user, club=club)
     membership = approve_membership(membership, "U")
     return membership
+
+
+def genericApproveMembership(membership):
+    if membership.role == "U":
+        membership.update(role="A")  # add approve time
+    else:
+        membership.update(role="U")  # add approve time
+    membership.save()
 
 
 def createAdminMembership(user_email: str, club: Club):  # change
