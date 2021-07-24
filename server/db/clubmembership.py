@@ -1,5 +1,6 @@
 import datetime
-from .models import ClubMembership, User, Club, months_ago
+
+from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
 from mongoengine.queryset.visitor import Q
@@ -19,12 +20,17 @@ def get_membership(id: str):
 
 
 def createMembership(user, club, role):
+    approveTime = None
+    if role == "A":
+        approveTime = current_time()
     membership = ClubMembership(
         club=club,
         clubName=club.name,
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
+        RequestTime=current_time(),
+        approveTime=approveTime,
     )
     membership.save()
     return membership

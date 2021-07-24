@@ -8,7 +8,7 @@ from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
 from .clubmembership import change_club_name, createAdminMembership, delete_membership
-
+from .clubmembership import createAdminMembership
 
 def current_time():
     return datetime.datetime.utcnow()
@@ -21,7 +21,7 @@ def create_club(
     description: str = "",
     tags=[],
 ):
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+    now = current_time()
     club = Club(
         contactMail=contact_mail,
         name=club_name,

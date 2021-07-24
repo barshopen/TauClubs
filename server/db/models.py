@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField, URLField
+from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
 
 
@@ -143,7 +143,6 @@ class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
     endTime = DateTimeField(required=True)
     location = StringField()
@@ -168,7 +167,6 @@ class Event(DynamicDocument):
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            "duration": self.duration,
             "startTime": self.startTime.isoformat(),
             "endTime": self.endTime.isoformat(),
             "location": self.location,
@@ -272,3 +270,7 @@ def dict_two_months(clubs, func):
         dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
         dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
     return dict
+
+
+def current_time():
+    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
