@@ -231,7 +231,7 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
-        validatePermessionByClub(user, club)
+        return validatePermessionByClub(user, club)
     except DoesNotExist:
         return False  # invalid membership
 
