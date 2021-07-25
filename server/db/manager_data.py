@@ -4,8 +4,10 @@ from server.db.clubmembership import (
     clubs_by_user_manager,
     dict_users_and_update_by_club,
     is_manager,
+    users_for_club_six_months,
+    users_for_clubs,
 )
-from flask import Blueprint
+from flask import Blueprint, json
 from flask_login import login_required, current_user
 from server.auth.userauth import get_userauth_user_by_id
 
@@ -27,6 +29,8 @@ def clubs_for_manager():
     dict["clubs"] = dict_users_and_update_by_club(
         clubs
     )  # dict with 3 fields: club info, last update, users that joined last 6 months
+    dict["users"] = users_for_clubs(clubs)
+    dict["usersByDated"] = users_for_club_six_months(dict["users"])
     return dict
 
 

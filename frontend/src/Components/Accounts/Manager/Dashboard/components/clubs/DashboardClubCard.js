@@ -37,7 +37,7 @@ ClickableTrigger.propTypes = {
 
 const DashboardClubCard = ({ club }) => {
   const { club: clubData } = club;
-
+  const clubdata = club.club;
   const { editClub: edit } = useClub(clubData.id);
   const queryClient = useQueryClient();
 
@@ -73,28 +73,24 @@ const DashboardClubCard = ({ club }) => {
             handler={editClubHandler}
             refetch={refetchDashboard}
             clubId={{
-              id: clubData?.id,
-              name: clubData?.name,
-              description: clubData?.description,
-              contact: clubData?.contactMail,
+              id: clubdata?.id,
+              name: clubdata?.name,
+              description: clubdata?.description,
+              contact: clubdata?.contactMail,
               title: 'Edit Club',
-              isImage: clubData?.profileImage,
-              existTag: clubData?.tags,
+              isImage: clubdata?.profileImage,
+              existTag: clubdata?.tags,
             }}
           />
           <Avatar
             alt='club'
-            src={`${window.origin}/db/images/${clubData?.id}`}
+            src={`${window.origin}/db/images/${clubdata?.id}`}
             variant='circle'
             style={{ height: '70px', width: '70px', marginBottom: '10px' }}
           />
 
           <DeleteConfirmationModal
-            id={clubData?.id}
-            deleteHandler={deleteHandler}
-          />
-          <DeleteConfirmationModal
-            id={clubData?.id}
+            id={clubdata?.id}
             deleteHandler={deleteHandler}
           />
         </Box>
@@ -104,10 +100,10 @@ const DashboardClubCard = ({ club }) => {
           color='textPrimary'
           gutterBottom
           variant='h4'>
-          {clubData.name}
+          {clubdata.name}
         </Typography>
         <Typography align='center' color='textPrimary' variant='body1'>
-          {clubData.description}
+          {clubdata.description}
         </Typography>
       </CardContent>
       <Box style={{ flexGrow: 1 }} />
@@ -145,7 +141,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              {club.users.length} Users
+              {clubdata.membersCount} Users
             </Typography>
           </Grid>
         </Grid>

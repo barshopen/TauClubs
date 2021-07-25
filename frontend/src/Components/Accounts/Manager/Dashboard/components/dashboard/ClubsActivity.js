@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Bar } from 'react-chartjs-2';
@@ -12,23 +12,9 @@ import {
   colors,
 } from '@material-ui/core';
 
-const ClubsActivity = ({ clubs }) => {
+const ClubsActivity = ({ usersByDated }) => {
   const theme = useTheme();
-  const [values, setValues] = useState({});
-
-  useEffect(() => {
-    const tempValues = {};
-
-    Object.values(clubs)
-      .map(({ usersByDated }) => usersByDated)
-      .forEach(item =>
-        Object.entries(item).forEach(([key, value]) => {
-          tempValues[key] = (tempValues[key] ?? 0) + value;
-        })
-      );
-
-    setValues(tempValues);
-  }, []);
+  const values = useState(usersByDated);
 
   const labels = useMemo(() => {
     const monthArray = [];
@@ -129,9 +115,9 @@ const ClubsActivity = ({ clubs }) => {
 export default ClubsActivity;
 
 ClubsActivity.propTypes = {
-  clubs: PropTypes.node,
+  usersByDated: PropTypes.node,
 };
 
 ClubsActivity.defaultProps = {
-  clubs: {},
+  usersByDated: {},
 };
