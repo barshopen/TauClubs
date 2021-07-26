@@ -22,7 +22,7 @@ const DashboardApp = ({ data }) => (
         />
         <Route
           path='/profile/users'
-          component={() => <UsersList users={data.users} />}
+          component={() => <UsersList data={data} />}
         />
         <Route
           path='/profile/clubs'

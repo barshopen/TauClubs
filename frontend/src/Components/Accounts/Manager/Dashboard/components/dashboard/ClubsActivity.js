@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Bar } from 'react-chartjs-2';
@@ -14,7 +14,7 @@ import {
 
 const ClubsActivity = ({ usersByDated }) => {
   const theme = useTheme();
-  const values = useState(usersByDated);
+  const values = usersByDated;
 
   const labels = useMemo(() => {
     const monthArray = [];
@@ -39,7 +39,6 @@ const ClubsActivity = ({ usersByDated }) => {
     ],
     labels,
   };
-
   const options = {
     animation: true,
     cornerRadius: 20,

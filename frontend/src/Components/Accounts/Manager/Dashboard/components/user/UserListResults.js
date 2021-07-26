@@ -3,6 +3,7 @@ import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DataGrid } from '@material-ui/data-grid';
+import PropTypes from 'prop-types';
 import AddIcon from '@material-ui/icons/Add';
 import {
   approveUserUsers,
@@ -21,7 +22,7 @@ function sendUnApprove(memberships) {
 }
 const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
-  const newUsers = Array.from(Object.values(users)[0], user => {
+  const newUsers = Array.from(Object.values(users), user => {
     user.date =
       user.status === 'Pending' ? user?.approveTime : user?.requestTime;
     return user;
@@ -76,5 +77,7 @@ const UserListResults = ({ users }) => {
     </div>
   );
 };
-
+UserListResults.propTypes = {
+  users: PropTypes.node.isRequired,
+};
 export default UserListResults;
