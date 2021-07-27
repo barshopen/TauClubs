@@ -5,6 +5,7 @@ from server.db.mailMessages import (
     approve_user_message,
     delete_club_message,
     remove_by_admin,
+    user_to_manager_message,
 )
 from server.db.user import update
 from server.db.clubmembership import (
@@ -121,6 +122,28 @@ def filter_by_id(data, data_id):
         d = json.dumps([x for x in data if x["id"] == data_id][0])
         return d
     return json.dumps(data)
+
+
+def send_mail_user_to_manager(club_name, membername, clubMail, title, info, userMail):
+    text = user_to_manager_message(info, membername, userMail, club_name)
+    send_message_text([clubMail], title, text)
+
+
+@db_app.route("/contactus", methods=["POST"])
+def send_mail_to_club():
+    try:
+        clubMail = request.json["data"]["contactMail"]
+        title = request.json["data"]["title"]
+        info = request.json["data"]["info"]
+        userMail = request.json["data"]["mail"]
+        membername = request.json["data"]["name"]
+        club_name = request.json["data"]["clubName"]
+        send_mail_user_to_manager(
+            club_name, membername, clubMail, title, info, userMail
+        )
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @db_app.route("/default_clubs")

@@ -93,3 +93,5 @@ export const addImage = data => postClub(`/db/club/add_image`, data);
 export const getDashboardData = () => get('/dashboard/data');
 
 export const updateUserData = data => post('/db/updateuser', data);
+
+export const sendMailToClub = data => post('/db/contactus', data);

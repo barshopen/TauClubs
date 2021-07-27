@@ -25,3 +25,11 @@ def delete_club_message(club_name):
     subject = f"{club_name} club status"
     body = f"Hi,\nThe {club_name} club is closed."
     return subject, body
+
+
+def user_to_manager_message(info, membername, userMail, clubName):
+    body = (
+        f"Hello,\nYou recieved a message about \n{clubName} Club\nFrom {membername},"
+        f"{userMail}\n\n{info}."
+    )
+    return body
