@@ -57,9 +57,6 @@ const useStyles = makeStyles(theme => ({
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -163,12 +160,30 @@ function FeedCardEvent({ feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography style={{ marginBottom: '10px' }}>
-              <strong>Timing:</strong>
-              {` ${displayStartTime} - ${displayEndTime}`}
-            </Typography>
             <Typography>
-              <strong>Location:</strong> {location}
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Timing:
+              </Typography>
+              {displayStartTime} - {displayEndTime}
+            </Typography>
+
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Location:
+              </Typography>
+              {location}
             </Typography>
           </>
         )}
@@ -188,12 +203,30 @@ function FeedCardEvent({ feedItem }) {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
-          <strong>Responses:</strong>
-          {` ${numAttending} Attending / ${numInterest} Intrested `}
+          <Typography>
+            <Typography
+              style={{
+                marginBottom: '10px',
+                marginRight: '4px',
+                fontWeight: '600',
+                display: 'inline-block',
+              }}>
+              Responses:
+            </Typography>
+            {` ${numAttending} Attending / ${numInterest} Intrested `}
+          </Typography>
 
-          <br />
-          <Typography paragraph>more details:</Typography>
-          <Typography paragraph variant='h6' color='initial'>
+          <Typography
+            style={{
+              marginBottom: '10px',
+              marginRight: '4px',
+              fontWeight: '600',
+              display: 'inline-block',
+            }}
+            paragraph>
+            more details:
+          </Typography>
+          <Typography paragraph variant='h7' color='initial'>
             {description}
           </Typography>
         </CardContent>
@@ -272,7 +305,6 @@ FeedCardEvent.propTypes = {
       location: PropTypes.string,
       startTime: PropTypes.string,
       endTime: PropTypes.string,
-      // duration: PropTypes.string,
     })
   ),
 };
@@ -290,7 +322,6 @@ FeedCardMessage.propTypes = {
       profileImage: PropTypes.string,
       description: PropTypes.string,
       lastUpdateTime: PropTypes.string,
-      // duration: PropTypes.string,
     })
   ),
 };
