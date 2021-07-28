@@ -161,22 +161,42 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography style={{ marginBottom: '10px' }}>
-              <strong>Timing:</strong>
-              {` ${displayStartTime} - ${displayEndTime}`}
-            </Typography>
-            <Typography
-              style={{
-                marginBottom: '10px',
-              }}>
-              <strong>Location:</strong> {location}
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Timing:
+              </Typography>
+              {displayStartTime} - {displayEndTime}
             </Typography>
 
-            <Typography
-              style={{
-                marginBottom: '10px',
-              }}>
-              <strong>Responses:</strong>
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Location:
+              </Typography>
+              {location}
+            </Typography>
+
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Responses:
+              </Typography>
               {` ${numAttending} Attending / ${numInterest} Intrested `}
             </Typography>
           </>
@@ -229,7 +249,6 @@ GenericFeedMessage.propTypes = {
       lastUpdateTime: PropTypes.string,
       isAttend: PropTypes.string,
       isInterested: PropTypes.string,
-      duration: PropTypes.string,
     })
   ),
 };
