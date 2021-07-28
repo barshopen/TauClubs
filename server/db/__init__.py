@@ -5,17 +5,18 @@ from server.db.mailMessages import (
     approve_user_message,
     delete_club_message,
     remove_by_admin,
+    user_to_manager_message,
 )
-from server.db.user import get_user, update
+from server.db.user import update
 from server.db.clubmembership import (
     clubs_by_user_member,
-    createAdminMembership,
     genericApproveMembership,
     get_membership,
     is_member,
     is_user_member,
     leave_club,
-    regularMembership,
+    regularMembership
+
 )
 from flask import Blueprint, json, request
 from server.db.club import (
@@ -89,21 +90,18 @@ def send_message_text(recipients, subject, body):
     mail.send(msg)
 
 
-def send_mail_approve(receivers, club_name):
+def send_mail_approve(receivers, club_name, role):
     for receive in receivers:
-        head, text = approve_user_message(receive["name"], club_name)
+        if role == "p":
+            head, text = approve_user_message(receive["name"], club_name)
+        else:
+            head, text = approve_manager_message(receive["name"], club_name)
         send_message_text([receive["contactMail"]], head, text)
 
 
 def send_mail_delete_by_manager(receivers, club_name):
     for receive in receivers:
         head, text = remove_by_admin(receive["name"], club_name)
-        send_message_text([receive["contactMail"]], head, text)
-
-
-def send_mail_approve_manager(receivers, club_name):
-    for receive in receivers:
-        head, text = approve_manager_message(receive["name"], club_name)
         send_message_text([receive["contactMail"]], head, text)
 
 
@@ -126,6 +124,28 @@ def filter_by_id(data, data_id):
         d = json.dumps([x for x in data if x["id"] == data_id][0])
         return d
     return json.dumps(data)
+
+
+def send_mail_user_to_manager(club_name, membername, clubMail, title, info, userMail):
+    text = user_to_manager_message(info, membername, userMail, club_name)
+    send_message_text([clubMail], title, text)
+
+
+@db_app.route("/contactus", methods=["POST"])
+def send_mail_to_club():
+    try:
+        clubMail = request.json["data"]["contactMail"]
+        title = request.json["data"]["title"]
+        info = request.json["data"]["info"]
+        userMail = request.json["data"]["mail"]
+        membername = request.json["data"]["name"]
+        club_name = request.json["data"]["clubName"]
+        send_mail_user_to_manager(
+            club_name, membername, clubMail, title, info, userMail
+        )
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @db_app.route("/default_clubs")
@@ -170,7 +190,8 @@ def deleteClub():
         user = get_userauth_user_by_id(current_user.get_id())
         if not validatePermession(user, club_id):
             return "Failed", 400
-        delete_club(club)
+        list_memberships = delete_club(club)
+        send_delete_club(list_memberships, club.name)
         return "Success", 200
     except Exception:
         return "Failed", 400
@@ -263,7 +284,7 @@ def join_club_by_id():
     res = join_club(cur_user_email, club_id).to_json()
     if not res:
         return "Could not complete request", 400
-    return res, 200
+    return "Success", 200
 
 
 @db_app.route("/leave_club", methods=["POST"])
@@ -301,39 +322,6 @@ def message_creation():
     return result.to_json(), 200
 
 
-@db_app.route("/upcoming_events")
-@login_required
-def upcoming_events():
-    user = get_userauth_user_by_id(current_user.get_id())
-    clubs = clubs_by_user_member(user)
-    return get_events_for_all_clubs_by_user(clubs)
-
-
-@login_required
-@db_app.route("/club/create_event", methods=["POST"])
-def event_creation():
-    club_id = request.json.get("clubId")
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    result = createEvent(
-        title=request.json.get("data")["event_title"],
-        description=request.json.get("data")["event_description"],
-        startTime=datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
-        ).replace(tzinfo=datetime.timezone.utc),
-        endTime=datetime.datetime.strptime(
-            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
-        ).replace(tzinfo=datetime.timezone.utc),
-        location=request.json.get("data")["event_location"],
-        club=get_club(club_id),
-    )
-    if not result:
-        return "Failed", 400
-
-    return result, 200
-
-
 @db_app.route("/club/<club_id>/messages/get_messages")
 def messages_by_club(club_id):
     if not club_id:
@@ -342,16 +330,6 @@ def messages_by_club(club_id):
     if not club:
         return "Failed", 400
     return get_messages_by_club(club)
-
-
-@db_app.route("/club/<club_id>/events/get_events")
-def events_by_club(club_id):
-    if not club_id:
-        return "Failed", 400
-    club = get_club(club_id)
-    if not club:
-        return "Failed", 400
-    return get_events_by_club(club)
 
 
 @db_app.route("/club/<club_id>/messages/<message_id>")
@@ -399,6 +377,49 @@ def message_delete():
         return "SUCCESS", 200
     except Exception:
         return "Failed", 400
+
+
+@db_app.route("/upcoming_events")
+@login_required
+def upcoming_events():
+    user = get_userauth_user_by_id(current_user.get_id())
+    clubs = clubs_by_user_member(user)
+    return get_events_for_all_clubs_by_user(clubs)
+
+
+@login_required
+@db_app.route("/club/create_event", methods=["POST"])
+def event_creation():
+    club_id = request.json.get("clubId")
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
+        return "Restrict", 400
+    result = createEvent(
+        title=request.json.get("data")["event_title"],
+        description=request.json.get("data")["event_description"],
+        startTime=datetime.datetime.strptime(
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc),
+        endTime=datetime.datetime.strptime(
+            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc),
+        location=request.json.get("data")["event_location"],
+        club=get_club(club_id),
+    )
+    if not result:
+        return "Failed", 400
+
+    return result, 200
+
+
+@db_app.route("/club/<club_id>/events/get_events")
+def events_by_club(club_id):
+    if not club_id:
+        return "Failed", 400
+    club = get_club(club_id)
+    if not club:
+        return "Failed", 400
+    return get_events_by_club(club)
 
 
 @login_required
@@ -515,7 +536,7 @@ def event_not_attending(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/interested")
+@db_app.route("/club/<club_id>/events/<event_id>/interested")
 def event_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -526,7 +547,7 @@ def event_interesting(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/uninterested")
+@db_app.route("/club/<club_id>/events/<event_id>/uninterested")
 def event_not_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -580,8 +601,8 @@ def approve_users():
                 or membership is None
             ):
                 return "Restrict", 400
-            genericApproveMembership(membership)
-            # send_mail_approve([user.to_dict()], club.name)
+            membership = genericApproveMembership(membership)
+            send_mail_approve([membership.member.to_dict()], club.name, membership.role)
             return "Success", 200
     except Exception:
         return "Failed", 400
@@ -603,62 +624,10 @@ def unapprove_users():
             ):
                 return "Restrict", 400
             leave_club(membership)
-            # send_mail_delete_by_manager([user.to_dict()], club.name)
+            send_mail_delete_by_manager([membership.member.to_dict()], club.name)
             return "Success", 200
     except Exception:
         return "Failed", 400
-
-
-@login_required
-@db_app.route("/approve_user", methods=["POST"])
-def approve_user():
-    club_id = request.json.get("clubId")
-    user_id = request.json.get("userId")
-    if not club_id or not user_id:
-        return "Failed", 400
-    manager = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club or not validatePermession(manager, club_id):
-        return "Restrict", 400
-    user = get_user(user_id)
-    regularMembership(user, club)
-    # send_mail_approve([user.to_dict()], club.name)
-    return "success", 200
-
-
-@login_required
-@db_app.route("/remove_user", methods=["POST"])
-def remove_user():
-    club_id = request.json.get("clubId")
-    user_id = request.json.get("userId")
-    if not club_id or user_id:
-        return "Failed", 400
-    manager = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club or not validatePermession(manager, club_id):
-        return "Restrict", 400
-    club = get_club(club_id)
-    user = get_user(user_id)
-    leave_club(user, club)
-    # send_mail_delete_by_manager([user.to_dict()], club.name)
-    return 200
-
-
-@login_required
-@db_app.route("/approve_manager", methods=["POST"])
-def approve_manager():
-    club_id = request.json.get("clubId")
-    userId = request.json.get("userId")
-    if not club_id or userId:
-        return "Failed", 400
-    manager = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club or not validatePermession(manager, club_id):
-        return "Restrict", 400
-    user = get_user(userId)
-    createAdminMembership(user.contactMail, club)
-    # send_mail_approve_manager([user.to_dict()], club.name)
-    return 200
 
 
 @login_required
@@ -678,8 +647,6 @@ def update_user_data():
         return "failed", 400
 
 
-######################################################
-# how do we us it?
 @login_required
 @db_app.route("/club/<club_id>/messages/<message_id>/like")
 def like_message(club_id, message_id):

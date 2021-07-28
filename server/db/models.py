@@ -121,11 +121,11 @@ class ClubMembership(DynamicDocument):
     approveTime = DateTimeField()
 
     def to_dict(self):
-        approve = None
         try:
-            approve = self.approveTime
+            approve = self.approveTime.isoformat()
         except Exception:
-            print(approve)
+            approve = None
+
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
