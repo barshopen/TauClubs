@@ -83,7 +83,7 @@ const DashboardClubCard = ({ club }) => {
             }}
           />
           <Avatar
-            alt='club'
+            alt={clubData.name}
             src={`${window.origin}/db/images/${clubData?.id}`}
             variant='circle'
             style={{ height: '70px', width: '70px', marginBottom: '10px' }}

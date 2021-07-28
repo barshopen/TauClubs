@@ -31,7 +31,8 @@ def create_club(
         lastUpdateTime=current_time(),
     )
     club.save(force_insert=True)
-    add_tags(club.id, club, tags)
+    if tags is not None:
+        add_tags(club.id, club, tags)
     return club
 
 

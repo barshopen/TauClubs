@@ -15,6 +15,8 @@ from server.db.clubmembership import (
     is_member,
     is_user_member,
     leave_club,
+    regularMembership
+
 )
 from flask import Blueprint, json, request
 from server.db.club import (
@@ -160,13 +162,17 @@ def club_creation():
         image = None
     else:
         image = request.files["image"]
+    if request.form["tags"] == "":
+        tags = None
+    else:
+        tags = request.form["tags"].split(",")
     result = establish_club(
         image=image,
         foundingUserEmail=user.contactMail,
         name=request.form["club_name"],
         contact_mail=request.form["contact_mail"],
         description=request.form["description"],
-        tags=request.form["tags"].split(","),
+        tags=tags,
     )
     if not result:
         return "Failed", 400
