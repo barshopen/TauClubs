@@ -13,7 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
 import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
@@ -21,7 +21,11 @@ import Autocomplete from './AutoComplete';
 import { logOut } from '../Shared/api';
 import useClubs from '../hooks/useClubs';
 import SignInModal from '../Scenarios/SignInModal';
-import { showSideBarMobileState, currentUser } from '../Shared/atoms';
+import {
+  showSideBarMobileState,
+  selectedSideBarTab,
+  currentUser,
+} from '../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -126,6 +130,7 @@ export default function NavBar() {
 
   const { clubs: data } = useClubs();
   const [user, setUser] = useRecoilState(currentUser);
+  const setSelectedIndex = useSetRecoilState(selectedSideBarTab);
 
   const handleLogout = () => {
     logOut();
@@ -260,7 +265,12 @@ export default function NavBar() {
             </IconButton>
           </Hidden>
           <div className={classes.sectionDesktop}>
-            <Button disableRipple onClick={() => history.push('/')}>
+            <Button
+              disableRipple
+              onClick={() => {
+                history.push('/');
+                setSelectedIndex(0);
+              }}>
               <img
                 alt='logo'
                 className={classes.logo}
