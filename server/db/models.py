@@ -123,7 +123,7 @@ class ClubMembership(DynamicDocument):
 
     def to_dict(self):
         try:
-            approve = self.approveTime.isoformat()
+            approve = self.approveTime
         except Exception:
             approve = None
 

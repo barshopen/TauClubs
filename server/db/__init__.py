@@ -15,8 +15,6 @@ from server.db.clubmembership import (
     is_member,
     is_user_member,
     leave_club,
-    regularMembership
-
 )
 from flask import Blueprint, json, request
 from server.db.club import (
