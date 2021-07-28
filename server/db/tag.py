@@ -53,7 +53,7 @@ def exist_tag_and_add(tag_name, club, club_id_object):
 def add_tags(club_id, club, tags):
     for tagname in tags:
         NewClub = exist_tag_and_add(tagname, club, ObjectId(club_id))
-        if NewClub is None:
+        if NewClub is None and tagname is not None:
             tag = Tag(name=tagname, clubsWithTag=[ObjectId(club_id)])
             tag.save()
             club.tags.append(tagname)

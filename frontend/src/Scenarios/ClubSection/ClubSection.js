@@ -161,7 +161,11 @@ const ClubSection = () => {
         <Route
           path='/club/about/:clubId'
           component={() => (
-            <AboutUs description={description} contactMail={contactMail} />
+            <AboutUs
+              name={name}
+              description={description}
+              contactMail={contactMail}
+            />
           )}
         />
         {user && !pending && !member && (
