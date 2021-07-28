@@ -1,7 +1,5 @@
 import datetime
 
-from mongoengine.queryset.visitor import Q
-
 from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
