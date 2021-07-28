@@ -18,12 +18,14 @@ const useClubs = () => {
   const storeKeyClubs = ['clubs', search];
   const storeKeyMyClubs = ['myClubs'];
 
-  const { isLoading: loadingClubs, data: clubs } = useQuery(storeKeyClubs, () =>
-    fetchClubs(search)
+  const { isLoading: loadingClubs, data: clubs } = useQuery(
+    storeKeyClubs,
+    () => fetchClubs(search),
+    { staleTime: Infinity, refetchOnMount: false }
   );
 
   const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs, {
-    staleTime: 60000,
+    staleTime: Infinity,
     refetchOnMount: false,
   });
 

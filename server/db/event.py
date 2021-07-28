@@ -1,89 +1,97 @@
 import json
-from server.db.models import Event, dict_two_months
-import datetime
+from server.db.models import Event, current_time, dict_two_months
 from mongoengine.queryset.visitor import Q
 
 
-def currentTime():
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
-    print(now)
-    return now
-
-
-def createEvent(title, duration, club, startTime, location=None, description=None):
+def createEvent(title, club, startTime, endTime, location=None, description=None):
     newEvent = Event(
         title=title,
         description=description,
-        creationTime=currentTime(),
-        duration=duration,
+        creationTime=current_time(),
         startTime=startTime,
-        lastUpdateTime=currentTime(),
+        endTime=endTime,
+        lastUpdateTime=current_time(),
         creatingClub=club,
         location=location,
     )
     newEvent.save()
-    club.update(lastUpdateTime=currentTime())
+    club.update(lastUpdateTime=current_time())
     return newEvent.to_dict()
 
 
 def updateEventContent(
     event,
     startTime=None,
+    endTime=None,
     location=None,
     title=None,
     description=None,
-    duration=None,
 ):
     if title:
         event.title = title
     if description:
         event.description = description
-    if duration:
-        event.duration = duration
     if startTime:
         event.startTime = startTime
+    if endTime:
+        event.endTime = endTime
     if location:
         event.location = location
-    now = currentTime()
+    now = current_time()
     event.update(
         lastUpdateTime=now,
         title=event.title,
         description=event.description,
+        startTime=event.startTime,
+        endTime=event.endTime,
+        location=event.location,
     )
     return event
 
 
 def addAttending(event, user):
     event.membersAttending.append(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def undoAttending(event, user):
     event.membersAttending.remove(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def addIntrested(event, user):
     event.intrested.append(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
 
 def undoIntrested(event, user):
     event.intrested.remove(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
 
+def removeEvent(event):
+    event.delete()
+    event.switch_collection("old_events")
+    event.save(force_insert=True)
+
+
 def deleteEvent(event_id):
     event = Event.objects.get(id=event_id)
-    event.delete()
+    removeEvent(event)
+
+
+def delete_events(club):
+    events = Event.objects.filter(creatingClub=club)
+    for event in events:
+        removeEvent(event)
 
 
 def getEvent(event_id):

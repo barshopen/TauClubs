@@ -6,8 +6,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import Hidden from '@material-ui/core/Hidden';
+import { useSetRecoilState } from 'recoil';
 import ChipsArray from './Generic/ChipsArray';
+import { selectedOptionState } from '../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,10 +50,11 @@ const useStyles = makeStyles(theme => ({
 
 const ClubCard = props => {
   const { title, tags, count, img, color } = props;
+  const setValue = useSetRecoilState(selectedOptionState);
 
   const classes = useStyles();
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={() => setValue(null)}>
       <CardActionArea>
         <CardMedia
           className={classes.media}

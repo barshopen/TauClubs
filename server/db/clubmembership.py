@@ -1,17 +1,36 @@
 import datetime
-from .models import ClubMembership, User, Club, months_ago
+
+from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
 from mongoengine.queryset.visitor import Q
 
 
+def removeMembership(membership):
+    membership.delete()
+    membership.switch_collection("old_memberships")
+    membership.save(force_insert=True)
+
+
+def get_membership(id: str):
+    try:
+        return ClubMembership.objects.get(id=id)
+    except DoesNotExist:
+        return None
+
+
 def createMembership(user, club, role):
+    approveTime = None
+    if role == "A":
+        approveTime = current_time()
     membership = ClubMembership(
         club=club,
         clubName=club.name,
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
+        RequestTime=current_time(),
+        approveTime=approveTime,
     )
     membership.save()
     return membership
@@ -21,27 +40,66 @@ def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
     club = Club.objects.get(pk=club_id)
     try:
-        return createRegularMembership(user, club)
+        return createPendingMembership(user, club)
     except NotUniqueError:
         return None
 
 
-def leave_club(user, club):
-    membership = ClubMembership.objects(member=user, club=club)
+def leave_club(membership):
     if membership is None:
         return None
     else:
-        membership.delete()
+        removeMembership(membership)
         return "Success"
 
 
-def createRegularMembership(user: User, club: Club):
-    return createMembership(user, club, "U")
+def delete_membership(club):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        removeMembership(membership)
 
 
-def createAdminMembership(user_email: str, club: Club):
+def approve_membership(membership, role):
+    membership.update(role=role, approveTime=datetime.datetime.utcnow())
+    return membership
+
+
+def regularMembership(user, club):
+    membership = ClubMembership.objects(member=user, club=club)
+    membership = approve_membership(membership, "U")
+    return membership
+
+
+def genericApproveMembership(membership):
+    if membership.role == "U":
+        membership.update(role="A")  # add approve time
+    else:
+        membership.update(role="U")  # add approve time
+    membership.save()
+
+
+def createAdminMembership(user_email: str, club: Club):  # change
     user = User.objects.get(contactMail=user_email)
-    return createMembership(user, club, "A")
+    # check if is member or pending, if yes change it otherwise create
+    try:
+        membership = ClubMembership.objects(member=user, club=club).first()
+        approve_membership(membership, "A")
+        return membership
+    except Exception:
+        return createMembership(user, club, "A")
+
+
+def createPendingMembership(user: User, club: Club):
+    membership = ClubMembership(
+        club=club,
+        clubName=club.name,
+        member=user,
+        memberName=f"{user.firstName} {user.lastName}",
+        role="P",
+        requestTime=datetime.datetime.utcnow(),
+    )
+    membership.save()
+    return membership
 
 
 def members_count(clubName: str):
@@ -70,10 +128,6 @@ def get_user_clubs(user):
 def listOfClubsPerUser(user):
     clubs = ClubMembership.objects(member=user)
     return clubs.to_json()  # need to decide hoe do we want to get it
-
-
-def joinClubAsUser(user: User, club: Club):
-    createRegularMembership(user, club)
 
 
 def is_user_member(user, club):
@@ -141,7 +195,9 @@ def users_for_club_six_months(club):
 def users_for_club(club):
     return list(
         map(
-            lambda membership: membership.member.to_dict(),
+            lambda membership: membership.member.to_dict_with_membership(
+                membership.to_dict()
+            ),
             ClubMembership.objects.filter(club=club),
         )
     )
@@ -170,6 +226,8 @@ def remove_club_from_user(membership):
     membership.delete()
 
 
-def approve(club, user, answer):
-    membership = ClubMembership.objects(member=user, club=club)
-    membership.update(role=answer)
+def change_club_name(club, club_name):
+    memberships = ClubMembership.objects.filter(club=club)
+    for membership in memberships:
+        membership.update(clubName=club_name)
+        membership.save()

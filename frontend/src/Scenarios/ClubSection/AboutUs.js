@@ -1,57 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-const ContainerOuter = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const ContainerInner = styled.div`
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 5fr 7fr;
-  grid-template-rows: repeat(5, auto);
-  max-width: 700px;
-  grid-gap: 15px;
-  grid-template-areas:
-    'a  a  h'
-    'a  a  t';
-`;
-
-const Header = styled.h2`
-  text-align: justify;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const Text = styled.div`
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  grid-area: ${props => props.gridArea};
-`;
-
-const GridItem = styled.div`
-  grid-area: ${props => props.gridArea};
-`;
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
+import SendIcon from '@material-ui/icons/Send';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 const AboutUs = ({ description, contactMail }) => (
-  <ContainerOuter>
-    <ContainerInner>
-      <GridItem gridArea='a'>
-        <Text gridArea='a'>{description}</Text>
-      </GridItem>
-      <GridItem gridArea='h'>
-        <Header>For more information:</Header>
-      </GridItem>
-      <GridItem gridArea='t'>
-        <Text gridArea='t'>{contactMail}</Text>
-      </GridItem>
-    </ContainerInner>
-  </ContainerOuter>
+  <Container>
+    <Box display='flex' justifyContent='center' m={2}>
+      <Typography variant='h5' disply='inline' align='center'>
+        {description}
+      </Typography>
+    </Box>
+    <Container>
+      <Box display='flex' justifyContent='center' m={2}>
+        <Button
+          variant='outlined'
+          color='primary'
+          font='Roboto Condensed'
+          startIcon={<SendIcon />}
+          href={`mailto:${contactMail}?body=hey!`}>
+          Send us a mail to {contactMail}
+        </Button>
+      </Box>
+    </Container>
+  </Container>
 );
 
 AboutUs.propTypes = {

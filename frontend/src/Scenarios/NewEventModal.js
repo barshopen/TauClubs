@@ -32,14 +32,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
-  const { id, title, description, location, titleStatus } = clubId;
+  const {
+    id,
+    title,
+    description,
+    location,
+    titleStatus,
+    startTime,
+    endTime,
+  } = clubId;
 
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
-    event_startDateTime: moment().format('YYYY-MM-DD[T]HH:mm'),
     eventId: id,
   });
-
   const handleChange = e =>
     setFormValues(prev => ({
       ...prev,
@@ -91,7 +97,7 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
         label='Start Date'
         type='datetime-local'
         variant='outlined'
-        defaultValue={moment().format('YYYY-MM-DD[T]HH:mm')}
+        defaultValue={moment(startTime).format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
         className={classes.textField}
         inputProps={{
@@ -103,16 +109,19 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
         required={titleStatus === 'Create New Event'}
       />
       <TextField
-        name='event_duration'
-        label='Event Duration(hours)'
+        name='event_endDateTime'
+        label='End Date'
+        type='datetime-local'
         variant='outlined'
-        type='number'
-        placeholder={1}
-        inputProps={{
-          min: '0',
-          step: '0.25',
-        }}
+        defaultValue={moment(endTime).format('YYYY-MM-DD[T]HH:mm')}
         onChange={handleChange}
+        className={classes.textField}
+        inputProps={{
+          min: moment().format('YYYY-MM-DD[T]HH:mm'),
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
         required={titleStatus === 'Create New Event'}
       />
 

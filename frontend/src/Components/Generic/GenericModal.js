@@ -27,6 +27,7 @@ export default function GenericModal({
   maxWidth,
   onChange,
   clubId,
+  refetch,
 }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -69,6 +70,7 @@ export default function GenericModal({
               setOpen={setOpen}
               onChange={onChange}
               clubId={clubId}
+              refetch={refetch}
             />
           </Container>
         </Fade>
@@ -79,6 +81,7 @@ export default function GenericModal({
 
 GenericModal.propTypes = {
   onChange: PropTypes.func,
+  refetch: PropTypes.func,
   Content: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
@@ -97,4 +100,5 @@ GenericModal.defaultProps = {
   maxWidth: 'sm',
   onChange: undefined,
   clubId: '',
+  refetch: undefined,
 };

@@ -4,7 +4,7 @@ export const getDb = (subroute, id) =>
   id ? get(`/db/${subroute}/${id}`) : get(`/db/${subroute}`);
 
 export const createClub = data => postClub('/db/create_club', data);
-
+export const editClub = data => postClub(`/db/club/edit`, data);
 export const joinClub = data => post('/db/join_club', data);
 
 export const leaveClub = data => post('/db/leave_club', data);
@@ -76,6 +76,12 @@ export const deleteMessage = ({ payload }) =>
 
 export const deleteEvent = ({ payload }) =>
   post(`/db/club/event/delete`, payload);
+
+export const deleteClub = ({ payload }) => post(`/db/club/delete`, payload);
+
+export const approveUserToClub = payload => post(`/db/approve_user`, payload);
+export const approveUserUsers = payload => post(`/db/approve`, payload);
+export const unapproveUserUsers = payload => post(`/db/unapprove`, payload);
 
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
