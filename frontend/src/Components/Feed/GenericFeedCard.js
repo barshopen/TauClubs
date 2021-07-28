@@ -159,7 +159,7 @@ function FeedCardEvent({ feedItem }) {
       </CardContent>
       <CardActions disableSpacing>
         {homeIcon(clubId)}
-        {eventsIcon(clubId, id, isAttend, isInterested)}
+        {eventsIcon({ clubId, id, isAttend, isInterested })}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

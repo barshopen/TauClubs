@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import { useQueryClient } from 'react-query';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -54,13 +55,13 @@ IconBu.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export const eventsIcon = ({
-  refetchFeed,
-  clubId,
-  id,
-  isAttend,
-  isInterested,
-}) => {
+export const eventsIcon = ({ clubId, id, isAttend, isInterested }) => {
+  const queryClient = useQueryClient();
+
+  const refetchFeed = () => {
+    queryClient.invalidateQueries(['feed']);
+  };
+
   const handleInterested = () =>
     // eslint-disable-next-line no-nested-ternary
     isInterested
@@ -76,6 +77,7 @@ export const eventsIcon = ({
         isInterested
           ? uninterested(clubId, id).then(() => refetchFeed())
           : null);
+
   return (
     <CardActions disableSpacing>
       <Tooltip title='Attend'>
