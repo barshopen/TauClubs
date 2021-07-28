@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DataGrid } from '@material-ui/data-grid';
+import PropTypes from 'prop-types';
 import AddIcon from '@material-ui/icons/Add';
 import {
   approveUserUsers,
@@ -20,16 +20,14 @@ function sendUnApprove(memberships) {
     unapproveUserUsers(memberships);
   }
 }
-const UserListResults = ({ users: allUsers }) => {
+const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
-  const newUsers = allUsers.map(({ users, club: { name } }) =>
-    users.map(user => {
-      user.date =
-        user.status === 'Pending' ? user?.approveTime : user?.requestTime;
-      user.clubName = name;
-      return user;
-    })
-  );
+  const newUsers = Array.from(Object.values(users), user => {
+    user.date =
+      user.status === 'Pending' ? user?.approveTime : user?.requestTime;
+    return user;
+  });
+  const rows = newUsers;
   const columns = [
     {
       field: 'name',
@@ -37,7 +35,7 @@ const UserListResults = ({ users: allUsers }) => {
       width: 200,
     },
     {
-      field: 'clubName',
+      field: 'club',
       headerName: 'Club Name',
       width: 200,
     },
@@ -59,8 +57,6 @@ const UserListResults = ({ users: allUsers }) => {
       description: 'Approve date for memebers, Request date for pending users',
     },
   ];
-
-  const rows = newUsers.flat();
   return (
     <div style={{ height: 700, width: '110%' }}>
       <IconButton aria-label='add' onClick={() => sendApprove(rowsChoose)}>
@@ -81,9 +77,7 @@ const UserListResults = ({ users: allUsers }) => {
     </div>
   );
 };
-
 UserListResults.propTypes = {
   users: PropTypes.node.isRequired,
 };
-
 export default UserListResults;

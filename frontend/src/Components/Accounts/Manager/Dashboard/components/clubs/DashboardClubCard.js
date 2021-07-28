@@ -35,9 +35,8 @@ ClickableTrigger.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const DashboardClubCard = ({ club }) => {
-  const { club: clubData } = club;
-
+const DashboardClubCard = ({ clubData }) => {
+  const { club } = clubData;
   const { editClub: edit } = useClub(clubData.id);
   const queryClient = useQueryClient();
 
@@ -73,24 +72,24 @@ const DashboardClubCard = ({ club }) => {
             handler={editClubHandler}
             refetch={refetchDashboard}
             clubId={{
-              id: clubData?.id,
-              name: clubData?.name,
-              description: clubData?.description,
-              contact: clubData?.contactMail,
+              id: club?.id,
+              name: club?.name,
+              description: club?.description,
+              contact: club?.contactMail,
               title: 'Edit Club',
-              isImage: clubData?.profileImage,
-              existTag: clubData?.tags,
+              isImage: club?.profileImage,
+              existTag: club?.tags,
             }}
           />
           <Avatar
-            alt={clubData.name}
-            src={`${window.origin}/db/images/${clubData?.id}`}
+            alt={club.name}
+            src={`${window.origin}/db/images/${club?.id}`}
             variant='circle'
             style={{ height: '70px', width: '70px', marginBottom: '10px' }}
           />
 
           <DeleteConfirmationModal
-            id={clubData?.id}
+            id={club?.id}
             deleteHandler={deleteHandler}
           />
         </Box>
@@ -100,10 +99,10 @@ const DashboardClubCard = ({ club }) => {
           color='textPrimary'
           gutterBottom
           variant='h4'>
-          {clubData.name}
+          {club.name}
         </Typography>
         <Typography align='center' color='textPrimary' variant='body1'>
-          {clubData.description}
+          {club.description}
         </Typography>
       </CardContent>
       <Box style={{ flexGrow: 1 }} />
@@ -141,7 +140,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              {club.users.length} Users
+              {club.membersCount} Users
             </Typography>
           </Grid>
         </Grid>
@@ -149,9 +148,7 @@ const DashboardClubCard = ({ club }) => {
     </Card>
   );
 };
-
 DashboardClubCard.propTypes = {
-  club: PropTypes.node.isRequired,
+  clubData: PropTypes.node.isRequired,
 };
-
 export default DashboardClubCard;

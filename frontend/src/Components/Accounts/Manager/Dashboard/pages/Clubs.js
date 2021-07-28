@@ -10,7 +10,7 @@ const Clubs = ({ clubs }) => (
         <Grid container spacing={3}>
           {Object.values(clubs).map(club => (
             <Grid item lg={4} md={6} xs={12}>
-              <DashboardClubCard club={club} />
+              <DashboardClubCard clubData={club} />
             </Grid>
           ))}
         </Grid>

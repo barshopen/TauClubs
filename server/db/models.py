@@ -97,6 +97,7 @@ class User(DynamicDocument):
         d["requestTime"] = membership_dict["requestTime"]
         d["approveTime"] = membership_dict["approveTime"]
         d["id"] = membership_dict["id"]
+        d["club"] = membership_dict["clubName"]
         return d
 
     def to_json(self):
