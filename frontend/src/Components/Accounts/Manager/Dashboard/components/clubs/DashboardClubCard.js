@@ -82,14 +82,14 @@ const DashboardClubCard = ({ clubData }) => {
             }}
           />
           <Avatar
-            alt='club'
-            src={`${window.origin}/db/images/${club?.id}`}
+            alt={clubData.name}
+            src={`${window.origin}/db/images/${clubData?.id}`}
             variant='circle'
             style={{ height: '70px', width: '70px', marginBottom: '10px' }}
           />
 
           <DeleteConfirmationModal
-            id={club?.id}
+            id={clubData?.id}
             deleteHandler={deleteHandler}
           />
         </Box>

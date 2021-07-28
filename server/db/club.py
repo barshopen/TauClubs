@@ -8,7 +8,7 @@ from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 from .models import Club
 from .clubmembership import change_club_name, createAdminMembership, delete_membership
-from .clubmembership import createAdminMembership
+
 
 def current_time():
     return datetime.datetime.utcnow()
@@ -31,7 +31,8 @@ def create_club(
         lastUpdateTime=current_time(),
     )
     club.save(force_insert=True)
-    add_tags(club.id, club, tags)
+    if tags is not None:
+        add_tags(club.id, club, tags)
     return club
 
 

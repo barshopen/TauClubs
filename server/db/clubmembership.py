@@ -30,7 +30,7 @@ def createMembership(user, club, role):
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
-        RequestTime=current_time(),
+        requestTime=current_time(),
         approveTime=approveTime,
     )
     membership.save()
