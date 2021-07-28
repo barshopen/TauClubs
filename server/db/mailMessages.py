@@ -15,11 +15,21 @@ def remove_by_admin(full_name, club_name):
 
 def approve_manager_message(full_name, club_name):
     subject = "Membership status"
-    body = f"Hi {full_name},\nAn admin added you as admin to {club_name} club."
+    body = (
+        f"Hi {full_name},\nAn admin has added you as An admin to the club {club_name}."
+    )
     return subject, body
 
 
 def delete_club_message(club_name):
     subject = f"{club_name} club status"
-    body = f"Hi,\nThe {club_name} club has been closed."
+    body = f"Hi,\nThe {club_name} club is closed."
     return subject, body
+
+
+def user_to_manager_message(info, membername, userMail, clubName):
+    body = (
+        f"Hello,\nYou recieved a message about \n{clubName} Club\nFrom {membername},"
+        f"{userMail}\n\n{info}."
+    )
+    return body

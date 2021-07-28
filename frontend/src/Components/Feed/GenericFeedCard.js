@@ -66,11 +66,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function cardHeader(profileImage, clubName, title, lastUpdateTime) {
+function cardHeader(clubName, title, lastUpdateTime) {
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
+
   return (
     <CardHeader
-      avatar={<Avatar alt='club image' src={profileImage} />}
+      avatar={
+        <Avatar
+          alt='club image'
+          variant='rounded'
+          style={{
+            flex: true,
+            padding: '10px',
+            backgroundColor: '#cfd8dc',
+            color: '#a1887f',
+            height: '70px',
+            width: '90px',
+            borderColor: 'black',
+          }}>
+          {clubName}
+        </Avatar>
+      }
       titleTypographyProps={{ variant: 'h5' }}
       title={title}
       subheader={displayLastUpdate.concat(` ${clubName}`)}
@@ -136,7 +152,7 @@ function FeedCardEvent({ feedItem }) {
   };
   return (
     <Card className={classes.root} m={75}>
-      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardHeader(clubName, title, lastUpdateTime)}
       {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
@@ -230,7 +246,8 @@ function FeedCardMessage({ feedItem }) {
   const classes = useStyles();
   return (
     <Card className={classes.root} m={75}>
-      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardHeader(clubName, title, lastUpdateTime)}
+
       {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
