@@ -16,10 +16,12 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
-import { deleteClub } from '../../../../../../Shared/api';
+import {
+  deleteClub,
+  editClub as editClubApi,
+} from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
 import NewClubModal from '../../../../../../Scenarios/NewClubModal';
-import useClub from '../../../../../../hooks/useClub';
 
 function ClickableTrigger({ onClick }) {
   return (
@@ -37,7 +39,6 @@ ClickableTrigger.propTypes = {
 
 const DashboardClubCard = ({ clubData }) => {
   const { club } = clubData;
-  const { editClub: edit } = useClub(club.id);
   const queryClient = useQueryClient();
 
   const refetchDashboard = () =>
@@ -50,8 +51,9 @@ const DashboardClubCard = ({ clubData }) => {
 
   const editClubHandler = data => {
     data.append('clubId', club?.id);
-    edit(data);
+    editClubApi(data);
   };
+
   return (
     <Card
       style={{
