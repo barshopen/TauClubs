@@ -198,28 +198,26 @@ def deleteClub():
 @db_app.route("/club/edit", methods=["POST"])
 @login_required
 def editClub():  # write
-    try:
-        club_id = request.form["clubId"]
-        if not club_id:
-            return "invalid club", 400
-        club = get_club(club_id)
-        user = get_userauth_user_by_id(current_user.get_id())
-        if not validatePermession(user, club_id):
-            return "Failed", 400
-        name = request.form["club_name"]
-        contact_mail = request.form["contact_mail"]
-        description = request.form["description"]
-        tags = request.form["tags"]
-        try:
-            image = request.files["image"]
-        except Exception:
-            image = "None"
-        edit_club(club, name, contact_mail, description, image, tags)
-        if image != "None":
-            send_file(image, download_name="club.jpg", max_age=20000000)
-        return "Success", 200
-    except Exception:
+
+    club_id = request.form["clubId"]
+    if not club_id:
+        return "invalid club", 400
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Failed", 400
+    name = request.form["club_name"]
+    contact_mail = request.form["contact_mail"]
+    description = request.form["description"]
+    tags = request.form["tags"]
+    try:
+        image = request.files["image"]
+    except Exception:
+        image = "None"
+    edit_club(club, name, contact_mail, description, image, tags)
+    if image != "None":
+        send_file(image, download_name="club.jpg", max_age=20000000)
+    return "Success", 200
 
 
 @db_app.route("/club/add_image", methods=["POST"])

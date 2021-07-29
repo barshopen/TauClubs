@@ -71,10 +71,8 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
   const image = useMemo(() => [`${window.origin}/db/images/${id}`], [id]);
 
   const handleTags = selectedOptions => {
-    setTags(selectedOptions);
+    setTags(selectedOptions.map(({ label }) => label));
   };
-  console.log(tags);
-
   const handleChange = e => {
     setValues({
       ...values,
@@ -84,14 +82,12 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
 
   const submitHandler = async e => {
     e.preventDefault();
-
-    const tagsArray = tags.map(({ label }) => label);
     const data = new FormData();
     data.append('clubId', values.clubId);
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
-    data.append('tags', tagsArray);
+    data.append('tags', tags);
     if (values.image) {
       data.append('image', values.image);
     } else {
