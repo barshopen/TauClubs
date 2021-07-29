@@ -58,7 +58,9 @@ const useStyles = makeStyles(theme => ({
 function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
   const { id, name, description, contact, title, isImage, existTag } = clubId;
   const classes = useStyles();
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    clubId: id,
+  });
   const [tags, setTags] = useState(existTag);
   const [done, setDone] = useState(false);
 
@@ -71,6 +73,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
   const handleTags = selectedOptions => {
     setTags(selectedOptions);
   };
+  console.log(tags);
 
   const handleChange = e => {
     setValues({
@@ -84,6 +87,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
 
     const tagsArray = tags.map(({ label }) => label);
     const data = new FormData();
+    data.append('clubId', values.clubId);
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
@@ -127,21 +131,24 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
 
         <TextField
           name='club_name'
-          label={name}
+          label='Club Name'
+          value={name}
           variant='outlined'
           required={title === 'Create New Club'}
           onChange={handleChange}
         />
         <TextField
           name='contact_mail'
-          label={contact}
+          label='Club Contact Email'
+          value={contact}
           variant='outlined'
           required={title === 'Create New Club'}
           onChange={handleChange}
         />
         <TextField
           name='description'
-          label={description}
+          label='Club Description'
+          value={description}
           multiline
           variant='outlined'
           rows={4}

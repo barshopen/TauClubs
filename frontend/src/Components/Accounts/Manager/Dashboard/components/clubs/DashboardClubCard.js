@@ -37,7 +37,7 @@ ClickableTrigger.propTypes = {
 
 const DashboardClubCard = ({ clubData }) => {
   const { club } = clubData;
-  const { editClub: edit } = useClub(clubData.id);
+  const { editClub: edit } = useClub(club.id);
   const queryClient = useQueryClient();
 
   const refetchDashboard = () =>
@@ -52,7 +52,6 @@ const DashboardClubCard = ({ clubData }) => {
     data.append('clubId', clubData?.id);
     edit(data);
   };
-
   return (
     <Card
       style={{
@@ -124,7 +123,7 @@ const DashboardClubCard = ({ clubData }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Last Updated{' '}
+              Last Updated
               {moment(clubData.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
