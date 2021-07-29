@@ -17,10 +17,13 @@ const selectedOptionState = atom({ key: 'selectedOptionState', default: '' });
 
 const mainSearch = atom({ key: 'mainSearch', default: '' });
 
+const selectedSideBarTab = atom({ key: 'selectedSideBarTab', default: null });
+
 export {
   newUserData,
   currentUser,
   selectedOptionState,
   showSideBarMobileState,
   mainSearch,
+  selectedSideBarTab,
 };

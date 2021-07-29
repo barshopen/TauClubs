@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -19,7 +19,11 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import AddIcon from '@material-ui/icons/Add';
 import useClubs from '../../hooks/useClubs';
-import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
+import {
+  showSideBarMobileState,
+  currentUser,
+  selectedSideBarTab,
+} from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
@@ -140,7 +144,7 @@ ClickableTrigger.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useRecoilState(selectedSideBarTab);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
