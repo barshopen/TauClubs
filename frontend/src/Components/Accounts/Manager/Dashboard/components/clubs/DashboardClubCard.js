@@ -52,7 +52,6 @@ const DashboardClubCard = ({ clubData }) => {
     data.append('clubId', club?.id);
     edit(data);
   };
-
   return (
     <Card
       style={{

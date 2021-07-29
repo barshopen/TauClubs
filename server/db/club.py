@@ -1,7 +1,7 @@
 import datetime
 from server.db.event import delete_events
 from server.db.message import delete_messages
-from server.db.tag import add_tags
+from server.db.tag import add_tags, edit_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
@@ -60,8 +60,7 @@ def edit_club(club, name, contact_mail, description, image, tags):  # write
         description = club.description
     if image != "None":
         club.profileImage.replace(image)
-    if tags != "":
-        add_tags(club.id, club, tags.split(","))
+    edit_tags(club.id, club, tags.split(","))
     club.update(
         name=name,
         contactMail=contact_mail,

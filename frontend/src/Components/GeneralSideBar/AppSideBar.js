@@ -206,9 +206,9 @@ export default function AppSideBar() {
             refetch={refetchMyClubs}
             handler={createClub}
             clubId={{
-              name: 'Club Name',
-              description: 'Club Description',
-              contact: 'Club Contact Email',
+              name: '',
+              description: '',
+              contact: '',
               title: 'Create New Club',
               existTag: [],
               isImage: false,
