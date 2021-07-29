@@ -56,14 +56,16 @@ function NewMessageContnet({ clubId, setOpen, onChange: handler }) {
 
       <TextField
         name='message_title'
-        label={title}
+        label='Message Title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
         required={titleStatus === 'Create New Message'}
       />
       <TextField
         name='message_content'
-        label={content}
+        label='Message Content'
+        defaultValue={content}
         multiline
         variant='outlined'
         onChange={handleChange}
