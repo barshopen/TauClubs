@@ -128,7 +128,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         <TextField
           name='club_name'
           label='Club Name'
-          value={name}
+          defaultValue={name}
           variant='outlined'
           required={title === 'Create New Club'}
           onChange={handleChange}
@@ -136,7 +136,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         <TextField
           name='contact_mail'
           label='Club Contact Email'
-          value={contact}
+          defaultValue={contact}
           variant='outlined'
           required={title === 'Create New Club'}
           onChange={handleChange}
@@ -144,7 +144,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         <TextField
           name='description'
           label='Club Description'
-          value={description}
+          defaultValue={description}
           multiline
           variant='outlined'
           rows={4}
