@@ -78,8 +78,8 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
                     handler={addMessage}
                     clubId={{
                       id: '',
-                      title: 'Message Title',
-                      content: 'Message Content',
+                      title: '',
+                      content: '',
                       titleStatus: 'Create New Message',
                     }}
                   />
@@ -92,9 +92,9 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
                     handler={addEvent}
                     clubId={{
                       id: '',
-                      title: 'Event Title',
-                      description: 'Event Description',
-                      location: 'Event Loaction',
+                      title: '',
+                      description: '',
+                      location: '',
                       titleStatus: 'Create New Event',
                     }}
                   />
