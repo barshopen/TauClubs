@@ -43,12 +43,12 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     position: 'relative',
-    height: '30%',
+    // height: '30%',
     [theme.breakpoints.up('md')]: {
-      height: '40%',
+      // height: '40%',
     },
     [theme.breakpoints.up('lg')]: {
-      height: '60%',
+      // height: '60%',
     },
   },
   copyRight: {

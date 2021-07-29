@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -118,6 +119,7 @@ MenuItemWithToolTip.defaultProps = {
 
 export default function NavBar() {
   const classes = useStyles();
+  const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
@@ -130,6 +132,7 @@ export default function NavBar() {
   const handleLogout = () => {
     logOut();
     setUser(null);
+    queryClient.removeQueries(['myClubs']);
   };
 
   // primitive consts

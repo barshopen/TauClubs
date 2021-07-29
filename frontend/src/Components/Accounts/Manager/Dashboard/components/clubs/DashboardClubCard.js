@@ -49,7 +49,7 @@ const DashboardClubCard = ({ clubData }) => {
   };
 
   const editClubHandler = data => {
-    data.append('clubId', clubData?.id);
+    data.append('clubId', club?.id);
     edit(data);
   };
   return (
@@ -123,8 +123,7 @@ const DashboardClubCard = ({ clubData }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Last Updated
-              {moment(clubData.lastUpdateTime).format('DD/MM/YYYY')}
+              Last Updated {moment(club.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid
