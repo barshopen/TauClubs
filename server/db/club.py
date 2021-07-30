@@ -69,9 +69,10 @@ def edit_club(club, name, contact_mail, description, image, tags):  # write
     )
     club.save()
 
-def get_clubs(search: str):
-    name_Q = Q(name__icontains=search) if search else Q()
-    tags_Q = Q(tags=search) if search else Q()
+
+def get_clubs(name: str, tag: str):
+    name_Q = Q(name__icontains=name) if name else Q()
+    tags_Q = Q(tags__icontains=tag) if tag else Q()
     return json.dumps(
         list(
             map(
