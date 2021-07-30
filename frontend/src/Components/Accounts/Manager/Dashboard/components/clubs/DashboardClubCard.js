@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -102,9 +102,6 @@ const DashboardClubCard = ({ clubData }) => {
           variant='h4'>
           {club.name}
         </Typography>
-        <Typography align='center' color='textPrimary' variant='body1'>
-          {club.description}
-        </Typography>
       </CardContent>
       <Box style={{ flexGrow: 1 }} />
       <Divider />
@@ -134,7 +131,7 @@ const DashboardClubCard = ({ clubData }) => {
               alignItems: 'center',
               display: 'flex',
             }}>
-            <GetAppIcon color='action' style={{ marginRight: '5px' }} />
+            <PeopleAltIcon color='action' style={{ marginRight: '5px' }} />
             <Typography
               color='textSecondary'
               display='inline'

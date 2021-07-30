@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: '100ch',
+      justifyContent: 'center',
     },
   },
 }));
@@ -67,12 +68,12 @@ const AboutUs = ({ name, description, contactMail }) => {
         </Box>
 
         <Box display='flex' justifyContent='center' m={2}>
-          <Typography variant='h6' disply='inline' align='center'>
-            Contact us:
+          <Typography variant='h5' disply='inline' align='center'>
+            Contact us at {contactMail}:
           </Typography>
         </Box>
       </Container>
-      <Container maxWidth='md'>
+      <Container>
         <Box display='flex' justifyContent='center'>
           <form
             className={classes.root}
@@ -92,7 +93,7 @@ const AboutUs = ({ name, description, contactMail }) => {
                 onChange={handleChange}
                 name='info'
                 variant='outlined'
-                label='Comments'
+                label='Content'
                 fullWidth
                 multiline
                 size='medium'
@@ -124,11 +125,15 @@ const AboutUs = ({ name, description, contactMail }) => {
                 required
               />
             </div>
-            <div className={classes.buttons}>
-              <Button type='submit' variant='contained' color='primary'>
+            <Box display='flex' justifyContent='center' p={2}>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                size='large'>
                 Send
               </Button>
-            </div>
+            </Box>
           </form>
         </Box>
       </Container>

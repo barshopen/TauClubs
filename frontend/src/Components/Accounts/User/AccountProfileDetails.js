@@ -115,7 +115,7 @@ const AccountProfileDetails = props => {
           </Grid>
         </CardContent>
         <Divider />
-        <Box display='flex' justifyContent='flex-end' p={2}>
+        <Box display='flex' justifyContent='center' p={2}>
           <Button color='primary' variant='contained' onClick={submitHandler}>
             Save details
           </Button>

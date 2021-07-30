@@ -93,7 +93,7 @@ def createPendingMembership(user: User, club: Club):
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role="P",
-        requestTime=current_time().isoformat(),
+        requestTime=current_time(),
     )
     membership.save()
     return membership
