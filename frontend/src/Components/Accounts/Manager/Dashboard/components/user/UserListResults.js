@@ -1,33 +1,49 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState, useMemo } from 'react';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { DataGrid } from '@material-ui/data-grid';
 import PropTypes from 'prop-types';
-import AddIcon from '@material-ui/icons/Add';
+import { useQueryClient } from 'react-query';
+import { Tooltip, Typography } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
+import CheckIcon from '@material-ui/icons/Check';
 import {
   approveUserUsers,
   unapproveUserUsers,
 } from '../../../../../../Shared/api';
 
-function sendApprove(memberships) {
-  if (memberships.length > 0) {
-    approveUserUsers(memberships);
-  }
-}
-function sendUnApprove(memberships) {
-  if (memberships.length > 0) {
-    unapproveUserUsers(memberships);
-  }
-}
 const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
-  const newUsers = Array.from(Object.values(users), user => {
-    user.date =
-      user.status === 'Pending' ? user?.approveTime : user?.requestTime;
-    return user;
-  });
-  const rows = newUsers;
+  const queryClient = useQueryClient();
+
+  const sendApprove = async () => {
+    if (rowsChoose.length > 0) {
+      await approveUserUsers(rowsChoose);
+      queryClient.refetchQueries(['dashboardData']);
+    }
+  };
+
+  const sendUnApprove = async () => {
+    if (rowsChoose.length > 0) {
+      await unapproveUserUsers(rowsChoose);
+      queryClient.refetchQueries(['dashboardData']);
+    }
+  };
+
+  const newUsers = useMemo(
+    () =>
+      users
+        ? Object.values(users).map(user => ({
+            ...user,
+            displayDate:
+              user.status === 'Pending' ? user?.approveTime : user?.requestTime,
+            isApproved: user.status !== 'Pending',
+          }))
+        : [],
+    [users]
+  );
+
   const columns = [
     {
       field: 'name',
@@ -47,32 +63,68 @@ const UserListResults = ({ users }) => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 150,
+      width: 100,
     },
     {
-      field: 'date',
-      headerName: 'Approve/ Request Time',
-      renderCell: date => moment(date.formattedValue).format('DD/MM/YYYY'),
-      width: 230,
+      field: 'displayDate',
+      headerName: 'Approve/ Request Date',
+      renderCell: ({ row, formattedValue }) => (
+        <Tooltip title={row.isApproved ? 'Approve Date' : 'Request Date'}>
+          <Typography variant='h5'>
+            {moment(formattedValue).format('DD/MM/YYYY')}
+          </Typography>
+        </Tooltip>
+      ),
+      width: 210,
       description: 'Approve date for memebers, Request date for pending users',
     },
   ];
   return (
-    <div style={{ height: 700, width: '110%' }}>
-      <IconButton aria-label='add' onClick={() => sendApprove(rowsChoose)}>
-        <AddIcon />
+    <div style={{ height: '700px', width: '100%' }}>
+      <Typography variant='h2'>Users</Typography>
+      <Typography style={{ marginTop: '20px' }} variant='h5'>
+        Approve/Decline pending requests of users, and approve/decline current
+        users request to be admin
+      </Typography>
+      <IconButton
+        style={{
+          marginRight: '20px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          padding: '0',
+        }}
+        onClick={() => sendApprove(rowsChoose)}>
+        <Typography variant='h5'>Approve selected </Typography>
+        <CheckIcon
+          style={{
+            color: 'green',
+            marginLeft: '5px',
+          }}
+        />
       </IconButton>
-      <IconButton aria-label='delete' onClick={() => sendUnApprove(rowsChoose)}>
-        <DeleteIcon />
+      <IconButton
+        style={{
+          marginRight: '20px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          padding: '0',
+        }}
+        onClick={() => sendUnApprove(rowsChoose)}>
+        <Typography variant='h5'>Decline selected </Typography>
+        <ClearIcon style={{ color: 'red', marginLeft: '5px' }} />
       </IconButton>
       <DataGrid
-        rows={rows}
+        rows={newUsers}
         columns={columns}
         autoPageSize
+        loading={!users}
+        disableColumnMenu
         checkboxSelection
+        disableColumnSelector
         onSelectionModelChange={e => setRows(e)}
         disableSelectionOnClick
-        isRowSelectable={params => params.row.status !== 'Admin'}
+        isCellEditable={false}
+        isRowSelectable={({ row }) => row?.status !== 'Admin'}
       />
     </div>
   );
