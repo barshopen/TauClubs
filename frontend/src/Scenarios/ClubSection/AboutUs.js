@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }));
-
+console.log();
 const AboutUs = ({
   name,
   description,
