@@ -56,7 +56,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
-  const { id, name, description, contact, title, isImage, existTag } = clubId;
+  const {
+    id,
+    name,
+    description,
+    contact,
+    title,
+    isImage,
+    existTag,
+    WhatsAppGroup,
+    FacebookGroup,
+  } = clubId;
   const classes = useStyles();
   const [values, setValues] = useState({
     clubId: id,
@@ -88,6 +98,8 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
     data.append('tags', tags);
+    data.append('WhatsAppGroup', values.WhatsAppGroup);
+    data.append('FacebookGroup', values.FacebookGroup);
     if (values.image) {
       data.append('image', values.image);
     } else {
@@ -159,14 +171,14 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         <TextField
           name='WhatsAppGroup'
           label='WhatsApp group link'
-          defaultValue=''
+          defaultValue={WhatsAppGroup}
           variant='outlined'
           onChange={handleChange}
         />
         <TextField
           name='FacebookGroup'
           label='Facebook group link'
-          defaultValue=''
+          defaultValue={FacebookGroup}
           variant='outlined'
           onChange={handleChange}
         />
