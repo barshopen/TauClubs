@@ -33,6 +33,8 @@ class Club(DynamicDocument):
     creationTime = DateTimeField()
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
+    FacebookGroup = StringField()
+    WhatsAppGroup = StringField()
 
     def hasPicture(self):
         return self.profileImage.__dict__["grid_id"] is not None
@@ -55,6 +57,8 @@ class Club(DynamicDocument):
             "creationTime": self.id.generation_time.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
+            "FacebookGroup": self.FacebookGroup,
+            "WhatsAppGroup": self.WhatsAppGroup,
             "membersCount": ClubMembership.objects(club=self).count(),
             "tags": self.tags,
             "admin": admin,

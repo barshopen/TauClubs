@@ -80,6 +80,8 @@ const DashboardClubCard = ({ clubData }) => {
               title: 'Edit Club',
               isImage: club?.profileImage,
               existTag: club?.tags,
+              FacebookGroup: club?.FacebookGroup,
+              WhatsAppGroup: club?.WhatsAppGroup,
             }}
           />
           <Avatar

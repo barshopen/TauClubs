@@ -115,6 +115,8 @@ const ClubSection = () => {
     description,
     contactMail,
     profileImage,
+    WhatsAppGroup,
+    FacebookGroup,
   } = clubData || {};
 
   const user = useRecoilValue(currentUser);
@@ -240,6 +242,8 @@ const ClubSection = () => {
               name={name}
               description={description}
               contactMail={contactMail}
+              FacebookGroup={FacebookGroup}
+              WhatsAppGroup={WhatsAppGroup}
             />
           )}
         />
