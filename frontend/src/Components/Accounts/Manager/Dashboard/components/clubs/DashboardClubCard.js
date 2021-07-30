@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
