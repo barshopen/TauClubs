@@ -39,15 +39,9 @@ export const getUpcomingEventsByClub = (clubId = null) =>
 
 export const getClub = clubId => getDb('club', clubId);
 
-export const getClubs = ({ name, tag }) => {
-  if (name && tag) {
-    return getDb(`clubs?name=${name}&tag=${tag}`);
-  }
-  if (name) {
-    return getDb(`clubs?name=${name}`);
-  }
-  if (tag) {
-    return getDb(`/clubs?tag=${tag}`);
+export const getClubs = ({ search }) => {
+  if (search) {
+    return getDb(`clubs?search=${search}`);
   }
   return getDb(`clubs`);
 };
