@@ -10,10 +10,10 @@ export const joinClub = data => post('/db/join_club', data);
 export const leaveClub = data => post('/db/leave_club', data);
 
 export const interested = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/interested`);
+  getDb(`club/${clubId}/events/${eventId}/interested`);
 
 export const attend = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/attend`);
+  getDb(`club/${clubId}/events/${eventId}/attend`);
 
 export const uninterested = (clubId, eventId) =>
   getDb(`club/${clubId}/events/${eventId}/uninterested`);
