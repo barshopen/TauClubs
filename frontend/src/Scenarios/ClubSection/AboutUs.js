@@ -1,61 +1,122 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import { sendMailToClub } from '../../Shared/api';
 
-const ContainerOuter = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
-const ContainerInner = styled.div`
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 5fr 7fr;
-  grid-template-rows: repeat(5, auto);
-  max-width: 700px;
-  grid-gap: 15px;
-  grid-template-areas:
-    'a  a  h'
-    'a  a  t';
-`;
+const AboutUs = ({ name, description, contactMail }) => {
+  const classes = useStyles();
+  const [formValues, setFormValues] = useState({
+    contactMail,
+    clubName: name,
+  });
 
-const Header = styled.h2`
-  text-align: justify;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-`;
+  const handleChange = e =>
+    setFormValues(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  const submitHandler = e => {
+    e.preventDefault();
+    e.target.reset();
+    sendMailToClub({ data: formValues });
+  };
 
-const Text = styled.div`
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  grid-area: ${props => props.gridArea};
-`;
+  return (
+    <div>
+      <Container>
+        <Box display='flex' justifyContent='center' m={2}>
+          <Typography variant='h5' disply='inline' align='center'>
+            {description}
+          </Typography>
+        </Box>
 
-const GridItem = styled.div`
-  grid-area: ${props => props.gridArea};
-`;
-
-const AboutUs = ({ description, contactMail }) => (
-  <ContainerOuter>
-    <ContainerInner>
-      <GridItem gridArea='a'>
-        <Text gridArea='a'>{description}</Text>
-      </GridItem>
-      <GridItem gridArea='h'>
-        <Header>For more information:</Header>
-      </GridItem>
-      <GridItem gridArea='t'>
-        <Text gridArea='t'>{contactMail}</Text>
-      </GridItem>
-    </ContainerInner>
-  </ContainerOuter>
-);
+        <Box display='flex' justifyContent='center' m={2}>
+          <Typography variant='h6' disply='inline' align='center'>
+            Contact us:
+          </Typography>
+        </Box>
+      </Container>
+      <Container maxWidth='md'>
+        <Box display='flex' justifyContent='center'>
+          <form
+            className={classes.root}
+            onSubmit={submitHandler}
+            autoComplete='off'>
+            <div>
+              <TextField
+                onChange={handleChange}
+                name='title'
+                required
+                variant='outlined'
+                label='Title'
+              />
+            </div>
+            <div>
+              <TextField
+                onChange={handleChange}
+                name='info'
+                variant='outlined'
+                label='Comments'
+                fullWidth
+                multiline
+                size='medium'
+                rows={5}
+                required
+              />
+            </div>
+            <div>
+              <TextField
+                onChange={handleChange}
+                name='name'
+                variant='outlined'
+                label='Full Name'
+                fullWidth
+                multiline
+                size='medium'
+                required
+              />
+            </div>
+            <div>
+              <TextField
+                onChange={handleChange}
+                name='mail'
+                variant='outlined'
+                label='Email'
+                fullWidth
+                multiline
+                size='medium'
+                required
+              />
+            </div>
+            <div className={classes.buttons}>
+              <Button type='submit' variant='contained' color='primary'>
+                Send
+              </Button>
+            </div>
+          </form>
+        </Box>
+      </Container>
+    </div>
+  );
+};
 
 AboutUs.propTypes = {
   description: PropTypes.string,
+  name: PropTypes.string.isRequired,
   contactMail: PropTypes.string,
 };
 AboutUs.defaultProps = { description: '', contactMail: '' };

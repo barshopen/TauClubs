@@ -1,14 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useQueryClient } from 'react-query';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,21 +14,19 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { useSetRecoilState, useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Hidden from '@material-ui/core/Hidden';
 import { Button } from '@material-ui/core';
 import { LogIn as LogInIcon, LogOut as LogOutIcon } from 'react-feather';
+import Autocomplete from './AutoComplete';
 import { logOut } from '../Shared/api';
 import useClubs from '../hooks/useClubs';
 import SignInModal from '../Scenarios/SignInModal';
-
 import {
   showSideBarMobileState,
+  selectedSideBarTab,
   currentUser,
-  selectedOptionState,
-  mainSearch,
 } from '../Shared/atoms';
-import SearchFor from '../assets/search-icon.png';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -69,22 +65,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    fontSize: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
   },
   sectionDesktop: {
     display: 'none',
@@ -143,19 +123,21 @@ MenuItemWithToolTip.defaultProps = {
 
 export default function NavBar() {
   const classes = useStyles();
+  const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [showSideBarMobile, setShowSideBarMobile] = useRecoilState(
     showSideBarMobileState
   );
-  const [search, setSearch] = useRecoilState(mainSearch);
 
   const { clubs: data } = useClubs();
   const [user, setUser] = useRecoilState(currentUser);
+  const setSelectedIndex = useSetRecoilState(selectedSideBarTab);
 
   const handleLogout = () => {
     logOut();
     setUser(null);
+    queryClient.removeQueries(['myClubs']);
   };
 
   // primitive consts
@@ -169,26 +151,10 @@ export default function NavBar() {
   const showSideBarMobileToggleHandler = () => {
     setShowSideBarMobile(!showSideBarMobile);
   };
-  const setSelectedOptionState = useSetRecoilState(selectedOptionState);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
-
-  const defaultFilterOptions = useMemo(() => {
-    if (data) {
-      return search
-        ? data.slice(0, 5).concat([
-            {
-              name: `${search}`,
-              icon: SearchFor,
-              prefix: true,
-            },
-          ])
-        : data.slice(0, 5);
-    }
-    return [];
-  }, [data, search]);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -287,12 +253,6 @@ export default function NavBar() {
     </StyledMenu>
   );
 
-  const searchImageStyle = {
-    marginRight: '10px',
-    width: '12%',
-    height: '12%',
-  };
-
   return (
     <div className={classes.grow}>
       <AppBar className={classes.appBar}>
@@ -307,53 +267,37 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Button disableRipple onClick={() => history.push('/')}>
-            <Typography className={classes.title} variant='h6' noWrap>
-              TauClubs
-            </Typography>
-          </Button>
+          <div className={classes.sectionDesktop}>
+            <Button
+              disableRipple
+              onClick={() => {
+                history.push('/');
+                setSelectedIndex(0);
+              }}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '46px', height: '42px' }}
+              />
+            </Button>
+          </div>
+          <div className={classes.sectionMobile}>
+            <Button disableRipple onClick={() => history.push('/')}>
+              <img
+                alt='logo'
+                className={classes.logo}
+                src='/images/tauclubslogo.png'
+                style={{ width: '35px', height: '35px' }}
+              />
+            </Button>
+          </div>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-
-            <Autocomplete
-              id='combo-box-demo'
-              size='small'
-              autoComplete
-              autoHighlight
-              autoSelect={false}
-              onChange={(_, newValue) => {
-                setSelectedOptionState(newValue?.id || '');
-              }}
-              options={defaultFilterOptions}
-              getOptionLabel={option => option.render ?? option.name}
-              renderOption={option => (
-                <>
-                  {option.icon && (
-                    <img src={option.icon} alt='' style={searchImageStyle} />
-                  )}
-                  {option.prefix ? `Search for ${option.name}` : option.name}
-                </>
-              )}
-              renderInput={params => {
-                const { InputLabelProps, InputProps, ...rest } = params;
-
-                setSearch(rest.inputProps.value); // this one gives the error
-
-                return (
-                  <InputBase
-                    {...params.InputProps}
-                    {...rest}
-                    placeholder='Search…'
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                  />
-                );
-              }}
-            />
+            <Autocomplete data={data} />
           </div>
 
           {user ? (
@@ -393,13 +337,3 @@ export default function NavBar() {
     </div>
   );
 }
-
-NavBar.propTypes = {
-  search: PropTypes.string,
-  setSearch: PropTypes.func,
-};
-
-NavBar.defaultProps = {
-  search: '',
-  setSearch: null,
-};

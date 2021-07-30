@@ -1,12 +1,6 @@
-import datetime
 import json
-from server.db.models import Message, dict_two_months
+from server.db.models import Message, current_time, dict_two_months
 from mongoengine.queryset.visitor import Q
-
-
-def currentTime():
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
-    return now
 
 
 def createMessage(title, content, club, user):
@@ -15,20 +9,20 @@ def createMessage(title, content, club, user):
         content=content,
         creatingClub=club,
         creatingUser=user,
-        creationTime=currentTime(),
-        lastUpdateTime=currentTime(),
+        creationTime=current_time(),
+        lastUpdateTime=current_time(),
     )
-    club.update(lastUpdateTime=currentTime())
+    club.update(lastUpdateTime=current_time())
     message.save()
     return message
 
 
 def updateMessageContent(message: Message, content):
-    message.update(content=content, lastUpdateTime=currentTime())
+    message.update(content=content, lastUpdateTime=current_time())
 
 
 def updateMessageTitle(message: Message, title):
-    message.update(title=title, lastUpdateTime=currentTime())
+    message.update(title=title, lastUpdateTime=current_time())
 
 
 def updateMessage(message: Message, title, content):
@@ -37,7 +31,7 @@ def updateMessage(message: Message, title, content):
     if content:
         message.content = content
     message.update(
-        title=message.title, content=message.content, lastUpdateTime=currentTime()
+        title=message.title, content=message.content, lastUpdateTime=current_time()
     )
     return message
 
@@ -78,16 +72,28 @@ def get_messages():
     )
 
 
+def removeMessage(message):
+    message.delete()
+    message.switch_collection("old_messages")
+    message.save(force_insert=True)
+
+
 def delete_message(id: str):
     message = Message.objects.get(id=id)
-    message.delete()
+    removeMessage(message)
+
+
+def delete_messages(club):
+    messages = Message.objects.filter(creatingClub=club)
+    for message in messages:
+        removeMessage(message)
 
 
 def add_like(message_id, user):
     message = Message.objects.get(id=message_id)
     if user.id not in message.likes:
         message.likes.append(user.id)
-        message.update(likes=message.likes, lastUpdateTime=currentTime())
+        message.update(likes=message.likes, lastUpdateTime=current_time())
     return message.to_dict()
 
 
@@ -95,7 +101,7 @@ def unlike(message_id, user):
     message = Message.objects.get(id=message_id)
     if user.id in message.likes:
         message.likes.remove(user.id)
-        message.update(likes=message.likes, lastUpdateTime=currentTime())
+        message.update(likes=message.likes, lastUpdateTime=current_time())
     return message.to_dict()
 
 

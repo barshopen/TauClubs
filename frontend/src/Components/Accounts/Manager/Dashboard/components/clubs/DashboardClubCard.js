@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import {
   Avatar,
   Box,
@@ -12,9 +13,47 @@ import {
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
+import {
+  deleteClub,
+  editClub as editClubApi,
+} from '../../../../../../Shared/api';
+import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
+import NewClubModal from '../../../../../../Scenarios/NewClubModal';
 
-const DashboardClubCard = ({ club }) => {
-  const { club: clubData } = club;
+function ClickableTrigger({ onClick }) {
+  return (
+    <IconButton onClick={onClick}>
+      <Tooltip title='Edit'>
+        <EditIcon fontSize='large' />
+      </Tooltip>
+    </IconButton>
+  );
+}
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
+const DashboardClubCard = ({ clubData }) => {
+  const { club } = clubData;
+  const queryClient = useQueryClient();
+
+  const refetchDashboard = () =>
+    queryClient.invalidateQueries(['dashboardData']);
+
+  const deleteHandler = clubId => {
+    deleteClub({ payload: { clubId } });
+    refetchDashboard();
+  };
+
+  const editClubHandler = data => {
+    data.append('clubId', club?.id);
+    editClubApi(data);
+  };
+
   return (
     <Card
       style={{
@@ -26,26 +65,45 @@ const DashboardClubCard = ({ club }) => {
         <Box
           style={{
             display: 'flex',
-            justifyContent: 'center',
-
+            justifyContent: 'space-between',
             pb: 3,
           }}>
+          <NewClubModal
+            ClickableTrigger={ClickableTrigger}
+            handler={editClubHandler}
+            refetch={refetchDashboard}
+            clubId={{
+              id: club?.id,
+              name: club?.name,
+              description: club?.description,
+              contact: club?.contactMail,
+              title: 'Edit Club',
+              isImage: club?.profileImage,
+              existTag: club?.tags,
+            }}
+          />
           <Avatar
-            alt='club'
-            src={clubData.profileImage}
-            variant='square'
-            style={{ marginBottom: '10px' }}
+            alt={club.name}
+            src={`${window.origin}/db/images/${club?.id}`}
+            variant='circle'
+            style={{ height: '70px', width: '70px', marginBottom: '10px' }}
+          />
+
+          <DeleteConfirmationModal
+            id={club?.id}
+            deleteHandler={deleteHandler}
           />
         </Box>
+
         <Typography
           align='center'
           color='textPrimary'
           gutterBottom
           variant='h4'>
-          {clubData.name}
+          {club.name}
         </Typography>
         <Typography align='center' color='textPrimary' variant='body1'>
-          {clubData.description}
+          {club.description}
         </Typography>
       </CardContent>
       <Box style={{ flexGrow: 1 }} />
@@ -67,7 +125,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Updated {moment(clubData.creationTime).format('DD/MM/YYYY')}
+              Last Updated {moment(club.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid
@@ -82,7 +140,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              {club.users.length} Users
+              {club.membersCount} Users
             </Typography>
           </Grid>
         </Grid>
@@ -90,9 +148,7 @@ const DashboardClubCard = ({ club }) => {
     </Card>
   );
 };
-
 DashboardClubCard.propTypes = {
-  club: PropTypes.node.isRequired,
+  clubData: PropTypes.node.isRequired,
 };
-
 export default DashboardClubCard;

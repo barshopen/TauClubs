@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import { useQueryClient } from 'react-query';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -54,13 +55,13 @@ IconBu.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export const eventsIcon = ({
-  refetchFeed,
-  clubId,
-  id,
-  isAttend,
-  isInterested,
-}) => {
+export const eventsIcon = ({ clubId, id, isAttend, isInterested }) => {
+  const queryClient = useQueryClient();
+
+  const refetchFeed = () => {
+    queryClient.invalidateQueries(['feed']);
+  };
+
   const handleInterested = () =>
     // eslint-disable-next-line no-nested-ternary
     isInterested
@@ -76,6 +77,7 @@ export const eventsIcon = ({
         isInterested
           ? uninterested(clubId, id).then(() => refetchFeed())
           : null);
+
   return (
     <CardActions disableSpacing>
       <Tooltip title='Attend'>
@@ -110,12 +112,14 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
     title,
     description,
     startTime,
+    endTime,
     location,
     lastUpdateTime,
     isAttend,
     isInterested,
     content,
-    duration,
+    numAttending,
+    numInterest,
   } = feedItem;
 
   const { refetchFeed } = useFeed();
@@ -123,6 +127,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
   const { editMessage, editEvent } = useClubFeed({ clubId });
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
 
   function deleteHandler(eventId) {
     if (location) {
@@ -158,14 +163,44 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography style={{ marginBottom: '10px' }}>
-              Starts at: {displayStartTime}
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Timing:
+              </Typography>
+              {displayStartTime} - {displayEndTime}
             </Typography>
-            <Typography
-              style={{
-                marginBottom: '10px',
-              }}>{`Duration: ${duration} hours`}</Typography>
-            <Typography>Location: {location}</Typography>
+
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Location:
+              </Typography>
+              {location}
+            </Typography>
+
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Responses:
+              </Typography>
+              {` ${numAttending} Attending / ${numInterest} Intrested `}
+            </Typography>
           </>
         )}
       </CardContent>
@@ -183,6 +218,8 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
                 description,
                 location,
                 titleStatus: 'Edit Event',
+                startTime,
+                endTime,
               }}
             />
           ) : (
@@ -214,7 +251,6 @@ GenericFeedMessage.propTypes = {
       lastUpdateTime: PropTypes.string,
       isAttend: PropTypes.string,
       isInterested: PropTypes.string,
-      duration: PropTypes.string,
     })
   ),
 };

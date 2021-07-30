@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -17,11 +17,17 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import AddIcon from '@material-ui/icons/Add';
 import useClubs from '../../hooks/useClubs';
-import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
+import {
+  showSideBarMobileState,
+  currentUser,
+  selectedSideBarTab,
+} from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
+import { createClub } from '../../Shared/api';
 
 const drawerWidth = 240;
 
@@ -41,12 +47,12 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     position: 'relative',
-    height: '30%',
+    // height: '30%',
     [theme.breakpoints.up('md')]: {
-      height: '40%',
+      // height: '40%',
     },
     [theme.breakpoints.up('lg')]: {
-      height: '60%',
+      // height: '60%',
     },
   },
   copyRight: {
@@ -75,7 +81,14 @@ const SideBarListItem = ({
         handleListItemClick && (event => handleListItemClick(event, id))
       }>
       <ListItemIcon>{children}</ListItemIcon>
-      <ListItemText primary={text} />
+      <ListItemText
+        primary={text}
+        style={{
+          whiteSpace: 'break-spaces',
+          wordBreak: 'break-word',
+          marginRight: '20px',
+        }}
+      />
       {admin && <GiQueenCrown />}
     </ListItem>
   </NavLink>
@@ -113,17 +126,33 @@ const Copyright = ({ className }) => (
 Copyright.propTypes = {
   className: PropTypes.string.isRequired,
 };
+function ClickableTrigger({ onClick }) {
+  const text = 'Add New Club';
+  return (
+    <ListItem button key={text} onClick={onClick}>
+      <ListItemIcon>
+        <AddIcon />
+      </ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItem>
+  );
+}
+
+ClickableTrigger.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useRecoilState(selectedSideBarTab);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
 
-  const { myClubs } = useClubs();
+  const { refetchMyClubs, myClubs } = useClubs();
   const user = useRecoilValue(currentUser);
+
   const SideBardListItems = [
     {
       text: 'Feed',
@@ -171,7 +200,21 @@ export default function AppSideBar() {
           }
           return null;
         })}
-        {user && <NewClubModal />}
+        {user && (
+          <NewClubModal
+            ClickableTrigger={ClickableTrigger}
+            refetch={refetchMyClubs}
+            handler={createClub}
+            clubId={{
+              name: '',
+              description: '',
+              contact: '',
+              title: 'Create New Club',
+              existTag: [],
+              isImage: false,
+            }}
+          />
+        )}
       </List>
       <Divider />
       {user && (

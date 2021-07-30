@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField, URLField
+from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
 
 
@@ -91,6 +91,15 @@ class User(DynamicDocument):
             "joinTime": self.id.generation_time.isoformat(),
         }
 
+    def to_dict_with_membership(self, membership_dict):
+        d = self.to_dict()
+        d["status"] = ROLES[membership_dict["role"]]
+        d["requestTime"] = membership_dict["requestTime"]
+        d["approveTime"] = membership_dict["approveTime"]
+        d["id"] = membership_dict["id"]
+        d["club"] = membership_dict["clubName"]
+        return d
+
     def to_json(self):
         return json.dumps(self.to_dict())
 
@@ -109,17 +118,22 @@ class ClubMembership(DynamicDocument):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    RequestTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    requestTime = DateTimeField(required=True)
     approveTime = DateTimeField()
 
     def to_dict(self):
+        try:
+            approve = self.approveTime
+        except Exception:
+            approve = None
+
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
+            "requestTime": self.requestTime,
+            "approveTime": approve,
         }
 
     def to_json(self):
@@ -130,8 +144,8 @@ class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
+    endTime = DateTimeField(required=True)
     location = StringField()
     creatingClub = ReferenceField("Club", max_length=200, required=True)
     creationTime = DateTimeField(required=True, validation=None)
@@ -140,21 +154,31 @@ class Event(DynamicDocument):
     membersAttending = ListField(ReferenceField("User"))
 
     def to_dict(self):
-        user = UserAuth.objects.get(id=current_user.get_id()).userauth
+        isAttend = False
+        isInterested = False
+        if current_user.is_authenticated:
+            user = UserAuth.objects.get(id=current_user.get_id()).userauth
+            if user in self.membersAttending:
+                isAttend = True
+            if user in self.intrested:
+                isInterested = True
+
         return {
             "id": str(self.pk),
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            "duration": self.duration,
             "startTime": self.startTime.isoformat(),
+            "endTime": self.endTime.isoformat(),
             "location": self.location,
             "creationTime": self.creationTime.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "clubName": self.creatingClub.name,
-            "isAttend": user in self.membersAttending,
-            "isInterested": user in self.intrested,
+            "isAttend": isAttend,
+            "isInterested": isInterested,
             "profileImage": self.creatingClub.hasPicture(),
+            "numAttending": len(self.membersAttending),
+            "numInterest": len(self.intrested),
         }
 
     def to_json(self):
@@ -207,6 +231,13 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
+        return validatePermessionByClub(user, club)
+    except DoesNotExist:
+        return False  # invalid membership
+
+
+def validatePermessionByClub(user, club):
+    try:
         membership = ClubMembership.objects(club=club, member=user).first()
         if not membership or membership.role != "A":
             return False  # error only admin can create message
@@ -240,3 +271,7 @@ def dict_two_months(clubs, func):
         dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
         dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
     return dict
+
+
+def current_time():
+    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)

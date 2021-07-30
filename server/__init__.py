@@ -1,14 +1,11 @@
 import os
-from flask import Flask, request, json
+from flask import Flask, request
 import dotenv
-from server.db import db_app
+from server.db import db_app, mail_init
 from server.db.manager_data import dashboard_app
 from server.auth import auth_app, init
 from server.generic import disable_route_on_flag
 from flask_mongoengine import MongoEngine
-from server.auth.userauth import get_userauth_user_by_id
-from flask_login import current_user, login_required
-from server.db.clubmembership import is_manager
 
 
 dotenv.load_dotenv()
@@ -26,6 +23,18 @@ app.register_blueprint(db_app)
 
 init(app)
 
+mail_settings = {
+    "MAIL_SERVER": "smtp.gmail.com",
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": os.getenv("EMAIL_USER"),
+    "MAIL_PASSWORD": os.getenv("EMAIL_PASSWORD"),
+}
+
+
+app.config.update(mail_settings)
+mail_init(app)
 # blueprint for auth
 app.register_blueprint(auth_app)
 
@@ -60,10 +69,3 @@ if FLAG_EXPECTED_VALUE != FLAG_ACTUAL_VALUE:
     @disable_route_on_flag(FLAG_EXPECTED_VALUE, FLAG_ACTUAL_VALUE)
     def index():
         return app.send_static_file("index.html")
-
-
-@app.route("/isManager")
-@login_required
-def is_user_manager():
-    user = get_userauth_user_by_id(current_user.get_id())
-    return json.dumps(is_manager(user))

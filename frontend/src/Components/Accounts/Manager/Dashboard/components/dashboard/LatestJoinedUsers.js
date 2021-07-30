@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-const LatestJoinedUsers = ({ allUsers }) => (
+const LatestJoinedUsers = ({ users }) => (
   <Card>
     <CardHeader title='Latest Applications' />
     <Divider />
@@ -34,26 +34,24 @@ const LatestJoinedUsers = ({ allUsers }) => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {allUsers?.map(({ users, club }) =>
-              users.map(user => (
-                <TableRow hover key={user.id}>
-                  <TableCell>
-                    <Chip color='primary' label={club} size='small' />
-                  </TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>
-                    {moment(user.joinTime).format('DD/MM/YYYY')}
-                  </TableCell>
-                  {/* <TableCell>
+            {users.map(user => (
+              <TableRow hover key={user.id}>
+                <TableCell>
+                  <Chip color='primary' label={user.club} size='small' />
+                </TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>
+                  {moment(user.joinTime).format('DD/MM/YYYY')}
+                </TableCell>
+                {/* <TableCell>
                     <Chip
                       color='primary'
                       label={user?.status ? 'pending' : 'member'}
                       size='small'
                     /> 
                   </TableCell> */}
-                </TableRow>
-              ))
-            )}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Box>
@@ -75,9 +73,9 @@ const LatestJoinedUsers = ({ allUsers }) => (
 export default LatestJoinedUsers;
 
 LatestJoinedUsers.propTypes = {
-  allUsers: PropTypes.node,
+  users: PropTypes.node,
 };
 
 LatestJoinedUsers.defaultProps = {
-  allUsers: {},
+  users: {},
 };
