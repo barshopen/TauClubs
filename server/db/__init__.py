@@ -277,7 +277,7 @@ def join_club_by_id():
         return "Not valid club id", 400
     if is_member(user, club):
         return "Already member", 200
-    res = join_club(cur_user_email, club_id).to_json()
+    res = join_club(cur_user_email, club_id)
     if not res:
         return "Could not complete request", 400
     return "Success", 200
