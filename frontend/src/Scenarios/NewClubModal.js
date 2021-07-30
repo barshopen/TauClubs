@@ -121,7 +121,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         Validate
         autoComplete='on'
         onSubmit={submitHandler}>
-        <Typography variant='h6' className={classes.header}>
+        <Typography variant='h4' className={classes.header} align='center'>
           {title}
         </Typography>
 
@@ -154,6 +154,20 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           rows={4}
           rowsMax={10}
           required={title === 'Create New Club'}
+          onChange={handleChange}
+        />
+        <TextField
+          name='WhatsAppGroup'
+          label='WhatsApp group link'
+          defaultValue=''
+          variant='outlined'
+          onChange={handleChange}
+        />
+        <TextField
+          name='FacebookGroup'
+          label='Facebook group link'
+          defaultValue=''
+          variant='outlined'
           onChange={handleChange}
         />
         <Box p={1}>

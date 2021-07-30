@@ -4,8 +4,10 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import FacebookIcon from '@material-ui/icons/Facebook';
 import { sendMailToClub } from '../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +44,26 @@ const AboutUs = ({ name, description, contactMail }) => {
           <Typography variant='h5' disply='inline' align='center'>
             {description}
           </Typography>
+        </Box>
+        <Box display='flex' justifyContent='center' m={2}>
+          <Button
+            variant='h5'
+            disply='inline'
+            align='center'
+            target='_blank'
+            href='https://chat.whatsapp.com/Ksx0PrM3VzA8Nm3KjDshmJ'
+            startIcon={<WhatsAppIcon />}>
+            WhatsApp group
+          </Button>
+          <Button
+            variant='h5'
+            disply='inline'
+            align='center'
+            target='_blank'
+            href='https://chat.whatsapp.com/Ksx0PrM3VzA8Nm3KjDshmJ'
+            startIcon={<FacebookIcon />}>
+            Facebook group
+          </Button>
         </Box>
 
         <Box display='flex' justifyContent='center' m={2}>
