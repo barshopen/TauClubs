@@ -10,10 +10,10 @@ export const joinClub = data => post('/db/join_club', data);
 export const leaveClub = data => post('/db/leave_club', data);
 
 export const interested = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/interested`);
+  getDb(`club/${clubId}/events/${eventId}/interested`);
 
 export const attend = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/attend`);
+  getDb(`club/${clubId}/events/${eventId}/attend`);
 
 export const uninterested = (clubId, eventId) =>
   getDb(`club/${clubId}/events/${eventId}/uninterested`);
@@ -39,15 +39,9 @@ export const getUpcomingEventsByClub = (clubId = null) =>
 
 export const getClub = clubId => getDb('club', clubId);
 
-export const getClubs = ({ name, tag }) => {
-  if (name && tag) {
-    return getDb(`clubs?name=${name}&tag=${tag}`);
-  }
-  if (name) {
-    return getDb(`clubs?name=${name}`);
-  }
-  if (tag) {
-    return getDb(`/clubs?tag=${tag}`);
+export const getClubs = ({ search }) => {
+  if (search) {
+    return getDb(`clubs?search=${search}`);
   }
   return getDb(`clubs`);
 };

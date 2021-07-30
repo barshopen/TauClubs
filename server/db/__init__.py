@@ -251,7 +251,7 @@ def clubs():
         containes foodies OR have a 'Math' tag
     """
     clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+    return get_clubs(name=clubs_params.get("search"), tag=clubs_params.get("search"))
 
 
 @db_app.route("/club/<club_id>")
@@ -510,7 +510,7 @@ def validate_user_event_permession(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/attend")
+@db_app.route("/club/<club_id>/events/<event_id>/attend")
 def event_attending(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -521,7 +521,7 @@ def event_attending(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/unattend")
+@db_app.route("/club/<club_id>/events/<event_id>/unattend")
 def event_not_attending(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:

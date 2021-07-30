@@ -10,23 +10,23 @@ import GenericModal from '../Components/Generic/GenericModal';
 import useConfetti from '../hooks/useConfetti';
 
 const options = [
-  { value: 'sports', label: 'Sports' },
-  { value: 'Dancing', label: 'Dancing' },
-  { value: 'Social', label: 'Social' },
-  { value: 'Math', label: 'Math' },
-  { value: 'Outdoors', label: 'Outdoors' },
-  { value: 'Music', label: 'Music' },
-  { value: 'Science', label: 'Science' },
-  { value: 'Politics', label: 'Politics' },
-  { value: 'meditation', label: 'Meditation' },
-  { value: 'Food', label: 'Food' },
-  { value: 'Cooking', label: 'Cooking' },
-  { value: 'architecture', label: 'Architecture' },
-  { value: 'history', label: 'History' },
-  { value: 'Literature', label: 'Literature' },
-  { value: 'poetry', label: 'Poetry' },
-  { value: 'Gaming', label: 'Gaming' },
-  { value: 'volunteering', label: 'Volunteering' },
+  'sports',
+  'dancing',
+  'social',
+  'math',
+  'outdoors',
+  'music',
+  'science',
+  'politics',
+  'meditation',
+  'food',
+  'cooking',
+  'architecture',
+  'history',
+  'literature',
+  'poetry',
+  'gaming',
+  'volunteering',
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -131,6 +131,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           defaultValue={name}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{ maxLength: 24 }}
           onChange={handleChange}
         />
         <TextField
@@ -139,6 +140,9 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           defaultValue={contact}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{
+            pattern: '[a-zA-Z0-9._%+-]+@[a-z0-9.-]+.[a-zA-Z]{2,4}',
+          }}
           onChange={handleChange}
         />
         <TextField
@@ -158,7 +162,14 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
             backgroundColor='black'
             onChange={handleTags}
             isMulti
-            options={tags.length === 5 ? [] : options}
+            options={
+              tags.length === 5
+                ? []
+                : options.map(label => ({
+                    value: label,
+                    label,
+                  }))
+            }
             defaultValue={tagsfunc(tags)}
           />
         </Box>

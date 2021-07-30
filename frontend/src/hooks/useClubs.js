@@ -4,7 +4,7 @@ import { getClubs, getMyClubs } from '../Shared/api';
 import { mainSearch } from '../Shared/atoms';
 
 const fetchClubs = async search => {
-  const res = await getClubs({ name: search });
+  const res = await getClubs({ search });
   return res;
 };
 
