@@ -9,12 +9,7 @@ import TotalUsers from '../components/dashboard/TotalUsers';
 import TotalEvents from '../components/dashboard/TotalEvents';
 
 const Dashboard = ({ data }) => {
-  const { clubs, events, messages } = data || {};
-
-  const allUsers = Object.values(clubs).map(({ users, club }) => ({
-    users,
-    club: club.name,
-  }));
+  const { clubs, users, usersByDated, events, messages } = data || {};
 
   return (
     <Box backgroundColor='background.default' minHeight='100%' py={3}>
@@ -30,13 +25,13 @@ const Dashboard = ({ data }) => {
             <TotalEvents events={events} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalUsers clubs={clubs} />
+            <TotalUsers users={users} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <ClubsActivity clubs={clubs} />
+            <ClubsActivity usersByDated={usersByDated} />
           </Grid>
           <Grid item lg={12} md={12} xl={9} xs={12}>
-            <LatestJoinedUsers allUsers={allUsers} style={{ width: '100%' }} />
+            <LatestJoinedUsers users={users} style={{ width: '100%' }} />
           </Grid>
         </Grid>
       </Container>

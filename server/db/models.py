@@ -97,6 +97,7 @@ class User(DynamicDocument):
         d["requestTime"] = membership_dict["requestTime"]
         d["approveTime"] = membership_dict["approveTime"]
         d["id"] = membership_dict["id"]
+        d["club"] = membership_dict["clubName"]
         return d
 
     def to_json(self):
@@ -121,11 +122,11 @@ class ClubMembership(DynamicDocument):
     approveTime = DateTimeField()
 
     def to_dict(self):
-        approve = None
         try:
             approve = self.approveTime
         except Exception:
-            print(approve)
+            approve = None
+
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
@@ -230,7 +231,7 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
-        validatePermessionByClub(user, club)
+        return validatePermessionByClub(user, club)
     except DoesNotExist:
         return False  # invalid membership
 

@@ -16,10 +16,12 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
-import { deleteClub } from '../../../../../../Shared/api';
+import {
+  deleteClub,
+  editClub as editClubApi,
+} from '../../../../../../Shared/api';
 import DeleteConfirmationModal from '../../../../../../Scenarios/DeleteConfirmationModal';
 import NewClubModal from '../../../../../../Scenarios/NewClubModal';
-import useClub from '../../../../../../hooks/useClub';
 
 function ClickableTrigger({ onClick }) {
   return (
@@ -35,10 +37,8 @@ ClickableTrigger.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const DashboardClubCard = ({ club }) => {
-  const { club: clubData } = club;
-
-  const { editClub: edit } = useClub(clubData.id);
+const DashboardClubCard = ({ clubData }) => {
+  const { club } = clubData;
   const queryClient = useQueryClient();
 
   const refetchDashboard = () =>
@@ -50,8 +50,8 @@ const DashboardClubCard = ({ club }) => {
   };
 
   const editClubHandler = data => {
-    data.append('clubId', clubData?.id);
-    edit(data);
+    data.append('clubId', club?.id);
+    editClubApi(data);
   };
 
   return (
@@ -73,28 +73,24 @@ const DashboardClubCard = ({ club }) => {
             handler={editClubHandler}
             refetch={refetchDashboard}
             clubId={{
-              id: clubData?.id,
-              name: clubData?.name,
-              description: clubData?.description,
-              contact: clubData?.contactMail,
+              id: club?.id,
+              name: club?.name,
+              description: club?.description,
+              contact: club?.contactMail,
               title: 'Edit Club',
-              isImage: clubData?.profileImage,
-              existTag: clubData?.tags,
+              isImage: club?.profileImage,
+              existTag: club?.tags,
             }}
           />
           <Avatar
-            alt='club'
-            src={`${window.origin}/db/images/${clubData?.id}`}
+            alt={club.name}
+            src={`${window.origin}/db/images/${club?.id}`}
             variant='circle'
             style={{ height: '70px', width: '70px', marginBottom: '10px' }}
           />
 
           <DeleteConfirmationModal
-            id={clubData?.id}
-            deleteHandler={deleteHandler}
-          />
-          <DeleteConfirmationModal
-            id={clubData?.id}
+            id={club?.id}
             deleteHandler={deleteHandler}
           />
         </Box>
@@ -104,10 +100,10 @@ const DashboardClubCard = ({ club }) => {
           color='textPrimary'
           gutterBottom
           variant='h4'>
-          {clubData.name}
+          {club.name}
         </Typography>
         <Typography align='center' color='textPrimary' variant='body1'>
-          {clubData.description}
+          {club.description}
         </Typography>
       </CardContent>
       <Box style={{ flexGrow: 1 }} />
@@ -129,8 +125,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              Last Updated{' '}
-              {moment(clubData.lastUpdateTime).format('DD/MM/YYYY')}
+              Last Updated {moment(club.lastUpdateTime).format('DD/MM/YYYY')}
             </Typography>
           </Grid>
           <Grid
@@ -145,7 +140,7 @@ const DashboardClubCard = ({ club }) => {
               display='inline'
               style={{ pl: 1 }}
               variant='body2'>
-              {club.users.length} Users
+              {club.membersCount} Users
             </Typography>
           </Grid>
         </Grid>
@@ -153,9 +148,7 @@ const DashboardClubCard = ({ club }) => {
     </Card>
   );
 };
-
 DashboardClubCard.propTypes = {
-  club: PropTypes.node.isRequired,
+  clubData: PropTypes.node.isRequired,
 };
-
 export default DashboardClubCard;

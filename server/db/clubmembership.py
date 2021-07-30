@@ -3,7 +3,6 @@ import datetime
 from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
-from mongoengine.queryset.visitor import Q
 
 
 def removeMembership(membership):
@@ -29,7 +28,7 @@ def createMembership(user, club, role):
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
-        RequestTime=current_time(),
+        requestTime=current_time(),
         approveTime=approveTime,
     )
     membership.save()
@@ -55,27 +54,25 @@ def leave_club(membership):
 
 def delete_membership(club):
     memberships = ClubMembership.objects.filter(club=club)
+    list_of_memberships = []
     for membership in memberships:
+        list_of_memberships.append(membership.member.to_dict())
         removeMembership(membership)
+    return list_of_memberships
 
 
 def approve_membership(membership, role):
-    membership.update(role=role, approveTime=datetime.datetime.utcnow())
-    return membership
-
-
-def regularMembership(user, club):
-    membership = ClubMembership.objects(member=user, club=club)
-    membership = approve_membership(membership, "U")
+    membership.update(role=role, approveTime=current_time())
     return membership
 
 
 def genericApproveMembership(membership):
     if membership.role == "U":
-        membership.update(role="A")  # add approve time
+        membership.update(role="A", approveTime=current_time())
     else:
-        membership.update(role="U")  # add approve time
+        membership.update(role="U", approveTime=current_time())
     membership.save()
+    return membership
 
 
 def createAdminMembership(user_email: str, club: Club):  # change
@@ -96,7 +93,7 @@ def createPendingMembership(user: User, club: Club):
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role="P",
-        requestTime=datetime.datetime.utcnow(),
+        requestTime=current_time().isoformat(),
     )
     membership.save()
     return membership
@@ -168,27 +165,29 @@ def clubs_by_user_member(user):
     )
 
 
-def users_for_club_between_dates(club, before, after):  # change to request time
-    before_Q = Q(approveTime__lte=before, club=club)  # bigger
-    after_Q = Q(approveTime__gte=after, club=club)
-    return ClubMembership.objects.filter(after_Q & before_Q).count()
-
-
 def month_to_num(today_month, month_ago):
     if today_month >= month_ago:
         return today_month - month_ago
     return today_month - month_ago + 12 + 1
 
 
-def users_for_club_six_months(club):
+def users_by_date(users, start, end):
+    counter = 0
+    for user in users:
+        if user["approveTime"] is not None:
+            approveTime = user["approveTime"]
+            if approveTime >= start and approveTime <= end:
+                counter = counter + 1
+    return counter
+
+
+def users_for_club_six_months(users):
     today = datetime.datetime.today()
     dict = {}
     for i in range(-1, 5):
         before = months_ago(today, i)
         after = months_ago(today, i + 1)
-        dict[month_to_num(today.month, i + 1)] = users_for_club_between_dates(
-            club, before, after
-        )
+        dict[month_to_num(today.month, i + 1)] = users_by_date(users, after, before)
     return dict
 
 
@@ -203,13 +202,22 @@ def users_for_club(club):
     )
 
 
+def users_for_clubs(clubs):
+    return list(
+        map(
+            lambda membership: membership.member.to_dict_with_membership(
+                membership.to_dict()
+            ),
+            ClubMembership.objects.filter(club__in=clubs),
+        )
+    )
+
+
 def dict_users_and_update_by_club(clubs):
     dict = {}
     for club in clubs:
         dict[club.name] = {"club": club.to_dict()}  # club data
         dict[club.name]["lastUpdate"] = club.lastUpdateTime  # last update time for club
-        dict[club.name]["users"] = users_for_club(club)  # member for the club
-        dict[club.name]["usersByDated"] = users_for_club_six_months(club)
     return dict
 
 

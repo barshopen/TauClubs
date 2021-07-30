@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 // import { useReducer } from 'react';
-import { getClub, editClub as editClubApi } from '../Shared/api';
+import { getClub } from '../Shared/api';
 
 const fetchClub = async clubId => {
   const res = await getClub(clubId);
@@ -13,7 +13,6 @@ const fetchClub = async clubId => {
 
 const useClub = clubId => {
   const storeKey = ['club', clubId];
-  const queryClient = useQueryClient();
   // const [clubData, dispatch] = useReducer(reducer, {});
 
   // const { loading: loadingClub, refetch } = useQuery(
@@ -31,20 +30,14 @@ const useClub = clubId => {
   //     },
   //   }
   // );
-
   const { isLoading: loadingClub, refetch, data: clubData } = useQuery(
     storeKey,
     () => fetchClub(clubId),
     { staleTime: Infinity, refetchOnMount: false }
   );
 
-  const { mutate: editClub } = useMutation(data => editClubApi(data), {
-    onSuccess: () => queryClient.invalidateQueries(['dashboardData']),
-  });
-
   return {
     loadingClub,
-    editClub,
     clubData,
     refetchUseClub: refetch,
   };

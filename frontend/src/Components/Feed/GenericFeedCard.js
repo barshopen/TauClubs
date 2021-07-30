@@ -57,9 +57,6 @@ const useStyles = makeStyles(theme => ({
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -69,11 +66,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function cardHeader(profileImage, clubName, title, lastUpdateTime) {
+function cardHeader(clubName, title, lastUpdateTime) {
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
+
   return (
     <CardHeader
-      avatar={<Avatar alt='club image' src={profileImage} />}
+      avatar={
+        <Avatar
+          alt='club image'
+          variant='rounded'
+          style={{
+            flex: true,
+            padding: '10px',
+            backgroundColor: '#cfd8dc',
+            color: '#a1887f',
+            height: '70px',
+            width: '90px',
+            borderColor: 'black',
+          }}>
+          {clubName}
+        </Avatar>
+      }
       titleTypographyProps={{ variant: 'h5' }}
       title={title}
       subheader={displayLastUpdate.concat(` ${clubName}`)}
@@ -139,7 +152,7 @@ function FeedCardEvent({ feedItem }) {
   };
   return (
     <Card className={classes.root} m={75}>
-      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardHeader(clubName, title, lastUpdateTime)}
       {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
@@ -147,19 +160,37 @@ function FeedCardEvent({ feedItem }) {
         </Typography>
         {location && (
           <>
-            <Typography style={{ marginBottom: '10px' }}>
-              <strong>Timing:</strong>
-              {` ${displayStartTime} - ${displayEndTime}`}
-            </Typography>
             <Typography>
-              <strong>Location:</strong> {location}
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Timing:
+              </Typography>
+              {displayStartTime} - {displayEndTime}
+            </Typography>
+
+            <Typography>
+              <Typography
+                style={{
+                  marginBottom: '10px',
+                  marginRight: '4px',
+                  fontWeight: '600',
+                  display: 'inline-block',
+                }}>
+                Location:
+              </Typography>
+              {location}
             </Typography>
           </>
         )}
       </CardContent>
       <CardActions disableSpacing>
         {homeIcon(clubId)}
-        {eventsIcon(clubId, id, isAttend, isInterested)}
+        {eventsIcon({ clubId, id, isAttend, isInterested })}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -172,12 +203,30 @@ function FeedCardEvent({ feedItem }) {
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
-          <strong>Responses:</strong>
-          {` ${numAttending} Attending / ${numInterest} Intrested `}
+          <Typography>
+            <Typography
+              style={{
+                marginBottom: '10px',
+                marginRight: '4px',
+                fontWeight: '600',
+                display: 'inline-block',
+              }}>
+              Responses:
+            </Typography>
+            {` ${numAttending} Attending / ${numInterest} Intrested `}
+          </Typography>
 
-          <br />
-          <Typography paragraph>more details:</Typography>
-          <Typography paragraph variant='h6' color='initial'>
+          <Typography
+            style={{
+              marginBottom: '10px',
+              marginRight: '4px',
+              fontWeight: '600',
+              display: 'inline-block',
+            }}
+            paragraph>
+            more details:
+          </Typography>
+          <Typography paragraph variant='h7' color='initial'>
             {description}
           </Typography>
         </CardContent>
@@ -197,7 +246,8 @@ function FeedCardMessage({ feedItem }) {
   const classes = useStyles();
   return (
     <Card className={classes.root} m={75}>
-      {cardHeader(profileImage, clubName, title, lastUpdateTime)}
+      {cardHeader(clubName, title, lastUpdateTime)}
+
       {cardImage(profileImage, clubId, title)}
       <CardContent>
         <Typography paragraph variant='h6' color='initial' component='p'>
@@ -255,7 +305,6 @@ FeedCardEvent.propTypes = {
       location: PropTypes.string,
       startTime: PropTypes.string,
       endTime: PropTypes.string,
-      // duration: PropTypes.string,
     })
   ),
 };
@@ -273,7 +322,6 @@ FeedCardMessage.propTypes = {
       profileImage: PropTypes.string,
       description: PropTypes.string,
       lastUpdateTime: PropTypes.string,
-      // duration: PropTypes.string,
     })
   ),
 };

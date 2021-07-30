@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -19,7 +19,11 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import AddIcon from '@material-ui/icons/Add';
 import useClubs from '../../hooks/useClubs';
-import { showSideBarMobileState, currentUser } from '../../Shared/atoms';
+import {
+  showSideBarMobileState,
+  currentUser,
+  selectedSideBarTab,
+} from '../../Shared/atoms';
 import NewClubModal from '../../Scenarios/NewClubModal';
 import ContactUsModal from '../../Scenarios/ContactUsModal';
 import SideBar from './SideBar';
@@ -43,12 +47,12 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     position: 'relative',
-    height: '30%',
+    // height: '30%',
     [theme.breakpoints.up('md')]: {
-      height: '40%',
+      // height: '40%',
     },
     [theme.breakpoints.up('lg')]: {
-      height: '60%',
+      // height: '60%',
     },
   },
   copyRight: {
@@ -140,7 +144,7 @@ ClickableTrigger.propTypes = {
 
 export default function AppSideBar() {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useRecoilState(selectedSideBarTab);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -202,9 +206,9 @@ export default function AppSideBar() {
             refetch={refetchMyClubs}
             handler={createClub}
             clubId={{
-              name: 'Club Name',
-              description: 'Club Description',
-              contact: 'Club Contact Email',
+              name: '',
+              description: '',
+              contact: '',
               title: 'Create New Club',
               existTag: [],
               isImage: false,
