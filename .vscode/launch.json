@@ -1,44 +1,41 @@
 {
-    "version": "0.2.0",
-    "compounds": [
-        {
-          "name": "Server+Client",
-          "configurations": ["Debug Server", "Debug Frontend"],
-          "presentation": {
-        
-              "hidden": false,
-              "order": 1
-          }
-        }
-    ],
-    "configurations": [
-        {
-            "name": "Check build locally",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "module":"server",
-            "preLaunchTask": "Front build"
-        },
-        {
-            "name": "Debug Frontend",
-            "command": "yarn start",
-            "request": "launch",
-            "type": "node-terminal",
-            "cwd": "${workspaceFolder}/frontend",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-        },
-        {
-            "name": "Debug Server",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "module":"server",
-            "env": {"DEBUG_BACKEND":"1"},
-        },
-    ]
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Server+Client",
+      "configurations": ["Debug Server", "Debug Frontend"],
+      "presentation": {
+        "hidden": false,
+        "order": 1
+      }
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Check build locally",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "module": "server",
+      "preLaunchTask": "Front build"
+    },
+    {
+      "name": "Debug Frontend",
+      "command": "yarn start",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/frontend",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Server",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "module": "server",
+      "env": { "DEBUG_BACKEND": "1" }
+    }
+  ]
 }
