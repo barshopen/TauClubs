@@ -81,8 +81,12 @@ function cardHeader(clubName, title, lastUpdateTime) {
             backgroundColor: '#cfd8dc',
             color: '#a1887f',
             height: '70px',
-            width: '90px',
+            minWidth: '100px',
+            maxWidth: '200px',
+            width: 'auto',
             borderColor: 'black',
+            whiteSpace: 'break-spaces',
+            wordBreak: 'break-word',
           }}>
           {clubName}
         </Avatar>

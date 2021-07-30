@@ -131,6 +131,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           defaultValue={name}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{ maxLength: 24 }}
           onChange={handleChange}
         />
         <TextField
@@ -139,6 +140,9 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           defaultValue={contact}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{
+            pattern: '[a-zA-Z0-9._%+-]+@[a-z0-9.-]+.[a-zA-Z]{2,4}',
+          }}
           onChange={handleChange}
         />
         <TextField
