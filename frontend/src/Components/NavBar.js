@@ -137,6 +137,7 @@ export default function NavBar() {
   const handleLogout = () => {
     logOut();
     setUser(null);
+    history.push('/');
     queryClient.removeQueries(['myClubs']);
   };
 
