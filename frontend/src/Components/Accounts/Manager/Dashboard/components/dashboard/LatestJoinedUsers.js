@@ -41,7 +41,7 @@ const LatestJoinedUsers = ({ users }) => (
                 </TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>
-                  {moment(user.joinTime).format('DD/MM/YYYY')}
+                  {moment(user.requestTime).format('DD/MM/YYYY')}
                 </TableCell>
                 {/* <TableCell>
                     <Chip

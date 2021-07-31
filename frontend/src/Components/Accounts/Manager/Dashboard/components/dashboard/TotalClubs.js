@@ -10,7 +10,7 @@ const TotalClubs = ({ clubs }) => (
       <Grid container spacing={3} style={{ justifyContent: 'space-between' }}>
         <Grid item>
           <Typography color='textSecondary' gutterBottom variant='h6'>
-            TOTAL ClUBS
+            TOTAL CLUBS
           </Typography>
           <Typography color='textPrimary' variant='h3'>
             {Object.keys(clubs).length || 0}
