@@ -11,8 +11,8 @@ const Feed = () => {
     feed
       ?.sort(
         (a, b) =>
-          new Date(...a.lastUpdateTime.split('/').reverse()) -
-          new Date(...b.lastUpdateTime.split('/').reverse())
+          new Date(...a.creationTime.split('/').reverse()) -
+          new Date(...b.creationTime.split('/').reverse())
       )
       .reverse()
   );
@@ -20,9 +20,16 @@ const Feed = () => {
   return (
     <Container>
       <Container>
-        {feed?.map(feedItem => (
-          <FeedCard key={feedItem.id} feedItem={feedItem} />
-        ))}
+        {feed
+          ?.sort(
+            (a, b) =>
+              new Date(...a.lastUpdateTime.split('/').reverse()) -
+              new Date(...b.lastUpdateTime.split('/').reverse())
+          )
+          .reverse()
+          .map(feedItem => (
+            <FeedCard key={feedItem.id} feedItem={feedItem} />
+          ))}
         {feed?.length === 0 && <FeedCard />}
       </Container>
     </Container>
