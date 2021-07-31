@@ -628,7 +628,7 @@ def unapprove_users():
                 return "Restrict", 400
             leave_club(membership)
             send_mail_delete_by_manager([membership.member.to_dict()], club.name)
-            return "Success", 200
+        return "Success", 200
     except Exception:
         return "Failed", 400
 
