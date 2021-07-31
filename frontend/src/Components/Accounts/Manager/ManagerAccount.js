@@ -13,7 +13,10 @@ const Loader = styled(BaseLoader)`
 
 const ManagerAccount = () => {
   const storeKey = ['dashboardData'];
-  const { data, isLoading } = useQuery(storeKey, getDashboardData);
+  const { data, isLoading } = useQuery(storeKey, getDashboardData, {
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+  });
 
   return isLoading ? (
     <Loader type='TailSpin' color='#00BFFF' height={100} width={100} />

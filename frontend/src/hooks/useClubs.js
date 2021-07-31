@@ -26,7 +26,6 @@ const useClubs = () => {
 
   const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs, {
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
   });
 
   return {
