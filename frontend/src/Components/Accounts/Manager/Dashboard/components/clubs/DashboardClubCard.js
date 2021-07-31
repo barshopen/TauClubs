@@ -41,8 +41,10 @@ const DashboardClubCard = ({ clubData }) => {
   const { club } = clubData;
   const queryClient = useQueryClient();
 
-  const refetchDashboard = () =>
-    queryClient.invalidateQueries(['dashboardData']);
+  const refetchDashboard = () => {
+    setTimeout(() => queryClient.invalidateQueries(['dashboardData']), 2000);
+    queryClient.invalidateQueries(['myClubs']);
+  };
 
   const deleteHandler = clubId => {
     deleteClub({ payload: { clubId } });

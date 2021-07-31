@@ -24,7 +24,9 @@ const useClubs = () => {
     { staleTime: Infinity, refetchOnMount: false }
   );
 
-  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs);
+  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs, {
+    refetchOnWindowFocus: false,
+  });
 
   return {
     loadingClubs,
