@@ -6,7 +6,6 @@ from mongoengine import (
     EmailField,
     DateTimeField,
     ListField,
-    IntField,
     ImageField,
 )
 import json
@@ -15,13 +14,6 @@ from mongoengine.base.fields import ObjectIdField
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
-
-
-def names_of_tags(listTags):
-    re = []
-    for tag_id in listTags:
-        re.append(Tag.objects.get(pk=tag_id).to_dict())
-    return re
 
 
 class Club(DynamicDocument):
