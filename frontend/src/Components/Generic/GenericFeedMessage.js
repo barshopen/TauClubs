@@ -85,7 +85,7 @@ export const eventsIcon = ({ clubId, id, isAttend, isInterested }) => {
           {isAttend ? (
             <EventAvailableIcon fontSize='large' style={{ color: 'green' }} />
           ) : (
-            <EventAvailableIcon fontSize='large' />
+            <EventAvailableIcon fontSize='large' style={{ color: 'black' }} />
           )}
         </IconButton>
       </Tooltip>
@@ -95,7 +95,7 @@ export const eventsIcon = ({ clubId, id, isAttend, isInterested }) => {
             {isInterested ? (
               <StarIcon fontSize='large' style={{ color: 'gold' }} />
             ) : (
-              <StarIcon fontSize='large' />
+              <StarIcon fontSize='large' style={{ color: 'black' }} />
             )}
           </IconButton>
         </Tooltip>
