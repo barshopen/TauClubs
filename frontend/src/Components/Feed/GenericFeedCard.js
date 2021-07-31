@@ -193,8 +193,7 @@ function FeedCardEvent({ feedItem }) {
             </Typography>
             {moment().isAfter(endTime) && (
               <Typography color='primary' variant='h6'>
-                {' '}
-                Event Ended{' '}
+                Event Ended
               </Typography>
             )}
           </>
