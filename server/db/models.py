@@ -189,21 +189,6 @@ class Event(DynamicDocument):
         return json.dumps(self.to_dict())
 
 
-class Tag(DynamicDocument):
-    name = StringField(max_length=200, required=True)
-    color = IntField()
-    clubsWithTag = ListField(ObjectIdField())  # list of clubs
-    meta = {"collection": "tags"}
-
-    def to_dict(self):
-        return {
-            "name": self.name,
-        }
-
-    def to_json(self):
-        return json.dumps(self.to_dict())
-
-
 class Message(DynamicDocument):
     title = StringField(max_length=200, required=True)
     content = StringField(required=True)

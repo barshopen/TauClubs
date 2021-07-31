@@ -54,7 +54,6 @@ from server.db.event import (
 )
 from server.db.models import validatePermession, validatePermessionByClub
 from server.db.clubmembership import get_user_clubs, join_club
-from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
 from flask import send_file
@@ -212,7 +211,10 @@ def editClub():  # write
     name = request.form["club_name"]
     contact_mail = request.form["contact_mail"]
     description = request.form["description"]
-    tags = request.form["tags"]
+    if request.form["tags"] == "":
+        tags = None
+    else:
+        tags = request.form["tags"].split(",")
     WhatsAppGroup = request.form["WhatsAppGroup"]
     FacebookGroup = request.form["FacebookGroup"]
     try:
@@ -565,28 +567,6 @@ def get_image_club(club_id):
     club = get_club(club_id)
     image = club.profileImage
     return send_file(image, download_name="club.jpg", max_age=20000000)
-
-
-@db_app.route("/club/<club_id>/tags")
-def tags(club_id):
-    club = get_club(club_id)
-    return tags_for_club(club)
-
-
-@login_required
-@db_app.route("/club/addtags", methods=["POST"])
-def add_tag(club_id):
-    try:
-        club_id = request.json.get("clubId")
-        club = get_club(club_id)
-        user = get_userauth_user_by_id(current_user.get_id())
-        if not validatePermession(user, club_id):
-            return "Restrict", 400
-        tags = request.json.get("tags")
-        club = add_tags(club_id, club, tags)
-        return club.to_json()
-    except Exception:
-        return "Failed", 200
 
 
 @login_required
