@@ -155,28 +155,29 @@ def all_clubs():
 @db_app.route("/create_club", methods=["POST"])
 @login_required
 def club_creation():
-    user = get_userauth_user_by_id(current_user.get_id())
-    if request.form.get("image") == "None":
-        image = None
-    else:
-        image = request.files["image"]
-    if request.form["tags"] == "":
-        tags = None
-    else:
-        tags = request.form["tags"].split(",")
-    result = establish_club(
-        image=image,
-        foundingUserEmail=user.contactMail,
-        name=request.form["club_name"],
-        contact_mail=request.form["contact_mail"],
-        description=request.form["description"],
-        WhatsAppGroup=request.form["WhatsAppGroup"],
-        FacebookGroup=request.form["FacebookGroup"],
-        tags=tags,
-    )
-    if not result:
+    try:
+        user = get_userauth_user_by_id(current_user.get_id())
+        if request.form.get("image") == "None":
+            image = None
+        else:
+            image = request.files["image"]
+        if request.form["tags"] == "":
+            tags = None
+        else:
+            tags = request.form["tags"].split(",")
+        result = establish_club(
+            image=image,
+            foundingUserEmail=user.contactMail,
+            name=request.form["club_name"],
+            contact_mail=request.form["contact_mail"],
+            description=request.form["description"],
+            tags=tags,
+        )
+        if not result:
+            return "Failed", 400
+        return result, 200
+    except Exception:
         return "Failed", 400
-    return result, 200
 
 
 @db_app.route("/club/delete", methods=["POST"])
@@ -605,7 +606,7 @@ def approve_users():
                 return "Restrict", 400
             membership = genericApproveMembership(membership)
             send_mail_approve([membership.member.to_dict()], club.name, membership.role)
-            return "Success", 200
+        return "Success", 200
     except Exception:
         return "Failed", 400
 
