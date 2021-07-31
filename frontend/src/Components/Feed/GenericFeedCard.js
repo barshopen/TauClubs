@@ -80,8 +80,8 @@ function cardHeader(clubName, title, lastUpdateTime) {
           style={{
             flex: true,
             padding: '10px',
-            backgroundColor: '#cfd8dc',
-            color: '#a1887f',
+            backgroundColor: 'black',
+            color: 'white',
             height: '70px',
             minWidth: '100px',
             maxWidth: '200px',
