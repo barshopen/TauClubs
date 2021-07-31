@@ -104,7 +104,7 @@ def get_events_by_club(club):
         list(
             map(
                 lambda event: event.to_dict(),
-                Event.objects(creatingClub=club, endTime__gte=datetime.today()),
+                Event.objects(creatingClub=club),
             )
         )
     )
