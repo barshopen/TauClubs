@@ -71,35 +71,31 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
         {currentUserIsClubsAdmin && (
           <>
             <Grid container justify='center' spacing={2}>
-              <Tooltip title='New Message' placement='top'>
-                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                  <NewMessageModal
-                    ClickableTrigger={IconBu}
-                    handler={addMessage}
-                    clubId={{
-                      id: '',
-                      title: '',
-                      content: '',
-                      titleStatus: 'Create New Message',
-                    }}
-                  />
-                </Box>
-              </Tooltip>
-              <Tooltip title='New Event' placement='top'>
-                <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
-                  <NewEventModal
-                    ClickableTrigger={AddEventIcon}
-                    handler={addEvent}
-                    clubId={{
-                      id: '',
-                      title: '',
-                      description: '',
-                      location: '',
-                      titleStatus: 'Create New Event',
-                    }}
-                  />
-                </Box>
-              </Tooltip>
+              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                <NewMessageModal
+                  ClickableTrigger={IconBu}
+                  handler={addMessage}
+                  clubId={{
+                    id: '',
+                    title: '',
+                    content: '',
+                    titleStatus: 'Create New Message',
+                  }}
+                />
+              </Box>
+              <Box padding='10%' paddingTop='1%' paddingBottom='2%'>
+                <NewEventModal
+                  ClickableTrigger={AddEventIcon}
+                  handler={addEvent}
+                  clubId={{
+                    id: '',
+                    title: '',
+                    description: '',
+                    location: '',
+                    titleStatus: 'Create New Event',
+                  }}
+                />
+              </Box>
             </Grid>
           </>
         )}
