@@ -70,9 +70,8 @@ class User(DynamicDocument):
     country = StringField()
     phone = StringField()
     picture = URLField()
-    joinTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    joinTime = DateTimeField(required=True)
+
     meta = {"collection": "users"}
 
     def full_name(self):

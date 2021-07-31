@@ -57,7 +57,7 @@ def establish_club(
 
 def edit_club(
     club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
-):  # write
+):
     if name == "undefined":
         name = club.name
     else:
@@ -108,7 +108,6 @@ def delete_club(club):
     delete_messages(club)
     delete_events(club)
     list_memberships = delete_membership(club)
-    # delete_tags(club)
     club.delete()
     club.switch_collection("old_clubs")
     club.save(force_insert=True)
