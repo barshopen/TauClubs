@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container';
 import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
