@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from server.db.models import Event, current_time, dict_two_months
 from mongoengine.queryset.visitor import Q
@@ -111,11 +112,12 @@ def get_events_by_club(club):
 
 def get_events_for_all_clubs_by_user(clubs):
     club_Q = Q(creatingClub__in=clubs)
+    future_end = Q(endTime__gte=datetime.today())
     return json.dumps(
         list(
             map(
                 lambda message: message.to_dict(),
-                Event.objects.filter(club_Q),
+                Event.objects.filter(club_Q & future_end),
             )
         )
     )

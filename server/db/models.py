@@ -6,7 +6,6 @@ from mongoengine import (
     EmailField,
     DateTimeField,
     ListField,
-    IntField,
     ImageField,
 )
 import json
@@ -15,13 +14,6 @@ from mongoengine.base.fields import ObjectIdField
 from mongoengine.errors import DoesNotExist
 from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
-
-
-def names_of_tags(listTags):
-    re = []
-    for tag_id in listTags:
-        re.append(Tag.objects.get(pk=tag_id).to_dict())
-    return re
 
 
 class Club(DynamicDocument):
@@ -78,9 +70,8 @@ class User(DynamicDocument):
     country = StringField()
     phone = StringField()
     picture = URLField()
-    joinTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    joinTime = DateTimeField(required=True)
+
     meta = {"collection": "users"}
 
     def full_name(self):
@@ -183,21 +174,6 @@ class Event(DynamicDocument):
             "profileImage": self.creatingClub.hasPicture(),
             "numAttending": len(self.membersAttending),
             "numInterest": len(self.intrested),
-        }
-
-    def to_json(self):
-        return json.dumps(self.to_dict())
-
-
-class Tag(DynamicDocument):
-    name = StringField(max_length=200, required=True)
-    color = IntField()
-    clubsWithTag = ListField(ObjectIdField())  # list of clubs
-    meta = {"collection": "tags"}
-
-    def to_dict(self):
-        return {
-            "name": self.name,
         }
 
     def to_json(self):
