@@ -1,7 +1,6 @@
 import datetime
 from server.db.event import delete_events
 from server.db.message import delete_messages
-from server.db.tag import add_tags, edit_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
@@ -20,6 +19,8 @@ def create_club(
     contact_mail: str,
     description: str = "",
     tags=[],
+    FacebookGroup=None,
+    WhatsAppGroup=None,
 ):
     now = current_time()
     club = Club(
@@ -29,10 +30,11 @@ def create_club(
         description=description,
         creationTime=now,
         lastUpdateTime=current_time(),
+        FacebookGroup=FacebookGroup,
+        WhatsAppGroup=WhatsAppGroup,
+        tags=tags,
     )
     club.save(force_insert=True)
-    if tags is not None:
-        add_tags(club.id, club, tags)
     return club
 
 
@@ -41,15 +43,21 @@ def establish_club(
     name: str,
     contact_mail: str,
     description: str = "",
+    FacebookGroup=None,
+    WhatsAppGroup=None,
     image=None,
     tags=None,
 ):
-    newclub = create_club(image, name, contact_mail, description, tags)
+    newclub = create_club(
+        image, name, contact_mail, description, tags, FacebookGroup, WhatsAppGroup
+    )
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 
 
-def edit_club(club, name, contact_mail, description, image, tags):  # write
+def edit_club(
+    club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
+):
     if name == "undefined":
         name = club.name
     else:
@@ -58,14 +66,20 @@ def edit_club(club, name, contact_mail, description, image, tags):  # write
         contact_mail = club.contactMail
     if description == "undefined":
         description = club.description
+    if FacebookGroup == "undefined":
+        FacebookGroup = club.FacebookGroup
+    if WhatsAppGroup == "undefined":
+        WhatsAppGroup = club.WhatsAppGroup
     if image != "None":
         club.profileImage.replace(image)
-    edit_tags(club.id, club, tags.split(","))
     club.update(
         name=name,
         contactMail=contact_mail,
         description=description,
+        FacebookGroup=FacebookGroup,
+        WhatsAppGroup=WhatsAppGroup,
         lastUpdateTime=current_time(),
+        tags=tags,
     )
     club.save()
 
@@ -94,7 +108,6 @@ def delete_club(club):
     delete_messages(club)
     delete_events(club)
     list_memberships = delete_membership(club)
-    # delete_tags(club)
     club.delete()
     club.switch_collection("old_clubs")
     club.save(force_insert=True)

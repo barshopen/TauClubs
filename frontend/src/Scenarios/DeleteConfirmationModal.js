@@ -26,7 +26,7 @@ function ClickableTrigger({ onClick }) {
   return (
     <IconButton onClick={onClick}>
       <Tooltip title='Delete'>
-        <DeleteIcon fontSize='large' />
+        <DeleteIcon fontSize='large' color='black' />
       </Tooltip>
     </IconButton>
   );

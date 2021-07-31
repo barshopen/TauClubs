@@ -4,8 +4,10 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import FacebookIcon from '@material-ui/icons/Facebook';
 import { sendMailToClub } from '../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
@@ -18,7 +20,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AboutUs = ({ name, description, contactMail }) => {
+const AboutUs = ({
+  name,
+  description,
+  contactMail,
+  FacebookGroup,
+  WhatsAppGroup,
+}) => {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
     contactMail,
@@ -44,6 +52,31 @@ const AboutUs = ({ name, description, contactMail }) => {
             {description}
           </Typography>
         </Box>
+        <Box display='flex' justifyContent='center' m={2}>
+          {WhatsAppGroup && (
+            <Button
+              variant='h5'
+              disply='inline'
+              align='center'
+              target='_blank'
+              href={WhatsAppGroup}
+              startIcon={<WhatsAppIcon />}>
+              WhatsApp group
+            </Button>
+          )}
+          {FacebookGroup && (
+            <Button
+              variant='h5'
+              disply='inline'
+              align='center'
+              target='_blank'
+              href={FacebookGroup}
+              startIcon={<FacebookIcon />}>
+              Facebook group
+            </Button>
+          )}
+        </Box>
+
         <Box display='flex' justifyContent='center' m={2}>
           <Typography variant='h5' disply='inline' align='center'>
             Contact us at {contactMail}:
@@ -122,7 +155,14 @@ AboutUs.propTypes = {
   description: PropTypes.string,
   name: PropTypes.string.isRequired,
   contactMail: PropTypes.string,
+  WhatsAppGroup: PropTypes.string,
+  FacebookGroup: PropTypes.string,
 };
-AboutUs.defaultProps = { description: '', contactMail: '' };
+AboutUs.defaultProps = {
+  description: '',
+  contactMail: '',
+  WhatsAppGroup: '',
+  FacebookGroup: '',
+};
 
 export default AboutUs;

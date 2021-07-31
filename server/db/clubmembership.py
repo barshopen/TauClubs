@@ -118,10 +118,6 @@ def get_user_clubs(user):
     return jsonify(res)
 
 
-# def clubs_by_admin(member: User):
-#     return ClubMembership.objects(member=member, role="A").to_json()
-
-
 def listOfClubsPerUser(user):
     clubs = ClubMembership.objects(member=user)
     return clubs.to_json()  # need to decide hoe do we want to get it

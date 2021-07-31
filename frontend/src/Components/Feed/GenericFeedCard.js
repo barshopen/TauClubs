@@ -11,13 +11,15 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
+import { red, green } from '@material-ui/core/colors';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+import moment from 'moment';
+import EventBusyIcon from '@material-ui/icons/EventBusy';
 import { eventsIcon } from '../Generic/GenericFeedMessage';
 import ClubsView from '../ClubsView';
 import useFeedGeneral from '../../hooks/useFeedGeneral';
@@ -78,8 +80,8 @@ function cardHeader(clubName, title, lastUpdateTime) {
           style={{
             flex: true,
             padding: '10px',
-            backgroundColor: '#cfd8dc',
-            color: '#a1887f',
+            backgroundColor: 'black',
+            color: 'white',
             height: '70px',
             minWidth: '100px',
             maxWidth: '200px',
@@ -122,7 +124,7 @@ function homeIcon(clubId) {
     <Tooltip title='go to club'>
       <NavLink to={`/club/board/${clubId}`}>
         <IconButton aria-label='go to club home page'>
-          <HomeIcon style={{ fontSize: 40 }} />
+          <HomeIcon style={{ fontSize: 40, color: green[700] }} />
         </IconButton>
       </NavLink>
     </Tooltip>
@@ -189,12 +191,21 @@ function FeedCardEvent({ feedItem }) {
               </Typography>
               {location}
             </Typography>
+            {moment().isAfter(endTime) && (
+              <Typography color='primary' variant='h6'>
+                Event Ended
+              </Typography>
+            )}
           </>
         )}
       </CardContent>
       <CardActions disableSpacing>
         {homeIcon(clubId)}
-        {eventsIcon({ clubId, id, isAttend, isInterested })}
+        {moment(endTime).isAfter(moment()) &&
+          eventsIcon({ clubId, id, isAttend, isInterested })}
+        {moment().isAfter(endTime) && (
+          <EventBusyIcon color='primary' style={{ fontSize: 40 }} />
+        )}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -271,12 +282,14 @@ function FeedCard({ feedItem }) {
     return (
       <Container>
         <Typography className={classes.root} align='center'>
-          <Typography variant='h4' color='primary' paragraph='true'>
-            No messages and events for you...
+          <Typography variant='h4' paragraph='true'>
+            Plenty of events and activities are waiting for you! Find out more
+            clubs that will fit you and start participating in meetups and
+            activities
           </Typography>
 
           <Link component='a' variant='h6' href='/explore'>
-            Click here to explore and join clubs
+            Click here to explore and join other clubs
           </Link>
         </Typography>
         <ClubsView
