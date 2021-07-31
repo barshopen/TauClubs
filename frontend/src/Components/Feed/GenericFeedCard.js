@@ -283,7 +283,7 @@ function FeedCard({ feedItem }) {
     return (
       <Container>
         <Typography className={classes.root} align='center'>
-          <Typography variant='h4' color='primary' paragraph='true'>
+          <Typography variant='h4' paragraph='true'>
             Plenty of events and activities are waiting for you! Find out more
             clubs that will fit you and start participating in meetups and
             activities
