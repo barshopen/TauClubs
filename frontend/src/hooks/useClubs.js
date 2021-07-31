@@ -4,7 +4,7 @@ import { getClubs, getMyClubs } from '../Shared/api';
 import { mainSearch } from '../Shared/atoms';
 
 const fetchClubs = async search => {
-  const res = await getClubs({ name: search });
+  const res = await getClubs({ search });
   return res;
 };
 
@@ -24,10 +24,7 @@ const useClubs = () => {
     { staleTime: Infinity, refetchOnMount: false }
   );
 
-  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs, {
-    staleTime: Infinity,
-    refetchOnMount: false,
-  });
+  const { data: myClubs, refetch } = useQuery(storeKeyMyClubs, fetchMyClubs);
 
   return {
     loadingClubs,

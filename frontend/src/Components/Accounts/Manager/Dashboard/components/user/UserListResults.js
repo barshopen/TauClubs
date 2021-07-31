@@ -1,115 +1,135 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+import React, { useState, useMemo } from 'react';
 import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import IconButton from '@material-ui/core/IconButton';
+import { DataGrid } from '@material-ui/data-grid';
+import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
+import { Tooltip, Typography } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
+import CheckIcon from '@material-ui/icons/Check';
 import {
-  Box,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+  approveUserUsers,
+  unapproveUserUsers,
+} from '../../../../../../Shared/api';
 
-const UserListResults = ({ users: allUsers }) => (
-  // const handleSelectOne = (event, id) => {
-  //   const selectedIndex = selectedCustomerIds.indexOf(id);
-  //   let newSelectedCustomerIds = [];
+const UserListResults = ({ users }) => {
+  const [rowsChoose, setRows] = useState([]);
+  const queryClient = useQueryClient();
 
-  //   if (selectedIndex === -1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds,
-  //       id
-  //     );
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(1)
-  //     );
-  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, -1)
-  //     );
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, selectedIndex),
-  //       selectedCustomerIds.slice(selectedIndex + 1)
-  //     );
-  //   }
+  const sendApprove = async () => {
+    if (rowsChoose.length > 0) {
+      await approveUserUsers(rowsChoose);
+      queryClient.refetchQueries(['dashboardData']);
+    }
+  };
 
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
+  const sendUnApprove = async () => {
+    if (rowsChoose.length > 0) {
+      await unapproveUserUsers(rowsChoose);
+      queryClient.refetchQueries(['dashboardData']);
+    }
+  };
 
-  // const getInitials = (name = '') =>
-  //   name
-  //     .replace(/\s+/, ' ')
-  //     .split(' ')
-  //     .slice(0, 2)
-  //     .map(v => v && v[0].toUpperCase())
-  //     .join('');
+  const newUsers = useMemo(
+    () =>
+      users
+        ? Object.values(users).map(user => ({
+            ...user,
+            displayDate:
+              user.status === 'Pending' ? user?.approveTime : user?.requestTime,
+            isApproved: user.status !== 'Pending',
+          }))
+        : [],
+    [users]
+  );
 
-  <Card>
-    <PerfectScrollbar>
-      <Box minWidth={300}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Clubs</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Registration date</TableCell>
-              {/* <TableCell>Status</TableCell>
-                <TableCell>Approve</TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allUsers?.map(({ users, club }) =>
-              users.map(user => (
-                <TableRow
-                  hover
-                  key={user.id}
-                  // selected={selectedCustomerIds.indexOf(user.id) !== -1}
-                >
-                  <TableCell>{club}</TableCell>
-                  <TableCell>
-                    <Box alignItems='center' display='flex'>
-                      {user.name}
-                    </Box>
-                  </TableCell>
-                  <TableCell>{user.contactMail}</TableCell>
-
-                  <TableCell>{user?.phone || ''}</TableCell>
-                  <TableCell>
-                    {moment(user?.joinTime).format('DD/MM/YYYY')}
-                  </TableCell>
-
-                  {/* <TableCell>
-                      <Chip
-                        color='primary'
-                        label={user?.status || 'member'}
-                        size='small'
-                      />
-                    </TableCell>
-
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={user?.status === 'Member'}
-                        onChange={event => handleSelectOne(event, user?.id)}
-                        value='true'
-                      />
-                    </TableCell> */}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </Box>
-    </PerfectScrollbar>
-  </Card>
-);
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Member Name',
+      width: 200,
+    },
+    {
+      field: 'club',
+      headerName: 'Club Name',
+      width: 200,
+    },
+    {
+      field: 'contactMail',
+      headerName: 'Email',
+      width: 220,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 100,
+    },
+    {
+      field: 'displayDate',
+      headerName: 'Approve/ Request Date',
+      renderCell: ({ row, formattedValue }) => (
+        <Tooltip title={row.isApproved ? 'Approve Date' : 'Request Date'}>
+          <Typography variant='h5'>
+            {moment(formattedValue).format('DD/MM/YYYY')}
+          </Typography>
+        </Tooltip>
+      ),
+      width: 210,
+      description: 'Approve date for memebers, Request date for pending users',
+    },
+  ];
+  return (
+    <div style={{ height: '700px', width: '100%' }}>
+      <Typography variant='h2'>Users</Typography>
+      <Typography style={{ marginTop: '20px' }} variant='h5'>
+        Approve/Decline pending requests of users, and approve/decline current
+        users request to be admin
+      </Typography>
+      <IconButton
+        style={{
+          marginRight: '20px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          padding: '0',
+        }}
+        onClick={() => sendApprove(rowsChoose)}>
+        <Typography variant='h5'>Approve selected </Typography>
+        <CheckIcon
+          style={{
+            color: 'green',
+            marginLeft: '5px',
+          }}
+        />
+      </IconButton>
+      <IconButton
+        style={{
+          marginRight: '20px',
+          marginBottom: '20px',
+          marginTop: '20px',
+          padding: '0',
+        }}
+        onClick={() => sendUnApprove(rowsChoose)}>
+        <Typography variant='h5'>Decline selected </Typography>
+        <ClearIcon style={{ color: 'red', marginLeft: '5px' }} />
+      </IconButton>
+      <DataGrid
+        rows={newUsers}
+        columns={columns}
+        autoPageSize
+        loading={!users}
+        disableColumnMenu
+        checkboxSelection
+        disableColumnSelector
+        onSelectionModelChange={e => setRows(e)}
+        disableSelectionOnClick
+        isCellEditable={false}
+        isRowSelectable={({ row }) => row?.status !== 'Admin'}
+      />
+    </div>
+  );
+};
 UserListResults.propTypes = {
   users: PropTypes.node.isRequired,
 };
-
 export default UserListResults;

@@ -1,8 +1,8 @@
 import datetime
-from .models import ClubMembership, User, Club, months_ago
+
+from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
-from mongoengine.queryset.visitor import Q
 
 
 def removeMembership(membership):
@@ -11,13 +11,25 @@ def removeMembership(membership):
     membership.save(force_insert=True)
 
 
+def get_membership(id: str):
+    try:
+        return ClubMembership.objects.get(id=id)
+    except DoesNotExist:
+        return None
+
+
 def createMembership(user, club, role):
+    approveTime = None
+    if role == "A":
+        approveTime = current_time()
     membership = ClubMembership(
         club=club,
         clubName=club.name,
         member=user,
         memberName=f"{user.firstName} {user.lastName}",
         role=role,
+        requestTime=current_time(),
+        approveTime=approveTime,
     )
     membership.save()
     return membership
@@ -27,13 +39,12 @@ def join_club(user_email: str, club_id: str):
     user = User.objects.get(contactMail=user_email)
     club = Club.objects.get(pk=club_id)
     try:
-        return createRegularMembership(user, club)
+        return createPendingMembership(user, club)
     except NotUniqueError:
         return None
 
 
-def leave_club(user, club):
-    membership = ClubMembership.objects(member=user, club=club)
+def leave_club(membership):
     if membership is None:
         return None
     else:
@@ -43,17 +54,49 @@ def leave_club(user, club):
 
 def delete_membership(club):
     memberships = ClubMembership.objects.filter(club=club)
+    list_of_memberships = []
     for membership in memberships:
+        list_of_memberships.append(membership.member.to_dict())
         removeMembership(membership)
+    return list_of_memberships
 
 
-def createRegularMembership(user: User, club: Club):
-    return createMembership(user, club, "U")
+def approve_membership(membership, role):
+    membership.update(role=role, approveTime=current_time())
+    return membership
 
 
-def createAdminMembership(user_email: str, club: Club):
+def genericApproveMembership(membership):
+    if membership.role == "U":
+        membership.update(role="A", approveTime=current_time())
+    else:
+        membership.update(role="U", approveTime=current_time())
+    membership.save()
+    return membership
+
+
+def createAdminMembership(user_email: str, club: Club):  # change
     user = User.objects.get(contactMail=user_email)
-    return createMembership(user, club, "A")
+    # check if is member or pending, if yes change it otherwise create
+    try:
+        membership = ClubMembership.objects(member=user, club=club).first()
+        approve_membership(membership, "A")
+        return membership
+    except Exception:
+        return createMembership(user, club, "A")
+
+
+def createPendingMembership(user: User, club: Club):
+    membership = ClubMembership(
+        club=club,
+        clubName=club.name,
+        member=user,
+        memberName=f"{user.firstName} {user.lastName}",
+        role="P",
+        requestTime=current_time(),
+    )
+    membership.save()
+    return membership
 
 
 def members_count(clubName: str):
@@ -82,10 +125,6 @@ def get_user_clubs(user):
 def listOfClubsPerUser(user):
     clubs = ClubMembership.objects(member=user)
     return clubs.to_json()  # need to decide hoe do we want to get it
-
-
-def joinClubAsUser(user: User, club: Club):
-    createRegularMembership(user, club)
 
 
 def is_user_member(user, club):
@@ -126,35 +165,50 @@ def clubs_by_user_member(user):
     )
 
 
-def users_for_club_between_dates(club, before, after):  # change to request time
-    before_Q = Q(approveTime__lte=before, club=club)  # bigger
-    after_Q = Q(approveTime__gte=after, club=club)
-    return ClubMembership.objects.filter(after_Q & before_Q).count()
-
-
 def month_to_num(today_month, month_ago):
     if today_month >= month_ago:
         return today_month - month_ago
     return today_month - month_ago + 12 + 1
 
 
-def users_for_club_six_months(club):
+def users_by_date(users, start, end):
+    counter = 0
+    for user in users:
+        if user["approveTime"] is not None:
+            approveTime = user["approveTime"]
+            if approveTime >= start and approveTime <= end:
+                counter = counter + 1
+    return counter
+
+
+def users_for_club_six_months(users):
     today = datetime.datetime.today()
     dict = {}
     for i in range(-1, 5):
         before = months_ago(today, i)
         after = months_ago(today, i + 1)
-        dict[month_to_num(today.month, i + 1)] = users_for_club_between_dates(
-            club, before, after
-        )
+        dict[month_to_num(today.month, i + 1)] = users_by_date(users, after, before)
     return dict
 
 
 def users_for_club(club):
     return list(
         map(
-            lambda membership: membership.member.to_dict(),
+            lambda membership: membership.member.to_dict_with_membership(
+                membership.to_dict()
+            ),
             ClubMembership.objects.filter(club=club),
+        )
+    )
+
+
+def users_for_clubs(clubs):
+    return list(
+        map(
+            lambda membership: membership.member.to_dict_with_membership(
+                membership.to_dict()
+            ),
+            ClubMembership.objects.filter(club__in=clubs),
         )
     )
 
@@ -164,8 +218,6 @@ def dict_users_and_update_by_club(clubs):
     for club in clubs:
         dict[club.name] = {"club": club.to_dict()}  # club data
         dict[club.name]["lastUpdate"] = club.lastUpdateTime  # last update time for club
-        dict[club.name]["users"] = users_for_club(club)  # member for the club
-        dict[club.name]["usersByDated"] = users_for_club_six_months(club)
     return dict
 
 
@@ -187,8 +239,3 @@ def change_club_name(club, club_name):
     for membership in memberships:
         membership.update(clubName=club_name)
         membership.save()
-
-
-def approve(club, user, answer):
-    membership = ClubMembership.objects(member=user, club=club)
-    membership.update(role=answer)

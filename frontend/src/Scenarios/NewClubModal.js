@@ -10,23 +10,23 @@ import GenericModal from '../Components/Generic/GenericModal';
 import useConfetti from '../hooks/useConfetti';
 
 const options = [
-  { value: 'sports', label: 'Sports' },
-  { value: 'Dancing', label: 'Dancing' },
-  { value: 'Social', label: 'Social' },
-  { value: 'Math', label: 'Math' },
-  { value: 'Outdoors', label: 'Outdoors' },
-  { value: 'Music', label: 'Music' },
-  { value: 'Science', label: 'Science' },
-  { value: 'Politics', label: 'Politics' },
-  { value: 'meditation', label: 'Meditation' },
-  { value: 'Food', label: 'Food' },
-  { value: 'Cooking', label: 'Cooking' },
-  { value: 'architecture', label: 'Architecture' },
-  { value: 'history', label: 'History' },
-  { value: 'Literature', label: 'Literature' },
-  { value: 'poetry', label: 'Poetry' },
-  { value: 'Gaming', label: 'Gaming' },
-  { value: 'volunteering', label: 'Volunteering' },
+  'sports',
+  'dancing',
+  'social',
+  'math',
+  'outdoors',
+  'music',
+  'science',
+  'politics',
+  'meditation',
+  'food',
+  'cooking',
+  'architecture',
+  'history',
+  'literature',
+  'poetry',
+  'gaming',
+  'volunteering',
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -56,9 +56,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
-  const { id, name, description, contact, title, isImage, existTag } = clubId;
+  const {
+    id,
+    name,
+    description,
+    contact,
+    title,
+    isImage,
+    existTag,
+    WhatsAppGroup,
+    FacebookGroup,
+  } = clubId;
   const classes = useStyles();
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    clubId: id,
+  });
   const [tags, setTags] = useState(existTag);
   const [done, setDone] = useState(false);
 
@@ -69,9 +81,8 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
   const image = useMemo(() => [`${window.origin}/db/images/${id}`], [id]);
 
   const handleTags = selectedOptions => {
-    setTags(selectedOptions);
+    setTags(selectedOptions.map(({ label }) => label));
   };
-
   const handleChange = e => {
     setValues({
       ...values,
@@ -81,13 +92,14 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
 
   const submitHandler = async e => {
     e.preventDefault();
-
-    const tagsArray = tags.map(({ label }) => label);
     const data = new FormData();
+    data.append('clubId', values.clubId);
     data.append('club_name', values.club_name);
     data.append('description', values.description);
     data.append('contact_mail', values.contact_mail);
-    data.append('tags', tagsArray);
+    data.append('tags', tags);
+    data.append('WhatsAppGroup', values.WhatsAppGroup);
+    data.append('FacebookGroup', values.FacebookGroup);
     if (values.image) {
       data.append('image', values.image);
     } else {
@@ -121,32 +133,53 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         Validate
         autoComplete='on'
         onSubmit={submitHandler}>
-        <Typography variant='h6' className={classes.header}>
+        <Typography variant='h4' className={classes.header} align='center'>
           {title}
         </Typography>
 
         <TextField
           name='club_name'
-          label={name}
+          label='Club Name'
+          defaultValue={name}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{ maxLength: 24 }}
           onChange={handleChange}
         />
         <TextField
           name='contact_mail'
-          label={contact}
+          label='Club Contact Email'
+          defaultValue={contact}
           variant='outlined'
           required={title === 'Create New Club'}
+          inputProps={{
+            pattern: '[a-zA-Z0-9._%+-]+@[a-z0-9.-]+.[a-zA-Z]{2,4}',
+          }}
           onChange={handleChange}
         />
         <TextField
           name='description'
-          label={description}
+          label='Club Description'
+          defaultValue={description}
           multiline
           variant='outlined'
           rows={4}
           rowsMax={10}
           required={title === 'Create New Club'}
+          onChange={handleChange}
+        />
+        <TextField
+          name='WhatsAppGroup'
+          label='WhatsApp group link'
+          defaultValue={WhatsAppGroup}
+          variant='outlined'
+          onChange={handleChange}
+        />
+        <TextField
+          name='FacebookGroup'
+          label='Facebook group link'
+          defaultValue={FacebookGroup}
+          variant='outlined'
           onChange={handleChange}
         />
         <Box p={1}>
@@ -155,7 +188,14 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
             backgroundColor='black'
             onChange={handleTags}
             isMulti
-            options={tags.length === 5 ? [] : options}
+            options={
+              tags.length === 5
+                ? []
+                : options.map(label => ({
+                    value: label,
+                    label,
+                  }))
+            }
             defaultValue={tagsfunc(tags)}
           />
         </Box>

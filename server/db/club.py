@@ -1,7 +1,7 @@
 import datetime
 from server.db.event import delete_events
 from server.db.message import delete_messages
-from server.db.tag import add_tags
+from server.db.tag import add_tags, edit_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
@@ -20,8 +20,10 @@ def create_club(
     contact_mail: str,
     description: str = "",
     tags=[],
+    FacebookGroup=None,
+    WhatsAppGroup=None,
 ):
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+    now = current_time()
     club = Club(
         contactMail=contact_mail,
         name=club_name,
@@ -29,9 +31,12 @@ def create_club(
         description=description,
         creationTime=now,
         lastUpdateTime=current_time(),
+        FacebookGroup=FacebookGroup,
+        WhatsAppGroup=WhatsAppGroup,
     )
     club.save(force_insert=True)
-    add_tags(club.id, club, tags)
+    if tags is not None:
+        add_tags(club.id, club, tags)
     return club
 
 
@@ -40,15 +45,21 @@ def establish_club(
     name: str,
     contact_mail: str,
     description: str = "",
+    FacebookGroup=None,
+    WhatsAppGroup=None,
     image=None,
     tags=None,
 ):
-    newclub = create_club(image, name, contact_mail, description, tags)
+    newclub = create_club(
+        image, name, contact_mail, description, tags, FacebookGroup, WhatsAppGroup
+    )
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 
 
-def edit_club(club, name, contact_mail, description, image, tags):  # write
+def edit_club(
+    club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
+):  # write
     if name == "undefined":
         name = club.name
     else:
@@ -57,14 +68,19 @@ def edit_club(club, name, contact_mail, description, image, tags):  # write
         contact_mail = club.contactMail
     if description == "undefined":
         description = club.description
+    if FacebookGroup == "undefined":
+        FacebookGroup = club.FacebookGroup
+    if WhatsAppGroup == "undefined":
+        WhatsAppGroup = club.WhatsAppGroup
     if image != "None":
         club.profileImage.replace(image)
-    if tags != "":
-        add_tags(club.id, club, tags.split(","))
+    edit_tags(club.id, club, tags.split(","))
     club.update(
         name=name,
         contactMail=contact_mail,
         description=description,
+        FacebookGroup=FacebookGroup,
+        WhatsAppGroup=WhatsAppGroup,
         lastUpdateTime=current_time(),
     )
     club.save()
@@ -72,7 +88,7 @@ def edit_club(club, name, contact_mail, description, image, tags):  # write
 
 def get_clubs(name: str, tag: str):
     name_Q = Q(name__icontains=name) if name else Q()
-    tags_Q = Q(tags=tag) if tag else Q()
+    tags_Q = Q(tags__icontains=tag) if tag else Q()
     return json.dumps(
         list(
             map(
@@ -93,11 +109,12 @@ def get_club(id: str):
 def delete_club(club):
     delete_messages(club)
     delete_events(club)
-    delete_membership(club)
+    list_memberships = delete_membership(club)
     # delete_tags(club)
     club.delete()
     club.switch_collection("old_clubs")
     club.save(force_insert=True)
+    return list_memberships
 
 
 def members_count(club: Club):

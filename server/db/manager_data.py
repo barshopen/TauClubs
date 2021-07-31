@@ -4,6 +4,8 @@ from server.db.clubmembership import (
     clubs_by_user_manager,
     dict_users_and_update_by_club,
     is_manager,
+    users_for_club_six_months,
+    users_for_clubs,
 )
 from flask import Blueprint
 from flask_login import login_required, current_user
@@ -24,9 +26,9 @@ def clubs_for_manager():
     clubs = clubs_by_user_manager(user)  # list of clubs that user manage
     dict["messages"] = dict_two_months_messages(clubs)
     dict["events"] = dict_two_months_events(clubs)
-    dict["clubs"] = dict_users_and_update_by_club(
-        clubs
-    )  # dict with 3 fields: club info, last update, users that joined last 6 months
+    dict["clubs"] = dict_users_and_update_by_club(clubs)
+    dict["users"] = users_for_clubs(clubs)
+    dict["usersByDated"] = users_for_club_six_months(dict["users"])
     return dict
 
 

@@ -1,8 +1,17 @@
 from os import path
-from server.db.user import get_user, update
+import os
+from server.db.mailMessages import (
+    approve_manager_message,
+    approve_user_message,
+    delete_club_message,
+    remove_by_admin,
+    user_to_manager_message,
+)
+from server.db.user import update
 from server.db.clubmembership import (
-    approve,
     clubs_by_user_member,
+    genericApproveMembership,
+    get_membership,
     is_member,
     is_user_member,
     leave_club,
@@ -43,12 +52,13 @@ from server.db.event import (
     getEvent,
     deleteEvent,
 )
-from server.db.models import validatePermession
+from server.db.models import validatePermession, validatePermessionByClub
 from server.db.clubmembership import get_user_clubs, join_club
 from server.db.tag import add_tags, tags_for_club
 from flask_login import current_user, login_required
 from server.auth.userauth import get_userauth_user_by_id
 from flask import send_file
+from flask_mail import Mail, Message
 
 STATIC_FOLDER_NAME = "mock-api"
 
@@ -57,6 +67,48 @@ db_app = Blueprint(
     __name__,
     url_prefix="/db",
 )
+
+mail = Mail()
+
+
+def mail_init(app):
+    mail.init_app(app)
+
+
+def send_message_text(recipients, subject, body):
+    msg = Message(
+        subject=subject,
+        sender=os.getenv("EMAIL_USER"),
+        recipients=recipients,
+        body=body,
+    )
+    path = os.path.join(os.getcwd(), "frontend", "public", "images", "logo.jpeg")
+    f = open(path, "rb")
+    msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
+    mail.send(msg)
+
+
+def send_mail_approve(receivers, club_name, role):
+    for receive in receivers:
+        if role == "p":
+            head, text = approve_user_message(receive["name"], club_name)
+        else:
+            head, text = approve_manager_message(receive["name"], club_name)
+        send_message_text([receive["contactMail"]], head, text)
+
+
+def send_mail_delete_by_manager(receivers, club_name):
+    for receive in receivers:
+        head, text = remove_by_admin(receive["name"], club_name)
+        send_message_text([receive["contactMail"]], head, text)
+
+
+def send_delete_club(receivers, club_name):
+    head, text = delete_club_message(club_name)
+    mails = []
+    for receive in receivers:
+        mails.append(receive["contactMail"])
+    send_message_text(mails, head, text)
 
 
 def get_json_data(filename):
@@ -70,6 +122,28 @@ def filter_by_id(data, data_id):
         d = json.dumps([x for x in data if x["id"] == data_id][0])
         return d
     return json.dumps(data)
+
+
+def send_mail_user_to_manager(club_name, membername, clubMail, title, info, userMail):
+    text = user_to_manager_message(info, membername, userMail, club_name)
+    send_message_text([clubMail], title, text)
+
+
+@db_app.route("/contactus", methods=["POST"])
+def send_mail_to_club():
+    try:
+        clubMail = request.json["data"]["contactMail"]
+        title = request.json["data"]["title"]
+        info = request.json["data"]["info"]
+        userMail = request.json["data"]["mail"]
+        membername = request.json["data"]["name"]
+        club_name = request.json["data"]["clubName"]
+        send_mail_user_to_manager(
+            club_name, membername, clubMail, title, info, userMail
+        )
+        return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @db_app.route("/default_clubs")
@@ -86,13 +160,19 @@ def club_creation():
         image = None
     else:
         image = request.files["image"]
+    if request.form["tags"] == "":
+        tags = None
+    else:
+        tags = request.form["tags"].split(",")
     result = establish_club(
         image=image,
         foundingUserEmail=user.contactMail,
         name=request.form["club_name"],
         contact_mail=request.form["contact_mail"],
         description=request.form["description"],
-        tags=request.form["tags"].split(","),
+        WhatsAppGroup=request.form["WhatsAppGroup"],
+        FacebookGroup=request.form["FacebookGroup"],
+        tags=tags,
     )
     if not result:
         return "Failed", 400
@@ -110,7 +190,8 @@ def deleteClub():
         user = get_userauth_user_by_id(current_user.get_id())
         if not validatePermession(user, club_id):
             return "Failed", 400
-        delete_club(club)
+        list_memberships = delete_club(club)
+        send_delete_club(list_memberships, club.name)
         return "Success", 200
     except Exception:
         return "Failed", 400
@@ -119,28 +200,30 @@ def deleteClub():
 @db_app.route("/club/edit", methods=["POST"])
 @login_required
 def editClub():  # write
-    try:
-        club_id = request.form["clubId"]
-        if not club_id:
-            return "invalid club", 400
-        club = get_club(club_id)
-        user = get_userauth_user_by_id(current_user.get_id())
-        if not validatePermession(user, club_id):
-            return "Failed", 400
-        name = request.form["club_name"]
-        contact_mail = request.form["contact_mail"]
-        description = request.form["description"]
-        tags = request.form["tags"]
-        try:
-            image = request.files["image"]
-        except Exception:
-            image = "None"
-        edit_club(club, name, contact_mail, description, image, tags)
-        if image != "None":
-            send_file(image, download_name="club.jpg", max_age=20000000)
-        return "Success", 200
-    except Exception:
+
+    club_id = request.form["clubId"]
+    if not club_id:
+        return "invalid club", 400
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not validatePermession(user, club_id):
         return "Failed", 400
+    name = request.form["club_name"]
+    contact_mail = request.form["contact_mail"]
+    description = request.form["description"]
+    tags = request.form["tags"]
+    WhatsAppGroup = request.form["WhatsAppGroup"]
+    FacebookGroup = request.form["FacebookGroup"]
+    try:
+        image = request.files["image"]
+    except Exception:
+        image = "None"
+    edit_club(
+        club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
+    )
+    if image != "None":
+        send_file(image, download_name="club.jpg", max_age=20000000)
+    return "Success", 200
 
 
 @db_app.route("/club/add_image", methods=["POST"])
@@ -174,7 +257,7 @@ def clubs():
         containes foodies OR have a 'Math' tag
     """
     clubs_params = request.args.to_dict()
-    return get_clubs(name=clubs_params.get("name"), tag=clubs_params.get("tag"))
+    return get_clubs(name=clubs_params.get("search"), tag=clubs_params.get("search"))
 
 
 @db_app.route("/club/<club_id>")
@@ -200,10 +283,10 @@ def join_club_by_id():
         return "Not valid club id", 400
     if is_member(user, club):
         return "Already member", 200
-    res = join_club(cur_user_email, club_id).to_json()
+    res = join_club(cur_user_email, club_id)
     if not res:
         return "Could not complete request", 400
-    return res, 200
+    return "Success", 200
 
 
 @db_app.route("/leave_club", methods=["POST"])
@@ -241,41 +324,6 @@ def message_creation():
     return result.to_json(), 200
 
 
-@db_app.route("/upcoming_events")
-@login_required
-def upcoming_events():
-    user = get_userauth_user_by_id(current_user.get_id())
-    clubs = clubs_by_user_member(user)
-    return get_events_for_all_clubs_by_user(clubs)
-
-
-@login_required
-@db_app.route("/club/create_event", methods=["POST"])
-def event_creation():
-    club_id = request.json.get("clubId")
-    user = get_userauth_user_by_id(current_user.get_id())
-    if not validatePermession(user, club_id):
-        return "Restrict", 400
-    result = createEvent(
-        title=request.json.get("data")["event_title"],
-        description=request.json.get("data")["event_description"],
-        # duration=request.json.get("data")["event_duration"],
-        duration=5,
-        startTime=datetime.datetime.strptime(
-            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
-        ).replace(tzinfo=datetime.timezone.utc),
-        endTime=datetime.datetime.strptime(
-            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
-        ).replace(tzinfo=datetime.timezone.utc),
-        location=request.json.get("data")["event_location"],
-        club=get_club(club_id),
-    )
-    if not result:
-        return "Failed", 400
-
-    return result, 200
-
-
 @db_app.route("/club/<club_id>/messages/get_messages")
 def messages_by_club(club_id):
     if not club_id:
@@ -284,16 +332,6 @@ def messages_by_club(club_id):
     if not club:
         return "Failed", 400
     return get_messages_by_club(club)
-
-
-@db_app.route("/club/<club_id>/events/get_events")
-def events_by_club(club_id):
-    if not club_id:
-        return "Failed", 400
-    club = get_club(club_id)
-    if not club:
-        return "Failed", 400
-    return get_events_by_club(club)
 
 
 @db_app.route("/club/<club_id>/messages/<message_id>")
@@ -343,26 +381,47 @@ def message_delete():
         return "Failed", 400
 
 
+@db_app.route("/upcoming_events")
 @login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/like")
-def like_message(club_id, message_id):
-    club = get_club(club_id)
+def upcoming_events():
     user = get_userauth_user_by_id(current_user.get_id())
-    if not is_user_member(user, club):
-        return "Failed", 400
-    result = add_like(message_id, user)
-    return result, 200
+    clubs = clubs_by_user_member(user)
+    return get_events_for_all_clubs_by_user(clubs)
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<message_id>/unlike")
-def unlike_message(club_id, message_id):
-    club = get_club(club_id)
+@db_app.route("/club/create_event", methods=["POST"])
+def event_creation():
+    club_id = request.json.get("clubId")
     user = get_userauth_user_by_id(current_user.get_id())
-    if not is_user_member(user, club):
+    if not validatePermession(user, club_id):
+        return "Restrict", 400
+    result = createEvent(
+        title=request.json.get("data")["event_title"],
+        description=request.json.get("data")["event_description"],
+        startTime=datetime.datetime.strptime(
+            request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc),
+        endTime=datetime.datetime.strptime(
+            request.json.get("data")["event_endDateTime"], "%Y-%m-%dT%H:%M"
+        ).replace(tzinfo=datetime.timezone.utc),
+        location=request.json.get("data")["event_location"],
+        club=get_club(club_id),
+    )
+    if not result:
         return "Failed", 400
-    result = unlike(message_id, user)
+
     return result, 200
+
+
+@db_app.route("/club/<club_id>/events/get_events")
+def events_by_club(club_id):
+    if not club_id:
+        return "Failed", 400
+    club = get_club(club_id)
+    if not club:
+        return "Failed", 400
+    return get_events_by_club(club)
 
 
 @login_required
@@ -401,7 +460,6 @@ def event_update():
         description = request.json.get("data")["event_description"]
     except Exception:
         description = None
-    # duration = request.json.get("data")["event_duration"]
     try:
         startTime = datetime.datetime.strptime(
             request.json.get("data")["event_startDateTime"], "%Y-%m-%dT%H:%M"
@@ -458,7 +516,7 @@ def validate_user_event_permession(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/attend")
+@db_app.route("/club/<club_id>/events/<event_id>/attend")
 def event_attending(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -469,7 +527,7 @@ def event_attending(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/unattend")
+@db_app.route("/club/<club_id>/events/<event_id>/unattend")
 def event_not_attending(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -480,7 +538,7 @@ def event_not_attending(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/interested")
+@db_app.route("/club/<club_id>/events/<event_id>/interested")
 def event_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -491,7 +549,7 @@ def event_interesting(club_id, event_id):
 
 
 @login_required
-@db_app.route("/club/<club_id>/messages/<event_id>/uninterested")
+@db_app.route("/club/<club_id>/events/<event_id>/uninterested")
 def event_not_interesting(club_id, event_id):
     event = validate_user_event_permession(club_id, event_id)
     if not event:
@@ -506,9 +564,6 @@ def get_image_club(club_id):
     club = get_club(club_id)
     image = club.profileImage
     return send_file(image, download_name="club.jpg", max_age=20000000)
-
-
-###########################################################################
 
 
 @db_app.route("/club/<club_id>/tags")
@@ -534,35 +589,47 @@ def add_tag(club_id):
 
 
 @login_required
-@db_app.route("/approve_user", methods=["POST"])
-def approve_user():
-    club_id = request.json.get("clubId")
-    user_id = request.json.get("userId")
-    if not club_id or user_id:
-        return "Failed", 400
+@db_app.route("/approve", methods=["POST"])
+def approve_users():
     manager = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club or not validatePermession(manager, club_id):
-        return "Restrict", 400
-    user = get_user(user_id)
-    approve(club, user, "U")
-    return 200
+    try:
+        memberships = request.json
+        for membership_id in memberships:
+            membership = get_membership(membership_id)
+            club = membership.club
+            if (
+                not club
+                or not validatePermessionByClub(manager, club)
+                or membership is None
+            ):
+                return "Restrict", 400
+            membership = genericApproveMembership(membership)
+            send_mail_approve([membership.member.to_dict()], club.name, membership.role)
+            return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @login_required
-@db_app.route("/approve_manager", methods=["POST"])
-def approve_manager():
-    club_id = request.json.get("clubId")
-    user_id = request.json.get("userId")
-    if not club_id or user_id:
-        return "Failed", 400
+@db_app.route("/unapprove", methods=["POST"])
+def unapprove_users():
     manager = get_userauth_user_by_id(current_user.get_id())
-    club = get_club(club_id)
-    if not club or not validatePermession(manager, club_id):
-        return "Restrict", 400
-    user = get_user(user_id)
-    approve(club, user, "A")
-    return 200
+    try:
+        memberships = request.json
+        for membership_id in memberships:
+            membership = get_membership(membership_id)
+            club = membership.club
+            if (
+                not club
+                or not validatePermessionByClub(manager, club)
+                or membership is None
+            ):
+                return "Restrict", 400
+            leave_club(membership)
+            send_mail_delete_by_manager([membership.member.to_dict()], club.name)
+            return "Success", 200
+    except Exception:
+        return "Failed", 400
 
 
 @login_required
@@ -582,8 +649,26 @@ def update_user_data():
         return "failed", 400
 
 
-######################################################
-# how do we us it?
+@login_required
+@db_app.route("/club/<club_id>/messages/<message_id>/like")
+def like_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = add_like(message_id, user)
+    return result, 200
+
+
+@login_required
+@db_app.route("/club/<club_id>/messages/<message_id>/unlike")
+def unlike_message(club_id, message_id):
+    club = get_club(club_id)
+    user = get_userauth_user_by_id(current_user.get_id())
+    if not is_user_member(user, club):
+        return "Failed", 400
+    result = unlike(message_id, user)
+    return result, 200
 
 
 @db_app.route("/users")

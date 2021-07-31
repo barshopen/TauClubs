@@ -70,14 +70,16 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
 
       <TextField
         name='event_title'
-        label={title}
+        label='Event Title'
+        defaultValue={title}
         variant='outlined'
         onChange={handleChange}
         required={titleStatus === 'Create New Event'}
       />
       <TextField
         name='event_description'
-        label={description}
+        label='Event Description'
+        defaultValue={description}
         multiline
         variant='outlined'
         onChange={handleChange}
@@ -87,7 +89,8 @@ function NewEventContent({ clubId, setOpen, onChange: addEvent }) {
       />
       <TextField
         name='event_location'
-        label={location}
+        label='Event Loaction'
+        defaultValue={location}
         variant='outlined'
         onChange={handleChange}
         required={titleStatus === 'Create New Event'}

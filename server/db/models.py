@@ -13,7 +13,7 @@ import json
 from mongoengine.base.fields import ObjectIdField
 
 from mongoengine.errors import DoesNotExist
-from mongoengine.fields import FloatField, URLField
+from mongoengine.fields import URLField
 from flask_login import UserMixin, current_user
 
 
@@ -33,6 +33,8 @@ class Club(DynamicDocument):
     creationTime = DateTimeField()
     lastUpdateTime = DateTimeField()
     contactMail = EmailField(required=True)
+    FacebookGroup = StringField()
+    WhatsAppGroup = StringField()
 
     def hasPicture(self):
         return self.profileImage.__dict__["grid_id"] is not None
@@ -55,6 +57,8 @@ class Club(DynamicDocument):
             "creationTime": self.id.generation_time.isoformat(),
             "lastUpdateTime": self.lastUpdateTime.isoformat(),
             "contactMail": self.contactMail,
+            "FacebookGroup": self.FacebookGroup,
+            "WhatsAppGroup": self.WhatsAppGroup,
             "membersCount": ClubMembership.objects(club=self).count(),
             "tags": self.tags,
             "admin": admin,
@@ -91,6 +95,15 @@ class User(DynamicDocument):
             "joinTime": self.id.generation_time.isoformat(),
         }
 
+    def to_dict_with_membership(self, membership_dict):
+        d = self.to_dict()
+        d["status"] = ROLES[membership_dict["role"]]
+        d["requestTime"] = membership_dict["requestTime"]
+        d["approveTime"] = membership_dict["approveTime"]
+        d["id"] = membership_dict["id"]
+        d["club"] = membership_dict["clubName"]
+        return d
+
     def to_json(self):
         return json.dumps(self.to_dict())
 
@@ -109,17 +122,22 @@ class ClubMembership(DynamicDocument):
     member = ReferenceField("User")
     memberName = StringField(max_length=71, required=True)
     role = StringField(max_length=35, required=True, choices=ROLES.keys())
-    RequestTime = (
-        DateTimeField()
-    )  # chaneg to required, havent change it because nedd to change the db
+    requestTime = DateTimeField(required=True)
     approveTime = DateTimeField()
 
     def to_dict(self):
+        try:
+            approve = self.approveTime
+        except Exception:
+            approve = None
+
         return {
             "id": str(self.pk),
             "clubName": self.clubName,
             "memberName": self.memberName,
             "role": self.role,
+            "requestTime": self.requestTime,
+            "approveTime": approve,
         }
 
     def to_json(self):
@@ -130,7 +148,6 @@ class Event(DynamicDocument):
     meta = {"collection": "events"}
     title = StringField(max_length=200, required=True)
     description = StringField(required=True)
-    duration = FloatField(validation=None)
     startTime = DateTimeField(required=True)
     endTime = DateTimeField(required=True)
     location = StringField()
@@ -155,7 +172,6 @@ class Event(DynamicDocument):
             "clubId": str(self.creatingClub.id),
             "title": self.title,
             "description": self.description,
-            "duration": self.duration,
             "startTime": self.startTime.isoformat(),
             "endTime": self.endTime.isoformat(),
             "location": self.location,
@@ -219,6 +235,13 @@ class Message(DynamicDocument):
 def validatePermession(user, club_id):
     try:
         club = Club.objects.get(id=club_id)
+        return validatePermessionByClub(user, club)
+    except DoesNotExist:
+        return False  # invalid membership
+
+
+def validatePermessionByClub(user, club):
+    try:
         membership = ClubMembership.objects(club=club, member=user).first()
         if not membership or membership.role != "A":
             return False  # error only admin can create message
@@ -252,3 +275,7 @@ def dict_two_months(clubs, func):
         dict[get_name_for_month(i)] = {"month": after.strftime("%B")}
         dict[get_name_for_month(i)]["total"] = len(func(before, after, clubs))
     return dict
+
+
+def current_time():
+    return datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)

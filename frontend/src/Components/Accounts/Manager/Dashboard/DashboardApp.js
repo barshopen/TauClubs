@@ -22,7 +22,7 @@ const DashboardApp = ({ data }) => (
         />
         <Route
           path='/profile/users'
-          component={() => <UsersList data={data.clubs} />}
+          component={() => <UsersList data={data} />}
         />
         <Route
           path='/profile/clubs'
@@ -38,6 +38,8 @@ export default DashboardApp;
 DashboardApp.propTypes = {
   data: PropTypes.shape({
     clubs: PropTypes.node.isRequired,
+    users: PropTypes.node.isRequired,
+    usersByDated: PropTypes.node.isRequired,
     events: PropTypes.node.isRequired,
     messages: PropTypes.node.isRequired,
   }),

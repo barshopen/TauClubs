@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import BaseLoader from 'react-loader-spinner';
 import EmptyState from '@pluralsight/ps-design-system-emptystate';
 import Typography from '@material-ui/core/Typography';
 import styled, { css } from 'styled-components';
 import { useRecoilValue } from 'recoil';
+import Button from '@material-ui/core/Button';
 import { Box, makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import AboutUs from './AboutUs';
@@ -24,6 +25,10 @@ const useStyles = makeStyles({
   emptyImage: {
     color: 'black',
     '&:hover': { color: 'red', cursor: 'pointer' },
+  },
+  root: {
+    background: props => props.backgroundColor,
+    color: props => props.color,
   },
 });
 const NavBarContainer = styled.div`
@@ -63,6 +68,7 @@ const NavLinkStyle = css`
 const NavLink = styled(Link)`
   ${NavLinkStyle};
 `;
+
 const NavLinkJoin = styled(NavLink)`
   color: green;
 `;
@@ -73,6 +79,26 @@ const NavWithoutLink = styled.h1`
   ${NavLinkStyle};
   color: blueviolet;
 `;
+
+const TABS = {
+  main: 0,
+  about: 1,
+  join: 2,
+};
+
+// eslint-disable-next-line react/prop-types
+const Tab = ({ isClicked, children, onClick, color }) => {
+  const styleProps = {
+    backgroundColor: isClicked ? '#e0e0e0' : 'none',
+    color,
+  };
+  const classes = useStyles(styleProps);
+  return (
+    <Button onClick={onClick} className={classes.root}>
+      {children}
+    </Button>
+  );
+};
 
 const ClubSection = () => {
   const {
@@ -89,20 +115,50 @@ const ClubSection = () => {
     description,
     contactMail,
     profileImage,
+    WhatsAppGroup,
+    FacebookGroup,
   } = clubData || {};
 
   const user = useRecoilValue(currentUser);
+  const [currentIndex, setCurrentIndex] = useState(TABS.main);
+
+  useEffect(() => setCurrentIndex(TABS.main), [clubData]);
 
   let join = null;
   if (user) {
     if (member) {
       join = (
-        <NavLinkLeave to={`/club/leave/${clubId}`}>Leave club</NavLinkLeave>
+        <NavLinkLeave to={`/club/leave/${clubId}`}>
+          <Tab
+            isClicked={currentIndex === TABS.join}
+            onClick={() => setCurrentIndex(TABS.join)}
+            color='red'>
+            Leave club
+          </Tab>
+        </NavLinkLeave>
       );
     } else if (pending) {
-      join = <NavWithoutLink>Pending</NavWithoutLink>;
+      join = (
+        <NavWithoutLink>
+          <Tab
+            isClicked={currentIndex === TABS.join}
+            onClick={() => setCurrentIndex(TABS.join)}
+            color='blueviolet'>
+            Pending
+          </Tab>
+        </NavWithoutLink>
+      );
     } else {
-      join = <NavLinkJoin to={`/club/joinus/${clubId}`}>Join</NavLinkJoin>;
+      join = (
+        <NavLinkJoin to={`/club/joinus/${clubId}`}>
+          <Tab
+            isClicked={currentIndex === TABS.join}
+            onClick={() => setCurrentIndex(TABS.join)}
+            color='green'>
+            Join
+          </Tab>
+        </NavLinkJoin>
+      );
     }
   }
   const img = profileImage
@@ -147,10 +203,31 @@ const ClubSection = () => {
 
       <NavBarContainer>
         <Nav>
-          <NavLink to={`/club/board/${clubId}`}>Club Board</NavLink>
-          <NavLink to={`/club/about/${clubId}`}>About Us</NavLink>
-
-          {admin ? <NavLink to='/profile/clubs'>Manage</NavLink> : join}
+          <NavLink to={`/club/board/${clubId}`}>
+            <Tab
+              isClicked={currentIndex === TABS.main}
+              onClick={() => setCurrentIndex(TABS.main)}>
+              Club Board
+            </Tab>
+          </NavLink>
+          <NavLink to={`/club/about/${clubId}`}>
+            <Tab
+              isClicked={currentIndex === TABS.about}
+              onClick={() => setCurrentIndex(TABS.about)}>
+              About Us
+            </Tab>
+          </NavLink>
+          {admin ? (
+            <NavLink to='/profile/clubs'>
+              <Tab
+                isClicked={currentIndex === TABS.join}
+                onClick={() => setCurrentIndex(TABS.join)}>
+                Manage
+              </Tab>
+            </NavLink>
+          ) : (
+            join
+          )}
         </Nav>
       </NavBarContainer>
       <Switch>
@@ -161,7 +238,13 @@ const ClubSection = () => {
         <Route
           path='/club/about/:clubId'
           component={() => (
-            <AboutUs description={description} contactMail={contactMail} />
+            <AboutUs
+              name={name}
+              description={description}
+              contactMail={contactMail}
+              FacebookGroup={FacebookGroup}
+              WhatsAppGroup={WhatsAppGroup}
+            />
           )}
         />
         {user && !pending && !member && (

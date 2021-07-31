@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -12,15 +12,8 @@ import { green, amber } from '@material-ui/core/colors';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
-const TotalUsers = ({ clubs }) => {
-  const totalUsersInAllClubs = useMemo(
-    () =>
-      Object.values(clubs).reduce(
-        (all, club) => (Object.keys(club?.users).length ?? 0) + all,
-        0
-      ),
-    [clubs]
-  );
+const TotalUsers = ({ users }) => {
+  const totalUsersInAllClubs = users?.length;
 
   return (
     <Card style={{ height: '100%', position: 'relative' }}>
@@ -74,9 +67,9 @@ const TotalUsers = ({ clubs }) => {
 export default TotalUsers;
 
 TotalUsers.propTypes = {
-  clubs: PropTypes.node,
+  users: PropTypes.node,
 };
 
 TotalUsers.defaultProps = {
-  clubs: {},
+  users: {},
 };

@@ -37,14 +37,22 @@ def delete_tag_to_club(club_id, tag_id):
     Club.update(tags=club.tags)
 
 
-def exist_tag_and_add(tag_name, club, club_id_object):
+def add_club_to_tag(tag_name, club, club_id_object):
     try:
         tag = Tag.objects.get(name=tag_name)
         if club_id_object not in tag.clubsWithTag:
             tag.clubsWithTag.append(club_id_object)
             tag.save()
-            club.tags.append(tag_name)
-            club.save()
+        return club
+    except Exception:
+        return None
+
+
+def exist_tag_and_add(tag_name, club, club_id_object):
+    try:
+        add_club_to_tag(tag_name, club, club_id_object)
+        club.tags.append(tag_name)
+        club.save()
         return club
     except Exception:
         return None
@@ -52,12 +60,34 @@ def exist_tag_and_add(tag_name, club, club_id_object):
 
 def add_tags(club_id, club, tags):
     for tagname in tags:
-        NewClub = exist_tag_and_add(tagname, club, ObjectId(club_id))
-        if NewClub is None:
-            tag = Tag(name=tagname, clubsWithTag=[ObjectId(club_id)])
-            tag.save()
-            club.tags.append(tagname)
-            club.save()
+        if tagname != "":
+            NewClub = exist_tag_and_add(tagname, club, ObjectId(club_id))
+            if NewClub is None and tagname is not None:
+                tag = Tag(name=tagname, clubsWithTag=[ObjectId(club_id)])
+                tag.save()
+                club.tags.append(tagname)
+                club.save()
+    return club
+
+
+def remove_club_from_tag(club_id, tag_name):
+    tag = Tag.objects.get(name=tag_name)
+    tag.clubsWithTag.remove(ObjectId(club_id))
+    tag.save()
+
+
+def edit_tags(club_id, club, tags):
+    for tagname in club.tags:
+        if tagname not in tags:
+            remove_club_from_tag(club_id, tagname)
+    for tagname in tags:
+        if tagname != "" and tagname not in club.tags:
+            NewClub = add_club_to_tag(tagname, club, ObjectId(club_id))
+            if NewClub is None and tagname is not None:
+                tag = Tag(name=tagname, clubsWithTag=[ObjectId(club_id)])
+                tag.save()
+    club.tags = tags
+    club.save()
     return club
 
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
 import { Avatar, Box, Card, CardContent, Typography } from '@material-ui/core';
@@ -27,12 +26,6 @@ const AccountProfile = props => {
           />
           <Typography color='textPrimary' gutterBottom variant='h3'>
             {user.name}
-          </Typography>
-          <Typography color='textSecondary' variant='body1'>
-            {`${user.city} ${user.country}`}
-          </Typography>
-          <Typography color='textSecondary' variant='body1'>
-            {`${moment().format('hh:mm A')} `}
           </Typography>
         </Box>
       </CardContent>

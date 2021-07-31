@@ -10,16 +10,16 @@ export const joinClub = data => post('/db/join_club', data);
 export const leaveClub = data => post('/db/leave_club', data);
 
 export const interested = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/interested`);
+  getDb(`club/${clubId}/events/${eventId}/interested`);
 
 export const attend = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/attend`);
+  getDb(`club/${clubId}/events/${eventId}/attend`);
 
 export const uninterested = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/uninterested`);
+  getDb(`club/${clubId}/events/${eventId}/uninterested`);
 
 export const unattend = (clubId, eventId) =>
-  getDb(`club/${clubId}/messages/${eventId}/unattend`);
+  getDb(`club/${clubId}/events/${eventId}/unattend`);
 
 export const whoami = () => get(`/auth/whoami`);
 
@@ -39,15 +39,9 @@ export const getUpcomingEventsByClub = (clubId = null) =>
 
 export const getClub = clubId => getDb('club', clubId);
 
-export const getClubs = ({ name, tag }) => {
-  if (name && tag) {
-    return getDb(`clubs?name=${name}&tag=${tag}`);
-  }
-  if (name) {
-    return getDb(`clubs?name=${name}`);
-  }
-  if (tag) {
-    return getDb(`/clubs?tag=${tag}`);
+export const getClubs = ({ search }) => {
+  if (search) {
+    return getDb(`clubs?search=${search}`);
   }
   return getDb(`clubs`);
 };
@@ -79,6 +73,10 @@ export const deleteEvent = ({ payload }) =>
 
 export const deleteClub = ({ payload }) => post(`/db/club/delete`, payload);
 
+export const approveUserToClub = payload => post(`/db/approve_user`, payload);
+export const approveUserUsers = payload => post(`/db/approve`, payload);
+export const unapproveUserUsers = payload => post(`/db/unapprove`, payload);
+
 export const createNewEvent = ({ payload }) =>
   post(`/db/club/create_event`, payload);
 
@@ -89,3 +87,5 @@ export const addImage = data => postClub(`/db/club/add_image`, data);
 export const getDashboardData = () => get('/dashboard/data');
 
 export const updateUserData = data => post('/db/updateuser', data);
+
+export const sendMailToClub = data => post('/db/contactus', data);

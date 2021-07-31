@@ -1,30 +1,21 @@
 import json
-from server.db.models import Event, dict_two_months
-import datetime
+from server.db.models import Event, current_time, dict_two_months
 from mongoengine.queryset.visitor import Q
 
 
-def currentTime():
-    now = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
-    return now
-
-
-def createEvent(
-    title, duration, club, startTime, endTime, location=None, description=None
-):
+def createEvent(title, club, startTime, endTime, location=None, description=None):
     newEvent = Event(
         title=title,
         description=description,
-        creationTime=currentTime(),
-        duration=duration,
+        creationTime=current_time(),
         startTime=startTime,
         endTime=endTime,
-        lastUpdateTime=currentTime(),
+        lastUpdateTime=current_time(),
         creatingClub=club,
         location=location,
     )
     newEvent.save()
-    club.update(lastUpdateTime=currentTime())
+    club.update(lastUpdateTime=current_time())
     return newEvent.to_dict()
 
 
@@ -46,7 +37,7 @@ def updateEventContent(
         event.endTime = endTime
     if location:
         event.location = location
-    now = currentTime()
+    now = current_time()
     event.update(
         lastUpdateTime=now,
         title=event.title,
@@ -60,28 +51,28 @@ def updateEventContent(
 
 def addAttending(event, user):
     event.membersAttending.append(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def undoAttending(event, user):
     event.membersAttending.remove(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, membersAttending=event.membersAttending)
     return event
 
 
 def addIntrested(event, user):
     event.intrested.append(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
 
 def undoIntrested(event, user):
     event.intrested.remove(user)
-    now = currentTime()
+    now = current_time()
     event.update(lastUpdateTime=now, intrested=event.intrested)
     return event
 
