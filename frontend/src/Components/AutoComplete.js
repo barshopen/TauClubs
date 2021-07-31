@@ -81,7 +81,7 @@ const AutocompleteComponent = ({ data }) => {
             <InputBase
               {...params.InputProps}
               {...rest}
-              placeholder='Search…'
+              placeholder='Search by name or tag…'
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

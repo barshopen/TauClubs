@@ -94,7 +94,7 @@ const UserListResults = ({ users }) => {
           padding: '0',
         }}
         onClick={() => sendApprove(rowsChoose)}>
-        <Typography variant='h5'>Approve selected </Typography>
+        <Typography variant='h5'>Approve selected / make admin </Typography>
         <CheckIcon
           style={{
             color: 'green',
