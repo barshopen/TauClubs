@@ -82,6 +82,7 @@ const DashboardClubCard = ({ clubData }) => {
               existTag: club?.tags,
               FacebookGroup: club?.FacebookGroup,
               WhatsAppGroup: club?.WhatsAppGroup,
+              officialWeb: club?.officialWeb,
             }}
           />
           <Avatar
