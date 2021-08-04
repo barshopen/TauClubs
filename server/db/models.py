@@ -72,7 +72,6 @@ class User(DynamicDocument):
     country = StringField()
     phone = StringField()
     picture = URLField()
-    joinTime = DateTimeField(required=True)
 
     meta = {"collection": "users"}
 
@@ -103,7 +102,7 @@ class User(DynamicDocument):
 
 class UserAuth(UserMixin, DynamicDocument):
     email = EmailField(required=True, unique=True)
-    userauth = ReferenceField(User)
+    userauth = ReferenceField("User")
 
 
 ROLES = {"A": "Admin", "U": "User", "P": "Pending"}
