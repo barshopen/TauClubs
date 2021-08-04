@@ -278,7 +278,7 @@ function FeedCard({ feedItem }) {
   const { feedAll } = useFeedGeneral();
 
   const classes = useStyles();
-  if (feedItem !== undefined) {
+  if (feedItem === undefined) {
     return (
       <Container>
         <Typography className={classes.root} align='center'>
