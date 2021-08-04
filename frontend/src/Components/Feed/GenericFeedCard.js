@@ -278,18 +278,16 @@ function FeedCard({ feedItem }) {
   const { feedAll } = useFeedGeneral();
 
   const classes = useStyles();
-  if (feedItem === undefined) {
+  if (feedItem !== undefined) {
     return (
       <Container>
         <Typography className={classes.root} align='center'>
-          <Typography variant='h4' paragraph='true'>
-            Plenty of events and activities are waiting for you! Find out more
-            clubs that will fit you and start participating in meetups and
-            activities
+          <Typography variant='h5' paragraph='true'>
+            Plenty Of Events And Activities Are Waiting For You!
           </Typography>
 
           <Link component='a' variant='h6' href='/explore'>
-            Click here to explore and join other clubs
+            Click here to explore and join more clubs!
           </Link>
         </Typography>
         <ClubsView
