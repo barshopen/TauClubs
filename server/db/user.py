@@ -1,6 +1,4 @@
 from server.db.models import User
-from pymongo.errors import DuplicateKeyError
-from mongoengine.errors import NotUniqueError
 
 
 def create_user(firstName, lastName, contactMail, picture):
@@ -12,7 +10,7 @@ def create_user(firstName, lastName, contactMail, picture):
             picture=picture,
         )
         user.save()
-    except [NotUniqueError, DuplicateKeyError]:
+    except Exception:
         user = User.objects.get(contactMail=contactMail)
     return user
 

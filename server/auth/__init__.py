@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request
+from flask import Blueprint, request
 import os
 import dotenv
 from flask_login import (
