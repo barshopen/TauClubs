@@ -22,6 +22,7 @@ def create_club(
     tags=[],
     FacebookGroup=None,
     WhatsAppGroup=None,
+    officialWeb=None,
 ):
     now = current_time()
     club = Club(
@@ -33,6 +34,7 @@ def create_club(
         lastUpdateTime=current_time(),
         FacebookGroup=FacebookGroup,
         WhatsAppGroup=WhatsAppGroup,
+        officialWeb=officialWeb,
     )
     club.save(force_insert=True)
     if tags is not None:
@@ -47,18 +49,34 @@ def establish_club(
     description: str = "",
     FacebookGroup=None,
     WhatsAppGroup=None,
+    officialWeb=None,
     image=None,
     tags=None,
 ):
     newclub = create_club(
-        image, name, contact_mail, description, tags, FacebookGroup, WhatsAppGroup
+        image,
+        name,
+        contact_mail,
+        description,
+        tags,
+        FacebookGroup,
+        WhatsAppGroup,
+        officialWeb,
     )
     membership = createAdminMembership(foundingUserEmail, newclub)
     return membership.clubName
 
 
 def edit_club(
-    club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
+    club,
+    name,
+    contact_mail,
+    description,
+    image,
+    tags,
+    WhatsAppGroup,
+    FacebookGroup,
+    officialWeb,
 ):  # write
     if name == "undefined":
         name = club.name
@@ -72,6 +90,8 @@ def edit_club(
         FacebookGroup = club.FacebookGroup
     if WhatsAppGroup == "undefined":
         WhatsAppGroup = club.WhatsAppGroup
+    if officialWeb == "undefined":
+        officialWeb = club.officialWeb
     if image != "None":
         club.profileImage.replace(image)
     edit_tags(club.id, club, tags.split(","))
@@ -81,6 +101,7 @@ def edit_club(
         description=description,
         FacebookGroup=FacebookGroup,
         WhatsAppGroup=WhatsAppGroup,
+        officialWeb=officialWeb,
         lastUpdateTime=current_time(),
     )
     club.save()

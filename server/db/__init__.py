@@ -172,6 +172,7 @@ def club_creation():
         description=request.form["description"],
         WhatsAppGroup=request.form["WhatsAppGroup"],
         FacebookGroup=request.form["FacebookGroup"],
+        officialWeb=request.form["officialWeb"],
         tags=tags,
     )
     if not result:
@@ -214,12 +215,21 @@ def editClub():  # write
     tags = request.form["tags"]
     WhatsAppGroup = request.form["WhatsAppGroup"]
     FacebookGroup = request.form["FacebookGroup"]
+    officialWeb = request.form["officialWeb"]
     try:
         image = request.files["image"]
     except Exception:
         image = "None"
     edit_club(
-        club, name, contact_mail, description, image, tags, WhatsAppGroup, FacebookGroup
+        club,
+        name,
+        contact_mail,
+        description,
+        image,
+        tags,
+        WhatsAppGroup,
+        FacebookGroup,
+        officialWeb,
     )
     if image != "None":
         send_file(image, download_name="club.jpg", max_age=20000000)

@@ -35,6 +35,7 @@ class Club(DynamicDocument):
     contactMail = EmailField(required=True)
     FacebookGroup = StringField()
     WhatsAppGroup = StringField()
+    officialWeb = StringField()
 
     def hasPicture(self):
         return self.profileImage.__dict__["grid_id"] is not None
@@ -59,6 +60,7 @@ class Club(DynamicDocument):
             "contactMail": self.contactMail,
             "FacebookGroup": self.FacebookGroup,
             "WhatsAppGroup": self.WhatsAppGroup,
+            "officialWeb": self.officialWeb,
             "membersCount": ClubMembership.objects(club=self).count(),
             "tags": self.tags,
             "admin": admin,
