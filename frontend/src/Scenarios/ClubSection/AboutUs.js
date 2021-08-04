@@ -8,6 +8,7 @@ import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import LanguageIcon from '@material-ui/icons/Language';
 import { sendMailToClub } from '../../Shared/api';
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +27,7 @@ const AboutUs = ({
   contactMail,
   FacebookGroup,
   WhatsAppGroup,
+  officialWeb,
 }) => {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({
@@ -73,6 +75,17 @@ const AboutUs = ({
               href={FacebookGroup}
               startIcon={<FacebookIcon />}>
               Facebook group
+            </Button>
+          )}
+          {officialWeb && (
+            <Button
+              variant='h5'
+              disply='inline'
+              align='center'
+              target='_blank'
+              href={officialWeb}
+              startIcon={<LanguageIcon />}>
+              official Website
             </Button>
           )}
         </Box>
@@ -157,12 +170,14 @@ AboutUs.propTypes = {
   contactMail: PropTypes.string,
   WhatsAppGroup: PropTypes.string,
   FacebookGroup: PropTypes.string,
+  officialWeb: PropTypes.string,
 };
 AboutUs.defaultProps = {
   description: '',
   contactMail: '',
   WhatsAppGroup: '',
   FacebookGroup: '',
+  officialWeb: '',
 };
 
 export default AboutUs;
