@@ -12,6 +12,7 @@ from server.db.clubmembership import (
     clubs_by_user_member,
     genericApproveMembership,
     get_membership,
+    get_membership_for_user_and_club,
     is_member,
     is_user_member,
     leave_club,
@@ -307,7 +308,8 @@ def join_club_by_id():
 def remove_club_by_id():
     user = get_userauth_user_by_id(current_user.get_id())
     club = get_club(request.json.get("clubId"))
-    if not leave_club(user, club):
+    membership = get_membership_for_user_and_club(user, club)
+    if not leave_club(membership):
         return "Could not complete request", 400
     return "Success", 200
 

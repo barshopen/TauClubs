@@ -18,6 +18,13 @@ def get_membership(id: str):
         return None
 
 
+def get_membership_for_user_and_club(user, club):
+    try:
+        return ClubMembership.objects.get(club=club, member=user)
+    except DoesNotExist:
+        return None
+
+
 def createMembership(user, club, role):
     approveTime = None
     if role == "A":
