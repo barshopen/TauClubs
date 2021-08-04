@@ -1,7 +1,6 @@
 import datetime
 from server.db.event import delete_events
 from server.db.message import delete_messages
-from server.db.tag import add_tags, edit_tags
 from bson.objectid import ObjectId
 import json
 from mongoengine.errors import DoesNotExist
@@ -35,10 +34,9 @@ def create_club(
         FacebookGroup=FacebookGroup,
         WhatsAppGroup=WhatsAppGroup,
         officialWeb=officialWeb,
+        tags=tags,
     )
     club.save(force_insert=True)
-    if tags is not None:
-        add_tags(club.id, club, tags)
     return club
 
 
@@ -77,7 +75,7 @@ def edit_club(
     WhatsAppGroup,
     FacebookGroup,
     officialWeb,
-):  # write
+):
     if name == "undefined":
         name = club.name
     else:
@@ -94,7 +92,6 @@ def edit_club(
         officialWeb = club.officialWeb
     if image != "None":
         club.profileImage.replace(image)
-    edit_tags(club.id, club, tags.split(","))
     club.update(
         name=name,
         contactMail=contact_mail,
@@ -103,6 +100,7 @@ def edit_club(
         WhatsAppGroup=WhatsAppGroup,
         officialWeb=officialWeb,
         lastUpdateTime=current_time(),
+        tags=tags,
     )
     club.save()
 
@@ -131,7 +129,6 @@ def delete_club(club):
     delete_messages(club)
     delete_events(club)
     list_memberships = delete_membership(club)
-    # delete_tags(club)
     club.delete()
     club.switch_collection("old_clubs")
     club.save(force_insert=True)
