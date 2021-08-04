@@ -38,6 +38,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'auto',
+    maxHeight: '85vh',
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
     },
@@ -66,6 +68,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
     existTag,
     WhatsAppGroup,
     FacebookGroup,
+    officialWeb,
   } = clubId;
   const classes = useStyles();
   const [values, setValues] = useState({
@@ -100,6 +103,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
     data.append('tags', tags);
     data.append('WhatsAppGroup', values.WhatsAppGroup);
     data.append('FacebookGroup', values.FacebookGroup);
+    data.append('officialWeb', values.officialWeb);
     if (values.image) {
       data.append('image', values.image);
     } else {
@@ -136,7 +140,6 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
         <Typography variant='h4' className={classes.header} align='center'>
           {title}
         </Typography>
-
         <TextField
           name='club_name'
           label='Club Name'
@@ -164,7 +167,7 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           multiline
           variant='outlined'
           rows={4}
-          rowsMax={10}
+          rowsMax={4}
           required={title === 'Create New Club'}
           onChange={handleChange}
         />
@@ -179,6 +182,13 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
           name='FacebookGroup'
           label='Facebook group link'
           defaultValue={FacebookGroup}
+          variant='outlined'
+          onChange={handleChange}
+        />
+        <TextField
+          name='officialWeb'
+          label='Official Website link'
+          defaultValue={officialWeb}
           variant='outlined'
           onChange={handleChange}
         />

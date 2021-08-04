@@ -82,7 +82,7 @@ function cardHeader(clubName, title, lastUpdateTime) {
             padding: '10px',
             backgroundColor: 'black',
             color: 'white',
-            height: '70px',
+            height: '50px',
             minWidth: '100px',
             maxWidth: '200px',
             width: 'auto',
