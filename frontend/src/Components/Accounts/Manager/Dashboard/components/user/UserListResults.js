@@ -39,7 +39,7 @@ const UserListResults = ({ users }) => {
         ? Object.values(users).map(user => ({
             ...user,
             displayDate:
-              user.status === 'Pending' ? user?.approveTime : user?.requestTime,
+              user.status === 'Pending' ? user?.requestTime : user?.approveTime,
             isApproved: user.status !== 'Pending',
           }))
         : [],
