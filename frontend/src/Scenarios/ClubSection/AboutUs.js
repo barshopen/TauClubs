@@ -47,7 +47,7 @@ const AboutUs = ({
   };
 
   return (
-    <div>
+    <Container>
       <Container>
         <Box display='flex' justifyContent='center' m={2}>
           <Typography variant='h5' disply='inline' align='center'>
@@ -160,7 +160,7 @@ const AboutUs = ({
           </form>
         </Box>
       </Container>
-    </div>
+    </Container>
   );
 };
 
