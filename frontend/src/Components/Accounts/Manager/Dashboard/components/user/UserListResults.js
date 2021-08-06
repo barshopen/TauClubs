@@ -8,10 +8,12 @@ import { useQueryClient } from 'react-query';
 import { Tooltip, Typography } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
+import { useRecoilValue } from 'recoil';
 import {
   approveUserUsers,
   unapproveUserUsers,
 } from '../../../../../../Shared/api';
+import { currentUser } from '../../../../../../Shared/atoms';
 
 const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
@@ -48,6 +50,11 @@ const UserListResults = ({ users }) => {
     {
       field: 'name',
       headerName: 'Member Name',
+      renderCell: ({ row, formattedValue }) => (
+        <Tooltip title={lastAdmin(row) ? "Last admin can't leave" : ''}>
+          <Typography variant='h5'>{formattedValue}</Typography>
+        </Tooltip>
+      ),
       width: 200,
     },
     {
@@ -79,6 +86,28 @@ const UserListResults = ({ users }) => {
       description: 'Approve date for memebers, Request date for pending users',
     },
   ];
+  const current = useRecoilValue(currentUser);
+
+  function allowApprove(row) {
+    if (
+      row?.status !== 'Admin' ||
+      (row?.contactMail === current?.email && !lastAdmin(row))
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  function lastAdmin(admin) {
+    if (
+      newUsers?.filter(
+        user => user.club === admin.club && user.status === 'Admin'
+      ).length === 1
+    ) {
+      return true;
+    }
+    return false;
+  }
   return (
     <div style={{ height: '700px', width: '100%' }}>
       <Typography variant='h2'>Users</Typography>
@@ -124,7 +153,7 @@ const UserListResults = ({ users }) => {
         onSelectionModelChange={e => setRows(e)}
         disableSelectionOnClick
         isCellEditable={false}
-        isRowSelectable={({ row }) => row?.status !== 'Admin'}
+        isRowSelectable={({ row }) => allowApprove(row)}
       />
     </div>
   );
