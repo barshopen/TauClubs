@@ -29,8 +29,11 @@ Please have a clear and brief explanation on what is the main changes you have a
 If you working on major changes, please try and devide your PR for few seperate PR that make logical sense.
 
 ## Running env ##
+
+### Node.js ###
+
 1. Install at least node 12.18.13.
-2. run `npm install --global yarn`
+2. run `npm install --global yarn` (so you can use yarn)
 3. at the root dir, run `yarn install`
 4. run `cd frontend` then  run `yarn install` again.
 5. At the frontend dir. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
@@ -42,7 +45,8 @@ If you working on major changes, please try and devide your PR for few seperate 
 4. Run `pipenv --where`. This should output the root of your project dir, (if not, let us know so we could provide support)
 5. Restart your vscode.
 6. At the server dir. copy .env_example file into .env file. Read the .env file and complete the missing parts if needed.
-7. Python virtual envirnoment should be activated when you start a new terminal. You should see a `(TauClubs)` suffix at your terminal prompt. (If you don't please let us know :) ). Restart the **terminal**.
+7. Python virtual envirnoment should be activated when you start a new terminal. You should see a `(TauClubs)` suffix at your terminal prompt. (If you don't please let us know :) ). **Restart the terminal**.
+
 
 ### Extensions and vscode ###
 1. Install recomended extenions Go to extensions(Ctrl+Shift+X on Windows), on the search type `@recommended` under workspace recommendations click on the ☁️ button the install all the recommended extensions.
