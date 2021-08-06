@@ -125,7 +125,7 @@ const ClubSection = () => {
   useEffect(() => setCurrentIndex(TABS.main), [clubData]);
 
   let join = null;
-  if (status === 'User' || status === 'Admin') {
+  if (status === 'User') {
     join = (
       <NavLinkLeave to={`/club/leave/${clubId}`}>
         <Tab
@@ -216,8 +216,7 @@ const ClubSection = () => {
               About Us
             </Tab>
           </NavLink>
-          {join}
-          {admin && (
+          {admin ? (
             <NavLink to='/profile/clubs'>
               <Tab
                 isClicked={currentIndex === TABS.manage}
@@ -225,6 +224,8 @@ const ClubSection = () => {
                 Manage
               </Tab>
             </NavLink>
+          ) : (
+            join
           )}
         </Nav>
       </NavBarContainer>
