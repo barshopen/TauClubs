@@ -82,9 +82,15 @@ def send_message_text(recipients, subject, body):
         recipients=recipients,
         body=body,
     )
-    path = os.path.join(os.getcwd(), "frontend", "public", "images", "logo.jpeg")
-    f = open(path, "rb")
-    msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
+    path = os.path.join(os.getcwd(), "images", "logo.jpeg")
+    
+    try:
+        with open(path, "rb") as f:
+            msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
+    except Exception as e:
+        print("could not attach logo.")
+        print(e)
+
     mail.send(msg)
 
 
@@ -599,7 +605,8 @@ def approve_users():
             membership = genericApproveMembership(membership)
             send_mail_approve([membership.member.to_dict()], club.name, membership.role)
         return "Success", 200
-    except Exception:
+    except Exception as e:
+        print(e)
         return "Failed", 400
 
 
