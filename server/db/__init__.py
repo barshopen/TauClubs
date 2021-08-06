@@ -82,9 +82,15 @@ def send_message_text(recipients, subject, body):
         recipients=recipients,
         body=body,
     )
-    path = os.path.join(os.getcwd(), "frontend", "public", "images", "logo.jpeg")
-    f = open(path, "rb")
-    msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
+    path = os.path.join(os.getcwd(), "images", "logo.jpeg")
+    
+    try:
+        with open(path, "rb") as f:
+            msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
+    except Exception as e:
+        print("could not attach logo.")
+        print(e)
+
     mail.send(msg)
 
 
@@ -585,19 +591,23 @@ def get_image_club(club_id):
 @db_app.route("/approve", methods=["POST"])
 def approve_users():
     manager = get_userauth_user_by_id(current_user.get_id())
-    memberships = request.json
-    for membership_id in memberships:
-        membership = get_membership(membership_id)
-        club = membership.club
-        if (
-            not club
-            or not validatePermessionByClub(manager, club)
-            or membership is None
-        ):
-            return "Restrict", 400
-        membership = genericApproveMembership(membership)
-        send_mail_approve([membership.member.to_dict()], club.name, membership.role)
-    return "Success", 200
+    try:
+        memberships = request.json
+        for membership_id in memberships:
+            membership = get_membership(membership_id)
+            club = membership.club
+            if (
+                not club
+                or not validatePermessionByClub(manager, club)
+                or membership is None
+            ):
+                return "Restrict", 400
+            membership = genericApproveMembership(membership)
+            send_mail_approve([membership.member.to_dict()], club.name, membership.role)
+        return "Success", 200
+    except Exception as e:
+        print(e)
+        return "Failed", 400
 
 
 @login_required

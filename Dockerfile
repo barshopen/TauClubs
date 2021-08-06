@@ -6,6 +6,8 @@ ENV PORT=443
 
 COPY requirements.txt .
 COPY server ./server
+COPY images ./images
+
 COPY .env .
 
 
