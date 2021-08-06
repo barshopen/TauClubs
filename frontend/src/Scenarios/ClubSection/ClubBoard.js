@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRouteMatch } from 'react-router-dom';
 import BaseLoader from 'react-loader-spinner';
-import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import EventIcon from '@material-ui/icons/Event';
 import MessageIcon from '@material-ui/icons/Message';
 import Grid from '@material-ui/core/Grid';
 import { Box } from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import Messages from '../../Components/Messages';
 import NewMessageModal from '../NewMessageModal';
 import NewEventModal from '../NewEventModal';
@@ -22,11 +21,15 @@ const Loader = styled(BaseLoader)`
 `;
 
 const IconBu = ({ ariaLabel, onClick }) => (
-  <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <Tooltip title='Add Message'>
-      <MessageIcon />
-    </Tooltip>
-  </IconButton>
+  <Button
+    variant='contained'
+    color='primary'
+    aria-label={ariaLabel}
+    onClick={onClick}
+    startIcon={<MessageIcon />}
+    size='Medium'>
+    new message
+  </Button>
 );
 IconBu.propTypes = {
   ariaLabel: PropTypes.string,
@@ -37,11 +40,15 @@ IconBu.defaultProps = {
 };
 
 const AddEventIcon = ({ ariaLabel, onClick }) => (
-  <IconButton color='inherit' aria-label={ariaLabel} onClick={onClick}>
-    <Tooltip title='Add Event'>
-      <EventIcon />
-    </Tooltip>
-  </IconButton>
+  <Button
+    variant='contained'
+    color='primary'
+    aria-label={ariaLabel}
+    onClick={onClick}
+    startIcon={<EventIcon />}
+    size='Medium'>
+    new event
+  </Button>
 );
 AddEventIcon.propTypes = {
   ariaLabel: PropTypes.string,
