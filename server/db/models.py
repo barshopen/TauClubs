@@ -34,9 +34,6 @@ class Club(DynamicDocument):
 
     def to_dict(self):
         status = "Non User"
-        admin = False
-        member = False
-        pending = False
         if current_user.is_authenticated:
             user = UserAuth.objects.get(id=current_user.get_id()).userauth
             admin = validatePermession(user, self.id)
@@ -46,8 +43,6 @@ class Club(DynamicDocument):
                 memebership = ClubMembership.objects(member=user, club=self).first()
                 if memebership is not None:
                     status = ROLES[memebership["role"]]
-                    member = admin or memebership.role == "U"
-                    pending = memebership.role == "P"
         return {
             "id": str(self.pk),
             "name": self.name,
@@ -60,9 +55,6 @@ class Club(DynamicDocument):
             "officialWeb": self.officialWeb,
             "membersCount": ClubMembership.objects(club=self).count(),
             "tags": self.tags,
-            "admin": admin,
-            "member": member,
-            "pending": pending,
             "profileImage": self.hasPicture(),
             "status": status,
         }
@@ -111,7 +103,7 @@ class UserAuth(UserMixin, DynamicDocument):
     userauth = ReferenceField("User")
 
 
-ROLES = {"A": "Admin", "U": "User", "P": "Pending", "N": "Non User"}
+ROLES = {"A": "Admin", "U": "User", "P": "Pending"}
 
 
 class ClubMembership(DynamicDocument):
