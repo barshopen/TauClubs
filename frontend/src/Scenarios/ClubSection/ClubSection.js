@@ -108,9 +108,6 @@ const ClubSection = () => {
   const { loadingClub, clubData } = useClub(clubId);
 
   const {
-    member,
-    admin,
-    pending,
     name,
     description,
     contactMail,
@@ -118,50 +115,50 @@ const ClubSection = () => {
     WhatsAppGroup,
     FacebookGroup,
     officialWeb,
+    status,
   } = clubData || {};
 
   const user = useRecoilValue(currentUser);
   const [currentIndex, setCurrentIndex] = useState(TABS.main);
-
+  const admin = status === 'Admin';
   useEffect(() => setCurrentIndex(TABS.main), [clubData]);
 
   let join = null;
-  if (user) {
-    if (member) {
-      join = (
-        <NavLinkLeave to={`/club/leave/${clubId}`}>
-          <Tab
-            isClicked={currentIndex === TABS.join}
-            onClick={() => setCurrentIndex(TABS.join)}
-            color='red'>
-            Leave club
-          </Tab>
-        </NavLinkLeave>
-      );
-    } else if (pending) {
-      join = (
-        <NavWithoutLink>
-          <Tab
-            isClicked={currentIndex === TABS.join}
-            onClick={() => setCurrentIndex(TABS.join)}
-            color='blueviolet'>
-            Pending
-          </Tab>
-        </NavWithoutLink>
-      );
-    } else {
-      join = (
-        <NavLinkJoin to={`/club/joinus/${clubId}`}>
-          <Tab
-            isClicked={currentIndex === TABS.join}
-            onClick={() => setCurrentIndex(TABS.join)}
-            color='green'>
-            Join
-          </Tab>
-        </NavLinkJoin>
-      );
-    }
+  if (status === 'User') {
+    join = (
+      <NavLinkLeave to={`/club/leave/${clubId}`}>
+        <Tab
+          isClicked={currentIndex === TABS.join}
+          onClick={() => setCurrentIndex(TABS.join)}
+          color='red'>
+          Leave club
+        </Tab>
+      </NavLinkLeave>
+    );
+  } else if (status === 'Pending') {
+    join = (
+      <NavWithoutLink>
+        <Tab
+          isClicked={currentIndex === TABS.join}
+          onClick={() => setCurrentIndex(TABS.join)}
+          color='blueviolet'>
+          Pending
+        </Tab>
+      </NavWithoutLink>
+    );
+  } else {
+    join = (
+      <NavLinkJoin to={`/club/joinus/${clubId}`}>
+        <Tab
+          isClicked={currentIndex === TABS.join}
+          onClick={() => setCurrentIndex(TABS.join)}
+          color='green'>
+          Join
+        </Tab>
+      </NavLinkJoin>
+    );
   }
+
   const img = profileImage
     ? `${window.origin}/db/images/${clubId}`
     : '/images/taulogo.png';
@@ -234,7 +231,9 @@ const ClubSection = () => {
       <Switch>
         <Route
           path='/club/board/:clubId'
-          component={() => <ClubBoard currentUserIsClubsAdmin={admin} />}
+          component={() => (
+            <ClubBoard currentUserIsClubsAdmin={admin} status={status} />
+          )}
         />
         <Route
           path='/club/about/:clubId'
@@ -249,13 +248,13 @@ const ClubSection = () => {
             />
           )}
         />
-        {user && !pending && !member && (
+        {user && status === 'Non User' && (
           <Route
             path='/club/joinus/:clubId'
             component={() => <JoinUs clubName={name} clubId={clubId} />}
           />
         )}
-        {user && member && (
+        {user && status === 'User' && (
           <Route
             path='/club/leave/:clubId'
             component={() => <Leave clubName={name} clubId={clubId} />}
