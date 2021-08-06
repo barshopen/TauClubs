@@ -51,7 +51,7 @@ AddEventIcon.defaultProps = {
   ariaLabel: '',
 };
 
-const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
+const ClubBoard = ({ currentUserIsClubsAdmin = false, status }) => {
   const {
     params: { clubId },
   } = useRouteMatch('/club/*/:clubId');
@@ -117,6 +117,7 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
                   )
                   .reverse()}
                 isAdmin={currentUserIsClubsAdmin}
+                status={status}
               />
             </>
           )
@@ -129,6 +130,7 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false }) => {
 export default ClubBoard;
 
 ClubBoard.propTypes = {
+  status: PropTypes.string.isRequired,
   currentUserIsClubsAdmin: PropTypes.bool,
 };
 

@@ -118,6 +118,7 @@ const ClubSection = () => {
     WhatsAppGroup,
     FacebookGroup,
     officialWeb,
+    status,
   } = clubData || {};
 
   const user = useRecoilValue(currentUser);
@@ -234,7 +235,9 @@ const ClubSection = () => {
       <Switch>
         <Route
           path='/club/board/:clubId'
-          component={() => <ClubBoard currentUserIsClubsAdmin={admin} />}
+          component={() => (
+            <ClubBoard currentUserIsClubsAdmin={admin} status={status} />
+          )}
         />
         <Route
           path='/club/about/:clubId'
