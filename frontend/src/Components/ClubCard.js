@@ -51,10 +51,14 @@ const useStyles = makeStyles(theme => ({
 const ClubCard = props => {
   const { title, tags, count, img, color } = props;
   const setValue = useSetRecoilState(selectedOptionState);
-
   const classes = useStyles();
+
   return (
-    <Card className={classes.root} onClick={() => setValue(null)}>
+    <Card
+      className={classes.root}
+      onClick={() => {
+        setValue(props);
+      }}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
