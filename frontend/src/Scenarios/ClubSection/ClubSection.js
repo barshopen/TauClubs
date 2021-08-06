@@ -84,7 +84,6 @@ const TABS = {
   main: 0,
   about: 1,
   join: 2,
-  manage: 3,
 };
 
 // eslint-disable-next-line react/prop-types
@@ -219,8 +218,8 @@ const ClubSection = () => {
           {admin ? (
             <NavLink to='/profile/clubs'>
               <Tab
-                isClicked={currentIndex === TABS.manage}
-                onClick={() => setCurrentIndex(TABS.manage)}>
+                isClicked={currentIndex === TABS.join}
+                onClick={() => setCurrentIndex(TABS.join)}>
                 Manage
               </Tab>
             </NavLink>
@@ -255,7 +254,7 @@ const ClubSection = () => {
             component={() => <JoinUs clubName={name} clubId={clubId} />}
           />
         )}
-        {user && status !== 'Non User' && (
+        {user && status === 'User' && (
           <Route
             path='/club/leave/:clubId'
             component={() => <Leave clubName={name} clubId={clubId} />}
