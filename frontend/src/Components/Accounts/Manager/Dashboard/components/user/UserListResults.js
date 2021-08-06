@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useMemo } from 'react';
 import moment from 'moment';
-import IconButton from '@material-ui/core/IconButton';
 import { DataGrid } from '@material-ui/data-grid';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Tooltip, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
 import { useRecoilValue } from 'recoil';
@@ -112,36 +112,29 @@ const UserListResults = ({ users }) => {
     <div style={{ height: '700px', width: '100%' }}>
       <Typography variant='h2'>Users</Typography>
       <Typography style={{ marginTop: '20px' }} variant='h5'>
-        Approve/Decline pending requests of users, and approve/decline current
-        users request to be admin
+        Approve/Decline pending requests of users, and make admin/remove member
+        from club
       </Typography>
-      <IconButton
-        style={{
-          marginRight: '20px',
-          marginBottom: '20px',
-          marginTop: '20px',
-          padding: '0',
-        }}
-        onClick={() => sendApprove(rowsChoose)}>
-        <Typography variant='h5'>Approve selected / make admin </Typography>
+      <Button
+        onClick={() => sendApprove(rowsChoose)}
+        variant='contained'
+        color='primary'>
+        <Typography variant='h5'>Approve / make admin </Typography>
         <CheckIcon
           style={{
-            color: 'green',
-            marginLeft: '5px',
+            color: 'white',
+            marginLeft: '12px',
           }}
         />
-      </IconButton>
-      <IconButton
-        style={{
-          marginRight: '20px',
-          marginBottom: '20px',
-          marginTop: '20px',
-          padding: '0',
-        }}
-        onClick={() => sendUnApprove(rowsChoose)}>
-        <Typography variant='h5'>Decline selected </Typography>
-        <ClearIcon style={{ color: 'red', marginLeft: '5px' }} />
-      </IconButton>
+      </Button>
+      <Button
+        style={{ margin: '20px' }}
+        onClick={() => sendUnApprove(rowsChoose)}
+        variant='contained'
+        color='primary'>
+        <Typography variant='h5'>Decline / remove member </Typography>
+        <ClearIcon style={{ color: 'white', marginLeft: '12px' }} />
+      </Button>
       <DataGrid
         rows={newUsers}
         columns={columns}

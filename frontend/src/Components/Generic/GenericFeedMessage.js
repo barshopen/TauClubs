@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       marginLeft: '-20%',
       marginRight: '-20%',
-      maxWidth: '140%',
+      maxWidth: '136%',
       marginTop: '5%',
       marginBottom: '5%',
     },
