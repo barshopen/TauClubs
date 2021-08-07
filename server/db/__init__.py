@@ -286,10 +286,11 @@ def club_by_id(club_id):
 
 
 @db_app.route("/my_clubs")
-@login_required
 def my_clubs():
-    user = get_userauth_user_by_id(current_user.get_id())
-    return get_user_clubs(user)
+    if current_user.is_authenticated:
+        user = get_userauth_user_by_id(current_user.get_id())
+        return get_user_clubs(user)
+    return json.dumps([]), 200
 
 
 @db_app.route("/join_club", methods=["POST"])
@@ -608,6 +609,7 @@ def approve_users():
     except Exception as e:
         print(e)
         return e, 400
+
 
 
 @login_required
