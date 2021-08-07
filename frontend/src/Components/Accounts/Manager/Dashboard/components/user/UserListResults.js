@@ -16,7 +16,6 @@ import {
 import { currentUser } from '../../../../../../Shared/atoms';
 import useConfetti from '../../../../../../hooks/useConfetti';
 
-
 const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
   const [done, setDone] = useState(false);
