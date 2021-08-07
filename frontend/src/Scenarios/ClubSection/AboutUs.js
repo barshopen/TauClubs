@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '100ch',
+      maxWidth: '100%',
       justifyContent: 'center',
     },
   },
@@ -47,7 +47,7 @@ const AboutUs = ({
   };
 
   return (
-    <div>
+    <Container>
       <Container>
         <Box display='flex' justifyContent='center' m={2}>
           <Typography variant='h5' disply='inline' align='center'>
@@ -97,70 +97,62 @@ const AboutUs = ({
         </Box>
       </Container>
       <Container>
-        <Box display='flex' justifyContent='center'>
-          <form
-            className={classes.root}
-            onSubmit={submitHandler}
-            autoComplete='off'>
-            <div>
-              <TextField
-                onChange={handleChange}
-                name='title'
-                required
-                variant='outlined'
-                label='Title'
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={handleChange}
-                name='info'
-                variant='outlined'
-                label='Content'
-                fullWidth
-                multiline
-                size='medium'
-                rows={5}
-                required
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={handleChange}
-                name='name'
-                variant='outlined'
-                label='Full Name'
-                fullWidth
-                multiline
-                size='medium'
-                required
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={handleChange}
-                name='mail'
-                variant='outlined'
-                label='Email'
-                fullWidth
-                multiline
-                size='medium'
-                required
-              />
-            </div>
-            <Box display='flex' justifyContent='center' p={2}>
-              <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                size='large'>
-                Send
-              </Button>
-            </Box>
-          </form>
-        </Box>
+        <form
+          className={classes.root}
+          onSubmit={submitHandler}
+          autoComplete='off'>
+          <TextField
+            onChange={handleChange}
+            name='title'
+            required
+            variant='outlined'
+            label='Title'
+            fullWidth
+            size='medium'
+          />
+          <TextField
+            onChange={handleChange}
+            name='info'
+            variant='outlined'
+            label='Content'
+            fullWidth
+            multiline
+            size='medium'
+            rows={5}
+            required
+          />
+          <TextField
+            onChange={handleChange}
+            name='name'
+            variant='outlined'
+            label='Full Name'
+            fullWidth
+            multiline
+            size='medium'
+            required
+          />
+          <TextField
+            onChange={handleChange}
+            name='mail'
+            variant='outlined'
+            label='Email'
+            fullWidth
+            multiline
+            size='medium'
+            required
+          />
+          <Box display='flex' justifyContent='center' p={2}>
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              size='large'>
+              Send
+            </Button>
+          </Box>
+        </form>
       </Container>
-    </div>
+    </Container>
   );
 };
 
