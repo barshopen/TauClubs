@@ -83,7 +83,7 @@ def send_message_text(recipients, subject, body):
         body=body,
     )
     path = os.path.join(os.getcwd(), "images", "logo.jpeg")
-    
+
     try:
         with open(path, "rb") as f:
             msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
@@ -591,23 +591,19 @@ def get_image_club(club_id):
 @db_app.route("/approve", methods=["POST"])
 def approve_users():
     manager = get_userauth_user_by_id(current_user.get_id())
-    try:
-        memberships = request.json
-        for membership_id in memberships:
-            membership = get_membership(membership_id)
-            club = membership.club
-            if (
-                not club
-                or not validatePermessionByClub(manager, club)
-                or membership is None
-            ):
-                return "Restrict", 400
-            membership = genericApproveMembership(membership)
-            send_mail_approve([membership.member.to_dict()], club.name, membership.role)
-        return "Success", 200
-    except Exception as e:
-        print(e)
-        return "Failed", 400
+    memberships = request.json
+    for membership_id in memberships:
+        membership = get_membership(membership_id)
+        club = membership.club
+        if (
+            not club
+            or not validatePermessionByClub(manager, club)
+            or membership is None
+        ):
+            return "Restrict", 400
+        membership = genericApproveMembership(membership)
+        send_mail_approve([membership.member.to_dict()], club.name, membership.role)
+    return "Success", 200
 
 
 @login_required
