@@ -16,7 +16,7 @@ def remove_by_admin(full_name, club_name):
 def approve_manager_message(full_name, club_name):
     subject = "Membership status"
     body = (
-        f"Hi {full_name},\nAn admin has added you as An admin to the club {club_name}."
+        f"Hi {full_name},\nAn admin has added you as an admin to the club {club_name}."
     )
     return subject, body
 
