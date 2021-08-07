@@ -154,7 +154,7 @@ const Leave = ({ clubName, clubId }) => {
                     color='primary'
                     onClick={handleSubmit}
                     className={classes.button}>
-                    Quit
+                    Leave Club
                   </Button>
                 </div>
               </>
