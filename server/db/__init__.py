@@ -83,7 +83,7 @@ def send_message_text(recipients, subject, body):
         body=body,
     )
     path = os.path.join(os.getcwd(), "images", "logo.jpeg")
-    
+
     try:
         with open(path, "rb") as f:
             msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
@@ -286,10 +286,11 @@ def club_by_id(club_id):
 
 
 @db_app.route("/my_clubs")
-@login_required
 def my_clubs():
-    user = get_userauth_user_by_id(current_user.get_id())
-    return get_user_clubs(user)
+    if current_user.is_authenticated:
+        user = get_userauth_user_by_id(current_user.get_id())
+        return get_user_clubs(user)
+    return json.dumps([]), 200
 
 
 @db_app.route("/join_club", methods=["POST"])
