@@ -274,7 +274,7 @@ def add_image():
     try:
         image = request.files["image"]
         add_image_to_club(image, club)
-        return "Success", 200
+        return send_file(image, download_name="club.jpg", max_age=20000000)
     except Exception:
         return "Failed", 400
 
@@ -617,6 +617,7 @@ def approve_users():
     except Exception as e:
         print(e)
         return e, 400
+
 
 @login_required
 @db_app.route("/unapprove", methods=["POST"])
