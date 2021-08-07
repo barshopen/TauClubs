@@ -171,13 +171,27 @@ def club_creation():
             tags = None
         else:
             tags = request.form["tags"].split(",")
+        if request.form["WhatsAppGroup"] == "undefined":
+            WhatsAppGroup = None
+        else:
+            WhatsAppGroup = request.form["WhatsAppGroup"]
+        if request.form["FacebookGroup"] == "undefined":
+            FacebookGroup = None
+        else:
+            FacebookGroup = request.form["FacebookGroup"]
+        if request.form["officialWeb"] == "undefined":
+            officialWeb = None
+        else:
+            officialWeb = request.form["officialWeb"]
         result = establish_club(
             image=image,
             foundingUserEmail=user.contactMail,
             name=request.form["club_name"],
             contact_mail=request.form["contact_mail"],
             description=request.form["description"],
-            officialWeb=request.form["officialWeb"],
+            WhatsAppGroup=WhatsAppGroup,
+            FacebookGroup=FacebookGroup,
+            officialWeb=officialWeb,
             tags=tags,
         )
         if not result:
@@ -603,7 +617,6 @@ def approve_users():
     except Exception as e:
         print(e)
         return e, 400
-
 
 @login_required
 @db_app.route("/unapprove", methods=["POST"])
