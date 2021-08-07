@@ -607,7 +607,8 @@ def approve_users():
             send_mail_approve([membership.member.to_dict()], club.name, membership.role)
         return "Success", 200
     except Exception as e:
-        return str(e), 400
+        return "Failed", 400
+        print(e)
 
 
 
