@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import { newUserData } from '../../../Shared/atoms';
 import { Form, Description } from './index';
 import { joinClub } from '../../../Shared/api';
-import useClubs from '../../../hooks/useClubs';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -70,7 +69,6 @@ const JoinUs = ({ clubName, clubId }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const { refetchMyClubs } = useClubs();
   const [approvedUsingPrivateData, setApprovedUsingPrivateData] = useState(
     false
   );
@@ -102,10 +100,9 @@ const JoinUs = ({ clubName, clubId }) => {
       setIsLoading(true);
       setActiveStep(prev => prev + 1);
 
-      await joinClub({ clubId }).then(() => {
-        refetchMyClubs();
-        setIsLoading(false);
-      });
+      await joinClub({ clubId }).then(() => setIsLoading(false));
+
+      queryClient.invalidateQueries(['myClubs']);
     },
     [setIsLoading, setActiveStep, history]
   );
