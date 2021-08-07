@@ -22,7 +22,6 @@ const UserListResults = ({ users }) => {
 
   const { Confetti } = useConfetti();
   const queryClient = useQueryClient();
-
   const sendApprove = async () => {
     if (rowsChoose.length > 0) {
       setDone(true);
@@ -96,8 +95,10 @@ const UserListResults = ({ users }) => {
 
   function allowApprove(row) {
     if (
-      row?.status !== 'Admin' ||
-      (row?.contactMail === current?.email && !lastAdmin(row))
+      (rowsChoose.length === 0 ||
+        (rowsChoose.length === 1 && rowsChoose[0] === row.id)) &&
+      (row?.status !== 'Admin' ||
+        (row?.contactMail === current?.email && !lastAdmin(row)))
     ) {
       return true;
     }
@@ -114,6 +115,7 @@ const UserListResults = ({ users }) => {
     }
     return false;
   }
+
   return (
     <div style={{ height: '700px', width: '100%' }}>
       <Typography variant='h2'>Users</Typography>
@@ -122,6 +124,10 @@ const UserListResults = ({ users }) => {
         from club
       </Typography>
       <Button
+        disabled={
+          rowsChoose.length === 0 ||
+          newUsers.find(user => user.id === rowsChoose[0]).status === 'Admin'
+        }
         onClick={() => sendApprove(rowsChoose)}
         variant='contained'
         color='primary'>
@@ -134,6 +140,7 @@ const UserListResults = ({ users }) => {
         />
       </Button>
       <Button
+        disabled={rowsChoose.length === 0}
         style={{ margin: '20px' }}
         onClick={() => sendUnApprove(rowsChoose)}
         variant='contained'

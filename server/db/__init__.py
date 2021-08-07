@@ -83,7 +83,7 @@ def send_message_text(recipients, subject, body):
         body=body,
     )
     path = os.path.join(os.getcwd(), "images", "logo.jpeg")
-    
+
     try:
         with open(path, "rb") as f:
             msg.attach("logo.jpeg", "image/jpeg", f.read(), "inline")
@@ -602,8 +602,11 @@ def approve_users():
                 or membership is None
             ):
                 return "Restrict", 400
-            membership = genericApproveMembership(membership)
-            send_mail_approve([membership.member.to_dict()], club.name, membership.role)
+            if membership.role != "A":
+                membership = genericApproveMembership(membership)
+                send_mail_approve(
+                    [membership.member.to_dict()], club.name, membership.role
+                )
         return "Success", 200
     except Exception as e:
         print(e)
