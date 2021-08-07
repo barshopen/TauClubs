@@ -68,7 +68,7 @@ const useClubFeed = ({ clubId }) => {
     ({ data }) => updateMessage({ payload: { clubId, data } }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(storeKeyEvents);
+        queryClient.invalidateQueries(storeKeyMessages);
       },
     }
   );
