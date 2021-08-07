@@ -1,5 +1,7 @@
 import datetime
 
+from mongoengine.queryset.visitor import Q
+
 from .models import ClubMembership, User, Club, current_time, months_ago
 from mongoengine.errors import DoesNotExist, NotUniqueError
 from flask import jsonify
@@ -160,10 +162,12 @@ def clubs_by_user_manager(user):
 
 def clubs_by_user_member(user):
     # return all clubs that the user manage
+    admin = Q(member=user, role="A")
+    userq = Q(member=user, role="U")
     return list(
         map(
             lambda memberships: memberships.club,
-            ClubMembership.objects.filter(member=user),
+            ClubMembership.objects.filter(admin | userq),
         )
     )
 
