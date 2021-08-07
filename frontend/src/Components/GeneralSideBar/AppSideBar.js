@@ -235,7 +235,7 @@ export default function AppSideBar() {
                 handleListItemClick={handleListItemClick}
                 text={d.name}
                 to={`/club/board/${d.id}`}
-                admin={d.admin}>
+                admin={d.status === 'Admin'}>
                 <Avatar
                   alt={d.name}
                   src={`${window.origin}/db/images/${d.id}`}

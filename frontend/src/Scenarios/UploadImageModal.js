@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 function UploadImageContent({ clubId, setOpen }) {
   const classes = useStyles();
   const [picture, setPicture] = useState(null);
-  const { refetchUseClub } = useClub();
+  const { refetchUseClub } = useClub(clubId);
 
   const submitHandler = e => {
     e.preventDefault();

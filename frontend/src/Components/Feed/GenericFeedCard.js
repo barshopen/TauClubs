@@ -150,8 +150,20 @@ function FeedCardEvent({ feedItem }) {
   } = feedItem;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const displayStartTime = new Date(startTime).toLocaleString('en-GB');
-  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
+  const displayStartTime = new Date(startTime).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -174,7 +186,7 @@ function FeedCardEvent({ feedItem }) {
                   fontWeight: '600',
                   display: 'inline-block',
                 }}>
-                Timing:
+                Time:
               </Typography>
               {displayStartTime} - {displayEndTime}
             </Typography>
@@ -229,20 +241,6 @@ function FeedCardEvent({ feedItem }) {
               Responses:
             </Typography>
             {` ${numAttending} Attending / ${numInterest} Intrested `}
-          </Typography>
-
-          <Typography
-            style={{
-              marginBottom: '10px',
-              marginRight: '4px',
-              fontWeight: '600',
-              display: 'inline-block',
-            }}
-            paragraph>
-            more details:
-          </Typography>
-          <Typography paragraph variant='h7' color='initial'>
-            {description}
           </Typography>
         </CardContent>
       </Collapse>
