@@ -58,6 +58,7 @@ const AutocompleteComponent = ({ data }) => {
       <Autocomplete
         id='controlled-demo'
         size='small'
+        clearOnBlur={false}
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);

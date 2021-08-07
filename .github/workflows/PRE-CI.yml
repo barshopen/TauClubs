@@ -1,0 +1,37 @@
+# This workflow will do a clean install of node dependencies, build the source code, and upload it as a build artifact.
+# The output build-artifact of this workflow is named frontend-build-artifact
+# After that, it will invoke another job which will build a docker image and push it into ECR
+name: PRE CHECK FOR CI
+
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    
+env:
+  IMAGE_NAME: docker.pkg.github.com/barshopen/tauclubs/tauclubsprod
+jobs:
+
+  CRA-Build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      working-directory: frontend
+
+    - name: Build frontend
+      run: yarn build
+      working-directory: frontend

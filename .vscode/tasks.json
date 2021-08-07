@@ -2,15 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build dockerfile",
-      "type": "docker-build",
-      "platform": "python",
-      "dependsOn": ["Front build"],
-      "dockerBuild": {
-        "tag": "tauclubs"
-      }
-    },
-    {
       "label": "Run docker",
       "type": "docker-run",
       "group": {
@@ -30,6 +21,17 @@
         ]
       }
     },
+
+    {
+      "label": "Build dockerfile",
+      "type": "docker-build",
+      "platform": "python",
+      "dependsOn": ["Front build"],
+      "dockerBuild": {
+        "tag": "tauclubs"
+      }
+    },
+
     {
       "label": "Front build",
       "type": "npm",

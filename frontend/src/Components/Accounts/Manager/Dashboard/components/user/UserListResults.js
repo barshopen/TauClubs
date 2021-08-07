@@ -14,15 +14,22 @@ import {
   unapproveUserUsers,
 } from '../../../../../../Shared/api';
 import { currentUser } from '../../../../../../Shared/atoms';
+import useConfetti from '../../../../../../hooks/useConfetti';
+
 
 const UserListResults = ({ users }) => {
   const [rowsChoose, setRows] = useState([]);
+  const [done, setDone] = useState(false);
+
+  const { Confetti } = useConfetti();
   const queryClient = useQueryClient();
 
   const sendApprove = async () => {
     if (rowsChoose.length > 0) {
+      setDone(true);
       await approveUserUsers(rowsChoose);
       queryClient.refetchQueries(['dashboardData']);
+      setDone(false);
     }
   };
 
@@ -148,6 +155,7 @@ const UserListResults = ({ users }) => {
         isCellEditable={false}
         isRowSelectable={({ row }) => allowApprove(row)}
       />
+      {done && <Confetti />}
     </div>
   );
 };

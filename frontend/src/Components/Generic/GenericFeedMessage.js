@@ -15,7 +15,6 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import { useRecoilValue } from 'recoil';
 import NewMessageModal from '../../Scenarios/NewMessageModal';
 import NewEventModal from '../../Scenarios/NewEventModal';
 import DeleteConfirmationModal from '../../Scenarios/DeleteConfirmationModal';
@@ -29,7 +28,6 @@ import {
   deleteMessage,
 } from '../../Shared/api';
 import useFeed from '../../hooks/useFeed';
-import { currentUser } from '../../Shared/atoms';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -106,7 +104,7 @@ export const eventsIcon = ({ clubId, id, isAttend, isInterested }) => {
   );
 };
 
-function GenericFeedMessage({ isAdmin, feedItem }) {
+function GenericFeedMessage({ isAdmin, feedItem, status }) {
   const classes = useStyles();
   const {
     clubId,
@@ -130,7 +128,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
   const displayStartTime = new Date(startTime).toLocaleString('en-GB');
   const displayEndTime = new Date(endTime).toLocaleString('en-GB');
-  const user = useRecoilValue(currentUser);
+  const presentIcon = status === 'Admin' || status === 'User';
 
   function deleteHandler(eventId) {
     if (location) {
@@ -209,7 +207,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
       </CardContent>
       <CardActions disableSpacing>
         {location &&
-          user &&
+          presentIcon &&
           eventsIcon({ refetchFeed, clubId, id, isAttend, isInterested })}
         {isAdmin &&
           (location ? (
@@ -243,6 +241,7 @@ function GenericFeedMessage({ isAdmin, feedItem }) {
 
 GenericFeedMessage.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
   feedItem: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

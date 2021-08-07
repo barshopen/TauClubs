@@ -33,16 +33,16 @@ class Club(DynamicDocument):
         return self.profileImage.__dict__["grid_id"] is not None
 
     def to_dict(self):
-        admin = False
-        member = False
-        pending = False
+        status = "Non User"
         if current_user.is_authenticated:
             user = UserAuth.objects.get(id=current_user.get_id()).userauth
             admin = validatePermession(user, self.id)
-            memebership = ClubMembership.objects(member=user, club=self).first()
-            if memebership is not None:
-                member = admin or memebership.role == "U"
-                pending = memebership.role == "P"
+            if admin:
+                status = ROLES["A"]
+            else:
+                memebership = ClubMembership.objects(member=user, club=self).first()
+                if memebership is not None:
+                    status = ROLES[memebership["role"]]
         return {
             "id": str(self.pk),
             "name": self.name,
@@ -55,10 +55,8 @@ class Club(DynamicDocument):
             "officialWeb": self.officialWeb,
             "membersCount": ClubMembership.objects(club=self).count(),
             "tags": self.tags,
-            "admin": admin,
-            "member": member,
-            "pending": pending,
             "profileImage": self.hasPicture(),
+            "status": status,
         }
 
     def to_json(self):
