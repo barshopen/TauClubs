@@ -111,8 +111,8 @@ function NewClubContent({ clubId, setOpen, onChange: handler, refetch }) {
     }
     setDone(true);
     await handler(data);
-    setOpen(false);
     refetch?.();
+    setOpen(false);
   };
 
   const handleDrop = pictureFiles => {

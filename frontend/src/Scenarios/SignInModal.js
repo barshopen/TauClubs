@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
-import { useSetRecoilState, useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 function ModalContent() {
   const classes = useStyles();
-  const [user, setUser] = useRecoilState(currentUser);
+  const setUser = useSetRecoilState(currentUser);
   const [loginError, setLoginError] = useState(false);
 
   function loginSuccess(d) {

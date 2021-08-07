@@ -17,7 +17,9 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import styled from 'styled-components';
 import AddIcon from '@material-ui/icons/Add';
+import BaseLoader from 'react-loader-spinner';
 import useClubs from '../../hooks/useClubs';
 import {
   showSideBarMobileState,
@@ -30,6 +32,11 @@ import SideBar from './SideBar';
 import { createClub } from '../../Shared/api';
 
 const drawerWidth = 240;
+
+const Loader = styled(BaseLoader)`
+  display: flex;
+  justify-content: center;
+`;
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -219,18 +226,25 @@ export default function AppSideBar() {
       <Divider />
       {user && (
         <List subheader={<ListSubheader>My Clubs</ListSubheader>}>
-          {myClubs?.map(d => (
-            <SideBarListItem
-              key={d.id}
-              id={d.id}
-              selectedIndex={selectedIndex}
-              handleListItemClick={handleListItemClick}
-              text={d.name}
-              to={`/club/board/${d.id}`}
-              admin={d.status === 'Admin'}>
-              <Avatar alt={d.name} src={`${window.origin}/db/images/${d.id}`} />
-            </SideBarListItem>
-          ))}
+          {myClubs && myClubs !== 'none' ? (
+            myClubs.map(d => (
+              <SideBarListItem
+                key={d.id}
+                id={d.id}
+                selectedIndex={selectedIndex}
+                handleListItemClick={handleListItemClick}
+                text={d.name}
+                to={`/club/board/${d.id}`}
+                admin={d.admin}>
+                <Avatar
+                  alt={d.name}
+                  src={`${window.origin}/db/images/${d.id}`}
+                />
+              </SideBarListItem>
+            ))
+          ) : (
+            <Loader type='TailSpin' color='#00BFFF' height={50} width={50} />
+          )}
         </List>
       )}
       <Box className={classes.footer} position={pos} bottom='0'>
