@@ -126,8 +126,20 @@ function GenericFeedMessage({ isAdmin, feedItem, status }) {
 
   const { editMessage, editEvent } = useClubFeed({ clubId });
   const displayLastUpdate = new Date(lastUpdateTime).toLocaleString('en-GB');
-  const displayStartTime = new Date(startTime).toLocaleString('en-GB');
-  const displayEndTime = new Date(endTime).toLocaleString('en-GB');
+  const displayStartTime = new Date(startTime).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const displayEndTime = new Date(endTime).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
   const presentIcon = status === 'Admin' || status === 'User';
 
   function deleteHandler(eventId) {
@@ -172,7 +184,7 @@ function GenericFeedMessage({ isAdmin, feedItem, status }) {
                   fontWeight: '600',
                   display: 'inline-block',
                 }}>
-                Timing:
+                Time:
               </Typography>
               {displayStartTime} - {displayEndTime}
             </Typography>
