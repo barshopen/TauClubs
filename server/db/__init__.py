@@ -608,7 +608,7 @@ def approve_users():
         return "Success", 200
     except Exception as e:
         print(e)
-        return e, 400
+        return str(e), 400
 
 
 
