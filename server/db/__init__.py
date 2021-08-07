@@ -267,15 +267,6 @@ def add_image():
 
 @db_app.route("/clubs")
 def clubs():
-    """
-    example queries:
-    * {mainroute}/clubs -> returns all clubs
-    * {mainroute}/clubs?tag=Math -> returns all clubs that have a 'Math' tag
-    * {mainroute}/clubs?name=Foodies -> returns all club that their name containes
-        foodies
-    * {mainroute}/clubs?name=Foodies&tag=Math -> returns all club that their name
-        containes foodies OR have a 'Math' tag
-    """
     clubs_params = request.args.to_dict()
     return get_clubs(name=clubs_params.get("search"), tag=clubs_params.get("search"))
 
@@ -290,7 +281,7 @@ def my_clubs():
     if current_user.is_authenticated:
         user = get_userauth_user_by_id(current_user.get_id())
         return get_user_clubs(user)
-    return json.dumps([]), 200
+    return "none", 200
 
 
 @db_app.route("/join_club", methods=["POST"])
