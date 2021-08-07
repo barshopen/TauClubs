@@ -96,7 +96,7 @@ def send_message_text(recipients, subject, body):
 
 def send_mail_approve(receivers, club_name, role):
     for receive in receivers:
-        if role == "p":
+        if role == "P":
             head, text = approve_user_message(receive["name"], club_name)
         else:
             head, text = approve_manager_message(receive["name"], club_name)
