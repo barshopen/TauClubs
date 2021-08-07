@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code, and upload it as a build artifact.
 # The output build-artifact of this workflow is named frontend-build-artifact
 # After that, it will invoke another job which will build a docker image and push it into ECR
-name: CI
+name: CI-CD
 
 on:
   push:
