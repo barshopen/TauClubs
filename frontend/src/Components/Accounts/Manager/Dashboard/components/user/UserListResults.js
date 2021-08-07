@@ -124,7 +124,6 @@ const UserListResults = ({ users }) => {
         columns={columns}
         autoPageSize
         loading={!users}
-        disableColumnMenu
         checkboxSelection
         disableColumnSelector
         onSelectionModelChange={e => setRows(e)}
