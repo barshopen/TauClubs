@@ -119,8 +119,8 @@ const ClubBoard = ({ currentUserIsClubsAdmin = false, status }) => {
                   ?.concat(upcomingEvents)
                   .sort(
                     (a, b) =>
-                      new Date(...a.lastUpdateTime.split('/').reverse()) -
-                      new Date(...b.lastUpdateTime.split('/').reverse())
+                      new Date(...a.creationTime.split('/').reverse()) -
+                      new Date(...b.creationTime.split('/').reverse())
                   )
                   .reverse()}
                 isAdmin={currentUserIsClubsAdmin}
